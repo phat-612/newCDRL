@@ -1,0 +1,116 @@
+html {
+  font-size: 62.5%;
+}
+
+.th-01 {
+  background-color: #dcdcdc;
+  font-size: 1.8rem;
+  text-align: center;
+}
+
+tr {
+  border: 1px solid;
+}
+.up-img {
+  margin: 20px;
+}
+
+th {
+  border: 1px solid #aeaeae;
+  /* padding-left: 10px; */
+}
+tbody {
+  text-align: left;
+}
+
+.row_type_1 {
+  background-color: #f1f1f1;
+  font-size: 1.5rem;
+}
+.row_type_2 {
+  font-size: 1.5rem;
+}
+
+.comboMark {
+  padding: 0;
+  justify-content: center;
+  border: 0.75px solid;
+}
+
+/* up img button */
+
+.up-img {
+  width: 15rem;
+  height: 15rem;
+  background: transparent;
+  border-radius: 0.5rem;
+  border: 2px solid black;
+  outline: none;
+  cursor: pointer;
+  margin: 0;
+}
+
+.up-img:active {
+  background: #9d9d9d;
+}
+
+.up-btn {
+  margin-top: 4rem;
+  padding: 1rem 4rem;
+  font-size: 2rem;
+  background-color: #000;
+  color: #fff;
+}
+
+.up-img i {
+  font-size: 2rem;
+  color: #515050;
+}
+
+.modal {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  display: none;
+  background-color: #aeaeaebf;
+}
+/* CSS cho dialog thêm ảnh */
+.modal_wrap {
+  position: relative;
+  bottom: 45rem;
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  width: 60rem;
+  height: 50rem;
+  transform: translate(-50%, -50%);
+  background-color: rgb(255, 255, 255);
+}
+
+.close-dialog {
+  position: absolute;
+  top: 0rem;
+  right: 0rem;
+  width: 3rem;
+  height: 3rem;
+  font-size: 2rem;
+}
+
+.row-type {
+  text-align: center;
+}
+.modal_wrap_img {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+}
+.description {
+  width: 50%;
+}
+.up-img-description {
+  width: 50%;
+  border: 1px solid;
+  border-radius: auto 1rem;
+  height: 9;
+}
