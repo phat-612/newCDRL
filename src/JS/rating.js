@@ -22,7 +22,21 @@ function page5_a_up_drop() {
     key.style.display = "none";
   }
 }
+$(document).ready(function () {
+  $(".up-btn").click(function () {
+    $(".modal").show();
+  });
 
-$(".up-btn").click(function () {
-  $(".modal").show();
+  $(".close-dialog").click(function () {
+    $(".modal").hide();
+  });
+});
+
+$(document).mouseup(function (e) {
+  var container = $(".modal");
+
+  // if the target of the click isn't the container nor a descendant of the container
+  if (container.is(e.target) && container.has(e.target).length === 0) {
+    container.hide();
+  }
 });
