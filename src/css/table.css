@@ -1,9 +1,15 @@
 html {
   font-size: 62.5%;
 }
+
 .header {
   background-color: #fff;
-  box-shadow: 0px 15px 10px -15px #70707042;
+  box-shadow: 0rem 1.5rem 1rem -1.5rem #70707042;
+}
+.jav{
+  height: 250rem;
+  box-shadow: 0rem 1.5rem 1rem -1.5rem #70707042;
+
 }
 .header-content {
   display: flex;
@@ -13,22 +19,27 @@ html {
   color: #667580;
   font-size: 1.2rem;
 }
+
 .right-header {
   display: flex;
   align-items: center;
 }
+
 .right-header a {
   color: #667580;
   text-decoration: none;
   margin-right: 2rem;
 }
+
 .avatar img {
-  height: 30px;
+  height: 3rem;
   border-radius: 50%;
 }
+
 .tittle-table {
-  padding: 30px 0;
+  padding: 3rem 0;
 }
+
 .th-01 {
   background-color: #dcdcdc;
   font-size: 1.8rem;
@@ -36,34 +47,37 @@ html {
 }
 
 tr {
-  border: 1px solid;
+  border: 0.1rem solid;
 }
 
-.modal_wrap_img_item{
-  width: 200px;
-  height: 200px;
+.modal_wrap_img_item {
+  width: 20rem;
+  height: 20rem;
   position: relative;
   overflow: hidden;
 }
-.modal_wrap_img_item:hover p{
+
+.modal_wrap_img_item:hover p {
   top: 70%;
 
 }
-.modal_wrap_img_item p{
-  margin: 0 1.4px;
+
+.modal_wrap_img_item p {
+  margin: 0 0.14rem;
   position: absolute;
   top: 100%;
   font-size: 1.3rem;
-  padding: 10px 20px;
+  padding: 1rem 2rem;
   transition: 0.3s top ease-in-out;
   background-color: #aeaeae;
 }
 
 th {
-  border: 1px solid #aeaeae;
+  border: 0.1rem solid #aeaeae;
   /* display: block; */
   /* padding-left: 10px; */
 }
+
 tbody {
   text-align: left;
 }
@@ -72,6 +86,7 @@ tbody {
   background-color: #f1f1f1;
   font-size: 1.5rem;
 }
+
 .row_type_2 {
   font-size: 1.5rem;
 }
@@ -79,7 +94,7 @@ tbody {
 .comboMark {
   padding: 0;
   justify-content: center;
-  border: 0.75px solid;
+  border: 0.075rem solid;
 }
 
 /* up img button */
@@ -88,8 +103,8 @@ tbody {
   width: 100%;
   height: 100%;
   background: transparent;
-  border-radius: 0.5rem;
-  border: 2px dashed black;
+  border-radius: 0.8rem;
+  border: 0.2rem dashed black;
   outline: none;
   cursor: pointer;
   margin: 0;
@@ -107,6 +122,9 @@ tbody {
   font-size: 2rem;
   background-color: #000;
   color: #fff;
+  margin-right: 1rem;
+  margin-bottom:3rem;
+  border-radius: 0.8rem;
 }
 
 .up-img i {
@@ -122,6 +140,7 @@ tbody {
   display: none;
   background-color: #aeaeaebf;
 }
+
 /* CSS cho dialog thêm ảnh */
 .modal_wrap {
   position: relative;
@@ -129,7 +148,7 @@ tbody {
   top: 50%;
   left: 50%;
   position: absolute;
-  width: 60rem;
+  width: 90rem;
   height: 50rem;
   transform: translate(-50%, -50%);
   background-color: rgb(255, 255, 255);
@@ -144,42 +163,87 @@ tbody {
   font-size: 2rem;
 }
 
+.drop_img {
+  width: 4.5rem;
+  /* height: 100%; */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border: none;
+  box-shadow: 0.1rem 0.1rem 0,3rem rgba(0, 0, 0, 0.15);
+  float: right;
+  position: relative;
+  justify-content: center;
+  font-size: 2rem;
+  color: #5c5c5c;
+  border-radius: 0.8rem;
+}
+
+.complete_img{
+  display: flex;
+  justify-content: flex-end;
+}
+
+.drop_img:hover {
+  background: #9e9e9e;
+  color: white;
+}
+
+
 .row-type {
   text-align: center;
 }
+
 .row-type th:first-child {
   text-align: left;
   padding-left: 1rem;
   min-height: 5rem;
 }
 
-.modal_img {
-  margin-top: 40px;
-  height: 80%;
+.modal_wrap {
+  border-radius: 0.8rem;
 }
+
+.modal_img {
+  margin-top: 4rem;
+  height: 80%;
+  overflow: auto;
+}
+
+.no-img {
+  text-align: center;
+  font-size: 2rem
+}
+
 .modal_wrap_img {
+  background-color: #f6f6f6;
   display: flex;
   justify-content: space-between;
-  padding: 10px 20px;
+  padding: 1rem 2rem;
+  margin: 0 1rem;
+  border-radius: 0.5rem;
+
 }
+
 .description {
   width: 50%;
 }
+
 .up-img-description {
-  width: 60%;
+  width: 68%;
   /* height: 40%; */
-  border: 1px solid;
-  border-radius: 1rem;
-  padding: 10px 2rem;
+  border: 0.1rem solid;
+  border-radius: 0.8rem;
+  padding: 1rem 2rem;
   box-sizing: border-box;
   font-size: 1.7rem;
 }
 
-textarea::placeholder{
-  font-size:2rem;
+textarea::placeholder {
+  font-size: 1.5rem;
 }
 
-.up-img-btn{
+.up-img-btn {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -193,21 +257,25 @@ textarea::placeholder{
   display: flex;
   justify-content: center;
   align-items: center;
+  border-bottom-left-radius: 0.8rem;
+  border-bottom-right-radius: 0.8rem;
 }
+
 .modal_img_btn button {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px 35px;
+  padding: 1rem 3.5rem;
   background-color: #515050;
   color: #fff;
   text-align: center;
-  margin-right: 20px;
-  width: 90px;
-  height: 50px;
-  font-size: 15px;
-  border-radius: 10px;
+  margin-right: 2rem;
+  width: 9rem;
+  height: 5rem;
+  font-size: 1.5rem;
+  border-radius: 1rem;
 }
+
 /* css check box */
 .checkbox-wrapper-4 * {
   box-sizing: border-box;
@@ -217,11 +285,12 @@ textarea::placeholder{
   -webkit-user-select: none;
   user-select: none;
   cursor: pointer;
-  border-radius: 6px;
+  border-radius: 0.6rem;
   /* overflow: hidden; */
   transition: all 0.2s ease;
   display: inline-block;
 }
+
 .checkbox-wrapper-4 .cbx span {
   float: left;
   vertical-align: middle;
@@ -230,34 +299,34 @@ textarea::placeholder{
 
 .checkbox-wrapper-4 .cbx span:first-child {
   position: relative;
-  width: 18px;
-  height: 18px;
-  border-radius: 4px;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 0.4rem;
   transform: scale(1);
-  border: 1px solid #cccfdb;
+  border: 0.1rem solid #cccfdb;
   transition: all 0.2s ease;
-  box-shadow: 0 1px 1px rgba(0, 16, 75, 0.05);
+  box-shadow: 0 0.1rem 0.1rem rgba(0, 16, 75, 0.05);
 }
 
 .checkbox-wrapper-4 .cbx span:first-child svg {
   position: absolute;
-  top: 3px;
-  left: 2px;
+  top: 0.3rem;
+  left: 0.2rem;
   fill: none;
   stroke: #fff;
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-dasharray: 16px;
-  stroke-dashoffset: 16px;
+  stroke-dasharray: 1.6rem;
+  stroke-dashoffset: 1.6rem;
   transition: all 0.3s ease;
   transition-delay: 0.1s;
   transform: translate3d(0, 0, 0);
 }
 
 .checkbox-wrapper-4 .cbx span:last-child {
-  padding-left: 8px;
-  line-height: 18px;
+  padding-left: 0.8rem;
+  line-height: 1.8rem;
 }
 
 .checkbox-wrapper-4 .cbx:hover span:first-child {
@@ -269,13 +338,13 @@ textarea::placeholder{
   visibility: hidden;
 }
 
-.checkbox-wrapper-4 .inp-cbx:checked + .cbx span:first-child {
+.checkbox-wrapper-4 .inp-cbx:checked+.cbx span:first-child {
   background: rgb(143, 213, 229);
   border-color: #c2c2c2;
   animation: wave-4 0.4s ease;
 }
 
-.checkbox-wrapper-4 .inp-cbx:checked + .cbx span:first-child svg {
+.checkbox-wrapper-4 .inp-cbx:checked+.cbx span:first-child svg {
   stroke-dashoffset: 0;
 }
 
@@ -287,7 +356,7 @@ textarea::placeholder{
   user-select: none;
 }
 
-@media screen and (max-width: 640px) {
+@media screen and (max-width: 64rem) {
   .checkbox-wrapper-4 .cbx {
     width: 100%;
     display: inline-block;
@@ -320,15 +389,15 @@ textarea::placeholder{
 
 /*------------------- combo box -------------------*/
 .select select {
+  text-align: center;
   appearance: none;
-  outline: 10px red;
+  outline: 1rem red;
   border: 0;
   box-shadow: none;
   flex: 1;
-  padding: 0 1em;
   background-image: none;
-  background-color: rgb(97, 115, 133);
-  color: #fff;
+  background-color: inherit;
+  /* color: #fff; */
   cursor: pointer;
 }
 
@@ -337,8 +406,7 @@ textarea::placeholder{
   display: flex;
   align-items: stretch;
   justify-content: center;
-  width: 50%;
-  height: 100%;
+  width: 100%;
   border-radius: .25em;
   overflow: hidden;
 }
@@ -347,20 +415,29 @@ textarea::placeholder{
   content: '\25BC';
   position: absolute;
   top: 0;
-  right: 0;
-  padding: 1em;
-  background-color: rgb(97, 115, 133);
+  right: 1.6rem;
+  /* padding: 1em; */
+  background-color: inherit;
   transition: .25s all ease;
   pointer-events: none;
 }
 
 .select:hover::after {
-  color: #f39c12;
+  /* color: #f39c12; */
+  color: rgb(143, 213, 229)
 }
 
 th:nth-child(2) {
   text-align: center;
 }
+
 th:nth-child(3) {
   text-align: center;
+}
+
+.m-auto{
+  margin: 0 auto 3rem;
+}
+.mdl-js{
+  background-color:#e7ecf0;
 }
