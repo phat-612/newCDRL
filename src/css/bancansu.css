@@ -1,0 +1,127 @@
+html {
+  font-size: 62.5%;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: content-box;
+}
+body {
+  background-color: #e7ecf0;
+}
+
+/* css tra cứu */
+.tra_cuu,
+.manager,
+.submit-mark {
+  margin-top: 2rem;
+  max-width: 90rem;
+  background-color: #fff;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 0.8rem;
+}
+
+.tra_cuu .content,
+.manager .content,
+.submit-mark .content {
+  padding: 1rem;
+  /* font-size: 2rem; */
+}
+
+.tra_cuu .content h2,
+.manager .content h2,
+.submit-mark .content h2 {
+  font-size: 2.6rem;
+  margin-bottom: 1.2rem;
+}
+
+.tra_cuu .content p {
+  display: inline-block;
+  font-size: 1.8rem;
+}
+
+.tra_cuu .content button {
+  padding: 1rem 2rem;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  border-radius: 0.8rem;
+}
+
+.tra_cuu .content button:hover {
+  background-color: rgb(47, 44, 44);
+}
+
+/* select */
+.selectbox {
+  display: inline-block;
+  margin: 0 2.9rem 0 1.6rem;
+}
+.select select {
+  font-size: 1.6rem;
+  padding: 0.6rem 1.6rem;
+  text-align: center;
+  appearance: none;
+  outline: 1rem red;
+  border: 0;
+  box-shadow: none;
+  flex: 1;
+  background-image: none;
+  background-color: rgb(154, 151, 151);
+  border-radius: 0.8rem;
+  /* color: #fff; */
+  cursor: pointer;
+}
+
+.select {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  width: 8rem;
+  border-radius: 0.25em;
+  /* overflow: hidden; */
+}
+
+.select::after {
+  content: "\25BC";
+  position: absolute;
+  top: 1rem;
+  right: -1rem;
+  /* padding: 1em; */
+  background-color: inherit;
+  transition: 0.25s all ease;
+  pointer-events: none;
+}
+
+.select:hover::after {
+  color: rgb(143, 213, 229);
+}
+
+/* button */
+/* .button {
+  padding: 1rem;
+  background-color: white;
+}
+.button .button-1 {
+  margin-top: 2rem;
+  padding: 0.5rem;
+} */
+
+.mark-button button,
+.submit-button button {
+  padding: 0.8rem;
+  font-size: 2rem;
+  color: white;
+  background-color: rgb(0, 0, 0);
+  border-radius: 0.8rem;
+  margin-left: 2rem;
+  margin-bottom: 1rem;
+}
+
+.mark-button button:hover,
+.submit-button button:hover {
+  background-color: rgb(47, 44, 44);
+}

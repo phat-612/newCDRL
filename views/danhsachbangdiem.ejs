@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../src/css/danhsachbangdiem.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="main">
+      <%- include(header) %>
+      <div class="container">
+        <div class="content">
+          <div class="hoc_ky">
+            <span>Học kỳ</span>
+            <select>
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+            <span>Niên khóa</span>
+            <select>
+              <option value="">2022-2023</option>
+            </select>
+            <button>Chọn</button>
+          </div>
+          <div class="danh_sach_bang_diem">
+            <button class="btn_xuat_bao_cao">Xuất báo cáo</button>
+            <div class="chu_thich">
+              <p><span class="dau_sao">*</span> Không nộp bảng điểm tự chấm</p>
+              <p><span class="mau_vang"></span> Có cập nhật mới</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

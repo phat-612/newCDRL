@@ -1,0 +1,43 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: content-box;
+}
+.content {
+  max-width: 91rem;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: beige;
+}
+.content .hoc_ky {
+  font-size: 2rem;
+  padding: 1rem;
+}
+.danh_sach_bang_diem {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #fff;
+  font-size: 1.6rem;
+}
+.danh_sach_bang_diem .btn_xuat_bao_cao {
+  background-color: #000;
+  color: #fff;
+  padding: 1.4rem 2.8rem;
+  border-radius: 0.8rem;
+  border: none;
+  cursor: pointer;
+}
+.danh_sach_bang_diem .chu_thich {
+  margin: 2rem 0;
+}
+.danh_sach_bang_diem .dau_sao {
+  display: inline-block;
+  color: red;
+  width: 1.5rem;
+}
+.danh_sach_bang_diem .mau_vang {
+  display: inline-block;
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: yellow;
+}
