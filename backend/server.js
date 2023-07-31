@@ -118,7 +118,7 @@ async function checkCookieUserLogin(req, res, next) {
   }
 }
 
-const blockUnwantedPaths = (req, res, next) => {
+const blockUnwantedPaths = (req, res, next) => { // cai díu j day @rurimeiko làm lại đi
   const unwantedPaths = ["/backend/"];
   for (const path of unwantedPaths) {
     if (req.url.includes(path)) {

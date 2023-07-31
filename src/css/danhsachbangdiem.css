@@ -7,7 +7,7 @@
   max-width: 91rem;
   margin-left: auto;
   margin-right: auto;
-  background-color: beige;
+  /* background-color: beige; */
 }
 .content .hoc_ky {
   font-size: 2rem;
@@ -40,4 +40,47 @@
   width: 1.5rem;
   height: 1.5rem;
   background-color: yellow;
+}
+
+.select select {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  appearance: none;
+  outline: 1rem red;
+  border: 0;
+  box-shadow: none;
+  flex: 1;
+  background-image: none;
+  background-color: inherit;
+  /* color: #fff; */
+  cursor: pointer;
+}
+.selectbox {
+  display: inline-block;
+}
+.select {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  width: 100px;
+  border-radius: 0.25em;
+  overflow: hidden;
+}
+
+.select::after {
+  content: "\25BC";
+  position: absolute;
+  top: 0;
+  right: 1.6rem;
+  /* padding: 1em; */
+  background-color: inherit;
+  transition: 0.25s all ease;
+  pointer-events: none;
+}
+
+.select:hover::after {
+  /* color: #f39c12; */
+  color: rgb(143, 213, 229);
 }

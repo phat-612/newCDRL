@@ -36,13 +36,12 @@ $(document).ready(function () {
     if ($(".modal_img .no-img")) {
       $(".modal_img .no-img").hide();
     }
-    if ($(".modal_img").children().length < 5) {
+    if ($(".modal_img").children().length <= 5) {
       $(".modal_img").append(`
       <div class="modal_wrap_img">
   
         <div class="modal_wrap_img_item">
           <p>Drag and drop an image here, or click to upload.</p>
-  
           <input type="file" class="upload-input" style="display: none;">
           <img class="up-img">
           <button class="up-img-btn">
@@ -256,7 +255,7 @@ function handleCheckboxChange(event) {
       if (checkboxTier.includes(checkbox.id)) {
         if (select_list[tier]) {
           const selectElement = document.getElementById(select_list[tier]);
-          selectElement.value = parseInt(0);
+          selectElement.value = 0;
         }
         if (tier == "tier_2") {
           document.getElementById("score_05").innerText = "0 điểm";
@@ -266,6 +265,15 @@ function handleCheckboxChange(event) {
   }
   total_tier();
 }
+
+
+// function blockUnTick() {
+//   for (const [tier, selectboxTier] of Object.entries(select_list)) {
+//     checkbox_list[tier].forEach((checkbox_i) => {
+//       document.getElementById(checkbox_i).checked = true;
+//     });
+//   }
+// }
 
 const checkboxes = document.querySelectorAll(
   '.checkbox-wrapper-4 input[type="checkbox"]'
