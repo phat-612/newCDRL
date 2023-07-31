@@ -256,6 +256,7 @@ function handleCheckboxChange(event) {
         if (select_list[tier]) {
           const selectElement = document.getElementById(select_list[tier]);
           selectElement.value = 0;
+          blockUnTick(selectElement);
         }
         if (tier == "tier_2") {
           document.getElementById("score_05").innerText = "0 điểm";
@@ -267,13 +268,19 @@ function handleCheckboxChange(event) {
 }
 
 
-// function blockUnTick() {
-//   for (const [tier, selectboxTier] of Object.entries(select_list)) {
-//     checkbox_list[tier].forEach((checkbox_i) => {
-//       document.getElementById(checkbox_i).checked = true;
-//     });
-//   }
-// }
+function blockUnTick(selectbox) {
+  for (const [tier, selectboxTier] of Object.entries(select_list)) {
+    if (selectboxTier == selectbox.id) {
+      checkbox_list[tier].forEach((checkbox_i) => {
+        if (selectbox.value != document.getElementById(checkbox_i).value) {
+          document.getElementById(checkbox_i).checked = false;
+        } else {
+          document.getElementById(checkbox_i).checked = true;
+        }
+      });
+    }
+  }
+}
 
 const checkboxes = document.querySelectorAll(
   '.checkbox-wrapper-4 input[type="checkbox"]'
@@ -281,6 +288,7 @@ const checkboxes = document.querySelectorAll(
 checkboxes.forEach((checkbox_i) => {
   checkbox_i.addEventListener("change", handleCheckboxChange);
 });
+
 
 function handleSelectChange(event) {
   const selectbox = event.target;
