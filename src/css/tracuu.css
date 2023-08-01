@@ -95,7 +95,7 @@
 
   .select select {
     font-size: 1.6rem;
-    padding: 0.6rem 1.6rem;
+    padding: 1rem 1.6rem 1rem 0.7rem;
     text-align: center;
     appearance: none;
     outline: 1rem red;
@@ -103,7 +103,7 @@
     box-shadow: none;
     flex: 1;
     background-image: none;
-    background-color: rgb(230, 216, 216);
+    background-color:rgb(211 211 211);
     border-radius: 0.8rem;
     /* color: #fff; */
     cursor: pointer;
@@ -122,8 +122,8 @@
   .select::after {
     content: "\25BC";
     position: absolute;
-    top: 1rem;
-    right: -1rem;
+    top: 37%;
+    right: -10%;
     /* padding: 1em; */
     background-color: inherit;
     transition: 0.25s all ease;

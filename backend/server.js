@@ -1,15 +1,15 @@
 // const viplib = require("./vip_pro_lib");
 const express = require("express");
-const bodyParser = require("body-parser");
+const session = require('express-session');
 const cors = require("cors");
-const crypto = require("crypto");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 
+const server = require("./vip_pro_lib.js");
 // ----------------------------------------------------------------
-
 const app = express();
 const router = express.Router();
+// ----------------------------------------------------------------
 const port = 8181;
 const secretKey = "5gB#2L1!8*1!0)$7vF@9";
 const authenticationKey = Buffer.from(
@@ -17,103 +17,20 @@ const authenticationKey = Buffer.from(
   "utf8"
 ).toString("hex");
 
-function encrypt(data, secretKey) {
-  const algorithm = "aes-256-cbc";
-  const iv = crypto.randomBytes(16); // Generate a random IV
-  const cipher = crypto.createCipheriv(
-    algorithm,
-    Buffer.from(secretKey, "hex"),
-    iv
-  );
-
-  let encryptedData = cipher.update(data, "utf8", "hex");
-  encryptedData += cipher.final("hex");
-
-  const encryptedDataWithIV = iv.toString("hex") + encryptedData;
-  console.log("SYSTEM | ENCRYPT | OK");
-
-  return encryptedDataWithIV;
-}
-
-function decrypt(encryptedDataWithIV, secretKey) {
-  const algorithm = "aes-256-cbc";
-  const iv = Buffer.from(encryptedDataWithIV.slice(0, 32), "hex"); // Extract IV from the encrypted data
-  const encryptedData = encryptedDataWithIV.slice(32); // Extract the encrypted data without IV
-  const decipher = crypto.createDecipheriv(
-    algorithm,
-    Buffer.from(secretKey, "hex"),
-    iv
-  );
-
-  let decryptedData = decipher.update(encryptedData, "hex", "utf8");
-  decryptedData += decipher.final("utf8");
-
-  console.log("SYSTEM | DECRYPT | OK");
-
-  return decryptedData;
-}
-
-function set_cookies(res, id, pass) {
-  const encryptedString = encrypt(
-    `${authenticationKey}:${id}:${pass}`,
-    authenticationKey
-  );
-  const oneYearFromNow = new Date();
-  oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
-  res.cookie("account", encryptedString, {
-    expires: oneYearFromNow,
-    secure: true,
-    sameSite: "none",
-    domain: "localhost",
-    path: "/",
-  });
-  res.writeHead(200, { "Content-Type": "text/html" });
-  console.log(`SYSTEM | SET_COOKIES | User ${id} login!`);
-}
 // ------------------------------------------------------------------------------------------------
-async function getDataCookieUserLogin(req, res, next) {
-  try {
-    const data = req.cookies;
-    if (!data.account) {
-      res.locals.avt = "";
-      res.locals.username = "";
-      next();
-    } else {
-      console.log("SYSTEM | AUTHENTICATION | Dữ liệu nhận được: ", data);
-      const decode = decrypt(data.account, authenticationKey);
-      const decodeList = decode.split(":"); // Output: "replika is best japanese waifu"
-      console.log(`SYSTEM | AUTHENTICATION | Dữ liệu đã giải mã ${decodeList}`);
-      // decodeList = authenticationKey:id:pass
-      if (decodeList[0] == authenticationKey) {
-        // tìm thông tin người dùng theo id người dùng decodeList[1]
-        if (result != null && result.length != 0) {
-          res.locals.avt = result.avatarUrl;
-          res.locals.username = result.displayName;
-          res.locals.user_id = result._id;
-          next();
-        } else if (result == null) {
-          res.locals.avt = "";
-          res.locals.username = "";
-          next();
-        } else {
-          res.locals.avt = "";
-          res.locals.username = "";
-          next();
-        }
-      }
-    }
-  } catch (error) {
-    // Xử lý lỗi nếu có
-    res.status(500).send("Internal Server Error");
-  }
-}
 
 async function checkCookieUserLogin(req, res, next) {
-  const data = req.cookies;
-  if (!data.account) {
+  const user = req.session.user;
+  
+  if (!user) {
     // Cookie không tồn tại, chặn truy cập
     return res.redirect("/login");
   } else {
+    const user_info =  await server.find_one_Data('user_info',{_id: user._id});
+    console.log(user_info);
+    res.locals.avt = user_info.avt;
+    res.locals.first_name = user_info.first_name;
+    res.locals.last_name = user_info.last_name;
     next();
   }
 }
@@ -134,14 +51,24 @@ const blockUnwantedPaths = (req, res, next) => { // cai díu j day @rurimeiko l�
 
 // Áp dụng middleware để chặn truy cập
 app.use(blockUnwantedPaths);
-
-// Lắng nghe các yêu cầu POST tới localhost:6969
 app.use(express.json({ limit: "10mb" }));
+
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
-app.use(bodyParser.json());
 app.use(cors({ origin: true, credentials: true }));
 app.use(cookieParser());
 app.use("/", router);
+// Sử dụng express-session middleware
+app.use(session({
+  secret: authenticationKey,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days (30 * 24 * 60 * 60 * 1000 milliseconds)
+    // secure: true, bật lên 
+    httpOnly: true,
+    sameSite: 'lax'
+  }
+}));
 app.use(express.json());
 const parentDirectory = path.dirname(__dirname);
 app.use(express.static(parentDirectory));
@@ -152,22 +79,23 @@ console.log(path.join(parentDirectory, "views"));
 // ROUTE SPACE ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // index route
-app.get("/", getDataCookieUserLogin, async (req, res) => {
-  //   res.sendFile(path.join(parentDirectory, "views", "tracuu.html"));
+app.get("/", checkCookieUserLogin, async (req, res) => {
   res.render("tracuu", {
     header: "header",
   });
 });
 
 // login route
-app.get("/login", getDataCookieUserLogin, async (req, res) => {
+app.get("/login", async (req, res) => {
   res.render("login", {
     header: "header",
+    thongbao: "thongbao",
+    avt: null,
   });
 });
 
 // nhap bang diem route
-app.get("/nhapdiemdanhgia", getDataCookieUserLogin, async (req, res) => {
+app.get("/nhapdiemdanhgia", checkCookieUserLogin, async (req, res) => {
   res.render("nhapbangdiem", {
     header: "header",
     thongbao: "thongbao",
@@ -175,46 +103,55 @@ app.get("/nhapdiemdanhgia", getDataCookieUserLogin, async (req, res) => {
 });
 
 // ban can su route
-app.get("/bancansu", getDataCookieUserLogin, async (req, res) => {
+app.get("/bancansu", checkCookieUserLogin, async (req, res) => {
   res.render("bancansu", {
     header: "header",
   });
 });
 
 // thong tin ca nhan route
-app.get("/profile", getDataCookieUserLogin, async (req, res) => {
+app.get("/profile", checkCookieUserLogin, async (req, res) => {
   res.render("edit-profile", {
     header: "header",
   });
 });
 
 // thong tin ca nhan route
-app.get("/danhsachbangdiem", getDataCookieUserLogin, async (req, res) => {
+app.get("/danhsachbangdiem", checkCookieUserLogin, async (req, res) => {
   res.render("danhsachbangdiem", {
     header: "header",
   });
 });
+
 // API SPACE ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Log in --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 app.post("/api/login", async (req, res) => {
   const data = req.body;
-  // 403: sai mat khau
-  // log in database {
-  // usr: 18102003
-  // pass: 18102003
-  // }
-  // data = {usr: bbp, pass: 1234567890}
+  // 403: sai thong tin dang nhap
+  // data = {mssv: bbp, password: 1234567890, remember: true}
   console.log("SYSTEM | LOG_IN | Dữ liệu nhận được: ", data);
   try {
     //(log in database)
-    // tìm pass của user_id trong database theo data.usr
-
-    if (n_result.pass == data.pass) {
-      set_cookies(res, data.usr, data.pass); // set cookies
-      res.end("Log in success!!!");
+    console.log("SYSTEM | LOG_IN | Tìm data");
+    const user = await server.find_one_Data("login_info", { _id: data.mssv });
+    if (user === null) {
+      // Đăng nhập không thành công
+      res.sendStatus(403);
+    } else if (user._id === data.mssv && user.password === data.password) {
+      // Đăng nhập thành công, lưu thông tin người dùng vào phiên
+      req.session.user = user;
+      // Kiểm tra xem người dùng có chọn "Remember me" không
+      if (data.remember) {
+        // Thiết lập thời gian sống cookie lâu hơn để lưu thông tin đăng nhập trong 30 ngày
+        req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days
+      } else {
+        // Thiết lập thời gian sống cookie lại về mặc định (1 giờ)
+        req.session.cookie.maxAge = 3600000; // 1 hour
+      }
+      res.sendStatus(200);
     } else {
-      res.writeHead(403, { "Content-Type": "text/plain" });
-      res.end("Log in fail!!!");
+      // Đăng nhập không thành công
+      res.sendStatus(403);
     }
   } catch (err) {
     console.log("SYSTEM | LOG_IN | ERROR | ", err);
@@ -223,22 +160,10 @@ app.post("/api/login", async (req, res) => {
 });
 
 // Logout /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-app.post("/api/logout", async (req, res) => {
+app.get("/api/logout", async (req, res) => {
   try {
-    const data = req.body;
-    console.log("SYSTEM | LOGOUT | Dữ liệu nhận được: ", data);
-    const expirationDate = new Date("2018-12-31");
-    res.cookie("account", data.account, {
-      expires: expirationDate, // Cookie will permernently expire
-      secure: true,
-      sameSite: "none",
-      domain: "localhost",
-      // domain: 'c22c-2a09-bac5-d44d-18d2-00-279-87.ngrok-free.app',
-      path: "/",
-    });
-    res.writeHead(200, { "Content-Type": "text/plain" });
-    console.log(`SYSTEM | LOGOUT | Dang xuat thành công`);
-    res.end("Da dang xuat!");
+    delete req.session.user;
+    res.redirect('/login');
   } catch (err) {
     res.sendStatus(500);
     console.log("SYSTEM | LOGOUT | ERROR | ", err);
@@ -271,7 +196,7 @@ app.post("/api/change_pass", async (req, res) => {
   }
 });
 
-app.get("*", getDataCookieUserLogin, async function (req, res) {
+app.get("*", checkCookieUserLogin, async function (req, res) {
   res.sendStatus(404);
 });
 

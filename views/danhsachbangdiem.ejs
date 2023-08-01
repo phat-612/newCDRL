@@ -11,9 +11,9 @@
       <%- include(header) %>
       <div class="container">
         <div class="content">
-          <div class="hoc_ky">
+          <div class="hk_nk">
             <span>Học kỳ</span>
-            <div class="selectbox">
+            <div class="selectbox hoc_ky">
               <div class="select">
                 <select >
                   <option value="1">1</option>
@@ -22,7 +22,7 @@
               </div>
             </div>
             <span>Niên khóa</span>
-            <div class="selectbox">
+            <div class="selectbox nien_khoa">
               <div class="select">
                 <select >
                   <option >2021-2022</option>
@@ -30,14 +30,84 @@
                 </select>
               </div>
             </div>
-            <button>Chọn</button>
+            <button class="button-35">Chọn</button>
           </div>
           <div class="danh_sach_bang_diem">
-            <button class="btn_xuat_bao_cao">Xuất báo cáo</button>
+            <div class="control">
+              <button class="button-35 ">Xuất báo cáo</button>
+              <button class="button-35 ">Chấm bảng điểm đã chọn</button>
+            </div>
             <div class="chu_thich">
               <p><span class="dau_sao">*</span> Không nộp bảng điểm tự chấm</p>
               <p><span class="mau_vang"></span> Có cập nhật mới</p>
             </div>
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 4%">
+                    <!-- set id của input == for của label -->
+                    <!-- thêm class "new_update" cho td có cập nhật điểm mới chưa được chấm -->
+                    <!-- <span class="dau_sao">*</span> đứng phía sau tên (ai không tự đánh giá) -->
+                    <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="row0" class="inp-cbx" value="2" />
+                    <label for="row0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+                  </th>
+                  <th style="width: 3%">STT</th>
+                  <th style="width: 11%">MSSV</th>
+                  <th style="width: 23%">Họ Tên</th>
+                  <th style="width: 6%">Điểm Tự Chấm</th>
+                  <th style="width: 6%">Tổng điểm Lần 1</th>
+                  <th style="width: 10%">Chấm Lần 1</th>
+                  <th style="width: 6%">Tổng Điểm Chính Thức</th>
+                  <th style="width: 10%"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="row1" class="inp-cbx" value="2" />
+                    <label for="row1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label></td>
+                  <td>1</td>
+                  <td>2100973</td>
+                  <td>nguyễn thị thúy an <span class="dau_sao">*</span></td>
+                  <td class="new_update">88</td>
+                  <td>88</td>
+                  <td>tấn đạt</td>
+                  <td>88</td>
+                  <td><a href="#">Chấm điểm</a></td>
+                </tr>
+                <tr>
+                  <td><div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="row2" class="inp-cbx" value="2" />
+                    <label for="row2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label></td>
+                  <td>1</td>
+                  <td>2100973</td>
+                  <td>nguyễn thị thúy an</td>
+                  <td>88</td>
+                  <td>88</td>
+                  <td>tấn đạt</td>
+                  <td>88</td>
+                  <td><a href="#">Chấm điểm</a></td>
+                </tr>
+                <tr>
+                  <td><div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="row3" class="inp-cbx" value="2" />
+                    <label for="row3" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label></td>
+                  <td>1</td>
+                  <td>2100973</td>
+                  <td>nguyễn thị thúy an</td>
+                  <td>88</td>
+                  <td>88</td>
+                  <td>tấn đạt</td>
+                  <td>88</td>
+                  <td><a href="#">Chấm điểm</a></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
