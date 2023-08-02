@@ -63,6 +63,7 @@
   transition: 0.5s;
   margin-top: 4rem;
   letter-spacing: 0.4rem;
+  cursor: pointer;
 }
 
 .login-box a:hover {
@@ -73,4 +74,16 @@
 .login-box a span {
   position: absolute;
   display: block;
+}
+.control{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.login-box form a.quen_mk{
+  padding: 0.4rem 1rem;
+  margin: 0;
+  overflow: inherit;
+  font-size: 1rem;
+  letter-spacing: 0.2rem;
 }

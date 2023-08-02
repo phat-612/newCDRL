@@ -1,0 +1,18 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: content-box;
+}
+.footer{
+    display: none;
+    height: 60px;
+    background-color: #fff;
+}
+.footer a{
+    display: inline-block;
+    padding: 1rem;
+}
+.footer a i{
+    font-size: 4rem;
+    color: black;
+}

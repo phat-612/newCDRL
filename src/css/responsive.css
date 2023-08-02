@@ -1,0 +1,31 @@
+@media screen and (max-width:600px){
+    .header{
+        display: flex;
+        top: 0;
+        left: 0;
+        right: 0;
+
+    }
+
+    .right-header > a{
+        display: none;
+    }
+    .avatar_wrap > p{
+        display: none;
+    }
+    .footer{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+    .setting{
+        right: -13%;
+    }
+    .avatar:hover .setting{
+        display: none;
+    }
+}

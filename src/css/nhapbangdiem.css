@@ -1,0 +1,17 @@
+@media screen and (max-width:600px){
+    .checkbox-wrapper-4{
+        margin-left: 28%;
+    }
+    .select::after {
+        right: 0.6rem;
+    }
+    .modal_wrap{
+        width: 100%;
+    }
+    .modal_wrap_img{
+        height:14.5rem
+    }
+    .modal_wrap_img_item{
+        height:14rem
+    }
+}

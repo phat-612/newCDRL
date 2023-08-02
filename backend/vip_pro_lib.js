@@ -23,9 +23,9 @@ exports.collection_seasion = client.db(name_databases).collection('sessions');
 exports.add_one_Data = async function (table, myobj) {
     try {
         // await client.connect();
-        // let myobj = { user_name: "Long Khoa Hoc", user_id: "longdd", password: "Nl<3Bp"};
+        // let myobj = { user_name: "Long Khoa Hoc", user_id: "longdd", password: ""};
         const resual = await client.db(name_databases).collection(table).insertOne(myobj);
-        // console.log('SYSTEM | ADD_ONE_DATA | Add document', myobj, 'successfull');
+        console.log('SYSTEM | ADD_ONE_DATA | Add document', myobj, 'successfull');
         return resual;
     } finally {
         // Ensures that the client will close when you finish/error
@@ -78,7 +78,7 @@ exports.find_one_Data = async function (table, myobj = undefined) {
         // let myobj = { user_name: "Long Khoa Hoc"};
         let result = await client.db(name_databases).collection(table).findOne(myobj);
 
-        // console.log('SYSTEM | FIND_ONE_DATA | Finding document: ', result);
+        console.log('SYSTEM | FIND_ONE_DATA | Finding document: ', result);
 
         return result;
     } finally {
@@ -113,9 +113,9 @@ exports.update_one_Data = async function (table, myquery, newvalues) {
         // let myquery = { user_name: "Long Khoa Hoc"};
         // let newvalues = { $set: {name: "Mickey", address: "Canyon 123" } };
         // có nhiều toán từ  $set, $inc, $push, $pull, tự google
-        await client.db(name_databases).collection(table).updateOne(myquery, newvalues);
-
-        // console.log('SYSTEM | UPDATE_ONE_DATA | Update document', myquery, 'to', newvalues, 'successfull');
+        const resual = await client.db(name_databases).collection(table).updateOne(myquery, newvalues);
+        console.log('SYSTEM | UPDATE_ONE_DATA | Update document', myquery, 'to', newvalues, 'successfull');
+        return resual;
 
 
     } finally {
@@ -279,7 +279,7 @@ const getAccessTokenFromCode = (code) => {
 };
 
 // Upload the file to Google Drive
-exports.uploadFileToDrive = async (filePath, id_folder = '1Tv80lyGA-rYIsN6nT9_A-E6f7tEnLXtV') => {
+exports.uploadFileToDrive = async (filePath, id_folder = '1CyiiQwVN1_99jYcbQvy4M3JeI1m4zyKR') => {
     await initStorage();
     await getAccessToken();
     const fileName = path.basename(filePath);

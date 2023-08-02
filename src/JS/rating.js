@@ -1,4 +1,23 @@
-
+console.log("cho minh")
+// identify file
+function validateFile(file) {
+  let allowedFormats = ['jpg', 'jpeg', 'png']; // Allowed file formats
+  let maxSize = 5485760; // MBit in bytes
+  // Check file format
+  const fileName = file.name;
+  const fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
+  if (!allowedFormats.includes(fileExtension)) {
+    // Invalid file format
+    notify('x', 'Sai định dạng file!');
+    return false;
+  }
+  if (file.size > maxSize) {
+    notify('!', 'Up ảnh dưới 5mb!');
+    return false;
+  }
+  // File is valid
+  return true;
+}
 //////////////////////
 $(document).ready(function () {
   $(".post-btn").click(function () {
@@ -61,10 +80,12 @@ function handleDragLeave(event) {
 }
 
 function handleDrop(event) {
-  event.preventDefault();
-  $(this).removeClass("dragover");
-  const file = event.originalEvent.dataTransfer.files[0];
-  displayImage.call(this, file);
+  if (validateFile(event.originalEvent.dataTransfer.files[0])) {
+    event.preventDefault();
+    $(this).removeClass("dragover");
+    const file = event.originalEvent.dataTransfer.files[0];
+    displayImage.call(this, file);
+  }
 }
 
 function handleUploadButtonClick() {
@@ -72,8 +93,10 @@ function handleUploadButtonClick() {
 }
 
 function handleUploadInputChange(event) {
-  const file = event.target.files[0];
-  displayImage.call($(this).parent().parent(), file);
+  if (validateFile(event.target.files[0])) {
+    const file = event.target.files[0];
+    displayImage.call($(this).parent().parent(), file);
+  }
 }
 
 function displayImage(file) {
@@ -200,7 +223,7 @@ const showUploadImg = () => {
   ) {
     if (!$(".post-btn").is(":visible")) {
       notify(
-        "Thông báo",
+        "!",
         "Hãy upload ảnh chứng minh bạn tham gia sự kiện nhé!"
       );
     }
@@ -294,3 +317,117 @@ selectboxes.forEach((selectbox) => {
 });
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------
+function generateUUID() {
+  // Hàm tạo chuỗi UUID
+  // Tham khảo: https://stackoverflow.com/a/2117523/13347726
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var r = (Math.random() * 16) | 0,
+      v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
+async function uploadImage() {
+  try {
+    // get files and descripts
+    let files = []
+    let descripts = []
+    $('.modal_wrap_img').each(function () {
+      let curr_file = $(this).find('.upload-input')[0].files[0];
+      if (curr_file) {
+        files.push(curr_file);
+        descripts.push($(this).find('.up-img-description').val());
+      }
+    });
+
+    let formData = new FormData();
+
+    for (let i = 0; i < files.length; i++) {
+      let extension = files[i].name.substring(files[i].name.lastIndexOf('.'));
+      let newName = `${i} ` + generateUUID() + extension;
+      let renamedFile = new File([files[i]], newName, { type: files[i].type });
+      formData.append('files[]', renamedFile);
+      formData.append('descripts[]', descripts[i]);
+    }
+
+    const response = await fetch('/api/uploadFile', {
+      method: 'POST',
+      body: formData
+    });
+
+    if (response.ok) {
+      mark(await response.json());
+    } else if (response.status == 400) {
+      // Error occurred during upload
+      notify('x', 'Sai định dạng file!.');
+      console.error('Error uploading files.');
+    }
+  } catch (error) {
+    // Error occurred during the request
+    console.error('Error uploading files. cho minh ', error);
+  }
+}
+
+async function mark(img_ids) {
+  try {
+
+    let postData = JSON.stringify({
+      school_year: 'hk1 2022-2023',
+      first: [
+        getSelectValue("mySelect1"),
+        getSelectValue("mySelect2"),
+        getSelectValue("mySelect3"),
+        getSelectValue("mySelect4"),
+        getScoreValue("score_05")
+      ],
+      second: [
+        getSelectValue("mySelect5"),
+        getSelectValue("mySelect6")
+      ],
+      third: [
+        getSelectValue("mySelect7"),
+        getSelectValue("mySelect8"),
+        getSelectValue("mySelect9"),
+      ],
+      fourth: [
+        getSelectValue("mySelect10"),
+        getSelectValue("mySelect11"),
+        getSelectValue("mySelect12"),
+      ],
+      fifth: [
+        getSelectValue("mySelect13"),
+        getSelectValue("mySelect14"),
+        getSelectValue("mySelect15"),
+        getSelectValue("mySelect16"),
+      ],
+      img_ids: img_ids,
+      total: total_tier(),
+    });
+
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: postData
+    };
+
+
+    const response = await fetch('/api/mark', requestOptions);
+    if (response.ok) {
+      // window.location.href = currentURLbase + "/";
+    }
+    else if (response.status == 403) {
+      // Error occurred during upload
+      notify('!', 'Sai thông tin đăng nhập');
+    }
+  } catch (error) {
+    console.log(error);
+    notify('x', 'Có lỗi xảy ra!');
+  }
+}
+
+// Save table infomation --------------------------------------------------------------------------------------------------------------------------------------------------
+$(document).on("click", ".save-btn", async function () {
+  uploadImage();
+});

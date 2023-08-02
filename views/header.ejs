@@ -8,6 +8,7 @@
   <title>Header</title>
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/src/css/header.css" />
+  <link rel="stylesheet" href="/src/css/responsive.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
   <script src="https://kit.fontawesome.com/b8977956b3.js" crossorigin="anonymous"></script>
@@ -23,14 +24,14 @@
         </a>
       </div>
       <div class="right-header">
-        <a href="/"></a>
+        <!-- <a href="/"></a> -->
         <%if (avt){%>
         <a href="/nhapdiemdanhgia">Chấm điểm rèn luyện</a>
         <div class="avatar">
           <div class="avatar_wrap">
             <img src="<%=avt%>" alt="" />
             <p>
-              <%=last_name+first_name%>
+              <%=last_name+" "+first_name%>
             </p>
           </div>
 
@@ -38,6 +39,12 @@
             <li><a href="/profile">Thông tin Cá Nhân</a></li>
             <li><a href="/api/logout">Đăng xuất</a></li>
           </ul>
+        </div>
+        <%}%>
+        <%if (typeof logout == 'boolean'){%>
+
+        <div class="dang_xuat">
+          <a href="/api/logout">Đăng xuất</a>
         </div>
         <%}%>
       </div>

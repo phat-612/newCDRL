@@ -6,19 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Trang Đăng Nhập</title>
   <link rel="stylesheet" href="/src/css/table.css" />
-  <!-- <script src="https://cdn.tailwindcss.com"></script> -->
-  <!-- <script>
-      tailwind.config = {
-        mode: "jit",
-        theme: {
-          extend: {
-            colors: {
-              clifford: "#da373d",
-            },
-          },
-        },
-      };
-    </script> -->
   <link rel="stylesheet" href="/src/css/login.css" />
 </head>
 
@@ -38,14 +25,17 @@
             <input type="password" name="password" class="password_input" required="" />
             <label>Mật khẩu</label>
           </div>
-          <div class="checkbox-wrapper-4">
-            <input type="checkbox" id="morning" class="inp-cbx" value="2" />
-            <label for="morning" class="cbx"><span> <svg height="10px" width="12px"></svg></span><span>Tự động đăng nhập</span></label>
-            <svg class="inline-svg">
-              <symbol viewBox="0 0 12 10" id="check-4">
-                <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
-              </symbol>
-            </svg>
+          <div class="control">
+            <div class="checkbox-wrapper-4">
+              <input type="checkbox" id="morning" class="inp-cbx" value="2" />
+              <label for="morning" class="cbx"><span> <svg height="10px" width="12px"></svg></span><span>Tự động đăng nhập</span></label>
+              <svg class="inline-svg">
+                <symbol viewBox="0 0 12 10" id="check-4">
+                  <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                </symbol>
+              </svg>
+            </div>
+            <a href="#" class="quen_mk">Quên mật khẩu</a>
           </div>
           <center>
             <a class="login_btn">
