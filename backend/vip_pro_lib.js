@@ -1,6 +1,8 @@
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = "mongodb+srv://binhminh19112003:Zr3uGIK4dCymOXON@database.sefjqcb.mongodb.net/?retryWrites=true&w=majority";
 
+exports.name_databases = 'database';
+const name_databases = 'database';
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
     serverApi: {
@@ -9,15 +11,17 @@ const client = new MongoClient(uri, {
         deprecationErrors: true,
     }
 });
-async function connectMGDB() {
+
+exports.connectMGDB = async function () {
     await client.connect();
-}
-connectMGDB();
+    return client;
+};
+
 exports.add_one_Data = async function (table, myobj) {
     try {
         // await client.connect();
         // let myobj = { user_name: "Long Khoa Hoc", user_id: "longdd", password: "Nl<3Bp"};
-        const resual = await client.db('database').collection(table).insertOne(myobj);
+        const resual = await client.db(name_databases).collection(table).insertOne(myobj);
         // console.log('SYSTEM | ADD_ONE_DATA | Add document', myobj, 'successfull');
         return resual;
     } finally {
@@ -33,7 +37,7 @@ exports.add_many_Data = async function (table, myobj) {
         //   { user_name: "Long Khoa Hoc", user_id: "longpb", password: "29092006"},
         //   { user_name: "Long Nghien", user_id: "longdd", password: "Nl<3Bp"}
         // ];;
-        await client.db('database').collection(table).insertMany(myobj);
+        await client.db(name_databases).collection(table).insertMany(myobj);
         // console.log('SYSTEM | ADD_MANY_DATA | Add many documents', myobj, 'successfull');
     } finally {
         // Ensures that the client will close when you finish/error
@@ -45,7 +49,7 @@ exports.delete_one_Data = async function (table, myobj) {
     try {
         // await client.connect();
         // let myobj = { user_name: "Long Khoa Hoc"};
-        await client.db('database').collection(table).deleteOne(myobj);
+        await client.db(name_databases).collection(table).deleteOne(myobj);
         // console.log('SYSTEM | DELETE_ONE_DATA | Delete document', myobj, 'successfull');
     } finally {
         // Ensures that the client will close when you finish/error
@@ -57,7 +61,7 @@ exports.delete_many_Data = async function (table, myobj) {
     try {
         // await client.connect();
         // let myobj = { user_name: "Long Khoa Hoc"};
-        await client.db('database').collection(table).deleteMany(myobj);
+        await client.db(name_databases).collection(table).deleteMany(myobj);
         // console.log('SYSTEM | DELETE_MANY_DATA | Delete many documents', myobj, 'successfull');
     } finally {
         // Ensures that the client will close when you finish/error
@@ -69,7 +73,7 @@ exports.find_one_Data = async function (table, myobj = undefined) {
     try {
         // await client.connect();
         // let myobj = { user_name: "Long Khoa Hoc"};
-        let result = await client.db('database').collection(table).findOne(myobj);
+        let result = await client.db(name_databases).collection(table).findOne(myobj);
 
         // console.log('SYSTEM | FIND_ONE_DATA | Finding document: ', result);
 
@@ -86,7 +90,7 @@ exports.find_all_Data = async function ({ table, query = undefined, projection =
         // await client.connect();
         // let query = { user_name: "Long Khoa Hoc"};
         // sort go here: https://www.w3schools.com/nodejs/nodejs_mongodb_sort.asp
-        let result = await client.db('database').collection(table).find(query, { 'projection': projection }).sort(sort).skip(skip).limit(limit).toArray();
+        let result = await client.db(name_databases).collection(table).find(query, { 'projection': projection }).sort(sort).skip(skip).limit(limit).toArray();
 
         // Chuyển đổi giá trị _id của từng bản ghi sang chuỗi ký tự
 
@@ -106,7 +110,7 @@ exports.update_one_Data = async function (table, myquery, newvalues) {
         // let myquery = { user_name: "Long Khoa Hoc"};
         // let newvalues = { $set: {name: "Mickey", address: "Canyon 123" } };
         // có nhiều toán từ  $set, $inc, $push, $pull, tự google
-        await client.db('database').collection(table).updateOne(myquery, newvalues);
+        await client.db(name_databases).collection(table).updateOne(myquery, newvalues);
 
         // console.log('SYSTEM | UPDATE_ONE_DATA | Update document', myquery, 'to', newvalues, 'successfull');
 
@@ -123,7 +127,7 @@ exports.update_many_Data = async function (table, myquery, newvalues) {
         // let myquery = { user_name: "Long Khoa Hoc"};
         // let newvalues = { $set: {name: "Mickey", address: "Canyon 123" } };
         // có nhiều toán từ  $set, $inc, $push, $pull, tự google
-        await client.db('database').collection(table).updateMany(myquery, newvalues);
+        await client.db(name_databases).collection(table).updateMany(myquery, newvalues);
 
         // console.log('SYSTEM | UPDATE_MANY_DATA | Update documents', myquery, 'to', newvalues, 'successfull');
 

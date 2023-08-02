@@ -35,5 +35,15 @@ $('.login_btn').on('click', async function (e) {
         }
 
     }
-
 });
+
+if (($('.mssv_input').val() != "") || ($('.password_input').val() != "")) {
+    const input = $('.mssv_input');
+    let defaultValue = input.prop('defaultValue');
+    let currentValue = input.val();
+    console.log(defaultValue,currentValue)
+    if (defaultValue !== currentValue) {
+        console.log('dsa');
+    }
+    // $('.user-box').addClass('valid');;
+}
