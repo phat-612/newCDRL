@@ -62,10 +62,15 @@ server.connectMGDB().then((client) => {
   // Sử dụng express-session middleware
 
   app.use(session({
+    name: 'howtosavealife?', // Đặt tên mới cho Session ID
     secret: authenticationKey,
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({ client, dbName: 'database' }),
+    store: MongoStore.create({
+      client, dbName: 'database', crypto: {
+        secret: authenticationKey
+      }
+    }),
     cookie: {
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days (30 * 24 * 60 * 60 * 1000 milliseconds)
       // secure: true, bật lên 
