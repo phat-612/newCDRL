@@ -1,5 +1,6 @@
-// const viplib = require("./vip_pro_lib");
 const express = require("express");
+const fs = require('fs');
+const https = require('https');
 const session = require('express-session');
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
@@ -12,6 +13,11 @@ server.connectMGDB().then((client) => {
   // ----------------------------------------------------------------
   const app = express();
   const router = express.Router();
+  const privateKey = fs.readFileSync(path.join('.certificate', 'localhost.key'), 'utf8');
+  const certificate = fs.readFileSync(path.join('.certificate', 'localhost.crt'), 'utf8');
+
+  const credentials = { key: privateKey, cert: certificate };
+
   // ----------------------------------------------------------------
   const port = 8181;
   const secretKey = "5gB#2L1!8*1!0)$7vF@9";
@@ -73,9 +79,9 @@ server.connectMGDB().then((client) => {
     }),
     cookie: {
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days (30 * 24 * 60 * 60 * 1000 milliseconds)
-      // secure: true, bật lên 
+      secure: true,
       httpOnly: true,
-      sameSite: 'lax',
+      sameSite: 'strict',
       rolling: true,
     }
   }));
@@ -211,14 +217,14 @@ server.connectMGDB().then((client) => {
     res.sendStatus(404);
   });
 
-  app.listen(port, async () => {
+  const httpsServer = https.createServer(credentials, app);
+  httpsServer.listen(port, () => {
     console.log(
-      `SYSTEM | LOG | Đang chạy server siu cấp vip pro đa vũ trụ ở http://localhost:${port}`
+      `SYSTEM | LOG | Đang chạy server siu cấp vip pro đa vũ trụ ở https://localhost:${port}`
     );
   });
-
   // ----------------------------------------------------------------
 })
   .catch((err) => {
-    console.error('SYSTEM | DATABASE | Failed to connect to MongoDB', err);
+    console.error('SYSTEM | DATABASE | got err', err);
   });
