@@ -1,10 +1,11 @@
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = "mongodb+srv://binhminh19112003:Zr3uGIK4dCymOXON@database.sefjqcb.mongodb.net/?retryWrites=true&w=majority";
 
-exports.name_databases = 'database';
 const name_databases = 'database';
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
     serverApi: {
         version: ServerApiVersion.v1,
         strict: true,
@@ -16,6 +17,8 @@ exports.connectMGDB = async function () {
     await client.connect();
     return client;
 };
+
+exports.collection_seasion = client.db(name_databases).collection('sessions');
 
 exports.add_one_Data = async function (table, myobj) {
     try {

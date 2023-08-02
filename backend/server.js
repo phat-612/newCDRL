@@ -4,8 +4,9 @@ const session = require('express-session');
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const path = require("path");
-const MongoStore = require('connect-mongodb-session')(session);
 const server = require("./vip_pro_lib.js");
+const MongoStore = require('connect-mongo');
+
 // ----------------------------------------------------------------
 server.connectMGDB().then((client) => {
   // ----------------------------------------------------------------
@@ -59,11 +60,12 @@ server.connectMGDB().then((client) => {
   app.use(cookieParser());
   app.use("/", router);
   // Sử dụng express-session middleware
+
   app.use(session({
     secret: authenticationKey,
     resave: false,
     saveUninitialized: false,
-    // store: new MongoStore({ client: client, dbName: 'database', collection: 'sessions' }),
+    store: MongoStore.create({ client, dbName: 'database' }),
     cookie: {
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days (30 * 24 * 60 * 60 * 1000 milliseconds)
       // secure: true, bật lên 
