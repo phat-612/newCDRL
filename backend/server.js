@@ -330,11 +330,11 @@ server.connectMGDB().then((client) => {
       // }
       const user = req.session.user;
       // check if table is exist or not
-      if (await server.find_one_Data('table', { _id: data._id, school_year: data.school_year })) {
+      if (await server.find_one_Data('table', { mssv: user._id, school_year: data.school_year })) {
         // update old table
         await server.update_one_Data(
           'table',
-          { _id: data._id, school_year: data.school_year },
+          { mssv: user._id, school_year: data.school_year },
           {
             $set: {
               first: data.first,
@@ -351,7 +351,7 @@ server.connectMGDB().then((client) => {
       } else {
         // create new table
         await server.add_one_Data('table', {
-          _id: user._id,
+          mssv: user._id,
           school_year: data.school_year,
           first: data.first,
           second: data.second,

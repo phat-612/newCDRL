@@ -401,7 +401,11 @@ async function mark(img_ids) {
         getSelectValue("mySelect16"),
       ],
       img_ids: img_ids,
-      total: total_tier(),
+      total: index_tier_1() +
+        index_tier_2() +
+        index_tier_3() +
+        index_tier_4() +
+        index_tier_5()
     });
 
     const requestOptions = {
@@ -415,7 +419,7 @@ async function mark(img_ids) {
 
     const response = await fetch('/api/mark', requestOptions);
     if (response.ok) {
-      // window.location.href = currentURLbase + "/";
+      notify('n', 'Đã lưu phiếu đánh giá điểm rèn luyện thành công!')
     }
     else if (response.status == 403) {
       // Error occurred during upload
@@ -429,5 +433,6 @@ async function mark(img_ids) {
 
 // Save table infomation --------------------------------------------------------------------------------------------------------------------------------------------------
 $(document).on("click", ".save-btn", async function () {
+  notify('!', 'Đang upload phiếu điểm...');
   uploadImage();
 });
