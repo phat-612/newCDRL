@@ -1,0 +1,44 @@
+@media screen and (max-width: 600px) {
+    .porfile_container {
+        flex-direction: column;
+    }
+
+    .profile_title {
+        padding-top: 20px;
+        margin: 0;
+    }
+    .profile_btn_gr {
+        width: 100%;
+    }
+    .profile_btn_gr_parent {
+        flex-direction: column-reverse;
+        align-items: center;
+    }
+
+    .profile_title {
+        font-size: 1.5rem;
+        padding: 30px 0;
+    }
+
+    .profile_btn_gr_parent {
+        height: 20rem;
+    }
+
+    .porfile_container_item {
+        flex-direction: column;
+    }
+
+    .info_input {
+        height: 4rem;
+        width: 100%;
+        padding: 0;
+    }
+
+    .container {
+        width: 100%;
+    }
+
+    .bt_av {
+        flex-direction: column;
+    }
+}

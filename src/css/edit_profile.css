@@ -36,7 +36,13 @@ body {
   min-height: 4rem;
 }
 
+.porfile_container {
+  display: flex;
+  justify-content: space-between;
+}
+
 .porfile_avatar {
+  flex: 1;
   flex-direction: column;
   position: relative;
 }
@@ -239,16 +245,25 @@ body {
   font-size: 1.5rem;
   border-radius: 1rem;
 }
-.bt_av{
+
+.bt_av {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+
 .profile_btn_gr {
-  width: 50%;
+  width: 30%;
   display: flex;
   justify-content: center;
-  
+
+}
+
+.profile_btn_gr_parent {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding-bottom: 4rem;
 }
 
 .button-35 {
@@ -280,12 +295,21 @@ body {
   touch-action: manipulation;
 }
 
+.profile_btn_logoutall {
+  width: 30rem;
+}
+
 .button-35:hover {
   box-shadow: #121212 0 0 0 3px, transparent 0 0 0 0;
 }
 
 .profile_title {
-  margin: 4rem 0 8rem 0;
-  font-size: 3rem;
+  padding: 4rem 0;
+  font-size: 2rem;
   text-align: center;
+  border-bottom: 0.1rem solid;
+}
+
+.right_container {
+  flex: 2;
 }

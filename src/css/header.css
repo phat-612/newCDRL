@@ -99,7 +99,7 @@ body {
   box-sizing: border-box;
   color: #121212;
   cursor: pointer;
-  display: inline-flex;
+  /* display: inline-flex; */
   font-family: Inter, sans-serif;
   font-size: 1.8rem;
   font-weight: 700;
@@ -120,4 +120,26 @@ body {
 
 .button-35:hover {
   box-shadow: #121212 0 0 0 3px, transparent 0 0 0 0;
+}
+/* responsive */
+@media screen and (max-width: 600px){
+  .header{
+    display: flex;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.right-header > a{
+    display: none;
+}
+.avatar_wrap > p{
+    display: none;
+}
+.setting{
+    right: -13%;
+}
+.avatar:hover .setting{
+    display: none;
+}
 }

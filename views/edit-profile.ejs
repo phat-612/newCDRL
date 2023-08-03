@@ -6,35 +6,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Trang Thông Tin Cá Nhân</title>
   <link rel="stylesheet" href="../src/css/edit_profile.css" />
+  <link rel="stylesheet" href="../src/css/edit-profile-responsive.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
   <script src="https://kit.fontawesome.com/b8977956b3.js" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="../src/css/user_info.css">
 </head>
 
 <body>
   <div class="main">
     <%- include(header) %>
       <div class="container">
+        <div class="profile_title">
+          <h1>Thông Tin Sinh Viên </h1>  
+        </div>
         <form method="post" action="/chaclaguilen" class="porfile_container">
-          <h1 class="profile_title">Thông Tin Sinh Viên </h1>
-
-          <div class="porfile_container_item">
-            <label class="info_lable" for="">Mã Số Sinh Viên </label><input type="text" required
-              class="mssv info_input" />
-          </div>
-          <div class="porfile_container_item">
-            <label class="info_lable" for="">Họ Và Tên</label><input type="text" required
-              class="full_name info_input" />
-          </div>
-          <div class="porfile_container_item">
-            <label class="info_lable" for="">Email</label>
-            <input type="email" class="email info_input" />
-          </div>
-          <div class="porfile_container_item">
-            <label class="info_lable" for="">Tên Hiển Thị</label>
-            <input type="text" required class="display_name info_input" />
-          </div>
-
           <div class="porfile_container_item porfile_avatar">
             <label class="info_lable" for="">Ảnh đại diện</label>
             <div class="bt_av">
@@ -47,16 +31,37 @@
                   <i class="fa-solid fa-plus"></i>
                 </button>
               </div>
-              <div class="profile_btn_gr">
-                <button class="button-35 profile_btn_cancel" role="button">Hủy </button>
-                <button class="button-35 profile_btn_save" role="button">Lưu </button>
-              </div>
             </div>
           </div>
-
+          <div class="right_container">
+            <div class="porfile_container_item">
+              <label class="info_lable" for="">Mã Số Sinh Viên </label><input type="text" required
+                class="mssv info_input" />
+            </div>
+            <div class="porfile_container_item">
+              <label class="info_lable" for="">Họ Và Tên</label><input type="text" required
+                class="full_name info_input" />
+            </div>
+            <div class="porfile_container_item">
+              <label class="info_lable" for="">Email</label>
+              <input type="email" class="email info_input" />
+            </div>
+            <div class="porfile_container_item">
+              <label class="info_lable" for="">Tên Hiển Thị</label>
+              <input type="text" required class="display_name info_input" />
+            </div>
+          </div>
         </form>
+        <div class="profile_btn_gr_parent">
+          <button class="button-35 profile_btn_logoutall" role="button"> Đăng xuất khỏi các thiết bị khác </button>
+          <div class="profile_btn_gr">
+            <button class="button-35 profile_btn_cancel" role="button">Hủy </button>
+            <button class="button-35 profile_btn_save" role="button">Lưu </button>
+          </div>
+        </div>
       </div>
   </div>
+  <%- include(footer) %>
   <script src="../src/JS/user_info.js"></script>
 </body>
 

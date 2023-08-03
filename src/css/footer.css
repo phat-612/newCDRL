@@ -5,14 +5,35 @@
 }
 .footer{
     display: none;
-    height: 60px;
+    justify-content: space-around;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
     background-color: #fff;
+    height: 60px;
 }
+
 .footer a{
     display: inline-block;
     padding: 1rem;
+    width: 33.3333%;
+    text-align: center;
 }
 .footer a i{
-    font-size: 4rem;
-    color: black;
+    font-size: 3.4rem;
+    color: #313131;
+    transition: color 0.2s ease-in-out;
+}
+.footer a i:active{
+    color: #0000ffa3 !important;
+}
+.active{
+    color: #0000ffa3 !important;
+}
+@media screen and (max-width: 600px){
+    .footer{
+        display: flex;
+    }
 }

@@ -1,3 +1,20 @@
+/* Ghi chú: --------------------------------------------------------------------------------------------------------------
+@dawn1810:
+  phân quyền người dùng:
+    0: sinh vien
+    1: ban cán sự lơp
+    2: giáo viên
+    3: khoa 
+    4: admin
+@RuriMeiko
+  tài khoản mặt định:
+    {_id: "2101281",
+    password: "2101281",
+    first: "true"}
+    
+ 
+-------------------------------------------------------------------------------------------------------------------------- */
+
 const express = require("express");
 const fs = require('fs');
 const https = require('https');
@@ -53,6 +70,7 @@ server.connectMGDB().then((client) => {
 
   async function checkCookieUserLogin(req, res, next) {
     const user = req.session.user;
+
     if (!user) {
       // Cookie không tồn tại, chặn truy cập
       return res.redirect("/login");
@@ -153,14 +171,6 @@ server.connectMGDB().then((client) => {
       footer: "footer",
     });
   });
-  // test new table
-  app.get("/testnhapbangdiem", checkCookieUserLogin, async (req, res) => {
-    res.render("nhapbangdiem_copy", {
-      header: "header",
-      footer: "footer",
-      thongbao: "thongbao",
-    });
-  });
 
   // login route
   app.get("/login", async (req, res) => {
@@ -194,6 +204,7 @@ server.connectMGDB().then((client) => {
     res.render("nhapbangdiem", {
       header: "header",
       thongbao: "thongbao",
+      footer: "footer"
     });
   });
 
@@ -215,14 +226,60 @@ server.connectMGDB().then((client) => {
   app.get("/profile", checkCookieUserLogin, async (req, res) => {
     res.render("edit-profile", {
       header: "header",
+      footer: "footer",
     });
   });
 
   // thong tin ca nhan route
   app.get("/danhsachbangdiem", checkCookieUserLogin, async (req, res) => {
-    res.render("danhsachbangdiem", {
-      header: "header",
-    });
+    // check user login:
+    if (
+      await server.find_one_Data('user_info', { _id: user._id }).power == 1 // user is staff members
+    ) {
+      const user = req.session.user;
+      const school_year = 'hk1 2022-2023'; // change latter as a session variable
+      // get staff member info :
+      const staff_info = await server.find_one_Data('user_info', { _id: user._id });
+      // get all student in staff member class:
+      const student_list = await server.find_all_Data({
+        table: 'user_info',
+        query: { class: staff_info.class },
+        projection: { first_name: 1, last_name: 1 },
+        sort: { first_name: 1, last_name: 1 }
+      });
+      // get all student total score from them self:
+      let render = {
+        header: "header",
+        student_list: student_list,
+        student_scores: [],
+        staff_scores: [],
+        department_scores: []
+      }
+      for (student of student_list) {
+        const curr_student_score = await server.find_one_Data('student_table', { _id: student._id, school_year: school_year });
+        const curr_staff_score = await server.find_one_Data('staff_table', { _id: student._id, school_year: school_year });
+        const curr_departmentt_score = await server.find_one_Data('department_table', { _id: student._id, school_year: school_year });
+        // student
+        if (curr_staff_score) {
+          render.student_scores.push(curr_student_score.total);
+        }
+        // staff member
+        if (curr_staff_score) {
+          render.staff_scores.push(curr_staff_score.total);
+        }
+        // department
+        if (curr_departmentt_score) {
+          render.department_scores.push(curr_departmentt_score.total);
+        }
+      }
+
+      res.render("danhsachbangdiem", render);
+    }
+    else { // user not staff members 
+      // redirect to home
+      return res.redirect('/');
+    }
+
   });
 
   // API SPACE ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -243,14 +300,6 @@ server.connectMGDB().then((client) => {
         } else if (user._id === data.mssv && user.password === data.password) {
           // Đăng nhập thành công, lưu thông tin người dùng vào phiên
           req.session.user = user;
-          // const sessionId = req.session.id;
-          // const resl = await server.find_one_Data("sessions_manager",{_id: user._id})
-          // if (resl)
-          // {
-          //   server.update_one_Data("sessions_manager",{_id: user._id}, )
-
-          // }
-          // server.add_one_Data("sessions_manager",{})
           // Kiểm tra xem người dùng có chọn "Remember me" không
           if (data.remember) {
             // Thiết lập thời gian sống cookie lâu hơn để lưu thông tin đăng nhập trong 30 ngày
@@ -259,7 +308,13 @@ server.connectMGDB().then((client) => {
             // Thiết lập thời gian sống cookie lại về mặc định (1 giờ)
             req.session.cookie.maxAge = 3600000; // 1 hour
           }
-
+          const sessionId = req.session.id;
+          const resl = await server.find_one_Data("sessions_manager", { _id: user._id })
+          if (resl) {
+            server.update_one_Data("sessions_manager", { _id: user._id }, { $push: { sessionId: sessionId } });
+          } else {
+            server.add_one_Data("sessions_manager", { _id: user._id, sessionId: [sessionId] })
+          }
           if (user.first == 'true') {
             res.status(200).json({ check: true });
           } else {
@@ -337,11 +392,30 @@ server.connectMGDB().then((client) => {
       //   total: 100,
       // }
       const user = req.session.user;
+      // check power of user:
+      let table = 'student_table'
+      switch (
+        await server.find_one_Data('user_info', { _id: user._id }).power
+      ) {
+        case 0: // sinh vien
+          table = 'student_table';
+          break;
+        case 1: // ban can su
+          table = 'staff_table';
+          break;
+        case 2: // giao vien
+          table = 'staff_table';
+          break;
+        case 3: // khoa
+          table = 'department_table';
+          break;
+      }
+
       // check if table is exist or not
-      if (await server.find_one_Data('table', { mssv: user._id, school_year: data.school_year })) {
+      if (await server.find_one_Data(table, { mssv: user._id, school_year: data.school_year })) {
         // update old table
         await server.update_one_Data(
-          'table',
+          table,
           { mssv: user._id, school_year: data.school_year },
           {
             $set: {
@@ -358,18 +432,21 @@ server.connectMGDB().then((client) => {
         )
       } else {
         // create new table
-        await server.add_one_Data('table', {
-          mssv: user._id,
-          school_year: data.school_year,
-          first: data.first,
-          second: data.second,
-          third: data.third,
-          fourth: data.fourth,
-          fifth: data.fifth,
-          img_ids: data.img_ids,
-          total: data.total,
-          update_date: new Date()
-        });
+        await server.add_one_Data(
+          table,
+          {
+            mssv: user._id,
+            school_year: data.school_year,
+            first: data.first,
+            second: data.second,
+            third: data.third,
+            fourth: data.fourth,
+            fifth: data.fifth,
+            img_ids: data.img_ids,
+            total: data.total,
+            update_date: new Date()
+          }
+        );
       }
 
       res.sendStatus(200);

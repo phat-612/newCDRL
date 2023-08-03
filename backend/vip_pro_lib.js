@@ -78,7 +78,7 @@ exports.find_one_Data = async function (table, myobj = undefined) {
         // let myobj = { user_name: "Long Khoa Hoc"};
         let result = await client.db(name_databases).collection(table).findOne(myobj);
 
-        console.log('SYSTEM | FIND_ONE_DATA | Finding document: ', result);
+        // console.log('SYSTEM | FIND_ONE_DATA | Finding document: ', result);
 
         return result;
     } finally {
@@ -114,7 +114,7 @@ exports.update_one_Data = async function (table, myquery, newvalues) {
         // let newvalues = { $set: {name: "Mickey", address: "Canyon 123" } };
         // có nhiều toán từ  $set, $inc, $push, $pull, tự google
         const resual = await client.db(name_databases).collection(table).updateOne(myquery, newvalues);
-        console.log('SYSTEM | UPDATE_ONE_DATA | Update document', myquery, 'to', newvalues, 'successfull');
+        // console.log('SYSTEM | UPDATE_ONE_DATA | Update document', myquery, 'to', newvalues, 'successfull');
         return resual;
 
 

@@ -1,21 +1,3 @@
 @media screen and (max-width:600px) {
-    .porfile_container_item {
-        flex-direction: column;
-    }
-
-    .info_input {
-        height: 4rem;
-        width: 100%;
-        padding:0;
-    }
-
-    .container {
-        width: 38rem;
-    }
-    .bt_av {
-        flex-direction: column;
-    }
-    .profile_btn_gr{
-        margin-top: 7rem;
-    }
+    
 }
