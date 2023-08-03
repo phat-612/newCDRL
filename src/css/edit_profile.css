@@ -45,12 +45,15 @@ body {
   flex: 1;
   flex-direction: column;
   position: relative;
+  margin-bottom: -12rem;
 }
 
 .info_lable {
   font-size: 2rem;
   line-height: 2;
   font-weight: 600;
+  display: flex;
+  justify-content: space-around;
 }
 
 .info_input {
@@ -250,19 +253,22 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 17rem;
+  justify-content: space-around;
+  margin-top: -2rem;
 }
 
 .profile_btn_gr {
   width: 30%;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
 
 }
 
 .profile_btn_gr_parent {
   display: flex;
   width: 100%;
-  justify-content: space-between;
+  justify-content: space-around;
   padding-bottom: 4rem;
 }
 
@@ -308,8 +314,10 @@ body {
   font-size: 2rem;
   text-align: center;
   border-bottom: 0.1rem solid;
+  border-color: #aeaeae;
 }
 
 .right_container {
   flex: 2;
+  margin-top: 1rem
 }
