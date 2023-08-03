@@ -243,6 +243,14 @@ server.connectMGDB().then((client) => {
         } else if (user._id === data.mssv && user.password === data.password) {
           // Đăng nhập thành công, lưu thông tin người dùng vào phiên
           req.session.user = user;
+          // const sessionId = req.session.id;
+          // const resl = await server.find_one_Data("sessions_manager",{_id: user._id})
+          // if (resl)
+          // {
+          //   server.update_one_Data("sessions_manager",{_id: user._id}, )
+
+          // }
+          // server.add_one_Data("sessions_manager",{})
           // Kiểm tra xem người dùng có chọn "Remember me" không
           if (data.remember) {
             // Thiết lập thời gian sống cookie lâu hơn để lưu thông tin đăng nhập trong 30 ngày
