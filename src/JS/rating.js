@@ -421,9 +421,9 @@ async function mark(img_ids) {
     if (response.ok) {
       notify('n', 'Đã lưu phiếu đánh giá điểm rèn luyện thành công!')
     }
-    else if (response.status == 403) {
+    else if (response.status == 500) {
       // Error occurred during upload
-      notify('!', 'Sai thông tin đăng nhập');
+      notify('x', 'Có lỗi xảy ra!');
     }
   } catch (error) {
     console.log(error);
