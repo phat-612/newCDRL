@@ -1,3 +1,9 @@
+// gia tri mac dinh
+const email_d = $('.email').val();
+const displayName_d = $('.display_name').val();
+const avt_d = $('.up-img').attr('src');
+// -------------
+
 $(document).on("dragover", ".modal_wrap_img_item", handleDragOver);
 $(document).on("dragleave", ".modal_wrap_img_item", handleDragLeave);
 $(document).on("drop", ".modal_wrap_img_item", handleDrop);
@@ -8,7 +14,6 @@ $(document).on("click", ".profile_btn_cancel", handleCancelButtonClick);
 $(document).on("click", ".profile_btn_save", handleSaveButtonClick);
 
 // -----------------------------------------------------------------------------
-
 function handleDragOver(event) {
   event.preventDefault();
   $(this).addClass("dragover");
@@ -43,14 +48,73 @@ function displayImage(file) {
   reader.readAsDataURL(file);
 }
 
-function handleCancelButtonClick(event){
-  console.log(event);
+function handleCancelButtonClick(event) {
+  const email = $('.email').val();
+  const displayName = $('.display_name').val();
+  const avt = $('.up-img').attr('src');
+  if (email != email_d || displayName != displayName_d || avt != avt_d) {
+    if (confirm('Thay đổi của bạn sẽ không được lưu, tiếp tục?')) {
+      window.location.href = "/";
+    }
+  } else {
+    window.location.href = "/";
+  }
 }
 
-function handleLogOutAllButtonClick(event){
-  console.log(event);
+async function handleLogOutAllButtonClick(event) {
+  try {
+    const requestOptions = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    };
+    const response = await fetch('/api/logoutAlldevice', requestOptions);
+    if (response.ok) {
+      notify('n', 'Đăng xuất khỏi tất cả thiết bị thành công!');
+    } else if (response.status == 500) {
+      // Error occurred during upload
+      notify('x', 'Có lỗi xảy ra!');
+    }
+  } catch (error) {
+    console.log(error);
+    notify('x', 'Có lỗi xảy ra!');
+  }
 }
 
-function handleSaveButtonClick(event){
-  console.log(event);
+async function handleSaveButtonClick(event) {
+  try {
+    const email = $('.email').val();
+    const displayName = $('.display_name').val();
+    const avt = $('.up-img').attr('src');
+    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+      notify('x', 'Email không đúng định dạng!');
+    }
+    else {
+      let postData = JSON.stringify({
+        email: email,
+        displayName: displayName,
+        avt: avt
+      });
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: postData
+      };
+      const response = await fetch('/api/updateInfo', requestOptions);
+      if (response.ok) {
+        notify('n', 'Đổi thông tin thành công!');
+        setTimeout(() => { window.location.reload(); },
+          2000)
+      } else if (response.status == 500) {
+        // Error occurred during upload
+        notify('x', 'Có lỗi xảy ra!');
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    notify('x', 'Có lỗi xảy ra!');
+  }
 }

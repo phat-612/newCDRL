@@ -236,6 +236,7 @@ server.connectMGDB().then((client) => {
       name: user_info.last_name + " " + user_info.first_name,
       mssv: user_info._id,
       email: user_info.email,
+      thongbao: "thongbao"
     });
   });
 
@@ -351,6 +352,36 @@ server.connectMGDB().then((client) => {
         res.redirect('/login');
       }
     });
+  });
+
+  app.get("/api/logoutAlldevice", checkCookieUserLogin, async (req, res) => {
+    // Xóa thông tin phiên (session) của người dùng
+    const _id = req.session.user._id;
+    const result = await server.find_one_Data('sessions_manager', { _id: _id });
+    const listSeasionId = result.sessionId;
+    listSeasionId.splice(listSeasionId.indexOf(req.session.id), 1);
+    await server.update_one_Data('sessions_manager', { _id: _id }, { $pull: { sessionId: { $ne: req.session.id } } });
+    await server.delete_many_Data('sessions', { _id: { $in: listSeasionId } });
+    res.sendStatus(200);
+  });
+
+  // Đổi pass lần đầu đăng nhập --------------------------------------------------------------------------------------------------------------------------------
+  app.post("/api/updateInfo", checkCookieUserLogin, async (req, res) => {
+    try {
+      const data = req.body;
+      // console.log(`SYSTEM | UPDATE_INFO | Dữ liệu nhận được`, data);
+      await server.update_one_Data('user_info', { "_id": req.session.user._id }, {
+        $set: {
+          displayName: data.displayName,
+          email: data.email,
+          avt: data.avt
+        }
+      });
+      res.sendStatus(200);
+    } catch (err) {
+      console.log("SYSTEM | UPDATE_INFO | ERROR | ", err);
+      res.sendStatus(500);
+    }
   });
 
   // Đổi pass ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

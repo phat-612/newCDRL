@@ -25,7 +25,7 @@ exports.add_one_Data = async function (table, myobj) {
         // await client.connect();
         // let myobj = { user_name: "Long Khoa Hoc", user_id: "longdd", password: ""};
         const resual = await client.db(name_databases).collection(table).insertOne(myobj);
-        console.log('SYSTEM | ADD_ONE_DATA | Add document', myobj, 'successfull');
+        // console.log('SYSTEM | ADD_ONE_DATA | Add document', myobj, 'successfull');
         return resual;
     } finally {
         // Ensures that the client will close when you finish/error

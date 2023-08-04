@@ -26,8 +26,7 @@ $('.login_btn').on('click', async function (e) {
                 if (datareturn.check) {
                     window.location.href = currentURLbase + "/login/updateyourpasswords";
                 } else {
-                    window.location.href = currentURLbase + "/";
-
+                    window.location.href = "/";
                 }
             }
             else if (response.status == 403) {
