@@ -7,10 +7,12 @@
         padding-top: 20px;
         margin: 0;
     }
+
     .profile_btn_gr {
         width: 100%;
         justify-content: center;
     }
+
     .profile_btn_gr_parent {
         flex-direction: column-reverse;
         align-items: center;
@@ -32,7 +34,7 @@
     .info_input {
         height: 4rem;
         width: 100%;
-        padding: 0;
+        box-sizing: border-box;
     }
 
     .container {
