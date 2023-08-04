@@ -230,14 +230,12 @@ server.connectMGDB().then((client) => {
 
   // thong tin ca nhan route
   app.get("/danhsachbangdiem", checkCookieUserLogin, async (req, res) => {
+    const user = req.session.user;
+    const school_year = 'hk1 2022-2023'; // change latter as a session variable
+    // get staff member info :
+    const staff_info = await server.find_one_Data('user_info', { _id: user._id });
     // check user login:
-    if (
-      await server.find_one_Data('user_info', { _id: user._id }).power == 1 // user is staff members
-    ) {
-      const user = req.session.user;
-      const school_year = 'hk1 2022-2023'; // change latter as a session variable
-      // get staff member info :
-      const staff_info = await server.find_one_Data('user_info', { _id: user._id });
+    if (staff_info.power == 1) {
       // get all student in staff member class:
       const student_list = await server.find_all_Data({
         table: 'user_info',
@@ -248,6 +246,7 @@ server.connectMGDB().then((client) => {
       // get all student total score from them self:
       let render = {
         header: "header",
+        staff_name: "tan dat",
         student_list: student_list,
         student_scores: [],
         staff_scores: [],
@@ -281,7 +280,7 @@ server.connectMGDB().then((client) => {
   });
 
   // API SPACE ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
+
   // Log in --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   app.post("/api/login", async (req, res) => {
     const data = req.body;
@@ -356,7 +355,7 @@ server.connectMGDB().then((client) => {
     }
   });
 
- // Đổi pass lần đầu đăng nhập --------------------------------------------------------------------------------------------------------------------------------
+  // Đổi pass lần đầu đăng nhập --------------------------------------------------------------------------------------------------------------------------------
   app.post("/api/first_login", checkCookieUserLogin, async (req, res) => {
     try {
       const data = req.body;
@@ -393,11 +392,10 @@ server.connectMGDB().then((client) => {
       //   total: 100,
       // }
       const user = req.session.user;
+      const marker = await server.find_one_Data('user_info', { _id: user._id });
       // check power of user:
       let table = 'student_table'
-      switch (
-      await server.find_one_Data('user_info', { _id: user._id }).power
-      ) {
+      switch ( marker.power ) {
         case 0: // sinh vien
           table = 'student_table';
           break;
@@ -415,11 +413,69 @@ server.connectMGDB().then((client) => {
       // check if table is exist or not
       if (await server.find_one_Data(table, { mssv: user._id, school_year: data.school_year })) {
         // update old table
-        await server.update_one_Data(
-          table,
-          { mssv: user._id, school_year: data.school_year },
-          {
-            $set: {
+        // if table of staff member or teacher it will have name of who mark this table
+        if (table === 'staff_table') {
+          await server.update_one_Data(
+            table,
+            { mssv: user._id, school_year: data.school_year },
+            {
+              $set: {
+                first: data.first,
+                second: data.second,
+                third: data.third,
+                fourth: data.fourth,
+                fifth: data.fifth,
+                img_ids: data.img_ids,
+                total: data.total,
+                marker: marker.last_name + " " + marker.first_name,
+                update_date: new Date()
+              }
+            }
+          )
+        } else {
+          await server.update_one_Data(
+            table,
+            { mssv: user._id, school_year: data.school_year },
+            {
+              $set: {
+                first: data.first,
+                second: data.second,
+                third: data.third,
+                fourth: data.fourth,
+                fifth: data.fifth,
+                img_ids: data.img_ids,
+                total: data.total,
+                update_date: new Date()
+              }
+            }
+          )
+        }
+      } else {
+        // create new table
+        // if table of staff member or teacher it will have name of who mark this table
+        if (table === 'staff_table') {
+          await server.add_one_Data(
+            table,
+            {
+              mssv: user._id,
+              school_year: data.school_year,
+              first: data.first,
+              second: data.second,
+              third: data.third,
+              fourth: data.fourth,
+              fifth: data.fifth,
+              img_ids: data.img_ids,
+              total: data.total,
+              marker: marker.last_name + " " + marker.first_name,
+              update_date: new Date()
+            }
+          );
+        } else {
+          await server.add_one_Data(
+            table,
+            {
+              mssv: user._id,
+              school_year: data.school_year,
               first: data.first,
               second: data.second,
               third: data.third,
@@ -429,25 +485,8 @@ server.connectMGDB().then((client) => {
               total: data.total,
               update_date: new Date()
             }
-          }
-        )
-      } else {
-        // create new table
-        await server.add_one_Data(
-          table,
-          {
-            mssv: user._id,
-            school_year: data.school_year,
-            first: data.first,
-            second: data.second,
-            third: data.third,
-            fourth: data.fourth,
-            fifth: data.fifth,
-            img_ids: data.img_ids,
-            total: data.total,
-            update_date: new Date()
-          }
-        );
+          );
+        }
       }
 
       res.sendStatus(200);

@@ -65,48 +65,22 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td><div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row1" class="inp-cbx" value="2" />
-                    <label for="row1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label></td>
-                  <td>1</td>
-                  <td>2100973</td>
-                  <td>nguyễn thị thúy an <span class="dau_sao">*</span></td>
-                  <td class="new_update">88</td>
-                  <td>88</td>
-                  <td>tấn đạt</td>
-                  <td>88</td>
-                  <td><a href="#">Chấm điểm</a></td>
-                </tr>
-                <tr>
-                  <td><div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row2" class="inp-cbx" value="2" />
-                    <label for="row2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label></td>
-                  <td>1</td>
-                  <td>2100973</td>
-                  <td>nguyễn thị thúy an</td>
-                  <td>88</td>
-                  <td>88</td>
-                  <td>tấn đạt</td>
-                  <td>88</td>
-                  <td><a href="#">Chấm điểm</a></td>
-                </tr>
-                <tr>
-                  <td><div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row3" class="inp-cbx" value="2" />
-                    <label for="row3" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label></td>
-                  <td>1</td>
-                  <td>2100973</td>
-                  <td>nguyễn thị thúy an</td>
-                  <td>88</td>
-                  <td>88</td>
-                  <td>tấn đạt</td>
-                  <td>88</td>
-                  <td><a href="#">Chấm điểm</a></td>
-                </tr>
+                <% for (let i = 0; i < student_list.length; i++)  {%>
+                  <tr>
+                    <td><div class="checkbox-wrapper-4">
+                      <input type="checkbox" id="row1" class="inp-cbx" value="2" />
+                      <label for="row1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                      </label></td>
+                    <td><% i + 1 %></td>
+                    <td><%= student_list[i]._id %></td>
+                    <td><%= student_list[i].last_name + " " +  student_list[i].first_name%> <span class="dau_sao">*</span></td>
+                    <td class="new_update"><%= student_scores[i] %></td>
+                    <td><%= staff_scores[i] %></td>
+                    <td>tandat</td>
+                    <td><%= department_scores[i] %></td>
+                    <td><a href="#">Chấm điểm</a></td>
+                  </tr>
+                <% } %>
               </tbody>
             </table>
           </div>
