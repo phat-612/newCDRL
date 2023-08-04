@@ -283,6 +283,7 @@ server.connectMGDB().then((client) => {
   });
 
   // API SPACE ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
   // Log in --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   app.post("/api/login", async (req, res) => {
     const data = req.body;
@@ -331,7 +332,7 @@ server.connectMGDB().then((client) => {
     }
   });
 
-  // Logout /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Logout ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   app.get("/api/logout", checkCookieUserLogin, async (req, res) => {
     // Xóa thông tin phiên (session) của người dùng
     req.session.destroy((err) => {
@@ -356,6 +357,8 @@ server.connectMGDB().then((client) => {
       res.sendStatus(500);
     }
   });
+
+ // Đổi pass lần đầu đăng nhập --------------------------------------------------------------------------------------------------------------------------------
   app.post("/api/first_login", checkCookieUserLogin, async (req, res) => {
     try {
       const data = req.body;
@@ -365,9 +368,8 @@ server.connectMGDB().then((client) => {
         res.sendStatus(403);
       } else {
         delete req.session.user.first;
-        await server.update_one_Data('login_info', { "_id": req.session.user._id }, { $unset: { first: "" } })
-        await server.update_one_Data('login_info', { "_id": req.session.user._id }, { $set: { password: data.new_password } })
-
+        await server.update_one_Data('login_info', { "_id": req.session.user._id }, { $unset: { first: "" } });
+        await server.update_one_Data('login_info', { "_id": req.session.user._id }, { $set: { password: data.new_password } });
         res.sendStatus(200);
       }
 
@@ -376,6 +378,7 @@ server.connectMGDB().then((client) => {
       res.sendStatus(500);
     }
   });
+
   // Save table and update old table ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   app.post("/api/mark", checkCookieUserLogin, async (req, res) => {
     try {
@@ -395,7 +398,7 @@ server.connectMGDB().then((client) => {
       // check power of user:
       let table = 'student_table'
       switch (
-        await server.find_one_Data('user_info', { _id: user._id }).power
+      await server.find_one_Data('user_info', { _id: user._id }).power
       ) {
         case 0: // sinh vien
           table = 'student_table';
@@ -456,7 +459,7 @@ server.connectMGDB().then((client) => {
     }
   });
 
-  // upload file -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  // Upload file -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   app.post('/api/uploadFile', upload.array('files[]'), async function (req, res) {
     if (!req.files) {
       return res.status(400).send('No file uploaded.');
@@ -476,17 +479,19 @@ server.connectMGDB().then((client) => {
     res.end(JSON.stringify(await get_full_id(uploadDirectory, list_name)));
   });
 
+  // Xử lý đường link không có -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   app.get("*", async function (req, res) {
     res.sendStatus(404);
   });
 
+  // -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   const httpsServer = https.createServer(credentials, app);
   httpsServer.listen(port, () => {
     console.log(
       `SYSTEM | LOG | Đang chạy server siu cấp vip pro đa vũ trụ ở https://localhost:${port}`
     );
   });
-  // ----------------------------------------------------------------
+  // -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 })
   .catch((err) => {
     console.error('SYSTEM | ERROR | got err', err);
