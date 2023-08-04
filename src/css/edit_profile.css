@@ -45,7 +45,6 @@ body {
   flex: 1;
   flex-direction: column;
   position: relative;
-  margin-bottom: -12rem;
 }
 
 .info_lable {
@@ -75,7 +74,7 @@ body {
 }
 
 .modal_wrap_img_item {
-  margin-top: 3rem;
+  /* margin-top: 3rem; */
   width: 20rem;
   height: 20rem;
   position: relative;
@@ -253,9 +252,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 17rem;
+  /* margin-bottom: 17rem; */
   justify-content: space-around;
-  margin-top: -2rem;
+  /* margin-top: -2rem; */
 }
 
 .profile_btn_gr {

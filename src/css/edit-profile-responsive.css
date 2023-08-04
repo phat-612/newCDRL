@@ -9,6 +9,7 @@
     }
     .profile_btn_gr {
         width: 100%;
+        justify-content: center;
     }
     .profile_btn_gr_parent {
         flex-direction: column-reverse;
