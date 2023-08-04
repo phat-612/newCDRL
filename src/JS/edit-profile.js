@@ -3,6 +3,11 @@ $(document).on("dragleave", ".modal_wrap_img_item", handleDragLeave);
 $(document).on("drop", ".modal_wrap_img_item", handleDrop);
 $(document).on("click", ".up-img-btn", handleUploadButtonClick);
 $(document).on("change", ".upload-input", handleUploadInputChange);
+$(document).on("click", ".profile_btn_logoutall", handleLogOutAllButtonClick);
+$(document).on("click", ".profile_btn_cancel", handleCancelButtonClick);
+$(document).on("click", ".profile_btn_save", handleSaveButtonClick);
+
+// -----------------------------------------------------------------------------
 
 function handleDragOver(event) {
   event.preventDefault();
@@ -36,4 +41,16 @@ function displayImage(file) {
     $(this).find(".up-img").attr("src", event.target.result);
   }.bind($(this));
   reader.readAsDataURL(file);
+}
+
+function handleCancelButtonClick(event){
+  console.log(event);
+}
+
+function handleLogOutAllButtonClick(event){
+  console.log(event);
+}
+
+function handleSaveButtonClick(event){
+  console.log(event);
 }

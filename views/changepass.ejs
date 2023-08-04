@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đổi mật khẩu</title>
+  <!-- <link rel="stylesheet" href="/src/css/table.css" /> -->
+  <link rel="stylesheet" href="/src/css/firstlogin.css" />
+</head>
+
+<body>
+  <div class="main bg-[#e7ecf0]">
+    <%- include(header) %>
+    <%- include(thongbao) %>
+
+    <div class="content">
+      <div class="login-box">
+        <form class="login_form">
+            <div class="user-box">
+                <input type="password" name="old_password" class="old_password_input" required="" />
+                <label>Mật khẩu cũ</label>
+              </div>
+          <div class="user-box">
+            <input type="password" name="password" class="password_input" required="" />
+            <label>Mật khẩu mới</label>
+          </div>
+          <div class="user-box">
+            <input type="password" name="again_password" class="again_password_input" required="" />
+            <label>Nhập lại mật khẩu mới</label>
+          </div>
+          <center>
+            <a class="login_btn">
+              Lưu
+              <span></span>
+            </a>
+          </center>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="/src/JS/changepass.js"></script>
+
+</html>

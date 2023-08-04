@@ -196,6 +196,14 @@ server.connectMGDB().then((client) => {
     });
   });
 
+  // doi password route
+  app.get("/profile/change_pass", checkCookieUserLogin, async (req, res) => {
+    res.render("changepass", {
+      header: "header",
+      thongbao: "thongbao",
+    });
+  });
+
   // nhap bang diem route
   app.get("/nhapdiemdanhgia", checkCookieUserLogin, async (req, res) => {
     res.render("nhapbangdiem", {
@@ -349,8 +357,18 @@ server.connectMGDB().then((client) => {
   app.post("/api/change_pass", checkCookieUserLogin, async (req, res) => {
     try {
       const data = req.body;
-
       console.log(`SYSTEM | CHANGE_PASSWORD | Dữ liệu nhận được`, data);
+      const old_pass = await server.find_one_Data('login_info', { _id: req.session.user._id });
+      if (old_pass.password == data.old_password) {
+        if (old_pass.password !== data.new_password) {
+          await server.update_one_Data('login_info', { "_id": req.session.user._id }, { $set: { password: data.new_password } });
+          res.sendStatus(200);
+        } else {
+          res.sendStatus(403);
+        }
+      } else {
+        res.sendStatus(404);
+      }
 
     } catch (err) {
       console.log("SYSTEM | CHANGE_PASSWORD | ERROR | ", err);

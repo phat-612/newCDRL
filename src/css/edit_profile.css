@@ -45,6 +45,7 @@ body {
   flex: 1;
   flex-direction: column;
   position: relative;
+  justify-content: revert;
 }
 
 .info_lable {
