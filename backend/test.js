@@ -3,4 +3,7 @@ const server = require("./vip_pro_lib.js");
 // server.atomic_table('database',['sessions'],'18102003').catch(eror => console.log(eror));
 
 // add quyên cho người dùng
-server.update_many_Data('user_info', {}, { $set: { class: 'KTPM0121' } });
+// server.update_many_Data('user_info', {}, { $set: { class: 'KTPM0121' } });
+
+// thêm email + tên hiển thị cho người dùng
+server.update_many_Data('user_info', {}, { $set: { displayName: 'con gà', email: 'doconga@gmail.com'} });

@@ -80,8 +80,7 @@ server.connectMGDB().then((client) => {
       } else {
         const user_info = await server.find_one_Data('user_info', { _id: user._id });
         res.locals.avt = user_info.avt;
-        res.locals.first_name = user_info.first_name;
-        res.locals.last_name = user_info.last_name;
+        res.locals.displayName = user_info.displayName;
       }
       next();
     }
@@ -222,9 +221,13 @@ server.connectMGDB().then((client) => {
 
   // thong tin ca nhan route
   app.get("/profile", checkCookieUserLogin, async (req, res) => {
+    const user_info = await server.find_one_Data('user_info', { _id: req.session.user._id });
     res.render("edit-profile", {
       header: "header",
       footer: "footer",
+      name: user_info.last_name + " " + user_info.first_name,
+      mssv: user_info._id,
+      email: user_info.email,
     });
   });
 
@@ -395,7 +398,7 @@ server.connectMGDB().then((client) => {
       const marker = await server.find_one_Data('user_info', { _id: user._id });
       // check power of user:
       let table = 'student_table'
-      switch ( marker.power ) {
+      switch (marker.power) {
         case 0: // sinh vien
           table = 'student_table';
           break;

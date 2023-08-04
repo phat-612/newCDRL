@@ -119,6 +119,7 @@ body {
   margin: 0;
   z-index: 2;
   position: absolute;
+  object-fit: cover;
 }
 
 .up-img:active {

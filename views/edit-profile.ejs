@@ -26,7 +26,7 @@
                 <p>Drag and drop an image here, or click to upload.</p>
   
                 <input type="file" class="upload-input" style="display: none" />
-                <img class="up-img" />
+                <img class="up-img" src="<%=avt%>"/>
                 <button class="up-img-btn">
                   <i class="fa-solid fa-plus"></i>
                 </button>
@@ -35,20 +35,20 @@
           </div>
           <div class="right_container">
             <div class="porfile_container_item">
-              <label class="info_lable" for="">Mã Số Sinh Viên </label><input type="text" required
+              <label class="info_lable" for="">Mã Số Sinh Viên </label><input type="text" disabled value = "<%=mssv%>"
                 class="mssv info_input" />
             </div>
             <div class="porfile_container_item">
-              <label class="info_lable" for="">Họ Và Tên</label><input type="text" required
+              <label class="info_lable" for="">Họ Và Tên</label><input type="text" disabled value = "<%=name%>"
                 class="full_name info_input" />
             </div>
             <div class="porfile_container_item">
               <label class="info_lable" for="">Email</label>
-              <input type="email" class="email info_input" />
+              <input type="email" value = "<%=email%>" class="email info_input" /> 
             </div>
             <div class="porfile_container_item">
               <label class="info_lable" for="">Tên Hiển Thị</label>
-              <input type="text" required class="display_name info_input" />
+              <input type="text" required value = "<%=displayName%>" class="display_name info_input" />
             </div>
           </div>
         </form>

@@ -47,6 +47,7 @@ body {
   width: 3.5rem;
   border-radius: 50%;
   margin-right: 0.7rem;
+  object-fit: cover;
 }
 .setting {
   width: 100%;
