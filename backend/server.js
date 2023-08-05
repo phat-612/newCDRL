@@ -68,14 +68,24 @@ server.connectMGDB().then((client) => {
   const upload = multer({ storage: storage_file });
   // ------------------------------------------------------------------------------------------------
 
-  async function checkCookieUserLogin(req, res, next) {
+  async function checkIfUserLoginAPI(req, res, next) {
+    const user = req.session.user;
+    if (!user) {
+      // Cookie không tồn tại, chặn truy cập
+      return res.sendStatus(403);
+    } else {
+      next();
+    }
+  }
+
+  async function checkIfUserLoginRoute(req, res, next) {
     const user = req.session.user;
 
     if (!user) {
       // Cookie không tồn tại, chặn truy cập
       return res.redirect("/login");
     } else {
-      if ((user.first == 'true') && !(req.url === '/api/first_login' || req.url === '/api/logout')) {
+      if ((user.first == 'true')) {
         return res.redirect('/login/updateyourpasswords');
       } else {
         const user_info = await server.find_one_Data('user_info', { _id: user._id });
@@ -162,7 +172,7 @@ server.connectMGDB().then((client) => {
   // ROUTE SPACE ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   // index route
-  app.get("/", checkCookieUserLogin, async (req, res) => {
+  app.get("/", checkIfUserLoginRoute, async (req, res) => {
     res.render("tracuu", {
       header: "header",
       footer: "footer",
@@ -197,7 +207,7 @@ server.connectMGDB().then((client) => {
   });
 
   // doi password route
-  app.get("/profile/change_pass", checkCookieUserLogin, async (req, res) => {
+  app.get("/profile/change_pass", checkIfUserLoginRoute, async (req, res) => {
     res.render("changepass", {
       header: "header",
       thongbao: "thongbao",
@@ -205,7 +215,7 @@ server.connectMGDB().then((client) => {
   });
 
   // nhap bang diem route
-  app.get("/nhapdiemdanhgia", checkCookieUserLogin, async (req, res) => {
+  app.get("/nhapdiemdanhgia", checkIfUserLoginRoute, async (req, res) => {
     res.render("nhapbangdiem", {
       header: "header",
       thongbao: "thongbao",
@@ -214,21 +224,21 @@ server.connectMGDB().then((client) => {
   });
 
   // ban can su route
-  app.get("/bancansu", checkCookieUserLogin, async (req, res) => {
+  app.get("/bancansu", checkIfUserLoginRoute, async (req, res) => {
     res.render("bancansu", {
       header: "header",
     });
   });
 
   // Quan li hoat dong route
-  app.get("/bancansu/quanlihoatdong", checkCookieUserLogin, async (req, res) => {
+  app.get("/bancansu/quanlihoatdong", checkIfUserLoginRoute, async (req, res) => {
     res.render("quanlihoatdong", {
       header: "header",
     });
   });
 
   // thong tin ca nhan route
-  app.get("/profile", checkCookieUserLogin, async (req, res) => {
+  app.get("/profile", checkIfUserLoginRoute, async (req, res) => {
     const user_info = await server.find_one_Data('user_info', { _id: req.session.user._id });
     res.render("edit-profile", {
       header: "header",
@@ -241,7 +251,7 @@ server.connectMGDB().then((client) => {
   });
 
   // thong tin ca nhan route
-  app.get("/danhsachbangdiem", checkCookieUserLogin, async (req, res) => {
+  app.get("/danhsachbangdiem", checkIfUserLoginRoute, async (req, res) => {
     const user = req.session.user;
     const school_year = 'hk1 2022-2023'; // change latter as a session variable
     // get staff member info :
@@ -342,7 +352,7 @@ server.connectMGDB().then((client) => {
   });
 
   // Logout ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  app.get("/api/logout", checkCookieUserLogin, async (req, res) => {
+  app.get("/api/logout", checkIfUserLoginAPI, async (req, res) => {
     // Xóa thông tin phiên (session) của người dùng
     req.session.destroy((err) => {
       if (err) {
@@ -354,7 +364,8 @@ server.connectMGDB().then((client) => {
     });
   });
 
-  app.get("/api/logoutAlldevice", checkCookieUserLogin, async (req, res) => {
+  // Đăng xuất tất cả thiết bị
+  app.get("/api/logoutAlldevice", checkIfUserLoginAPI, async (req, res) => {
     // Xóa thông tin phiên (session) của người dùng
     const _id = req.session.user._id;
     const result = await server.find_one_Data('sessions_manager', { _id: _id });
@@ -365,8 +376,8 @@ server.connectMGDB().then((client) => {
     res.sendStatus(200);
   });
 
-  // Đổi pass lần đầu đăng nhập --------------------------------------------------------------------------------------------------------------------------------
-  app.post("/api/updateInfo", checkCookieUserLogin, async (req, res) => {
+  // Đổi thông tin người dùng --------------------------------------------------------------------------------------------------------------------------------
+  app.post("/api/updateInfo", checkIfUserLoginAPI, async (req, res) => {
     try {
       const data = req.body;
       // console.log(`SYSTEM | UPDATE_INFO | Dữ liệu nhận được`, data);
@@ -385,7 +396,7 @@ server.connectMGDB().then((client) => {
   });
 
   // Đổi pass ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  app.post("/api/change_pass", checkCookieUserLogin, async (req, res) => {
+  app.post("/api/change_pass", checkIfUserLoginAPI, async (req, res) => {
     try {
       const data = req.body;
       console.log(`SYSTEM | CHANGE_PASSWORD | Dữ liệu nhận được`, data);
@@ -408,7 +419,7 @@ server.connectMGDB().then((client) => {
   });
 
   // Đổi pass lần đầu đăng nhập --------------------------------------------------------------------------------------------------------------------------------
-  app.post("/api/first_login", checkCookieUserLogin, async (req, res) => {
+  app.post("/api/first_login", checkIfUserLoginAPI, async (req, res) => {
     try {
       const data = req.body;
       console.log(`SYSTEM | CHANGE_PASSWORD | Dữ liệu nhận được`, data);
@@ -429,7 +440,7 @@ server.connectMGDB().then((client) => {
   });
 
   // Save table and update old table ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  app.post("/api/mark", checkCookieUserLogin, async (req, res) => {
+  app.post("/api/mark", checkIfUserLoginAPI, async (req, res) => {
     try {
 
       const data = req.body;
@@ -549,7 +560,7 @@ server.connectMGDB().then((client) => {
   });
 
   // Upload file -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  app.post('/api/uploadFile', upload.array('files[]'), async function (req, res) {
+  app.post('/api/uploadFile', upload.array('files[]'), checkIfUserLoginAPI, async function (req, res) {
     if (!req.files) {
       return res.status(400).send('No file uploaded.');
     }
