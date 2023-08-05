@@ -19,22 +19,22 @@ const express = require("express");
 const fs = require('fs');
 const https = require('https');
 const session = require('express-session');
+const cookie = require('cookie');
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 const server = require("./vip_pro_lib.js");
 const MongoStore = require('connect-mongo');
 const multer = require('multer'); // Thư viện để xử lý file upload
+const WebSocket = require('ws');
 
 // ----------------------------------------------------------------
 server.connectMGDB().then((client) => {
   // ----------------------------------------------------------------
   const allowedMimeTypes = ['image/jpeg', 'image/png'];
   const app = express();
-  const router = express.Router();
   const privateKey = fs.readFileSync(path.join('.certificate', 'localhost.key'), 'utf8');
   const certificate = fs.readFileSync(path.join('.certificate', 'localhost.crt'), 'utf8');
-
   const credentials = { key: privateKey, cert: certificate };
 
   // ----------------------------------------------------------------
@@ -44,8 +44,7 @@ server.connectMGDB().then((client) => {
     secretKey.padEnd(32, "0"),
     "utf8"
   ).toString("hex");
-
-
+  // ----------------------------------------------------------------
   const uploadDirectory = path.join('.upload_temp', 'files');
 
   const storage_file = multer.diskStorage({
@@ -96,6 +95,15 @@ server.connectMGDB().then((client) => {
     }
   }
 
+  // function sendHeartbeat(ws) {
+  //   if (ws.isAlive === false) {
+  //     return ws.terminate();
+  //   }
+
+  //   ws.isAlive = false;
+  //   ws.ping();
+  // }
+
   async function get_full_id(directoryPath, listName) {
     let list_id = [];
     try {
@@ -137,11 +145,9 @@ server.connectMGDB().then((client) => {
   // Áp dụng middleware để chặn truy cập
   app.use(blockUnwantedPaths);
   app.use(express.json({ limit: "10mb" }));
-
   app.use(express.urlencoded({ limit: "10mb", extended: true }));
   app.use(cors({ origin: true, credentials: true }));
   app.use(cookieParser());
-  app.use("/", router);
   // Sử dụng express-session middleware
 
   app.use(session({
@@ -168,7 +174,10 @@ server.connectMGDB().then((client) => {
   app.set("view engine", "ejs");
   // Đặt thư mục chứa các tệp template
   app.set("views", path.join(parentDirectory, "views"));
-  console.log(path.join(parentDirectory, "views"));
+
+  // -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  const httpsServer = https.createServer(credentials, app);
+  const wss = new WebSocket.Server({ server: httpsServer });
   // ROUTE SPACE ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   // index route
@@ -234,6 +243,14 @@ server.connectMGDB().then((client) => {
   app.get("/bancansu/quanlihoatdong", checkIfUserLoginRoute, async (req, res) => {
     res.render("quanlihoatdong", {
       header: "header",
+    });
+  });
+
+  // Danh gia hoat dong
+  app.get("/bancansu/quanlihoatdong/danh_gia_hoat_dong", checkIfUserLoginRoute, async (req, res) => {
+    res.render("danh_gia_hoat_dong", {
+      header: "header",
+      footer: "footer",
     });
   });
 
@@ -373,6 +390,11 @@ server.connectMGDB().then((client) => {
     listSeasionId.splice(listSeasionId.indexOf(req.session.id), 1);
     await server.update_one_Data('sessions_manager', { _id: _id }, { $pull: { sessionId: { $ne: req.session.id } } });
     await server.delete_many_Data('sessions', { _id: { $in: listSeasionId } });
+    wss.clients.forEach((ws) => {
+      if (listSeasionId.includes(ws.id)) {
+        ws.send('reload');
+      }
+    });
     res.sendStatus(200);
   });
 
@@ -584,8 +606,48 @@ server.connectMGDB().then((client) => {
     res.sendStatus(404);
   });
 
+
+  // // WEBSOCKET SPACE ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  wss.on('connection', async (ws, req) => {
+    // Kiểm tra địa chỉ đích của kết nối WebSocket
+    if (req.url === '/howtosavealife?') {
+      // console.log(`SYSTEM | WEBSOCKET | A new WebSocket connection is established.`);
+      // Gán id cho ws
+      if (req.headers.cookie) {
+        const cookie_seasion = cookie.parse(req.headers.cookie)
+        if ("howtosavealife?" in cookie_seasion) {
+          ws.id = cookieParser.signedCookie(cookie_seasion["howtosavealife?"], authenticationKey);
+          // Gán giá trị cho biến isAlive để thực hiện heartbeat
+          ws.isAlive = true;
+          // Xử lý khi client gửi dữ liệu
+          ws.on('message', (message) => {
+            console.log('SYSTEM | WEBSOCKET | Received message: ', message.toString('utf-8'));
+            if (message.toString('utf-8') == 'logout') {
+              ws.close();
+            }
+          });
+
+          // Xử lý khi client đóng kết nối
+          ws.on('close', () => {
+            // console.log('SYSTEM | WEBSOCKET | WebSocket connection closed for ' + ws.id);
+          });
+        } else { ws.close(); }
+      } else { ws.close(); }
+
+    } else {
+      console.log('SYSTEM | WEBSOCKET | Rejected WebSocket connection from:', ws.id);
+      ws.close();
+    }
+  });
+
+  // Heartbeat websocket
+  // setInterval(() => {
+  //   wss.clients.forEach((ws) => {
+  //     sendHeartbeat(ws);
+  //   });
+  // }, 5000);
+
   // -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  const httpsServer = https.createServer(credentials, app);
   httpsServer.listen(port, () => {
     console.log(
       `SYSTEM | LOG | Đang chạy server siu cấp vip pro đa vũ trụ ở https://localhost:${port}`

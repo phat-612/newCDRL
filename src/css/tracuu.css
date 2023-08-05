@@ -26,7 +26,6 @@
   .tra_cuu .content,
   .submit-mark .content {
     padding: 1rem;
-    /* font-size: 2rem; */
   }
 
   .tra_cuu .content h2,
@@ -40,100 +39,6 @@
     font-size: 1.8rem;
   }
 
-  /* .tra_cuu .content button {
-  padding: 1rem 2rem;
-  background-color: #c2c2c271;
-  color: #000;
-  border: none;
-  border-radius: 0.8rem;
-}
-
-.tra_cuu .content button:hover {
-  background-color: #c2c2c2;
-} */
-
-  #page-button {
-    align-items: center;
-    background-color: #d3d3d3;
-    border-radius: 1rem;
-    box-shadow: transparent 0 0 0 3px, rgba(18, 18, 18, .1) 0 6px 20px;
-    box-sizing: border-box;
-    color: #121212;
-    cursor: pointer;
-    display: inline-flex;
-    font-family: Inter, sans-serif;
-    font-size: 1.8rem;
-    font-weight: 700;
-    justify-content: center;
-    line-height: 1;
-    margin: 9px;
-    outline: none;
-    padding: 1rem 1.2rem;
-    text-align: center;
-    text-decoration: none;
-    transition: box-shadow .2s, -webkit-box-shadow .2s;
-    white-space: nowrap;
-    border: 0;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;    
-  }
-
-  #page-button:hover {
-    box-shadow: #121212 0 0 0 3px, transparent 0 0 0 0;
-  }
-
-  /* select */
-  .selectbox {
-    display: inline-block;
-    margin: 0 2.9rem 0 2rem;
-  }
-
-  .selectbox button:hover {
-    background-color: rgb(47, 44, 44);
-  }
-
-  .select select {
-    font-size: 1.6rem;
-    padding: 1rem 1.6rem 1rem 0.7rem;
-    text-align: center;
-    appearance: none;
-    outline: 1rem red;
-    border: 0;
-    box-shadow: none;
-    flex: 1;
-    background-image: none;
-    background-color:rgb(211 211 211);
-    border-radius: 0.8rem;
-    /* color: #fff; */
-    cursor: pointer;
-  }
-
-  .select {
-    position: relative;
-    display: flex;
-    align-items: stretch;
-    justify-content: center;
-    width: 8rem;
-    border-radius: 0.25em;
-    /* overflow: hidden; */
-  }
-
-  .select::after {
-    content: "\25BC";
-    position: absolute;
-    top: 37%;
-    right: -10%;
-    /* padding: 1em; */
-    background-color: inherit;
-    transition: 0.25s all ease;
-    pointer-events: none;
-  }
-
-  .select:hover::after {
-    color: rgb(143, 213, 229);
-  }
-
   .button {
     padding: 1rem;
     background-color: white;
@@ -143,27 +48,3 @@
     margin-top: 2rem;
     padding: 0.5rem;
   }
-
-  /* .submit-button button {
-    width: 40;
-    height: 3rem;
-    font-weight: 700;
-    justify-content: center;
-    line-height: 1;
-    margin: 2rem 2rem;
-    outline: none;
-    padding: 1rem 1rem;
-    text-align: center;
-    text-decoration: none;
-    transition: box-shadow .2s, -webkit-box-shadow .2s;
-    white-space: nowrap;
-    border: 0;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    border-radius: 0.8rem;
-  }
-
-  .submit-button button:hover {
-    box-shadow: #121212 0 0 0 3px, transparent 0 0 0 0;
-  } */

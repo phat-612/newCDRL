@@ -120,13 +120,6 @@ td .title{
 
 .button-35.up-btn {
   padding: 1rem 4rem;
-  /* margin-top: 4rem;
-  font-size: 2rem;
-  background-color: #000;
-  color: #fff;
-  margin-right: 3rem;
-  margin-bottom: 3rem;
-  border-radius: 0.8rem; */
 }
 .post-btn{
   display: none;
@@ -192,7 +185,6 @@ td .title{
 
 .drop_img {
   width: 4.5rem;
-  /* height: 100%; */
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -291,19 +283,6 @@ textarea::placeholder {
 
 .modal_img_btn button {
   padding: 1rem 4rem;
-  /* display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem 3.5rem;
-  background-color: #515050;
-  color: #fff;
-  text-align: center;
-  margin-right: 2rem;
-  width: 9rem;
-  height: 5rem;
-  font-size: 1.5rem;
-  border-radius: 1rem;
-  transition: 0.5s; */
 }
 .done-btn:last-child {
   margin: 0;
@@ -319,7 +298,6 @@ textarea::placeholder {
   user-select: none;
   cursor: pointer;
   border-radius: 0.6rem;
-  /* overflow: hidden; */
   transition: all 0.2s ease;
   display: inline-block;
 }
@@ -414,46 +392,15 @@ textarea::placeholder {
 }
 
 /*------------------- combo box -------------------*/
-.select select {
-  font-size: 1.5rem;
-  font-weight: bold;
-  text-align: center;
-  appearance: none;
-  outline: 1rem red;
-  border: 0;
-  box-shadow: none;
-  flex: 1;
-  background-image: none;
+td .select select{
   background-color: inherit;
-  /* color: #fff; */
-  cursor: pointer;
+  padding: 0;
+}
+td .select::after{
+  top: 6%;
+  right: 20%;
 }
 
-.select {
-  position: relative;
-  display: flex;
-  align-items: stretch;
-  justify-content: center;
-  width: 100%;
-  border-radius: 0.25em;
-  overflow: hidden;
-}
-
-.select::after {
-  content: "\25BC";
-  position: absolute;
-  top: 0;
-  right: 1.6rem;
-  /* padding: 1em; */
-  background-color: inherit;
-  transition: 0.25s all ease;
-  pointer-events: none;
-}
-
-.select:hover::after {
-  /* color: #f39c12; */
-  color: rgb(143, 213, 229);
-}
 .m-auto {
   margin: 3rem auto 6rem;
 }
