@@ -27,9 +27,19 @@ const server = require("./vip_pro_lib.js");
 const MongoStore = require('connect-mongo');
 const multer = require('multer'); // Thư viện để xử lý file upload
 const WebSocket = require('ws');
-
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const uri = "mongodb+srv://binhminh19112003:Zr3uGIK4dCymOXON@database.sefjqcb.mongodb.net/?retryWrites=true&w=majority";
+const client = new MongoClient(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
 // ----------------------------------------------------------------
-server.connectMGDB().then((client) => {
+client.connect().then(() => {
   // ----------------------------------------------------------------
   const allowedMimeTypes = ['image/jpeg', 'image/png'];
   const app = express();
@@ -65,6 +75,9 @@ server.connectMGDB().then((client) => {
 
   // Thiết lập middleware multer cho việc xử lý upload file
   const upload = multer({ storage: storage_file });
+
+  // mongodb database name
+  const name_databases = 'database';
   // ------------------------------------------------------------------------------------------------
 
   async function checkIfUserLoginAPI(req, res, next) {
@@ -87,7 +100,7 @@ server.connectMGDB().then((client) => {
       if ((user.first == 'true')) {
         return res.redirect('/login/updateyourpasswords');
       } else {
-        const user_info = await server.find_one_Data('user_info', { _id: user._id });
+        const user_info = await client.db(name_databases).collection('user_info').findOne({ _id: user._id });
         res.locals.avt = user_info.avt;
         res.locals.displayName = user_info.displayName;
       }
@@ -95,14 +108,13 @@ server.connectMGDB().then((client) => {
     }
   }
 
-  // function sendHeartbeat(ws) {
-  //   if (ws.isAlive === false) {
-  //     return ws.terminate();
-  //   }
-
-  //   ws.isAlive = false;
-  //   ws.ping();
-  // }
+  function sendHeartbeat(ws) {
+    if (ws.isAlive === false) {
+      return ws.terminate();
+    }
+    ws.isAlive = false;
+    ws.ping();
+  }
 
   async function get_full_id(directoryPath, listName) {
     let list_id = [];
@@ -140,6 +152,96 @@ server.connectMGDB().then((client) => {
       }
     }
     next();
+  };
+
+  async function mark(table, user, data) {
+    // data = {
+    //   first: [],
+    //   second: [],
+    //   third: [],
+    //   fourth: [],
+    //   fifth: [],
+    //   img_ids: [],
+    //   total: 100,
+    // }
+    const marker = await client.db(name_databases).collection('user_info').findOne({ _id: user._id });
+    const school_year = await client.db(name_databases).collection('school_year').findOne({});
+    // check if table is exist or not
+    if (await client.db(name_databases).collection(marker.class + table).findOne(
+      {
+        mssv: user._id,
+        school_year: school_year.year
+      }
+    )) {
+      // update old table
+      let update = {
+        first: data.first,
+        second: data.second,
+        third: data.third,
+        fourth: data.fourth,
+        fifth: data.fifth,
+        img_ids: data.img_ids,
+        total: data.total,
+        update_date: new Date()
+      }
+
+      // if table is stf_table - mark by staff members or teacher
+      if (table == 'stf_table') {
+        update.marker = marker.last_name + " " + marker.first_name;
+      }
+
+      await client.db(name_databases).collection(marker.class + table).updateOne(
+        {
+          mssv: user._id,
+          school_year: school_year.year
+        },
+        {
+          $set: update
+        }
+      );
+
+    } else { // entertainment area: https://youtu.be/CufIAJDVZvo
+      let insert = {
+        mssv: user._id,
+        school_year: school_year.year,
+        first: data.first,
+        second: data.second,
+        third: data.third,
+        fourth: data.fourth,
+        fifth: data.fifth,
+        img_ids: data.img_ids,
+        total: data.total,
+        update_date: new Date()
+      }
+
+      // if table is stf_table - mark by staff members or teacher
+      if (table == 'stf_table') {
+        insert.marker = marker.last_name + " " + marker.first_name;
+      }
+
+      // create new table
+      await client.db(name_databases).collection(marker.class + table).insertOne(insert);
+    }
+  }
+
+  function randompass() {
+    const lowerCase = "abcdefghijklmnopqrstuvwxyz";
+    const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const number = "0123456789";
+    const symbol = "!@#$%^&*_-+="
+    const allChars = upperCase + lowerCase + number + symbol
+
+    let password = "";
+    password += upperCase[Math.floor(Math.random() * upperCase.length)];
+    password += lowerCase[Math.floor(Math.random() * lowerCase.length)];
+    password += number[Math.floor(Math.random() * number.length)];
+    password += symbol[Math.floor(Math.random() * symbol.length)];
+
+    while (password.length < 8) {
+      password += allChars[Math.floor(Math.random() * allChars.length)];
+    }
+    console.log('SYSTEM | GEN_PASSWORD | OK')
+    return password;
   };
 
   // Áp dụng middleware để chặn truy cập
@@ -256,7 +358,7 @@ server.connectMGDB().then((client) => {
 
   // thong tin ca nhan route
   app.get("/profile", checkIfUserLoginRoute, async (req, res) => {
-    const user_info = await server.find_one_Data('user_info', { _id: req.session.user._id });
+    const user_info = await client.db(name_databases).collection('user_info').findOne({ _id: req.session.user._id });
     res.render("edit-profile", {
       header: "header",
       footer: "footer",
@@ -270,42 +372,66 @@ server.connectMGDB().then((client) => {
   // thong tin ca nhan route
   app.get("/danhsachbangdiem", checkIfUserLoginRoute, async (req, res) => {
     const user = req.session.user;
-    const school_year = 'hk1 2022-2023'; // change latter as a session variable
+    const school_year = await client.db(name_databases).collection('school_year').findOne({});
     // get staff member info :
-    const staff_info = await server.find_one_Data('user_info', { _id: user._id });
+    const marker = await client.db(name_databases).collection('user_info').findOne({ _id: user._id });
     // check user login:
-    if (staff_info.power == 1) {
+    if (marker.power == 1) {
       // get all student in staff member class:
-      const student_list = await server.find_all_Data({
-        table: 'user_info',
-        query: { class: staff_info.class },
-        projection: { first_name: 1, last_name: 1 },
-        sort: { first_name: 1, last_name: 1 }
-      });
-      // get all student total score from them self:
+      const student_list = await client.db(name_databases).collection('user_info').find(
+        { class: marker.class },
+        { 'projection': { first_name: 1, last_name: 1 } })
+        .sort({ first_name: 1, last_name: 1 })
+        .toArray();
+
+      // get all student total score from themself:
       let render = {
         header: "header",
-        staff_name: "tan dat",
+        staff_name: [],
         student_list: student_list,
         student_scores: [],
         staff_scores: [],
         department_scores: []
       }
+
       for (student of student_list) {
-        const curr_student_score = await server.find_one_Data('student_table', { _id: student._id, school_year: school_year });
-        const curr_staff_score = await server.find_one_Data('staff_table', { _id: student._id, school_year: school_year });
-        const curr_departmentt_score = await server.find_one_Data('department_table', { _id: student._id, school_year: school_year });
+        const curr_student_score = await client.db(name_databases)
+          .collection(marker.class + '_std_table')
+          .findOne({
+            mssv: student._id,
+            school_year: school_year.year
+          });
+        const curr_staff_score = await client.db(name_databases)
+          .collection(marker.class + '_stf_table')
+          .findOne({
+            mssv: student._id,
+            school_year: school_year.year
+          });
+        const curr_departmentt_score = await client.db(name_databases)
+          .collection(marker.class + '_dep_table')
+          .findOne({
+            mssv: student._id,
+            school_year: school_year.year
+          });
         // student
-        if (curr_staff_score) {
+        if (curr_student_score) {
           render.student_scores.push(curr_student_score.total);
+        } else {
+          render.student_scores.push('-');
         }
         // staff member
         if (curr_staff_score) {
           render.staff_scores.push(curr_staff_score.total);
+          render.staff_name.push(curr_staff_score.marker);
+        } else {
+          render.staff_scores.push('-');
+          render.staff_name.push('-');
         }
         // department
         if (curr_departmentt_score) {
           render.department_scores.push(curr_departmentt_score.total);
+        } else {
+          render.department_scores.push('-');
         }
       }
 
@@ -325,12 +451,12 @@ server.connectMGDB().then((client) => {
     const data = req.body;
     // 403: sai thong tin dang nhap
     // data = {mssv: bbp, password: 1234567890, remember: true}
-    console.log("SYSTEM | LOG_IN | Dữ liệu nhận được: ", data);
+    // console.log("SYSTEM | LOG_IN | Dữ liệu nhận được: ", data);
     try {
       const user = req.session.user;
       if (!user) {
         //(log in database)
-        const user = await server.find_one_Data("login_info", { _id: data.mssv });
+        const user = await client.db(name_databases).collection('login_info').findOne({ _id: data.mssv });
         if (user === null) {
           // Đăng nhập không thành công
           res.sendStatus(403);
@@ -346,11 +472,19 @@ server.connectMGDB().then((client) => {
             req.session.cookie.maxAge = 3600000; // 1 hour
           }
           const sessionId = req.session.id;
-          const resl = await server.find_one_Data("sessions_manager", { _id: user._id })
+          const resl = await client.db(name_databases).collection('sessions_manager').findOne({ _id: user._id });
           if (resl) {
-            server.update_one_Data("sessions_manager", { _id: user._id }, { $push: { sessionId: sessionId } });
+            await client.db(name_databases).collection('sessions_manager').updateOne(
+              { _id: user._id },
+              { $push: { sessionId: sessionId } }
+            );
           } else {
-            server.add_one_Data("sessions_manager", { _id: user._id, sessionId: [sessionId] })
+            await client.db(name_databases).collection('sessions_manager').insertOne(
+              {
+                _id: user._id,
+                sessionId: [sessionId]
+              }
+            )
           }
           if (user.first == 'true') {
             res.status(200).json({ check: true });
@@ -373,7 +507,7 @@ server.connectMGDB().then((client) => {
     // Xóa thông tin phiên (session) của người dùng
     req.session.destroy((err) => {
       if (err) {
-        console.error('SYSTEM | LOGOUT | Failed to logout:', err);
+        console.error('SYSTEM | LOG_OUT | Failed to logout:', err);
         res.sendStatus(500);
       } else {
         res.redirect('/login');
@@ -385,11 +519,14 @@ server.connectMGDB().then((client) => {
   app.get("/api/logoutAlldevice", checkIfUserLoginAPI, async (req, res) => {
     // Xóa thông tin phiên (session) của người dùng
     const _id = req.session.user._id;
-    const result = await server.find_one_Data('sessions_manager', { _id: _id });
+    const result = await client.db(name_databases).collection('sessions_manager').findOne({ _id: _id });
     const listSeasionId = result.sessionId;
     listSeasionId.splice(listSeasionId.indexOf(req.session.id), 1);
-    await server.update_one_Data('sessions_manager', { _id: _id }, { $pull: { sessionId: { $ne: req.session.id } } });
-    await server.delete_many_Data('sessions', { _id: { $in: listSeasionId } });
+    await client.db(name_databases).collection('sessions_manager').updateOne(
+      { _id: _id },
+      { $pull: { sessionId: { $ne: req.session.id } } }
+    );
+    await client.db(name_databases).collection('sessions').deleteMany({ _id: { $in: listSeasionId } });
     wss.clients.forEach((ws) => {
       if (listSeasionId.includes(ws.id)) {
         ws.send('reload');
@@ -403,13 +540,16 @@ server.connectMGDB().then((client) => {
     try {
       const data = req.body;
       // console.log(`SYSTEM | UPDATE_INFO | Dữ liệu nhận được`, data);
-      await server.update_one_Data('user_info', { "_id": req.session.user._id }, {
-        $set: {
-          displayName: data.displayName,
-          email: data.email,
-          avt: data.avt
+      await client.db(name_databases).collection('user_info').updateOne(
+        { "_id": req.session.user._id },
+        {
+          $set: {
+            displayName: data.displayName,
+            email: data.email,
+            avt: data.avt
+          }
         }
-      });
+      );
       res.sendStatus(200);
     } catch (err) {
       console.log("SYSTEM | UPDATE_INFO | ERROR | ", err);
@@ -421,11 +561,14 @@ server.connectMGDB().then((client) => {
   app.post("/api/change_pass", checkIfUserLoginAPI, async (req, res) => {
     try {
       const data = req.body;
-      console.log(`SYSTEM | CHANGE_PASSWORD | Dữ liệu nhận được`, data);
-      const old_pass = await server.find_one_Data('login_info', { _id: req.session.user._id });
+      // console.log(`SYSTEM | CHANGE_PASSWORD | Dữ liệu nhận được`, data);
+      const old_pass = await client.db(name_databases).collection("login_info").findOne({ _id: req.session.user._id });
       if (old_pass.password == data.old_password) {
         if (old_pass.password !== data.new_password) {
-          await server.update_one_Data('login_info', { "_id": req.session.user._id }, { $set: { password: data.new_password } });
+          await client.db(name_databases).collection('login_info').updateOne(
+            { "_id": req.session.user._id },
+            { $set: { password: data.new_password } }
+          );
           res.sendStatus(200);
         } else {
           res.sendStatus(403);
@@ -445,13 +588,20 @@ server.connectMGDB().then((client) => {
     try {
       const data = req.body;
       console.log(`SYSTEM | CHANGE_PASSWORD | Dữ liệu nhận được`, data);
-      const old_pass = await server.find_one_Data('login_info', { _id: req.session.user._id });
+      const old_pass = await client.db(name_databases).collection('login_info').findOne({ _id: req.session.user._id });
+
       if (old_pass.password == data.new_password) {
         res.sendStatus(403);
       } else {
         delete req.session.user.first;
-        await server.update_one_Data('login_info', { "_id": req.session.user._id }, { $unset: { first: "" } });
-        await server.update_one_Data('login_info', { "_id": req.session.user._id }, { $set: { password: data.new_password } });
+        await client.db(name_databases).collection('login_info').updateOne(
+          { "_id": req.session.user._id },
+          { $unset: { first: "" } }
+        );
+        await client.db(name_databases).collection('login_info').updateOne(
+          { "_id": req.session.user._id },
+          { $set: { password: data.new_password } }
+        );
         res.sendStatus(200);
       }
 
@@ -462,117 +612,11 @@ server.connectMGDB().then((client) => {
   });
 
   // Save table and update old table ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  app.post("/api/mark", checkIfUserLoginAPI, async (req, res) => {
+  app.post("/api/std_mark", checkIfUserLoginAPI, async (req, res) => {
     try {
-
-      const data = req.body;
-      // data = {
-      //   school_year: 'hk1 2022-2023',
-      //   first: [],
-      //   second: [],
-      //   third: [],
-      //   fourth: [],
-      //   fifth: [],
-      //   img_ids: [],
-      //   total: 100,
-      // }
       const user = req.session.user;
-      const marker = await server.find_one_Data('user_info', { _id: user._id });
-      // check power of user:
-      let table = 'student_table'
-      switch (marker.power) {
-        case 0: // sinh vien
-          table = 'student_table';
-          break;
-        case 1: // ban can su
-          table = 'staff_table';
-          break;
-        case 2: // giao vien
-          table = 'staff_table';
-          break;
-        case 3: // khoa
-          table = 'department_table';
-          break;
-      }
-
-      // check if table is exist or not
-      if (await server.find_one_Data(table, { mssv: user._id, school_year: data.school_year })) {
-        // update old table
-        // if table of staff member or teacher it will have name of who mark this table
-        if (table === 'staff_table') {
-          await server.update_one_Data(
-            table,
-            { mssv: user._id, school_year: data.school_year },
-            {
-              $set: {
-                first: data.first,
-                second: data.second,
-                third: data.third,
-                fourth: data.fourth,
-                fifth: data.fifth,
-                img_ids: data.img_ids,
-                total: data.total,
-                marker: marker.last_name + " " + marker.first_name,
-                update_date: new Date()
-              }
-            }
-          )
-        } else {
-          await server.update_one_Data(
-            table,
-            { mssv: user._id, school_year: data.school_year },
-            {
-              $set: {
-                first: data.first,
-                second: data.second,
-                third: data.third,
-                fourth: data.fourth,
-                fifth: data.fifth,
-                img_ids: data.img_ids,
-                total: data.total,
-                update_date: new Date()
-              }
-            }
-          )
-        }
-      } else {
-        // create new table
-        // if table of staff member or teacher it will have name of who mark this table
-        if (table === 'staff_table') {
-          await server.add_one_Data(
-            table,
-            {
-              mssv: user._id,
-              school_year: data.school_year,
-              first: data.first,
-              second: data.second,
-              third: data.third,
-              fourth: data.fourth,
-              fifth: data.fifth,
-              img_ids: data.img_ids,
-              total: data.total,
-              marker: marker.last_name + " " + marker.first_name,
-              update_date: new Date()
-            }
-          );
-        } else {
-          await server.add_one_Data(
-            table,
-            {
-              mssv: user._id,
-              school_year: data.school_year,
-              first: data.first,
-              second: data.second,
-              third: data.third,
-              fourth: data.fourth,
-              fifth: data.fifth,
-              img_ids: data.img_ids,
-              total: data.total,
-              update_date: new Date()
-            }
-          );
-        }
-      }
+      const data = req.body;
+      await mark("_std_table", user, data);
 
       res.sendStatus(200);
     } catch (err) {
@@ -621,18 +665,21 @@ server.connectMGDB().then((client) => {
           ws.isAlive = true;
           // Xử lý khi client gửi dữ liệu
           ws.on('message', (message) => {
-            console.log('SYSTEM | WEBSOCKET | Received message: ', message.toString('utf-8'));
+            // console.log('SYSTEM | WEBSOCKET | Received message: ', message.toString('utf-8'));
             if (message.toString('utf-8') == 'logout') {
               ws.close();
+            } else if (message.toString('utf-8') == 'ok ko e?') {
+              ws.send('Ok a');
             }
           });
+
 
           // Xử lý khi client đóng kết nối
           ws.on('close', () => {
             // console.log('SYSTEM | WEBSOCKET | WebSocket connection closed for ' + ws.id);
           });
-        } else { ws.close(); }
-      } else { ws.close(); }
+        } else { ws.send('Ko a'); ws.close(); }
+      } else { ws.send('Ko a'); ws.close(); }
 
     } else {
       console.log('SYSTEM | WEBSOCKET | Rejected WebSocket connection from:', ws.id);
@@ -641,11 +688,11 @@ server.connectMGDB().then((client) => {
   });
 
   // Heartbeat websocket
-  // setInterval(() => {
-  //   wss.clients.forEach((ws) => {
-  //     sendHeartbeat(ws);
-  //   });
-  // }, 5000);
+  setInterval(() => {
+    wss.clients.forEach((ws) => {
+      sendHeartbeat(ws);
+    });
+  }, 5000);
 
   // -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   httpsServer.listen(port, () => {

@@ -119,10 +119,21 @@ body {
 .button-35:hover {
   box-shadow: #121212 0 0 0 3px, transparent 0 0 0 0;
 }
+
+.button-35:active {
+  background-color: #a0a0a0;
+  color: #e2e2e2;
+}
+
 .button-35 a{
   text-decoration: none;
   color: #000;
 }
+
+.button-35:active a{
+  color: #e2e2e2;
+}
+
 /* css checkbox */
 .checkbox-wrapper-4 * {
   box-sizing: border-box;

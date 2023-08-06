@@ -8,8 +8,9 @@ const server = require("./vip_pro_lib.js");
 // thêm email + tên hiển thị cho người dùng
 // server.update_many_Data('user_info', {}, { $set: { displayName: 'con gà', email: 'doconga@gmail.com'} });
 
+server.uploadFileToDrive('/Users/rurimeiko/Documents/github/newCDRL/backend/vip_pro_lib.js').then(console.log('ok'))
 // thêm user
-// const mssv = "xxx2003";
+// const mssv = "210151";
 // const ho = "Nguyễn";
 // const ten = "Hưng Thịnh";
 // server.add_one_Data('login_info', {
@@ -27,6 +28,5 @@ const server = require("./vip_pro_lib.js");
 //     email: "kehuydiet@gmail.com"
 // }).then(console.log('done')));
 
-
 // chỉnh quyền
-server.update_one_Data('user_info', { _id: 2101281 }, { $set: { power: 1 } }).then(console.log('ok'));
+// server.update_one_Data('user_info', { _id: 2101281 }, { $set: { power: 1 } }).then(console.log('ok'));

@@ -2,6 +2,9 @@
 const email_d = $('.email').val();
 const displayName_d = $('.display_name').val();
 const avt_d = $('.up-img').attr('src');
+if (!(avt_d == "")) {
+  $('.modal_wrap_img_item').find(".up-img-btn i").hide();
+}
 // -------------
 
 $(document).on("dragover", ".modal_wrap_img_item", handleDragOver);
@@ -14,6 +17,25 @@ $(document).on("click", ".profile_btn_cancel", handleCancelButtonClick);
 $(document).on("click", ".profile_btn_save", handleSaveButtonClick);
 
 // -----------------------------------------------------------------------------
+function validateFile(file) {
+  let allowedFormats = ['jpg', 'jpeg', 'png']; // Allowed file formats
+  let maxSize = 5485760; // MBit in bytes
+  // Check file format
+  const fileName = file.name;
+  const fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
+  if (!allowedFormats.includes(fileExtension)) {
+    // Invalid file format
+    notify('x', 'Sai định dạng file!');
+    return false;
+  }
+  if (file.size > maxSize) {
+    notify('!', 'Up ảnh dưới 5mb!');
+    return false;
+  }
+  // File is valid
+  return true;
+}
+
 function handleDragOver(event) {
   event.preventDefault();
   $(this).addClass("dragover");
@@ -25,10 +47,12 @@ function handleDragLeave(event) {
 }
 
 function handleDrop(event) {
-  event.preventDefault();
-  $(this).removeClass("dragover");
-  const file = event.originalEvent.dataTransfer.files[0];
-  displayImage.call(this, file);
+  if (validateFile(event.originalEvent.dataTransfer.files[0])) {
+    event.preventDefault();
+    $(this).removeClass("dragover");
+    const file = event.originalEvent.dataTransfer.files[0];
+    displayImage.call(this, file);
+  }
 }
 
 function handleUploadButtonClick() {
@@ -36,8 +60,10 @@ function handleUploadButtonClick() {
 }
 
 function handleUploadInputChange(event) {
-  const file = event.target.files[0];
-  displayImage.call($(this).parent().parent(), file);
+  if (validateFile(event.target.files[0])) {
+    const file = event.target.files[0];
+    displayImage.call($(this).parent().parent(), file);
+  }
 }
 
 function displayImage(file) {
@@ -46,6 +72,7 @@ function displayImage(file) {
     $(this).find(".up-img").attr("src", event.target.result);
   }.bind($(this));
   reader.readAsDataURL(file);
+  $(this).find(".up-img-btn i").hide();
 }
 
 function handleCancelButtonClick(event) {

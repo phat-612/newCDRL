@@ -95,3 +95,13 @@
     width: 95%;
   }
 }
+
+
+.eye{
+  position: absolute;
+  right: 1rem;
+  top: 20%;
+  font-size: 15px;
+  cursor: pointer;
+  display: none;
+}

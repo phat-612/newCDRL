@@ -64,10 +64,10 @@ th, td{
 }
 table tr td:nth-child(4){
   text-transform: uppercase;
-  text-align: left;
+  text-align: center;
 }
 table tr td:nth-child(7){
-  text-align: left;
+  text-align: center;
 }
 table tr td:nth-child(9){
   

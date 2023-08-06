@@ -1,4 +1,3 @@
-console.log("cho minh")
 // identify file
 function validateFile(file) {
   let allowedFormats = ['jpg', 'jpeg', 'png']; // Allowed file formats
@@ -372,7 +371,6 @@ async function mark(img_ids) {
   try {
 
     let postData = JSON.stringify({
-      school_year: 'hk1 2022-2023',
       first: [
         getSelectValue("mySelect1"),
         getSelectValue("mySelect2"),
@@ -417,7 +415,7 @@ async function mark(img_ids) {
     };
 
 
-    const response = await fetch('/api/mark', requestOptions);
+    const response = await fetch('/api/std_mark', requestOptions);
     if (response.ok) {
       notify('n', 'Đã lưu phiếu đánh giá điểm rèn luyện thành công!')
     }
