@@ -94,7 +94,7 @@ body {
   align-items: center;
   background-color: #d3d3d3;
   border-radius: 1rem;
-  box-shadow: transparent 0 0 0 3px, rgba(18, 18, 18, .1) 0 6px 20px;
+  box-shadow: transparent 0 0 0 3px, rgba(18, 18, 18, 0.1) 0 6px 20px;
   box-sizing: border-box;
   color: #121212;
   cursor: pointer;
@@ -108,7 +108,7 @@ body {
   padding: 1rem 1.2rem;
   text-align: center;
   text-decoration: none;
-  transition: box-shadow .2s, -webkit-box-shadow .2s;
+  transition: box-shadow 0.2s, -webkit-box-shadow 0.2s;
   white-space: nowrap;
   border: 0;
   user-select: none;
@@ -125,12 +125,12 @@ body {
   color: #e2e2e2;
 }
 
-.button-35 a{
+.button-35 a {
   text-decoration: none;
   color: #000;
 }
 
-.button-35:active a{
+.button-35:active a {
   color: #e2e2e2;
 }
 
@@ -255,7 +255,7 @@ body {
   box-shadow: none;
   flex: 1;
   background-image: none;
-  background-color:#d3d3d3;
+  background-color: #d3d3d3;
   border-radius: 0.8rem;
   cursor: pointer;
 }
@@ -271,6 +271,7 @@ body {
 }
 
 .select::after {
+  font-size: 1.2rem;
   content: "\25BC";
   position: absolute;
   top: 37%;
@@ -284,30 +285,32 @@ body {
   color: rgb(143, 213, 229);
 }
 /* table chung */
-table, th, td {
+table,
+th,
+td {
   border: 1px solid #aeaeae;
   border-collapse: collapse;
 }
 
 /* responsive */
-@media screen and (max-width: 600px){
-  .header{
+@media screen and (max-width: 600px) {
+  .header {
     display: flex;
     top: 0;
     left: 0;
     right: 0;
-}
+  }
 
-.right-header > a{
+  .right-header > a {
     display: none;
-}
-.avatar_wrap > p{
+  }
+  .avatar_wrap > p {
     display: none;
-}
-.setting{
+  }
+  .setting {
     right: -13%;
-}
-.avatar:hover .setting{
+  }
+  .avatar:hover .setting {
     display: none;
-}
+  }
 }
