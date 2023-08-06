@@ -19,9 +19,12 @@ html {
 
 
 /* activity information */
+.activity {
+    padding: 1rem;
+}
 .information {
-    background-color: rgb(189, 189, 189);
-    margin: 1rem;
+    background-color: rgb(241, 241, 241);
+    margin: 2rem;
     border-radius: 0.8rem;
 }
 
@@ -31,8 +34,7 @@ html {
 }
 
 .activity-elements.title {
-    padding: 2rem;
-    font-size: 3rem;
+    font-size: 2rem;
     margin-left: 1rem;
 }
 
@@ -73,7 +75,7 @@ table tr td:nth-child(9) a {
 }
 
 th {
-    background-color: rgb(241, 241, 241);
+    background-color: #cecece;
 }
 
 tr:nth-child(even) {
