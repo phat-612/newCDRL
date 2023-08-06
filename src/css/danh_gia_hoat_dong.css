@@ -1,10 +1,10 @@
 html {
     font-size: 62.5%;
-  }
+}
 
 * {
     padding: 0;
-    margin: 0; 
+    margin: 0;
     /* box-sizing: content-box; */
 }
 
@@ -17,43 +17,73 @@ html {
     border-radius: 0.8rem;
 }
 
-.activity-content {
-    padding: 1rem;
-    margin-left: 2rem;
+
+/* activity information */
+.information {
+    background-color: rgb(189, 189, 189);
+    margin: 1rem;
+    border-radius: 0.8rem;
 }
 
-.evaluation {
+.activity-elements {
     padding: 1rem;
-    
+    font-size: 2rem;
+}
+
+.activity-elements.title {
+    padding: 2rem;
+    font-size: 3rem;
+    margin-left: 1rem;
 }
 
 /* Table */
+.evaluation {
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: #fff;
+    font-size: 1.6rem;
+    border-radius: 0.8rem;
+}
 
-/* table,td, th {
-    border-collapse: collapse;
-    border: 1px solid #000;
-} */
-th {
-    background-color: rgb(206, 206, 206);
-  }
-tr:nth-child(even) {
-    background-color: rgb(241, 241, 241);
-  }
-tr:nth-child(odd) {
-    background-color: #ffffff;
-  }
-tr:hover{
-    background-color: rgba(158, 158, 158, 0.507);
-  }
+/* css table */
+table,
+th,
 td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+th {
+    font-size: 2rem;
+}
+
+td {
+    font-size: 1.6rem;
     text-align: center;
 }
 
-th {
-    padding: 0.75rem;
-    font-size: 1.2rem;
+th,
+td {
+    padding: 1rem;
 }
 
-td {
-    padding: 0.25rem;
+table tr td:nth-child(9) a {
+    text-decoration: none;
+    color: rgb(117, 117, 255);
+}
+
+th {
+    background-color: rgb(241, 241, 241);
+}
+
+tr:nth-child(even) {
+    background-color: rgb(241, 241, 241);
+}
+
+tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+tr:hover {
+    background-color: rgba(158, 158, 158, 0.507);
 }
