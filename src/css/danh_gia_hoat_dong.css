@@ -35,7 +35,6 @@ html {
 
 .activity-elements.title {
     font-size: 2rem;
-    margin-left: 1rem;
 }
 
 /* Table */
@@ -48,12 +47,6 @@ html {
 }
 
 /* css table */
-table,
-th,
-td {
-    border: 1px solid black;
-    border-collapse: collapse;
-}
 
 th {
     font-size: 2rem;
@@ -84,8 +77,4 @@ tr:nth-child(even) {
 
 tr:nth-child(odd) {
     background-color: #ffffff;
-}
-
-tr:hover {
-    background-color: rgba(158, 158, 158, 0.507);
 }

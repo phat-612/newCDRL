@@ -45,7 +45,7 @@ td:nth-child(2){
   font-weight: bold;
 }
 
-tr:nth-child(13), tr:nth-child(28), tr:nth-child(33), tr:nth-child(41), tr:nth-child(42){
+tr:nth-child(13), tr:nth-child(21), tr:nth-child(28), tr:nth-child(33), tr:nth-child(41), tr:nth-child(42){
   color: rgb(255, 75, 75);
   font-size: 1.8rem;
 }
@@ -236,6 +236,7 @@ td .title{
 .no-img {
   text-align: center;
   font-size: 2rem;
+  background-color: #d4d1d1;
 }
 
 .modal_wrap_img {

@@ -19,6 +19,9 @@
 .hk_nk .select select{
   font-size: inherit;
 }
+.hk_nk .select select option{
+  text-align: center;
+}
 .danh_sach_bang_diem {
   margin-top: 2rem;
   padding: 1rem;
@@ -33,17 +36,22 @@
 .danh_sach_bang_diem .chu_thich {
   margin: 2rem 0;
 }
+
 .danh_sach_bang_diem .dau_sao {
+  text-align: center;
   display: inline-block;
   color: red;
   width: 1.5rem;
 }
+
 .danh_sach_bang_diem .mau_vang {
   display: inline-block;
+  border-radius: 0.3rem;
   width: 1.5rem;
   height: 1.5rem;
   background-color: rgb(251, 251, 138);
 }
+
 .new_update{
   background-color: rgb(251, 251, 138);
 }

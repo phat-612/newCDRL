@@ -27,14 +27,18 @@ $(document).ready(function () {
     $(".modal").hide();
   });
   $(".done-btn2").click(function () {
+    const modal_wrap_img = document.querySelectorAll(".modal_wrap_img");
+
+    for (const item of modal_wrap_img) {
+      if (item.querySelector('img').url !== '' || item.querySelector('img').url !== null) {
+        item.remove();
+      }
+    }
     $(".modal").hide();
   });
 
   $(".add-btn").click(function () {
-    if ($(".modal_img .no-img")) {
-      $(".modal_img .no-img").hide();
-    }
-    if ($(".modal_img").children().length <= 5) {
+    if ($(".modal_img").children().length < 5) {
       $(".modal_img").append(`
       <div class="modal_wrap_img">
   
@@ -52,6 +56,12 @@ $(document).ready(function () {
         <button class="drop_img"><i class="fa-solid fa-trash"></i></button> 
       </div>
       `);
+
+      $(".no-img span").text($(".modal_img").children().length);
+
+      if ($(".modal_img").children().length == 5) {
+        this.style.display = 'none';
+      }
     }
     const element_scroll = document.querySelector(".modal_img");
     element_scroll.scrollTop = element_scroll.scrollHeight;
@@ -60,6 +70,8 @@ $(document).ready(function () {
 
 $(document).on("click", ".drop_img ", function () {
   $(this).parent().remove();
+  $(".no-img span").text($(".modal_img").children().length);
+  document.querySelector('.add-btn').style.display = 'block';
 });
 
 $(document).on("dragover", ".modal_wrap_img_item", handleDragOver);
@@ -83,7 +95,8 @@ function handleDrop(event) {
     event.preventDefault();
     $(this).removeClass("dragover");
     const file = event.originalEvent.dataTransfer.files[0];
-    displayImage.call(this, file);
+    displayImage.call($(this), file);
+    $('.upload-input').prop('files', event.originalEvent.dataTransfer.files);
   }
 }
 
@@ -95,6 +108,7 @@ function handleUploadInputChange(event) {
   if (validateFile(event.target.files[0])) {
     const file = event.target.files[0];
     displayImage.call($(this).parent().parent(), file);
+    let selectedFiles = this.files;
   }
 }
 

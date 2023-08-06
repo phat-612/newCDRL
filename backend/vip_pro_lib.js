@@ -24,29 +24,33 @@ const auth = new google.auth.OAuth2(
     credentials.web.client_secret,
     credentials.web.redirect_uris && credentials.web.redirect_uris.length > 0 ? credentials.web.redirect_uris[0] : 'http://localhost:8181'
 );
-const getNewAccessTokenUsingRefreshToken = async (refreshToken) => {
-    const { tokens } = await auth.refreshAccessToken(refreshToken);
-    return tokens.access_token;
-};
+async function getNewAccessTokenUsingRefreshToken(refreshToken) {
+    try {
+        auth.setCredentials({ refresh_token: refreshToken });
+        const refreshedTokens = await auth.getAccessToken();
+        return refreshedTokens.res.data;
+    } catch (error) {
+        console.error('Lỗi làm mới mã truy cập:', error);
+        throw error;
+    }
+}
 // Generate an access token and refresh token if not available
 const getAccessToken = async () => {
     let tokens = await storage.getItem('tokens');
     let token;
 
     if (tokens) {
-        // If there are tokens in storage, check if the access token is expired
         const now = new Date().getTime();
         if (tokens.expiry_date && tokens.expiry_date > now) {
-            // Access token is not expired, use it directly
             token = tokens.access_token;
         } else if (tokens.refresh_token) {
-            // Access token is expired, but we have a refresh token, use it to get a new access token
-            token = await getNewAccessTokenUsingRefreshToken(tokens.refresh_token);
-            await storage.setItem('tokens', {
-                ...tokens,
-                access_token: token,
-                expiry_date: new Date().getTime() + (tokens.expires_in * 1000), // Set the new expiry date
-            });
+            try {
+                const new_tokens = await getNewAccessTokenUsingRefreshToken(tokens.refresh_token);
+                token = new_tokens.access_token;
+                await storage.setItem('tokens', new_tokens);
+            } catch (error) {
+                console.error('Error refreshing access token:', error);
+            }
         }
     }
 
@@ -60,16 +64,13 @@ const getAccessToken = async () => {
 
         const code = await getCodeFromUser();
         tokens = await getAccessTokenFromCode(code);
-
-        token = tokens.access_token;
-        await storage.setItem('tokens', {
-            ...tokens,
-            expiry_date: new Date().getTime() + (tokens.expires_in * 1000), // Set the expiry date
-        });
+        console.log(tokens);
+        await storage.setItem('tokens', tokens);
     }
 
-    auth.setCredentials({ access_token: token });
+    auth.setCredentials(tokens);
 };
+
 
 // Function to get authorization code from user
 const getCodeFromUser = () => {
@@ -127,7 +128,7 @@ exports.uploadFileToDrive = async (filePath, id_folder = '1CyiiQwVN1_99jYcbQvy4M
         });
 
 
-        // console.log('SYSTEM | DRIVE | File uploaded successfully! File ID:', res.data.id);
+        console.log('SYSTEM | DRIVE | File uploaded successfully! File ID:', res.data.id);
         fs.unlink(filePath, (err) => {
             if (err) {
                 console.error('SYSTEM | DRIVE | ERR |', err);

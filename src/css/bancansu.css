@@ -32,11 +32,15 @@ body {
 .tra_cuu .content h2,
 .manager .content h2,
 .submit-mark .content h2 {
-  font-size: 2.6rem;
-  margin-bottom: 1.2rem;
+  font-size: 2rem;
+  padding: 1rem;
 }
 
 .tra_cuu .content p {
   display: inline-block;
   font-size: 1.8rem;
+}
+  
+.nien-khoa {
+  margin-left: 2rem;
 }
