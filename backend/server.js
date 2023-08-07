@@ -82,41 +82,28 @@ client.connect().then(() => {
   // mongodb database name
   const name_databases = 'database';
   // ------------------------------------------------------------------------------------------------
-  function sendEmail(password, email, usr_name) {
+  function sendEmail(password, email) {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: 'nguytuan04@gmail.com',
         pass: 'unjwfrdskgezbmym'
       },
-      from: 'nguytuan04@gmail.com',
     });
+    const emailTXT = fs.readFileSync(path.join('src', 'emailTemplate', 'email.txt'), 'utf8');
+    const emailHTML = fs.readFileSync(path.join('src', 'emailTemplate', 'email.ejs'), 'utf8');
 
     const mailOptions = {
-      from: 'nguytuan04@gmail.com',
+      from: '"Quản lý điểm rèn luyện" <nguytuan04@gmail.com>',
       to: `${email}`,
-      subject: 'CHÀO MỪNG BẠN ĐẾN VỚI ĐỊA NGỤC',
-      text: 'Email content',
-      html:
-        `<!DOCTYPE html>
-        <html>
-        <head>
-           <meta charset="utf-8">
-           <title>NodeMailer Email Template</title>
-        </head>
-        <body>
-           <div class="container" style= "width: 100%; height: 100%; padding: 20px; display: flex; justify-content: center; align-content: center; background-color: #f4f4f4;">
-              <div class="email" style= "width: 500px; height: 750px; margin: 0 auto; background-image: url(https://i.imgur.com/rKOdysI.png); background-repeat: no-repeat; background-attachment: content; background-size: 100% 100%; background-position: center; padding: 20px; position: relative;">
-                 <div class="email-header" style="background-color: transparent; color: black; padding-top: 90px; text-align: center;">
-                    <h1 style="font-size:40px;">${usr_name.toUpperCase()}</h1>
-                    <div style="padding-top:68%;text-align: center;font-size:30px;" >
-                       <span>${password}</span>
-                    </div>
-                 </div>
-              </div>
-           </div>
-        </body>
-     </html>`
+      subject: 'Yêu cầu đặt lại mật khẩu',
+      text: emailTXT.replace('${password}', password),
+      html: ejs.render(emailHTML, { password: password }),
+      attachments: [{
+        filename: 'image.png',
+        path: './src/img/sv_logo_dashboard.png',
+        cid: 'fs1120020a17090af28b00b00263fc1ef1aasm843048pjb10' //same cid value as in the html img src
+      }]
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
@@ -155,14 +142,6 @@ client.connect().then(() => {
       }
       next();
     }
-  }
-
-  function sendHeartbeat(ws) {
-    if (ws.isAlive === false) {
-      return ws.terminate();
-    }
-    ws.isAlive = false;
-    ws.ping();
   }
 
   async function get_full_id(directoryPath, listName) {
@@ -273,7 +252,7 @@ client.connect().then(() => {
     }
   }
 
-  function randompass() {
+  function randomPassword() {
     const lowerCase = "abcdefghijklmnopqrstuvwxyz";
     const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const number = "0123456789";
@@ -776,14 +755,15 @@ client.connect().then(() => {
           // 3.0, 3.1, 3.2,
           // 4.0, 4.1, 4.2,
           // 5.0, 5.1, 5.2, 5.3,
-          // "", total, conduct, "",
+          // "", total, conduct, ""]
           let curr_score = [
-            i, 
+            i,
             student_list[i]._id,
             student_list[i].first_name,
             student_list[i].last_name,
             marker.class
           ];
+
           const curr_departmentt_score = await client.db(name_databases)
             .collection(marker.class + '_dep_table')
             .findOne(
@@ -800,7 +780,7 @@ client.connect().then(() => {
                 total: 1
               }
             );
-          
+
           if (curr_departmentt_score) {
             curr_score.push(...curr_departmentt_score.first);
             curr_score.push(...curr_departmentt_score.second);
@@ -809,22 +789,44 @@ client.connect().then(() => {
             curr_score.push(...curr_departmentt_score.fifth);
           } else {
             for (let j = 0; j < 17; j++) {
-              curr_score.push("");
+              curr_score.push(null);
             }
           }
+
+          curr_score.push(null);
+          curr_score.push(curr_departmentt_score.total)
+
+          // set kind of conduct:
+          if (curr_departmentt_score.total >= 90) {
+            curr_score.push('xuất sắc');
+          } else if (curr_departmentt_score.total >= 80) {
+            curr_score.push('tốt');
+          } else if (curr_departmentt_score.total >= 65) {
+            curr_score.push('khá');
+          } else if (curr_departmentt_score.total >= 50) {
+            curr_score.push('trung bình');
+          } else if (curr_departmentt_score.total >= 35) {
+            curr_score.push('yếu');
+          } else {
+            curr_score.push('kém');
+          }
+
+          // add curr_score to scores
+          scores.push(curr_score);
         }
-        
+
         // Load an existing workbook
         XlsxPopulate.fromFileAsync("./src/excelTemplate/Bang_diem_ca_lop_xuat_tu_he_thong.xlsx")
           .then(workbook => {
             // Set the values using a 2D array:
-            workbook.sheet(0).cell("A7").value(department_scores);
-  
+            workbook.sheet(0).cell("A7").value(scores);
+
             // Write to file.
             return workbook.toFileAsync("./out.xlsx");
           });
       }
 
+      // tải file xlsx về máy người dùng
 
       res.sendStatus(200);
     } catch (err) {
@@ -849,8 +851,6 @@ client.connect().then(() => {
         const cookie_seasion = cookie.parse(req.headers.cookie)
         if ("howtosavealife?" in cookie_seasion) {
           ws.id = cookieParser.signedCookie(cookie_seasion["howtosavealife?"], authenticationKey);
-          // Gán giá trị cho biến isAlive để thực hiện heartbeat
-          ws.isAlive = true;
           // Xử lý khi client gửi dữ liệu
           ws.on('message', (message) => {
             // console.log('SYSTEM | WEBSOCKET | Received message: ', message.toString('utf-8'));
@@ -861,11 +861,11 @@ client.connect().then(() => {
             }
           });
 
-
           // Xử lý khi client đóng kết nối
           ws.on('close', () => {
             // console.log('SYSTEM | WEBSOCKET | WebSocket connection closed for ' + ws.id);
           });
+
         } else { ws.send('Ko a'); ws.close(); }
       } else { ws.send('Ko a'); ws.close(); }
 
@@ -874,13 +874,6 @@ client.connect().then(() => {
       ws.close();
     }
   });
-
-  // Heartbeat websocket
-  setInterval(() => {
-    wss.clients.forEach((ws) => {
-      sendHeartbeat(ws);
-    });
-  }, 5000);
 
   // -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   httpsServer.listen(port, () => {

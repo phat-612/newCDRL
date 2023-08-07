@@ -10,16 +10,12 @@ function connectWebSocket() {
         if (event.data === 'reload') { window.location.reload(); }
     };
 
-    wss.onping = function () {
-        console.log('Received ping from server.');
-        wss.pong();
-        console.log('Sent pong to server.');
-    };
+
     wss.onclose = function (event) {
         if (!currentURLsub.startsWith(currentURLsub)) {
             console.log('Reconnect');
             // Khi bị mất kết nối, ta sẽ gọi hàm reconnect sau khoảng thời gian xác định
-            setTimeout(connectWebSocket, 5000);
+            setTimeout(connectWebSocket, 15000);
         }
     }
 }
