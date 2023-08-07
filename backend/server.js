@@ -1,18 +1,20 @@
 /* Ghi chú: --------------------------------------------------------------------------------------------------------------
 @dawn1810:
   phân quyền người dùng:
-    0: sinh vien
-    1: ban cán sự lơp
-    2: giáo viên
-    3: khoa 
-    4: admin
+    0: nhập điểm sinh viên
+    1: chấm điểm lần 1 (ban cán sự, cố vấn học tập)
+    2: chấp điểm/ duyệ điểm (khoa)
+    3: tạo hoạt động (ban cán sự, ???)
+    4: cấp quyền (> cố vấn)
+    ...
+  power = {
+    0: true,
+  }
 @RuriMeiko
   tài khoản mặt định:
     {_id: "2101281",
     password: "2101281",
     first: "true"}
-    
- 
 -------------------------------------------------------------------------------------------------------------------------- */
 
 const express = require("express");
@@ -340,6 +342,12 @@ client.connect().then(() => {
       header: "header",
     });
   });
+  // xac thuc route
+  app.get("/xacthucOTP", checkIfUserLoginRoute, async (req, res) => {
+    res.render("xacthucOTP", {
+      header: "header",
+    });
+  });
 
   // Quan li hoat dong route
   app.get("/bancansu/quanlihoatdong", checkIfUserLoginRoute, async (req, res) => {
@@ -376,7 +384,7 @@ client.connect().then(() => {
     // get staff member info :
     const marker = await client.db(name_databases).collection('user_info').findOne({ _id: user._id });
     // check user login:
-    if (marker.power == 1) {
+    if (marker.power[1]) {
       // get all student in staff member class:
       const student_list = await client.db(name_databases).collection('user_info').find(
         { class: marker.class },
@@ -645,6 +653,19 @@ client.connect().then(() => {
     res.end(JSON.stringify(await get_full_id(uploadDirectory, list_name)));
   });
 
+  // Create new account -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  app.get("/api/createAccount", checkIfUserLoginAPI, async (req, res) => {
+    try {
+      // read excel file:
+      // create all account
+      
+      res.sendStatus(200);
+    } catch (err) {
+      console.log("SYSTEM | MARK | ERROR | ", err);
+      res.sendStatus(500);
+    }
+  });
+  
   // Xử lý đường link không có -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   app.get("*", async function (req, res) {
     res.sendStatus(404);

@@ -1,0 +1,19 @@
+@media screen and (max-width:600px) {
+    .otp-input-fields input {
+        height: 4rem;
+        width: 4rem;
+    }
+    .otp-input-fields{
+        width:80%;
+    }
+    .title p.msg {
+        margin-left: 2rem;
+    }
+    .result{
+        padding: 3.7rem;
+    }
+    .otp_again {
+        margin: 2% 0 0 72%;
+        font-size: 1.5rem;
+    }
+}
