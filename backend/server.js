@@ -28,6 +28,7 @@ const path = require("path");
 const server = require("./vip_pro_lib.js");
 const MongoStore = require('connect-mongo');
 const multer = require('multer'); // Thư viện để xử lý file upload
+const XlsxPopulate = require('xlsx-populate');
 const WebSocket = require('ws');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = "mongodb+srv://binhminh19112003:Zr3uGIK4dCymOXON@database.sefjqcb.mongodb.net/?retryWrites=true&w=majority";
@@ -81,6 +82,52 @@ client.connect().then(() => {
   // mongodb database name
   const name_databases = 'database';
   // ------------------------------------------------------------------------------------------------
+  function sendEmail(password, email, usr_name) {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'nguytuan04@gmail.com',
+        pass: 'unjwfrdskgezbmym'
+      },
+      from: 'nguytuan04@gmail.com',
+    });
+
+    const mailOptions = {
+      from: 'nguytuan04@gmail.com',
+      to: `${email}`,
+      subject: 'CHÀO MỪNG BẠN ĐẾN VỚI ĐỊA NGỤC',
+      text: 'Email content',
+      html:
+        `<!DOCTYPE html>
+        <html>
+        <head>
+           <meta charset="utf-8">
+           <title>NodeMailer Email Template</title>
+        </head>
+        <body>
+           <div class="container" style= "width: 100%; height: 100%; padding: 20px; display: flex; justify-content: center; align-content: center; background-color: #f4f4f4;">
+              <div class="email" style= "width: 500px; height: 750px; margin: 0 auto; background-image: url(https://i.imgur.com/rKOdysI.png); background-repeat: no-repeat; background-attachment: content; background-size: 100% 100%; background-position: center; padding: 20px; position: relative;">
+                 <div class="email-header" style="background-color: transparent; color: black; padding-top: 90px; text-align: center;">
+                    <h1 style="font-size:40px;">${usr_name.toUpperCase()}</h1>
+                    <div style="padding-top:68%;text-align: center;font-size:30px;" >
+                       <span>${password}</span>
+                    </div>
+                 </div>
+              </div>
+           </div>
+        </body>
+     </html>`
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log('SYSTEM | SEND_EMAIL | ', error);
+      } else {
+        console.log(`SYSTEM | SEND_EMAIL | ${info.response}`);
+        // do something useful
+      }
+    });
+  }
 
   async function checkIfUserLoginAPI(req, res, next) {
     const user = req.session.user;
@@ -335,7 +382,14 @@ client.connect().then(() => {
       footer: "footer"
     });
   });
-
+  // danh sach sinh vien
+  app.get("/danhsachsinhvien", checkIfUserLoginRoute, async (req, res) => {
+    res.render("danhsachsinhvien", {
+      header: "header",
+      thongbao: "thongbao",
+      footer: "footer"
+    });
+  });
   // ban can su route
   app.get("/bancansu", checkIfUserLoginRoute, async (req, res) => {
     res.render("bancansu", {
@@ -377,12 +431,18 @@ client.connect().then(() => {
     });
   });
 
-  // thong tin ca nhan route
+  // danh sach bang diem
   app.get("/danhsachbangdiem", checkIfUserLoginRoute, async (req, res) => {
     const user = req.session.user;
-    const school_year = await client.db(name_databases).collection('school_year').findOne({});
+    const school_year = await client.db(name_databases).collection('school_year').findOne({}, { year: 1 });
     // get staff member info :
-    const marker = await client.db(name_databases).collection('user_info').findOne({ _id: user._id });
+    const marker = await client.db(name_databases).collection('user_info').findOne(
+      { _id: user._id },
+      {
+        power: 1,
+        class: 1
+      }
+    );
     // check user login:
     if (marker.power[1]) {
       // get all student in staff member class:
@@ -405,22 +465,38 @@ client.connect().then(() => {
       for (student of student_list) {
         const curr_student_score = await client.db(name_databases)
           .collection(marker.class + '_std_table')
-          .findOne({
-            mssv: student._id,
-            school_year: school_year.year
-          });
+          .findOne(
+            {
+              mssv: student._id,
+              school_year: school_year.year
+            },
+            {
+              total: 1
+            }
+          );
         const curr_staff_score = await client.db(name_databases)
           .collection(marker.class + '_stf_table')
-          .findOne({
-            mssv: student._id,
-            school_year: school_year.year
-          });
+          .findOne(
+            {
+              mssv: student._id,
+              school_year: school_year.year
+            },
+            {
+              total: 1,
+              marker: 1
+            }
+          );
         const curr_departmentt_score = await client.db(name_databases)
           .collection(marker.class + '_dep_table')
-          .findOne({
-            mssv: student._id,
-            school_year: school_year.year
-          });
+          .findOne(
+            {
+              mssv: student._id,
+              school_year: school_year.year
+            },
+            {
+              total: 1
+            }
+          );
         // student
         if (curr_student_score) {
           render.student_scores.push(curr_student_score.total);
@@ -658,14 +734,105 @@ client.connect().then(() => {
     try {
       // read excel file:
       // create all account
-      
+
       res.sendStatus(200);
     } catch (err) {
       console.log("SYSTEM | MARK | ERROR | ", err);
       res.sendStatus(500);
     }
   });
+
+  // Export class score report --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  app.get("/api/exportClassScore", checkIfUserLoginAPI, async (req, res) => {
+    try {
+      const user = req.session.user;
+      const data = req.body;
+      //data = {year: }
+      const school_year = data.year;
+      // get staff member info :
+      const marker = await client.db(name_databases).collection('user_info').findOne(
+        { _id: user._id },
+        {
+          power: 1,
+          class: 1
+        }
+      );
+      // check user login:
+      if (marker.power[1]) {
+        // get all student in staff member class:
+        const student_list = await client.db(name_databases).collection('user_info').find(
+          { class: marker.class },
+          { 'projection': { first_name: 1, last_name: 1 } })
+          .sort({ first_name: 1, last_name: 1 })
+          .toArray();
+
+        // get all student total score from themself:
+        let scores = [];
+
+        for (let i = 0; i < student_list.length; i++) {
+          // [stt, mssv. ho, ten, lop, 
+          // 1.0, 1.1, 1.2, 1.3, 1.4,
+          // 2.0, 2.1,
+          // 3.0, 3.1, 3.2,
+          // 4.0, 4.1, 4.2,
+          // 5.0, 5.1, 5.2, 5.3,
+          // "", total, conduct, "",
+          let curr_score = [
+            i, 
+            student_list[i]._id,
+            student_list[i].first_name,
+            student_list[i].last_name,
+            marker.class
+          ];
+          const curr_departmentt_score = await client.db(name_databases)
+            .collection(marker.class + '_dep_table')
+            .findOne(
+              {
+                mssv: student_list[i]._id,
+                school_year: school_year
+              },
+              {
+                first: 1,
+                second: 1,
+                third: 1,
+                fourth: 1,
+                fifth: 1,
+                total: 1
+              }
+            );
+          
+          if (curr_departmentt_score) {
+            curr_score.push(...curr_departmentt_score.first);
+            curr_score.push(...curr_departmentt_score.second);
+            curr_score.push(...curr_departmentt_score.third);
+            curr_score.push(...curr_departmentt_score.fourth);
+            curr_score.push(...curr_departmentt_score.fifth);
+          } else {
+            for (let j = 0; j < 17; j++) {
+              curr_score.push("");
+            }
+          }
+        }
+        
+        // Load an existing workbook
+        XlsxPopulate.fromFileAsync("./src/excelTemplate/Bang_diem_ca_lop_xuat_tu_he_thong.xlsx")
+          .then(workbook => {
+            // Set the values using a 2D array:
+            workbook.sheet(0).cell("A7").value(department_scores);
   
+            // Write to file.
+            return workbook.toFileAsync("./out.xlsx");
+          });
+      }
+
+
+      res.sendStatus(200);
+    } catch (err) {
+      console.log("SYSTEM | MARK | ERROR | ", err);
+      res.sendStatus(500);
+    }
+  });
+
   // Xử lý đường link không có -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   app.get("*", async function (req, res) {
     res.sendStatus(404);

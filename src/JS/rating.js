@@ -30,8 +30,9 @@ $(document).ready(function () {
     const modal_wrap_img = document.querySelectorAll(".modal_wrap_img");
 
     for (const item of modal_wrap_img) {
-      if (item.querySelector('img').url !== '' || item.querySelector('img').url !== null) {
+      if (item.querySelector('img').src === "") {
         item.remove();
+        $(".no-img span").text($(".modal_img").children().length);
       }
     }
     $(".modal").hide();
