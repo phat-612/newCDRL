@@ -1,4 +1,14 @@
-const server = require("./vip_pro_lib.js");
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const uri = "mongodb+srv://binhminh19112003:Zr3uGIK4dCymOXON@database.sefjqcb.mongodb.net/?retryWrites=true&w=majority";
+const client = new MongoClient(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverApi: {
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true,
+    }
+});
 // clear seasion của người dùng
 // server.atomic_table('database',['sessions'],'18102003').catch(eror => console.log(eror));
 
@@ -8,7 +18,7 @@ const server = require("./vip_pro_lib.js");
 // thêm email + tên hiển thị cho người dùng
 // server.update_many_Data('user_info', {}, { $set: { displayName: 'con gà', email: 'doconga@gmail.com'} });
 
-server.uploadFileToDrive('/Users/rurimeiko/Documents/github/newCDRL/.upload_temp/files/43c5f35b-3675-4515-bde8-020818f6d96b.png').then(console.log('ok'))
+// server.uploadFileToDrive('/Users/rurimeiko/Documents/github/newCDRL/.upload_temp/files/43c5f35b-3675-4515-bde8-020818f6d96b.png').then(console.log('ok'))
 // thêm user
 // const mssv = "210151";
 // const ho = "Nguyễn";
@@ -29,4 +39,9 @@ server.uploadFileToDrive('/Users/rurimeiko/Documents/github/newCDRL/.upload_temp
 // }).then(console.log('done')));
 
 // chỉnh quyền
-// server.update_one_Data('user_info', { _id: 2101281 }, { $set: { power: 1 } }).then(console.log('ok'));
+client.db('database').collection('user_info').updateOne(
+    {
+        _id: 'xxx'
+    },
+    { $set: { power: { 0: true, 1: true } } }
+).then(console.log('ok'));
