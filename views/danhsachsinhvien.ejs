@@ -1,98 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/src/css/danhsachsinhvien.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/src/css/danhsachsinhvien.css" />
     <title>Danh sách sinh viên</title>
-</head>
-<body>
+  </head>
+  <body>
     <div class="main">
-        <%- include(header) %>
-        <div class="container">
-            <div class="content">
-                <span class="lop">Lớp:</span>
-                <div class="selectbox hoc_ky">
-                    <div class="select">
-                      <select>
-                        <option value="1">Lớp</option>
-                        <option value="2">KTPM0121</option>
-                      </select>
-                    </div>
-                </div>
-                <button class="button-35">File tạo danh sách SV</button>
-                <div class="chitiet">
-                    <div class="control">
-                        <div class="left">
-                            <input type="file">
-                            <button class="button-35">Tải lên</button>
-                        </div>
-                        <div class="right">
-                            <button class="button-35">Xóa</button>
-                            <button class="button-35">Thêm sinh viên</button>
-                        </div>
-                    </div>
-                    <table>
-                        <thead>
-                            <tr>
-                              <th style="width: 2%">
-                                <div class="checkbox-wrapper-4">
-                                  <input type="checkbox" id="row0" class="inp-cbx" value="2" />
-                                  <label for="row0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                                  </label>
-                                </div>
-                              </th>
-                              <th style="width: 3%">STT</th>
-                              <th >MSSV</th>
-                              <th >Họ Tên</th>
-                              <th >Vai trò</th>
-                              <th style="width: 5%">Đảng viên</th>
-                              <th style="width: 5%">Chấm Lần</th>
-                              <th style="width: 5%">Lập hoạt động</th>
-                              <th style="width: 10%"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div class="checkbox-wrapper-4">
-                                        <input type="checkbox" id="row1" class="inp-cbx" value="2" />
-                                        <label for="row1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                                        </label>
-                                    </div>
-                                </td>
-                                <td>1</td>
-                                <td>2101281</td>
-                                <td>nguyễn thị thúy an</td>
-                                <td>Ban cán sự</td>
-                                <td></td>
-                                <td>X</td>
-                                <td>X</td>
-                                <td><a href="">Chỉnh sửa</a></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="checkbox-wrapper-4">
-                                        <input type="checkbox" id="row2" class="inp-cbx" value="2" />
-                                        <label for="row2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                                        </label>
-                                    </div>
-                                </td>
-                                <td>1</td>
-                                <td>2101281</td>
-                                <td>nguyễn thị thúy an</td>
-                                <td>Ban cán sự</td>
-                                <td></td>
-                                <td>X</td>
-                                <td>X</td>
-                                <td><a href="">Chỉnh sửa</a></td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                </div>
+      <%- include(header) %>
+      <div class="container">
+        <div class="content">
+          <span class="lop">Lớp:</span>
+          <div class="selectbox hoc_ky">
+            <div class="select">
+              <select>
+                <option value="1">Lớp</option>
+                <option value="2">KTPM0121</option>
+              </select>
             </div>
+          </div>
+          <button class="button-35">File tạo danh sách SV</button>
+          <div class="chitiet">
+            <div class="control">
+              <div class="left">
+                <div class="file_input">
+                  <button class="button-35">Chọn file sinh viên</button>
+                  <input type="file" />
+                </div>
+                <button class="button-35">Tải lên</button>
+              </div>
+              <div class="right">
+                <button class="button-35">Xóa</button>
+                <button class="button-35">Thêm sinh viên</button>
+              </div>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 2%">
+                    <div class="checkbox-wrapper-4">
+                      <input
+                        type="checkbox"
+                        id="row0"
+                        class="inp-cbx"
+                        value="2"
+                      />
+                      <label for="row0" class="cbx"
+                        ><span> <svg height="10px" width="12px"></svg></span>
+                      </label>
+                    </div>
+                  </th>
+                  <th style="width: 3%">STT</th>
+                  <th>MSSV</th>
+                  <th>Họ Tên</th>
+                  <th>Vai trò</th>
+                  <th style="width: 5%">Đảng viên</th>
+                  <th style="width: 5%">Chấm Lần</th>
+                  <th style="width: 5%">Lập hoạt động</th>
+                  <th style="width: 10%"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="checkbox-wrapper-4">
+                      <input
+                        type="checkbox"
+                        id="row1"
+                        class="inp-cbx"
+                        value="2"
+                      />
+                      <label for="row1" class="cbx"
+                        ><span> <svg height="10px" width="12px"></svg></span>
+                      </label>
+                    </div>
+                  </td>
+                  <td>1</td>
+                  <td>2101281</td>
+                  <td>nguyễn thị thúy an</td>
+                  <td>Ban cán sự</td>
+                  <td></td>
+                  <td>X</td>
+                  <td>X</td>
+                  <td><a href="">Chỉnh sửa</a></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="checkbox-wrapper-4">
+                      <input
+                        type="checkbox"
+                        id="row2"
+                        class="inp-cbx"
+                        value="2"
+                      />
+                      <label for="row2" class="cbx"
+                        ><span> <svg height="10px" width="12px"></svg></span>
+                      </label>
+                    </div>
+                  </td>
+                  <td>1</td>
+                  <td>2101281</td>
+                  <td>nguyễn thị thúy an</td>
+                  <td>Ban cán sự</td>
+                  <td></td>
+                  <td>X</td>
+                  <td>X</td>
+                  <td><a href="">Chỉnh sửa</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
+      </div>
     </div>
-</body>
+  </body>
 </html>

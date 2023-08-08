@@ -5,7 +5,7 @@ html {
 body {
   background-color: #e7ecf0;
 }
-*{
+* {
   margin: 0;
   padding: 0;
 }
@@ -164,7 +164,7 @@ body {
   height: 1.8rem;
   border-radius: 0.4rem;
   transform: scale(1);
-  border: 0.1rem solid #cccfdb;
+  border: 0.1rem solid #9b9ea7;
   transition: all 0.2s ease;
   box-shadow: 0 0.1rem 0.1rem rgba(0, 16, 75, 0.05);
 }
@@ -295,7 +295,7 @@ td {
   border: 1px solid #aeaeae;
   border-collapse: collapse;
 }
-tr{
+tr {
   transition: ease-in-out 0.1s;
 }
 tr:nth-child(even) {
@@ -304,21 +304,21 @@ tr:nth-child(even) {
 tr:nth-child(odd) {
   background-color: #ffffff;
 }
-tr:hover{
+tr:hover {
   background-color: rgb(247 234 255);
 }
-th{
+th {
   background-color: rgb(206, 206, 206);
 }
-td a{
+td a {
   text-decoration: none;
   color: rgb(117, 117, 255);
   user-select: none;
   transition: font-weight 0.1s ease;
 }
-td a:hover{
+td a:hover {
   color: rgb(79 79 235);
-    font-weight: 600;
+  font-weight: 600;
 }
 
 /* responsive */
