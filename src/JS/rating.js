@@ -246,6 +246,7 @@ const showUploadImg = () => {
     $(".post-btn").hide();
   }
 };
+
 function handleCheckboxChange(event) {
   const checkbox = event.target;
   if (checkbox.checked) {
@@ -384,7 +385,6 @@ async function uploadImage() {
 
 async function mark(img_ids) {
   try {
-
     let postData = JSON.stringify({
       first: [
         getSelectValue("mySelect1"),
