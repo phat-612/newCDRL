@@ -145,3 +145,15 @@ textarea::placeholder {
 .content.selection {
   display: flex;
 }
+
+label {
+  display: flex;
+  align-items: center;
+  margin-right: 10px; /* Để tạo khoảng cách giữa label và select */
+  font-size: 1.8rem;
+}
+
+main {
+  display: flex;
+  gap: 5rem;
+}

@@ -253,19 +253,15 @@ client.connect().then(() => {
   }
 
   function randomPassword() {
-    const lowerCase = "abcdefghijklmnopqrstuvwxyz";
     const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const number = "0123456789";
-    const symbol = "!@#$%^&*_-+="
-    const allChars = upperCase + lowerCase + number + symbol
+    const allChars = upperCase + number
 
     let password = "";
     password += upperCase[Math.floor(Math.random() * upperCase.length)];
-    password += lowerCase[Math.floor(Math.random() * lowerCase.length)];
     password += number[Math.floor(Math.random() * number.length)];
-    password += symbol[Math.floor(Math.random() * symbol.length)];
 
-    while (password.length < 8) {
+    while (password.length < 6) {
       password += allChars[Math.floor(Math.random() * allChars.length)];
     }
     console.log('SYSTEM | GEN_PASSWORD | OK')
@@ -361,14 +357,7 @@ client.connect().then(() => {
       footer: "footer"
     });
   });
-  // danh sach sinh vien
-  app.get("/danhsachsinhvien", checkIfUserLoginRoute, async (req, res) => {
-    res.render("danhsachsinhvien", {
-      header: "header",
-      thongbao: "thongbao",
-      footer: "footer"
-    });
-  });
+  
   // ban can su route
   app.get("/bancansu", checkIfUserLoginRoute, async (req, res) => {
     res.render("bancansu", {
@@ -410,6 +399,14 @@ client.connect().then(() => {
     });
   });
 
+  // danh sach sinh vien
+  app.get("/danhsachsinhvien", checkIfUserLoginRoute, async (req, res) => {
+    res.render("danhsachsinhvien", {
+      header: "header",
+      thongbao: "thongbao",
+      footer: "footer"
+    });
+  });
   // danh sach bang diem
   app.get("/danhsachbangdiem", checkIfUserLoginRoute, async (req, res) => {
     const user = req.session.user;
@@ -822,7 +819,7 @@ client.connect().then(() => {
             workbook.sheet(0).cell("A7").value(scores);
 
             // Write to file.
-            return workbook.toFileAsync("./out.xlsx");
+            return workbook.toFileAsync(path.join('.downloads',"out.xlsx"));
           });
       }
 
