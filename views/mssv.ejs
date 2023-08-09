@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trang Đăng Nhập</title>
+  <link rel="stylesheet" href="/src/css/login.css" />
+</head>
+
+<body>
+  <div class="main bg-[#e7ecf0]">
+    <%- include(header) %>
+
+    <div class="content">
+      <div class="login-box">
+        <form class="login_form">
+          <div class="user-box" style="margin-top: 20px;">
+            <input type="text" name="mssv" class="mssv_input" required="" />
+            <label>Mã số sinh viên</label>
+          </div>
+         
+          
+          <center>
+            <a href="/xacthucOTP" class="login_btn" style="margin-top: 20px;">
+              Kế tiếp
+              <span></span>
+            </a>
+          </center>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="/src/JS/login.js"></script>
+
+</html>

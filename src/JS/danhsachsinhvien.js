@@ -28,3 +28,60 @@ $("#row0")[0].addEventListener("change", (event) => {
     }
   }
 });
+
+// chon lop
+$('.js_lop').on('change',async (event)=>{
+  try {
+    let postData = JSON.stringify({
+        class: event.target.value
+    });
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: postData
+    };
+    const response = await fetch('/api/danhsachsinhvien', requestOptions);
+    if (response.ok) {
+        const students = await response.json();
+        console.log(students);
+        if (students.length != 0){
+        let htmls = [];
+        for (let i = 0; i < students.length; i++){
+          htmls.push(`
+          <tr>
+            <td>
+              <div class="checkbox-wrapper-4">
+                <input
+                  type="checkbox"
+                  id="row${i+1}"
+                  class="inp-cbx"
+                  value="${i+1}"
+                />
+                <label for="row${i+1}" class="cbx"
+                  ><span> <svg height="10px" width="12px"></svg></span>
+                </label>
+              </div>
+            </td>
+            <td>${i+1}</td>
+            <td> ${students[i]._id} </td>
+            <td>${students[i].last_name + " " +  students[i].first_name}</td>
+            <td>Lớp viên</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><a href="">Chỉnh sửa</a></td>
+          </tr>
+        `)
+        }
+        $('.js_tbody').append(htmls.join(''))}
+        else{
+          $('.js_tbody').empty()
+        }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+})
+

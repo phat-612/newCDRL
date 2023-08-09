@@ -8,6 +8,7 @@
   max-width: 91rem;
   margin-left: auto;
   margin-right: auto;
+  padding: 1.5rem;
 }
 
 .content .hk_nk {
@@ -117,10 +118,6 @@ tr:hover{
   overflow: auto;
 }
 
-.content {
-  padding: 1.5rem;
-}
-
 .title-box {
   font-size: 2rem;
 }
@@ -153,7 +150,13 @@ label {
   font-size: 1.8rem;
 }
 
-main {
+#select-main {
   display: flex;
   gap: 5rem;
+}
+
+#button-main {
+  display: flex;
+  gap: 3rem;
+  margin: 1rem 0rem 0rem 50rem;
 }

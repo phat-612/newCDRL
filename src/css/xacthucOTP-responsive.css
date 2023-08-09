@@ -14,6 +14,9 @@
     }
     .otp_again {
         margin: 2% 0 0 72%;
-        font-size: 1.5rem;
+        font-size: 1.3rem;
+    }
+    .content {
+        width: 100%;
     }
 }

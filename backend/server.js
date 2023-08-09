@@ -29,6 +29,7 @@ const server = require("./vip_pro_lib.js");
 const MongoStore = require('connect-mongo');
 const multer = require('multer'); // Thư viện để xử lý file upload
 const XlsxPopulate = require('xlsx-populate');
+const { v4: uuidv4 } = require('uuid');
 const WebSocket = require('ws');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = "mongodb+srv://binhminh19112003:Zr3uGIK4dCymOXON@database.sefjqcb.mongodb.net/?retryWrites=true&w=majority";
@@ -323,6 +324,7 @@ client.connect().then(() => {
     res.render("login", {
       header: "header",
       thongbao: "thongbao",
+      footer: "footer",
       avt: null,
     });
   });
@@ -336,6 +338,7 @@ client.connect().then(() => {
     res.render("firstlogin", {
       header: "header",
       thongbao: "thongbao",
+      footer: "footer",
       avt: null,
       logout: true,
     });
@@ -346,6 +349,7 @@ client.connect().then(() => {
     res.render("changepass", {
       header: "header",
       thongbao: "thongbao",
+      footer: "footer",
     });
   });
 
@@ -357,17 +361,21 @@ client.connect().then(() => {
       footer: "footer"
     });
   });
-  
+
   // ban can su route
   app.get("/bancansu", checkIfUserLoginRoute, async (req, res) => {
     res.render("bancansu", {
       header: "header",
+      footer: "footer",
     });
   });
   // xac thuc route
-  app.get("/xacthucOTP", checkIfUserLoginRoute, async (req, res) => {
+  app.get("/xacthucOTP", async (req, res) => {
     res.render("xacthucOTP", {
       header: "header",
+      footer: "footer",
+      avt: null,
+
     });
   });
 
@@ -375,6 +383,7 @@ client.connect().then(() => {
   app.get("/bancansu/quanlihoatdong", checkIfUserLoginRoute, async (req, res) => {
     res.render("quanlihoatdong", {
       header: "header",
+      footer: "footer",
     });
   });
 
@@ -385,7 +394,14 @@ client.connect().then(() => {
       footer: "footer",
     });
   });
-
+  // Quen mat khau
+  app.get("/quenmatkhau", async (req, res) => {
+    res.render("mssv", {
+      header: "header",
+      footer: "footer",
+      avt: null,
+    });
+  });
   // thong tin ca nhan route
   app.get("/profile", checkIfUserLoginRoute, async (req, res) => {
     const user_info = await client.db(name_databases).collection('user_info').findOne({ _id: req.session.user._id });
@@ -401,11 +417,27 @@ client.connect().then(() => {
 
   // danh sach sinh vien
   app.get("/danhsachsinhvien", checkIfUserLoginRoute, async (req, res) => {
-    res.render("danhsachsinhvien", {
+    const user = req.session.user;
+    const marker = await client.db(name_databases).collection('user_info').findOne(
+      { _id: user._id },
+      {
+        power: 1,
+        class: 1
+      }
+    );
+    const student_list = await client.db(name_databases).collection('user_info').find(
+      { class: marker.class },
+      { 'projection': { first_name: 1, last_name: 1 } })
+      .sort({ first_name: 1, last_name: 1 })
+      .toArray();
+
+    let render = {
       header: "header",
-      thongbao: "thongbao",
-      footer: "footer"
-    });
+      footer: "footer",
+      student_list: student_list
+    }
+
+    res.render("danhsachsinhvien", render);
   });
   // danh sach bang diem
   app.get("/danhsachbangdiem", checkIfUserLoginRoute, async (req, res) => {
@@ -431,6 +463,8 @@ client.connect().then(() => {
       // get all student total score from themself:
       let render = {
         header: "header",
+        footer: "footer",
+        thongbao: "thongbao",
         staff_name: [],
         student_list: student_list,
         student_scores: [],
@@ -722,9 +756,11 @@ client.connect().then(() => {
   app.get("/api/exportClassScore", checkIfUserLoginAPI, async (req, res) => {
     try {
       const user = req.session.user;
-      const data = req.body;
+      const data = req.query;
       //data = {year: }
       const school_year = data.year;
+      // create uuid for download file
+      const uuid = uuidv4();
       // get staff member info :
       const marker = await client.db(name_databases).collection('user_info').findOne(
         { _id: user._id },
@@ -754,10 +790,10 @@ client.connect().then(() => {
           // 5.0, 5.1, 5.2, 5.3,
           // "", total, conduct, ""]
           let curr_score = [
-            i,
+            i + 1,
             student_list[i]._id,
-            student_list[i].first_name,
             student_list[i].last_name,
+            student_list[i].first_name,
             marker.class
           ];
 
@@ -791,21 +827,23 @@ client.connect().then(() => {
           }
 
           curr_score.push(null);
-          curr_score.push(curr_departmentt_score.total)
 
-          // set kind of conduct:
-          if (curr_departmentt_score.total >= 90) {
-            curr_score.push('xuất sắc');
-          } else if (curr_departmentt_score.total >= 80) {
-            curr_score.push('tốt');
-          } else if (curr_departmentt_score.total >= 65) {
-            curr_score.push('khá');
-          } else if (curr_departmentt_score.total >= 50) {
-            curr_score.push('trung bình');
-          } else if (curr_departmentt_score.total >= 35) {
-            curr_score.push('yếu');
-          } else {
-            curr_score.push('kém');
+          if (curr_departmentt_score) {
+            curr_score.push(curr_departmentt_score.total)
+            // set kind of conduct:
+            if (curr_departmentt_score.total >= 90) {
+              curr_score.push('xuất sắc');
+            } else if (curr_departmentt_score.total >= 80) {
+              curr_score.push('tốt');
+            } else if (curr_departmentt_score.total >= 65) {
+              curr_score.push('khá');
+            } else if (curr_departmentt_score.total >= 50) {
+              curr_score.push('trung bình');
+            } else if (curr_departmentt_score.total >= 35) {
+              curr_score.push('yếu');
+            } else {
+              curr_score.push('kém');
+            }
           }
 
           // add curr_score to scores
@@ -813,25 +851,33 @@ client.connect().then(() => {
         }
 
         // Load an existing workbook
-        XlsxPopulate.fromFileAsync("./src/excelTemplate/Bang_diem_ca_lop_xuat_tu_he_thong.xlsx")
-          .then(workbook => {
-            // Set the values using a 2D array:
-            workbook.sheet(0).cell("A7").value(scores);
+        const workbook = await XlsxPopulate.fromFileAsync("./src/excelTemplate/Bang_diem_ca_lop_xuat_tu_he_thong.xlsx")
+        await workbook.sheet(0).cell("A7").value(scores);
+        // Write to file.
+        await workbook.toFileAsync(path.join('.downloads', uuid + ".xlsx"));
 
-            // Write to file.
-            return workbook.toFileAsync(path.join('.downloads',"out.xlsx"));
-          });
+        // tải file xlsx về máy người dùng
+        // res.download(path.join('.downloads', uuid + ".xlsx"));
+        res.download(path.join('.downloads', uuid + ".xlsx"));
       }
-
-      // tải file xlsx về máy người dùng
-
-      res.sendStatus(200);
     } catch (err) {
       console.log("SYSTEM | MARK | ERROR | ", err);
       res.sendStatus(500);
     }
   });
 
+
+  // api danh sach sinh vien
+  app.post("/api/danhsachsinhvien", checkIfUserLoginAPI, async (req, res) => {
+    const data = req.body;
+    const student_list = await client.db(name_databases).collection('user_info').find(
+      { class: data.class },
+      { 'projection': { first_name: 1, last_name: 1 } })
+      .sort({ first_name: 1, last_name: 1 })
+      .toArray();
+    res.status(200).json(student_list);
+
+  })
   // Xử lý đường link không có -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   app.get("*", async function (req, res) {
     res.sendStatus(404);
