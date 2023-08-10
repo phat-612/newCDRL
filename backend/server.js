@@ -401,6 +401,15 @@ client.connect().then(() => {
       footer: "footer",
     });
   });
+
+  // doan khoa route
+  app.get("/doan_khoa", checkIfUserLoginRoute, async (req, res) => {
+    res.render("doan_khoa", {
+      header: "header",
+      footer: "footer",
+    });
+  });
+
   // xac thuc route
   app.get("/xacthucOTP", async (req, res) => {
     const mssv = req.query.mssv;
@@ -919,6 +928,7 @@ client.connect().then(() => {
     }
   });
 
+  // Load score list of student in specific class at specific time ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
   app.get("/api/loadScoresList", checkIfUserLoginAPI, async (req, res) => {
     try {
       const user = req.session.user;
@@ -937,15 +947,97 @@ client.connect().then(() => {
 
       // check for post data.cls if class define this mean they choose class so that must
       if (!std_cls) {
-        std_cls = marker.class
+        std_cls = marker.class;
       }
 
-      
+      if (marker.power[1]) {
+        // get all student in staff member class:
+        const student_list = await client.db(name_databases).collection('user_info').find(
+          { class: std_cls },
+          { 'projection': { first_name: 1, last_name: 1 } })
+          .sort({ first_name: 1, last_name: 1 })
+          .toArray();
+  
+        // get all student total score from themself:
+        let result = {
+          staff_name: [],
+          student_list: student_list,
+          student_scores: [],
+          staff_scores: [],
+          department_scores: []
+        }
+  
+        for (student of student_list) {
+          const curr_student_score = await client.db(name_databases)
+            .collection(std_cls + '_std_table')
+            .findOne(
+              {
+                mssv: student._id,
+                school_year: school_year.year
+              },
+              {
+                total: 1
+              }
+            );
+          const curr_staff_score = await client.db(name_databases)
+            .collection(std_cls + '_stf_table')
+            .findOne(
+              {
+                mssv: student._id,
+                school_year: school_year.year
+              },
+              {
+                total: 1,
+                marker: 1
+              }
+            );
+          const curr_departmentt_score = await client.db(name_databases)
+            .collection(std_cls + '_dep_table')
+            .findOne(
+              {
+                mssv: student._id,
+                school_year: school_year.year
+              },
+              {
+                total: 1
+              }
+            );
+          // student
+          if (curr_student_score) {
+            result.student_scores.push(curr_student_score.total);
+          } else {
+            result.student_scores.push('-');
+          }
+          // staff member
+          if (curr_staff_score) {
+            result.staff_scores.push(curr_staff_score.total);
+            result.staff_name.push(curr_staff_score.marker);
+          } else {
+            result.staff_scores.push('-');
+            result.staff_name.push('-');
+          }
+          // department
+          if (curr_departmentt_score) {
+            result.department_scores.push(curr_departmentt_score.total);
+          } else {
+            result.department_scores.push('-');
+          }
+        }
+  
+        res.status(200).json(result);
+      }
+      else { // user not staff members 
+        // redirect to home
+        return res.redirect('/');
+      }
     } catch (err) {
-      console.log("SYSTEM | MARK | ERROR | ", err);
+      console.log("SYSTEM | LOAD_SCORE_LIST | ERROR | ", err);
       res.sendStatus(500);
     }
   })
+
+  // Auto mark (copy student mark to staff mark)
+  
 
   // api danh sach sinh vien // có j sữa tên tiêng anh lại cho nó dồng bộ code nha Phát
   app.post("/api/danhsachsinhvien", checkIfUserLoginAPI, async (req, res) => {

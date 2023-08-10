@@ -44,3 +44,20 @@ body {
 .nien-khoa {
   margin-left: 2rem;
 }
+
+.sub-container {
+  margin-top: 1.5rem;
+}
+
+table {
+  text-align: center;
+}
+
+th, td {
+  padding: 1rem;
+  font-size: 1.5rem;
+}
+
+.mark-box {
+  margin-bottom: 2rem;
+}
