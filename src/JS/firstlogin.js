@@ -25,7 +25,7 @@ $('.login_btn').on('click', async function (e) {
             };
             const response = await fetch('/api/first_login', requestOptions);
             if (response.ok) {
-                window.location.href = currentURLbase + "/";
+                window.location.href = "/";
             } else if (response.status == 403) {
                 // Error occurred during upload
                 notify('x', 'Mật khẩu mới không được trùng mật khẩu cũ!');

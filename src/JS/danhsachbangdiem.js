@@ -40,7 +40,39 @@ $(document).on("click", ".export_btn", async function () {
 });
 
 $(document).on("click", ".auto_mark_btn", async function () {
+  // disabled button until it done start down load
+  $('.auto_mark_btn').prop('disabled', true);
+  $('.auto_mark_btn').text('Loading...')
+  try {
+    // get all student was check
+    let mssv_list = []
+    $('table tbody .inp-cbx').each(function(){
+      if (this.checked) mssv_list.push(this.value);
+    })
 
+    const year = "HK" + $(".hoc_ky select option:selected").text() + "_" + $(".nien_khoa select option:selected").text();
+    
+    const requestOptions = {
+      method: 'GET',
+    };
+
+    const response = await fetch(`/api/loadScoresList?year=${year}`, requestOptions);
+    
+    if (response.ok) {
+
+      // reset export button to clickable
+      $('.auto_mark_btn').prop('disabled', false);
+      $('.auto_mark_btn').text('Chấm bảng điểm đã chọn')
+      notify('n', 'Đã chấm tất cả bảng điểm được chọn.');
+    }
+    else if (response.status == 500) {
+      // Error occurred during upload
+      notify('x', 'Có lỗi xảy ra!');
+    }
+  } catch (error) {
+    console.log(error);
+    notify('x', 'Có lỗi xảy ra!');
+  }
 });
 
 $(document).on("click", ".load_list_btn", async function () {
@@ -104,3 +136,23 @@ $(document).on("click", ".load_list_btn", async function () {
   }
 });
 
+$(document).on("change", ".all-cbx", async function () {
+  if ($('.all-cbx')[0].checked) {
+    $('table tbody .inp-cbx').prop('checked', true);
+  } else {
+    $('table tbody .inp-cbx').prop('checked', false);
+  }
+});
+
+$(document).on("change", ".inp-cbx", async function () {
+  let check = true
+  $('table tbody .inp-cbx').each(function(){
+    if (!this.checked) check = false; return;
+  })
+
+  if (check) {
+    $('.all-cbx').prop('checked', true);
+  } else {
+    $('.all-cbx').prop('checked', false);
+  }
+});

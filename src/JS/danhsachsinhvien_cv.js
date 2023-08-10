@@ -1,34 +1,36 @@
-let listCb = $(".inp-cbx");
-for (let i = 0; i < listCb.length; i++) {
-  listCb[i].addEventListener("change", (event) => {
-    if (event.target.checked) {
-      let countChecked = 0;
-      for (let i = 0; i < listCb.length; i++) {
-        if (listCb[i].checked) {
-          countChecked += 1;
+// tat ca duoc check thi check cai tat ca
+function handleCheckboxChange() {
+  let listCb = $(".inp-cbx");
+  for (let i = 0; i < listCb.length; i++) {
+    listCb[i].addEventListener("change", (event) => {
+      if (event.target.checked) {
+        let countChecked = 0;
+        for (let i = 0; i < listCb.length; i++) {
+          if (listCb[i].checked) {
+            countChecked += 1;
+          }
         }
+        if (countChecked == listCb.length - 1) {
+          $("#row0")[0].checked = true;
+        }
+      } else {
+        $("#row0")[0].checked = false;
       }
-      if (countChecked == listCb.length - 1) {
-        $("#row0")[0].checked = true;
+    });
+  }
+  // chon tat ca
+  $("#row0")[0].addEventListener("change", (event) => {
+    if (event.target.checked) {
+      for (let i = 0; i < listCb.length; i++) {
+        listCb[i].checked = true;
       }
     } else {
-      $("#row0")[0].checked = false;
+      for (let i = 0; i < listCb.length; i++) {
+        listCb[i].checked = false;
+      }
     }
   });
 }
-// chon tat ca
-$("#row0")[0].addEventListener("change", (event) => {
-  if (event.target.checked) {
-    for (let i = 0; i < listCb.length; i++) {
-      listCb[i].checked = true;
-    }
-  } else {
-    for (let i = 0; i < listCb.length; i++) {
-      listCb[i].checked = false;
-    }
-  }
-});
-
 // chon lop
 $('.js_lop').on('change',async (event)=>{
   try {
@@ -42,7 +44,7 @@ $('.js_lop').on('change',async (event)=>{
         },
         body: postData
     };
-    const response = await fetch('/api/danhsachsinhvien', requestOptions);
+    const response = await fetch('/api/danhsachsinhvien_cv', requestOptions);
     if (response.ok) {
         const students = await response.json();
         console.log(students);
@@ -79,9 +81,28 @@ $('.js_lop').on('change',async (event)=>{
         else{
           $('.js_tbody').empty()
         }
+        handleCheckboxChange()
     }
   } catch (error) {
     console.log(error);
   }
 })
+// model
+$(document).ready(() => {
+  $("#add-student").click(function () {
+    $(".modal.add").show();
+    console.log(1);
+  });
+  
+  $(".modal.add").click(function () {
+    $(".modal.add").hide();
+    console.log(2);
+  });
+  $(".modal_wrap.add").click(function (e) {
+    e.stopPropagation();
+    console.log(3);
+  });
+});
+
+
 

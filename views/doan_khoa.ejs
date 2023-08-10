@@ -4,15 +4,45 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="/src/css/tracuu.css" />
-  <title>Tra cứu</title>
+  <link rel="stylesheet" href="/src/css/doan_khoa.css" />
+  <title>Quản Lí Khoa</title>
 </head>
 
 <body>
   <div class="main">
     <%- include(header) %>
     <div class="container">
-        
+      <!-- Quản lí thông tin -->
+      <div class="manager manager__info">
+        <div class="content content__info">
+          <h2>QUẢN LÍ THÔNG TIN</h2>
+          <a href="#">
+            <button class="button-35" id="page-button">Quản lí Lớp</button>
+          </a>
+          <a href="#">
+            <button class="button-35" id="page-button">Quản lí Cố vấn</button>
+          </a>
+          <a href="#">
+            <button class="button-35" id="page-button">Quản lí Sinh viên</button>
+          </a>
+        </div>
+      </div>
+      <!-- Quản lí rèn luyện -->
+      <div class="manager manager__train">
+        <div class="content content__train">
+          <h2>QUẢN LÍ RÈN LUYỆN</h2>
+          <a href="#">
+            <button class="button-35" id="page-button">Quản lí điểm rèn luyện</button>
+          </a>
+          <a href="#">
+            <button class="button-35" id="page-button">Quản lí hoạt động rèn luyện</button>
+          </a>
+          <a href="#">
+            <button class="button-35" id="page-button">Quản lí thời hạn</button>
+          </a>
+        </div>
+      </div>
+
     </div>
   </div>
   <%- include(footer) %>

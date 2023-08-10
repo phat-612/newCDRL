@@ -198,7 +198,9 @@ client.connect().then(() => {
       { _id: user._id },
       {
         power: 1,
-        class: 1
+        class: 1,
+        last_name: 1,
+        first_name: 1
       }
     );
     const school_year = await client.db(name_databases).collection('school_year').findOne({});
@@ -226,7 +228,7 @@ client.connect().then(() => {
       }
 
       // if table is stf_table - mark by staff members or teacher
-      if (table == 'stf_table') {
+      if (table == '_stf_table') {
         update.marker = marker.last_name + " " + marker.first_name;
       }
 
@@ -255,7 +257,7 @@ client.connect().then(() => {
       }
 
       // if table is stf_table - mark by staff members or teacher
-      if (table == 'stf_table') {
+      if (table == '_stf_table') {
         insert.marker = marker.last_name + " " + marker.first_name;
       }
 
@@ -410,6 +412,15 @@ client.connect().then(() => {
     });
   });
 
+  // quan li lop - doan khoa route
+  // doan khoa route
+  app.get("/doan_khoa/quan_li_lop", checkIfUserLoginRoute, async (req, res) => {
+    res.render("quan_li_lop", {
+      header: "header",
+      footer: "footer",
+    });
+  });
+
   // xac thuc route
   app.get("/xacthucOTP", async (req, res) => {
     const mssv = req.query.mssv;
@@ -467,7 +478,7 @@ client.connect().then(() => {
   });
 
   // danh sach sinh vien
-  app.get("/danhsachsinhvien", checkIfUserLoginRoute, async (req, res) => {
+  app.get("/danhsachsinhvien_cv", checkIfUserLoginRoute, async (req, res) => {
     const user = req.session.user;
     const marker = await client.db(name_databases).collection('user_info').findOne(
       { _id: user._id },
@@ -488,7 +499,7 @@ client.connect().then(() => {
       student_list: student_list
     }
 
-    res.render("danhsachsinhvien", render);
+    res.render("danhsachsinhvien_cv", render);
   });
   // danh sach bang diem
   app.get("/danhsachbangdiem", checkIfUserLoginRoute, async (req, res) => {
@@ -957,7 +968,7 @@ client.connect().then(() => {
           { 'projection': { first_name: 1, last_name: 1 } })
           .sort({ first_name: 1, last_name: 1 })
           .toArray();
-  
+
         // get all student total score from themself:
         let result = {
           staff_name: [],
@@ -966,7 +977,7 @@ client.connect().then(() => {
           staff_scores: [],
           department_scores: []
         }
-  
+
         for (student of student_list) {
           const curr_student_score = await client.db(name_databases)
             .collection(std_cls + '_std_table')
@@ -1023,7 +1034,7 @@ client.connect().then(() => {
             result.department_scores.push('-');
           }
         }
-  
+
         res.status(200).json(result);
       }
       else { // user not staff members 
@@ -1034,13 +1045,82 @@ client.connect().then(() => {
       console.log("SYSTEM | LOAD_SCORE_LIST | ERROR | ", err);
       res.sendStatus(500);
     }
-  })
+  });
 
   // Auto mark (copy student mark to staff mark)
+  app.post("/api/autoMark", checkIfUserLoginAPI, async (req, res) => {
+    try {
+      const user = req.session.user;
+      const data = req.body;
+      //data = {year: "HK1_2022-2023", cls: "KTPM0121", std_list = []}
+      const school_year = data.year;
+      let std_cls = data.cls;
+      // get staff member info :
+      const marker = await client.db(name_databases).collection('user_info').findOne(
+        { _id: user._id },
+        {
+          power: 1,
+          class: 1,
+          last_name: 1,
+          first_name: 1
+        }
+      );
+
+      // check for post data.cls if class define this mean they choose class so that must
+      if (!std_cls) {
+        std_cls = marker.class;
+      }
+
+      // check if table is exist or not
+      // update or add new table copy from std_table to staff_table
+      for (let i = 0; i < data.std_list.length; i++) {
+        const std_table = await client.db(name_databases).collection(std_cls + '_std_table').findOne(
+          {
+            mssv: data.std_list[i],
+            school_year: data.year
+          }
+        );
+        if (std_table) {
+          // update old table
+          let update = {
+            first: std_table.first,
+            second: std_table.second,
+            third: std_table.third,
+            fourth: std_table.fourth,
+            fifth: std_table.fifth,
+            img_ids: std_table.img_ids,
+            total: std_table.total,
+            marker: marker.last_name + " " + marker.first_name,
+            update_date: new Date()
+          }
   
+          await client.db(name_databases).collection(std_cls + '_stf_table').updateOne(
+            {
+              mssv: data.std_list[i],
+              school_year: data.year
+            },
+            {
+              $set: update
+            }
+          );
+  
+        } else { // entertainment area: https://youtu.be/CufIAJDVZvo
+          // copy from stdent table and add marker name
+          std_table.marker = marker.last_name + " " + marker.first_name
+          // create new table
+          await client.db(name_databases).collection(std_cls + '_stf_table').insertOne(std_table);
+        }
+      }
+
+    } catch (err) {
+      console.log("SYSTEM | LOAD_SCORE_LIST | ERROR | ", err);
+      res.sendStatus(500);
+    }
+
+  });
 
   // api danh sach sinh vien // có j sữa tên tiêng anh lại cho nó dồng bộ code nha Phát
-  app.post("/api/danhsachsinhvien", checkIfUserLoginAPI, async (req, res) => {
+  app.post("/api/danhsachsinhvien_cv", checkIfUserLoginAPI, async (req, res) => {
     const data = req.body;
     const student_list = await client.db(name_databases).collection('user_info').find(
       { class: data.class },

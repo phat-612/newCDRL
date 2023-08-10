@@ -5,7 +5,8 @@
 body {
     margin: 0;
 }
-.content{
+
+.content {
     position: relative;
     width: 100%;
     height: 70vh;
@@ -87,7 +88,7 @@ body {
 }
 
 .otp_again {
-    display: block;
+    display: none;
     font-size: 15px;
     cursor: pointer;
     padding: 0.5rem;
@@ -131,7 +132,8 @@ body {
 .title h3 {
     padding: 4rem 4rem 2rem 4rem;
 }
-.otp-form{
+
+.otp-form {
     position: absolute;
     background-color: #fff;
     top: 50%;
@@ -156,18 +158,23 @@ body {
     border-radius: 0.5rem;
     background: #c2c2c2;
 }
-.no_sv{
+
+.no_sv {
     font-size: 30px;
     padding: 30px;
     text-align: center;
 }
 
-.result_top{
+.result_top {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
 }
-.times{
+
+.times {
+    /* margin-top: 0.5rem; */
     padding-left: 23px;
     font-size: 15px;
-    color: #ff6363;
+    color: #ec5b5b;
+    display: flex;
+    align-items: center;
 }

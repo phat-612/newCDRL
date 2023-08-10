@@ -1,0 +1,105 @@
+html {
+    font-size: 62.5%;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: content-box;
+}
+
+body {
+    background-color: #e7ecf0;
+}
+
+/* css tra cứu */
+.box-table {
+    margin-top: 2rem;
+    max-width: 90rem;
+    background-color: #fff;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 0.8rem;
+}
+
+.content {
+    padding: 1rem;
+}
+
+.content h2,
+.content h2 {
+    font-size: 2rem;
+    padding: 1rem;
+}
+
+.content p {
+    display: inline-block;
+    font-size: 1.8rem;
+}
+
+.table {
+    margin-top: 3rem;
+  }
+  
+  
+  th {
+    font-size: 2rem;
+  }
+  
+  td {
+    font-size: 1.6rem;
+    text-align: center;
+  }
+  
+  th,
+  td {
+    padding: 1rem;
+  }
+  
+
+  /* css table */
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+  th{
+    font-size: 2rem;
+  }
+  td{
+  font-size: 1.6rem;
+  text-align: center;
+  }
+  th, td{
+    padding: 1rem;
+  }
+
+  th {
+    background-color: rgb(241, 241, 241);
+  }
+  tr:nth-child(even) {
+    background-color: rgb(241, 241, 241);
+  }
+  tr:nth-child(odd) {
+    background-color: #ffffff;
+  }
+  
+  tr:hover{
+    background-color: rgba(158, 158, 158, 0.507);
+  }
+  
+/* 
+.button {
+    padding: 1rem;
+    background-color: white;
+}
+
+.button .button-1 {
+    margin-top: 2rem;
+    padding: 0.5rem;
+}
+
+.nien-khoa {
+    margin-left: 2rem;
+} */
+
+/* sub-box */

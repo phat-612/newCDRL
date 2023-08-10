@@ -1,0 +1,54 @@
+html {
+    font-size: 62.5%;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: content-box;
+}
+
+body {
+    background-color: #e7ecf0;
+}
+
+/* css tra cứu */
+.manager {
+    margin-top: 2rem;
+    max-width: 90rem;
+    background-color: #fff;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 0.8rem;
+}
+
+.content {
+    padding: 1rem;
+}
+
+.content h2,
+.content h2 {
+    font-size: 2rem;
+    padding: 1rem;
+}
+
+.content p {
+    display: inline-block;
+    font-size: 1.8rem;
+}
+
+.button {
+    padding: 1rem;
+    background-color: white;
+}
+
+.button .button-1 {
+    margin-top: 2rem;
+    padding: 0.5rem;
+}
+
+.nien-khoa {
+    margin-left: 2rem;
+}
+
+/* sub-box */
