@@ -1,6 +1,8 @@
 $(document).on("click", ".export_btn", async function () {
-  console.log('aaa')
-  notify('!', 'Đợi chút đang xuất bảng điểm!')
+  // disabled button until it done start down load
+  $('.export_btn').prop('disabled', true);
+  $('.export_btn').text('Downloading...')
+  notify('!', 'Đợi chút đang xuất bảng điểm!');
   try {
     const year = "HK" + $(".hoc_ky select option:selected").text() + "_" + $(".nien_khoa select option:selected").text();
 
@@ -9,6 +11,9 @@ $(document).on("click", ".export_btn", async function () {
     };
     const response = await fetch(`/api/exportClassScore?year=${year}`, requestOptions);
     if (response.ok) {
+      // reset export button to clickable
+      $('.export_btn').prop('disabled', false);
+      $('.export_btn').text('Xuất báo cáo')
       notify('n', 'Đã xuất bảng điểm thành công');
       // Tạo URL tạm thời cho dữ liệu Blob
       const blobUrl = URL.createObjectURL(await response.blob());
@@ -32,4 +37,12 @@ $(document).on("click", ".export_btn", async function () {
     console.log(error);
     notify('x', 'Có lỗi xảy ra!');
   }
+});
+
+$(document).on("click", ".auto_mark_btn", async function () {
+  console.log('tự động chấm điểm')
+});
+
+$(document).on("click", ".load_list_btn", async function () {
+  console.log('load danh sách')
 });
