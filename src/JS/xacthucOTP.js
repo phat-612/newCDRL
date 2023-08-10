@@ -57,6 +57,45 @@ function handle_paste_input(event) {
   }
 }
 
+async function handle_otp() {
+
+  var _finalKey = "";
+  for (let { value } of otp_inputs) {
+    _finalKey += value;
+  }
+  console.log(_finalKey);
+  // try {
+  //   let postData = JSON.stringify({
+  //     otp: _finalKey
+  //   });
+  //   const requestOptions = {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: postData
+  //   };
+  //   const response = await fetch('/api/login', requestOptions);
+  //   if (response.ok) {
+  //     const datareturn = await response.json();
+  //     if (datareturn.check) {
+  //       window.location.href = currentURLbase + "/login/updateyourpasswords";
+  //     } else {
+  //       window.location.href = "/";
+  //     }
+  //   }
+  //   else if (response.status == 403) {
+  //     // Error occurred during upload
+  //     notify('!', 'Sai thông tin đăng nhập');
+  //   } else if (response.status == 404) {
+  //     notify('x', 'Đã đăng nhập rồi!');
+  //   }
+  // } catch (error) {
+  //   console.log(error);
+  //   notify('x', 'Có lỗi xảy ra!');
+  // }
+}
+
 
 const button_next = document.querySelector('#page-button');
 button_next.onclick = () => {
@@ -72,25 +111,31 @@ button_next.onclick = () => {
   }
   console.log(check)
   if (check) {
-    button_next.innerHTML = "..."
+    button_next.innerHTML = "...";
     button_next.disabled = true;
+    //
+    
+    handle_otp()
   }
 }
 const otp_again = document.querySelector('.otp_again');
-const otp_times= document.querySelector('.times')
+const otp_times = document.querySelector('.times')
 otp_again.onclick = () => {
   notify("n", 'Đã Gửi Lại OTP!')
   otp_again.disabled = true;
+  setTimeout(() => {
+    location.reload();
+  }, 2000)
 };
 let seconds = 60;
 const interval = setInterval(() => {
 
-  otp_times.textContent = seconds+"s";
+  otp_times.textContent = seconds + "s";
   seconds--;
 
   if (seconds < 0) {
     clearInterval(interval);
-    otp_times.textContent = '';
+    otp_times.textContent = '0s opt hết hạn';
     otp_again.disabled = false;
   }
 }, 1000);
