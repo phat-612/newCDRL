@@ -44,5 +44,5 @@ $(document).on("click", ".auto_mark_btn", async function () {
 });
 
 $(document).on("click", ".load_list_btn", async function () {
-  console.log('load danh sách')
+  
 });

@@ -919,8 +919,35 @@ client.connect().then(() => {
     }
   });
 
+  app.get("/api/loadScoresList", checkIfUserLoginAPI, async (req, res) => {
+    try {
+      const user = req.session.user;
+      const data = req.query;
+      //data = {year: "HK1_2022-2023", cls: "KTPM0121"}
+      const school_year = data.year;
+      let std_cls = data.cls;
+      // get staff member info :
+      const marker = await client.db(name_databases).collection('user_info').findOne(
+        { _id: user._id },
+        {
+          power: 1,
+          class: 1
+        }
+      );
 
-  // api danh sach sinh vien
+      // check for post data.cls if class define this mean they choose class so that must
+      if (!std_cls) {
+        std_cls = marker.class
+      }
+
+      
+    } catch (err) {
+      console.log("SYSTEM | MARK | ERROR | ", err);
+      res.sendStatus(500);
+    }
+  })
+
+  // api danh sach sinh vien // có j sữa tên tiêng anh lại cho nó dồng bộ code nha Phát
   app.post("/api/danhsachsinhvien", checkIfUserLoginAPI, async (req, res) => {
     const data = req.body;
     const student_list = await client.db(name_databases).collection('user_info').find(
