@@ -1,7 +1,7 @@
 @media screen and (max-width:600px) {
     .otp-input-fields input {
-        height: 4rem;
-        width: 4rem;
+        height: 5rem;
+        width: 5rem;
     }
     .otp-input-fields{
         width:80%;
@@ -9,14 +9,17 @@
     .title p.msg {
         margin-left: 2rem;
     }
-    .result{
-        padding: 3.7rem;
-    }
     .otp_again {
         margin: 2% 0 0 72%;
         font-size: 1.3rem;
     }
     .content {
         width: 100%;
+    }
+    .otp-form{
+        width: 95%;
+    }
+    .no_sv {
+        font-size: 2.3rem;
     }
 }

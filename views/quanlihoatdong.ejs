@@ -37,7 +37,7 @@
         </div>
         <div class="activity-board">
           <div class="control">
-            <button class="button-35 ">Thêm hoạt động</button>
+            <button class="button-35 " id="add-activity">Thêm hoạt động</button>
             <button class="button-35 ">Xoá hoạt động</button>
           </div>
           <!-- table -->
@@ -71,7 +71,7 @@
                 <td>1</td>
                 <td>Hoạt động 1</td>
                 <td>Cấp lớp</td>
-                <td><a class="more_list" href="/bancansu/quanlihoatdong/danh_gia_hoat_dong">Chi tiết</a></td>
+                <td><a href="/bancansu/quanlihoatdong/danh_gia_hoat_dong">Chi tiết</a></td>
                 <td><a class="more_list" href="#">Chỉnh sửa</a></td>
               </tr>
               <tr>
@@ -108,8 +108,8 @@
   </div>
 
 </body>
-<div class="modal">
-  <div class="modal_wrap">
+<div class="modal edit">
+  <div class="modal_wrap edit">
     <div class="modal_main">
       <div class="content title">
         <h2 class="title-box">CHỈNH SỬA HOẠT ĐỘNG</h2>
@@ -149,6 +149,66 @@
     </div>
   </div>
 </div>
+
+<div class="modal add">
+  <div class="modal_wrap add">
+    <div class="modal_main">
+      <div class="content title">
+        <h2 class="title-box">THÊM HOẠT ĐỘNG</h2>
+      </div>
+      <div class="content subtitle">
+        <h3 class="sub-title name">Tên Hoạt Động</h3>
+        <textarea name="" id="" cols="30" rows="3" placeholder="Nhập tên hoạt động"></textarea>
+      </div>
+      <div class="content">
+        <h3 class="sub-title descrip">Nội Dung Hoạt Động</h3>
+        <textarea name="" id="" cols="30" rows="10" placeholder="Nhập nội dung hoạt động"></textarea>
+      </div>
+      <div>
+        <div class="selectbox nien_khoa">
+          <main id="select-main">
+            <div class="select">
+              <label for="select-level">Cấp Độ</label>
+              <select id="select-level">
+                <option>Cấp Lớp</option>
+              </select>
+            </div>
+
+            <div class="select">
+              <label for="select-level">Lớp</label>
+              <select id="select-level">
+                <option>KTPM-0121</option>
+              </select>
+            </div>
+
+            <div class="select">
+              <label for="select-level">Học Kì</label>
+              <select id="select-level">
+                <option>1</option>
+                <option>2</option>
+              </select>
+            </div>
+
+            <div class="select">
+              <label for="select-level">Niên Khoá</label>
+              <select id="select-level">
+                <option value="2022-2023">2022-2023</option>
+                <option value="2023-2024">2023-2024</option>
+              </select>
+            </div>
+          </main>
+        </div>
+      </div>
+      <div>
+        <main id="button-main">
+          <div><button class="button-35">Hoàn Tác</button></div>
+          <div><button class="button-35">Xong</button></div>
+        </main>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="/src/JS/quanlihoatdong.js"></script>
 
 </html>

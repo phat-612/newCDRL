@@ -32,6 +32,7 @@ const XlsxPopulate = require('xlsx-populate');
 const { v4: uuidv4 } = require('uuid');
 const WebSocket = require('ws');
 const { MongoClient, ServerApiVersion } = require('mongodb');
+const { data } = require("node-persist");
 const uri = "mongodb+srv://binhminh19112003:Zr3uGIK4dCymOXON@database.sefjqcb.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
@@ -183,7 +184,7 @@ client.connect().then(() => {
     next();
   };
 
-  async function mark(table, user, data) {
+  async function mark(table, user, data, cls = undefined) {
     // data = {
     //   first: [],
     //   second: [],
@@ -193,10 +194,20 @@ client.connect().then(() => {
     //   img_ids: [],
     //   total: 100,
     // }
-    const marker = await client.db(name_databases).collection('user_info').findOne({ _id: user._id });
+    const marker = await client.db(name_databases).collection('user_info').findOne(
+      { _id: user._id },
+      {
+        power: 1,
+        class: 1
+      }
+    );
     const school_year = await client.db(name_databases).collection('school_year').findOne({});
+    // teacher could choose class to mark so if class have input use cls else use marker.class
+    if (!cls) {
+      cls = marker.class;
+    }
     // check if table is exist or not
-    if (await client.db(name_databases).collection(marker.class + table).findOne(
+    if (await client.db(name_databases).collection(cls + table).findOne(
       {
         mssv: user._id,
         school_year: school_year.year
@@ -219,7 +230,7 @@ client.connect().then(() => {
         update.marker = marker.last_name + " " + marker.first_name;
       }
 
-      await client.db(name_databases).collection(marker.class + table).updateOne(
+      await client.db(name_databases).collection(cls + table).updateOne(
         {
           mssv: user._id,
           school_year: school_year.year
@@ -249,7 +260,7 @@ client.connect().then(() => {
       }
 
       // create new table
-      await client.db(name_databases).collection(marker.class + table).insertOne(insert);
+      await client.db(name_databases).collection(cls + table).insertOne(insert);
     }
   }
 
@@ -268,6 +279,27 @@ client.connect().then(() => {
     console.log('SYSTEM | GEN_PASSWORD | OK')
     return password;
   };
+
+  // Function to delete the file
+  function deleteFile(filePath) {
+    fs.unlink(filePath, (err) => {
+      if (err) {
+        console.error('Error deleting file:', err);
+      } else {
+        console.log('File deleted successfully.');
+      }
+    });
+  };
+
+  // Function to schedule the file deletion after 12 hours
+  function scheduleFileDeletion(filePath) {
+    const twelveHours = 12 * 60 * 60 * 1000; // Convert 12 hours to milliseconds
+
+    setTimeout(() => {
+      deleteFile(filePath);
+    }, twelveHours);
+  };
+
 
   // Áp dụng middleware để chặn truy cập
   app.use(blockUnwantedPaths);
@@ -371,11 +403,20 @@ client.connect().then(() => {
   });
   // xac thuc route
   app.get("/xacthucOTP", async (req, res) => {
+    const mssv = req.query.mssv;
+    const dataUser = await client.db('database').collection('user_info').findOne({ _id: mssv });
+    let emailToShow = '';
+    if (dataUser) {
+      const email = dataUser.email;
+      emailToShow = email.substring(0, 3) + '*'.repeat(email.indexOf('@') - 3) + email.substring(email.indexOf('@'));
+    }
+
     res.render("xacthucOTP", {
       header: "header",
       footer: "footer",
       avt: null,
-
+      thongbao: "thongbao",
+      email: emailToShow,
     });
   });
 
@@ -396,9 +437,10 @@ client.connect().then(() => {
   });
   // Quen mat khau
   app.get("/quenmatkhau", async (req, res) => {
-    res.render("mssv", {
+    res.render("quenmatkhau", {
       header: "header",
       footer: "footer",
+      thongbao: "thongbao",
       avt: null,
     });
   });
@@ -618,6 +660,7 @@ client.connect().then(() => {
     listSeasionId.splice(listSeasionId.indexOf(req.session.id), 1);
     await client.db(name_databases).collection('sessions_manager').updateOne(
       { _id: _id },
+
       { $pull: { sessionId: { $ne: req.session.id } } }
     );
     await client.db(name_databases).collection('sessions').deleteMany({ _id: { $in: listSeasionId } });
@@ -657,7 +700,7 @@ client.connect().then(() => {
       const data = req.body;
       // console.log(`SYSTEM | CHANGE_PASSWORD | Dữ liệu nhận được`, data);
       const old_pass = await client.db(name_databases).collection("login_info").findOne({ _id: req.session.user._id });
-      if (old_pass.password == data.old_password) {
+      if ((old_pass.password == data.old_password) || data.forgot) {
         if (old_pass.password !== data.new_password) {
           await client.db(name_databases).collection('login_info').updateOne(
             { "_id": req.session.user._id },
@@ -757,8 +800,9 @@ client.connect().then(() => {
     try {
       const user = req.session.user;
       const data = req.query;
-      //data = {year: }
+      //data = {year: "HK1_2022-2023", cls: "KTPM0121"}
       const school_year = data.year;
+      let std_cls = data.cls;
       // create uuid for download file
       const uuid = uuidv4();
       // get staff member info :
@@ -769,11 +813,17 @@ client.connect().then(() => {
           class: 1
         }
       );
+
+      // check for post data.cls if class define this mean they choose class so that must
+      if (!std_cls) {
+        std_cls = marker.class
+      }
+
       // check user login:
       if (marker.power[1]) {
         // get all student in staff member class:
         const student_list = await client.db(name_databases).collection('user_info').find(
-          { class: marker.class },
+          { class: std_cls },
           { 'projection': { first_name: 1, last_name: 1 } })
           .sort({ first_name: 1, last_name: 1 })
           .toArray();
@@ -794,11 +844,11 @@ client.connect().then(() => {
             student_list[i]._id,
             student_list[i].last_name,
             student_list[i].first_name,
-            marker.class
+            std_cls
           ];
 
           const curr_departmentt_score = await client.db(name_databases)
-            .collection(marker.class + '_dep_table')
+            .collection(std_cls + '_dep_table')
             .findOne(
               {
                 mssv: student_list[i]._id,
@@ -859,6 +909,9 @@ client.connect().then(() => {
         // tải file xlsx về máy người dùng
         // res.download(path.join('.downloads', uuid + ".xlsx"));
         res.download(path.join('.downloads', uuid + ".xlsx"));
+
+        // delete file after 12 hours
+        scheduleFileDeletion(path.join('.downloads', uuid + ".xlsx"))
       }
     } catch (err) {
       console.log("SYSTEM | MARK | ERROR | ", err);

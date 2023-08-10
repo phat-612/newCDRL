@@ -13,31 +13,40 @@
 <body>
   <div class="main bg-[#e7ecf0]">
     <%- include(header) %>
+    <%- include(thongbao) %>
 
     <div class="content">
-        <form action="javascript: void(0)" class="otp-form" name="otp-form">
-  
-            <div class="title">
-              <h3>Xác minh OTP</h3>
-              <p class="info">Mã OTP đã được gửi tới ********k876@gmail.com</p>
-              <p class="msg">Vui lòng nhập OTP để xác minh</p>
-            </div>
-            <div class="otp-input-fields">
-              <input type="text" class="otp__digit otp__field__1">
-              <input type="text" class="otp__digit otp__field__2">
-              <input type="text" class="otp__digit otp__field__3">
-              <input type="text" class="otp__digit otp__field__4">
-              <input type="text" class="otp__digit otp__field__5">
-              <input type="text" class="otp__digit otp__field__6">
-            </div>
-            
-            <div class="result">
-                <a class="otp_again">Gửi lại OTP</a>
-                
-                <button  id="page-button">Xác nhận</button>
-            </div>
+      <form action="javascript: void(0)" class="otp-form" name="otp-form">
 
-          </form>
+        <%if (email){%>
+        <div class="title">
+          <h3>Xác minh OTP</h3>
+          <p class="info">Mã OTP đã được gửi tới <%= email%></p>
+          <p class="msg">Vui lòng nhập OTP để xác minh</p>
+        </div>
+        <div class="otp-input-fields">
+          <input type="text" class="otp__digit otp__field__1" maxlength="1">
+          <input type="text" class="otp__digit otp__field__2" maxlength="1">
+          <input type="text" class="otp__digit otp__field__3" maxlength="1">
+          <input type="text" class="otp__digit otp__field__4" maxlength="1">
+          <input type="text" class="otp__digit otp__field__5" maxlength="1">
+          <input type="text" class="otp__digit otp__field__6" maxlength="1">
+        </div>
+
+        <div class="result">
+          <div class="result_top">
+            <span class="times">60s</span>
+            <a class="otp_again">Gửi lại OTP</a>
+          </div>
+
+          <button id="page-button">Xác nhận</button>
+        </div>
+        <%} else{%>
+        <div class="no_sv">Không tìm thấy sinh viên này!
+
+        </div>
+        <%}%>
+      </form>
     </div>
   </div>
 </body>

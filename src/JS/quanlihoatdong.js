@@ -1,10 +1,23 @@
 $(".more_list").click(function () {
-    $(".modal").show();
+    $(".modal.edit").show();
   });
 
-  $(".modal").click(function () {
-    $(".modal").hide();
+  $(".modal.edit").click(function () {
+    $(".modal.edit").hide();
   });
-  $(".modal_wrap").click(function (e) {
+  
+  $(".modal_wrap.edit").click(function (e) {
     e.stopPropagation();
   });
+
+  $("#add-activity").click(function () {
+    $(".modal.add").show();
+  });
+
+  $(".modal.add").click(function () {
+    $(".modal.add").hide();
+  });
+  $(".modal_wrap.add").click(function (e) {
+    e.stopPropagation();
+  });
+

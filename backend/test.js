@@ -1,3 +1,4 @@
+const server = require('D:\\github\\newCDRL\\read_only\\mongodb.js');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = "mongodb+srv://binhminh19112003:Zr3uGIK4dCymOXON@database.sefjqcb.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(uri, {
@@ -10,7 +11,7 @@ const client = new MongoClient(uri, {
     }
 });
 // clear seasion của người dùng
-// server.atomic_table('database',['sessions'],'18102003').catch(eror => console.log(eror));
+server.atomic_table('database',['sessions', 'sessions_manager'],'18102003').catch(eror => console.log(eror));
 
 // add quyên cho người dùng
 // server.update_many_Data('user_info', {}, { $set: { class: 'KTPM0121' } });
@@ -39,9 +40,9 @@ const client = new MongoClient(uri, {
 // }).then(console.log('done')));
 
 // chỉnh quyền
-client.db('database').collection('user_info').updateOne(
-    {
-        _id: 'xxx'
-    },
-    { $set: { power: { 0: true, 1: true } } }
-).then(console.log('ok'));
+// client.db('database').collection('user_info').updateOne(
+//     {
+//         _id: 'xxx'
+//     },
+//     { $set: { power: { 0: true, 1: true } } }
+// ).then(console.log('ok'));

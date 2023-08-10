@@ -5,6 +5,11 @@
 body {
     margin: 0;
 }
+.content{
+    position: relative;
+    width: 100%;
+    height: 70vh;
+}
 
 .title {
     max-width: 47rem;
@@ -12,6 +17,7 @@ body {
     text-align: center;
     font-family: "Poppins", sans-serif;
     font-size: 2rem;
+
 }
 
 .title h3 {
@@ -82,12 +88,12 @@ body {
 
 .otp_again {
     display: block;
-    margin: 1% 0 39px 80%;
     font-size: 15px;
     cursor: pointer;
     padding: 0.5rem;
     color: #533ad1;
     transition: 0.35s ease-in-out;
+    transition: opacity 0.3s ease-in-out;
 }
 
 .otp_again:hover {
@@ -117,8 +123,7 @@ body {
 }
 
 .content {
-    background-color: white;
-    width: 40%;
+    width: 100%;
     margin: 3% auto;
     border-radius: 0.7rem;
 }
@@ -126,9 +131,18 @@ body {
 .title h3 {
     padding: 4rem 4rem 2rem 4rem;
 }
+.otp-form{
+    position: absolute;
+    background-color: #fff;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -40%);
+    border-radius: 0.8rem;
+    width: 550px;
+}
 
 #page-button {
-    margin: 2rem 0 4rem 0;
+    margin: 0rem 0 4rem 0;
     border: none;
     background-color: transparent;
     font-size: 2.5rem;
@@ -141,4 +155,18 @@ body {
 #page-button:hover {
     border-radius: 0.5rem;
     background: #c2c2c2;
+}
+.no_sv{
+    font-size: 30px;
+    padding: 30px;
+    text-align: center;
+}
+
+.result_top{
+    display: flex;
+    justify-content: space-between;
+}
+.times{
+    padding-left: 23px;
+    font-size: 15px;
 }
