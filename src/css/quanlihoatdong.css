@@ -3,7 +3,17 @@
   margin: 0;
   box-sizing: content-box;
 }
-
+.close_modal{
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 2rem;
+    border: 1px solid;
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    text-align: center;
+}
 .content {
   max-width: 91rem;
   margin-left: auto;

@@ -141,7 +141,10 @@ client.connect().then(() => {
     } else {
       if ((user.first == 'true')) {
         return res.redirect('/login/updateyourpasswords');
-      } else {
+      } else if ((user.first == 'false')) {
+        return res.redirect('/login/updateyourpasswords?tile=ok');
+      }
+      else {
         const user_info = await client.db(name_databases).collection('user_info').findOne({ _id: user._id });
         res.locals.avt = user_info.avt;
         res.locals.displayName = user_info.displayName;
@@ -212,62 +215,36 @@ client.connect().then(() => {
     if (!cls) {
       cls = marker.class;
     }
-    // check if table is exist or not
-    if (await client.db(name_databases).collection(cls + table).findOne(
+
+    // update old table if exist or insert new tabl;e
+    let update = {
+      mssv: user._id,
+      school_year: school_year.year,
+      first: data.first,
+      second: data.second,
+      third: data.third,
+      fourth: data.fourth,
+      fifth: data.fifth,
+      img_ids: data.img_ids,
+      total: data.total,
+      update_date: new Date()
+    }
+
+    // if table is stf_table - mark by staff members or teacher
+    if (table == '_stf_table') {
+      update.marker = marker.last_name + " " + marker.first_name;
+    }
+
+    await client.db(name_databases).collection(cls + table).updateOne(
       {
         mssv: user._id,
         school_year: school_year.year
-      }
-    )) {
-      // update old table
-      let update = {
-        first: data.first,
-        second: data.second,
-        third: data.third,
-        fourth: data.fourth,
-        fifth: data.fifth,
-        img_ids: data.img_ids,
-        total: data.total,
-        update_date: new Date()
-      }
-
-      // if table is stf_table - mark by staff members or teacher
-      if (table == '_stf_table') {
-        update.marker = marker.last_name + " " + marker.first_name;
-      }
-
-      await client.db(name_databases).collection(cls + table).updateOne(
-        {
-          mssv: user._id,
-          school_year: school_year.year
-        },
-        {
-          $set: update
-        }
-      );
-
-    } else { // entertainment area: https://youtu.be/CufIAJDVZvo
-      let insert = {
-        mssv: user._id,
-        school_year: school_year.year,
-        first: data.first,
-        second: data.second,
-        third: data.third,
-        fourth: data.fourth,
-        fifth: data.fifth,
-        img_ids: data.img_ids,
-        total: data.total,
-        update_date: new Date()
-      }
-
-      // if table is stf_table - mark by staff members or teacher
-      if (table == '_stf_table') {
-        insert.marker = marker.last_name + " " + marker.first_name;
-      }
-
-      // create new table
-      await client.db(name_databases).collection(cls + table).insertOne(insert);
-    }
+      },
+      {
+        $set: update
+      },
+      { upsert: true }
+    );
   }
 
   function randomPassword() {
@@ -333,12 +310,11 @@ client.connect().then(() => {
       }
     }),
     cookie: {
-      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days (30 * 24 * 60 * 60 * 1000 milliseconds)
       secure: true,
       httpOnly: true,
       sameSite: 'strict',
-      rolling: true,
-    }
+    },
+    rolling: true
   }));
   app.use(express.json());
   const parentDirectory = path.dirname(__dirname);
@@ -377,6 +353,10 @@ client.connect().then(() => {
   // firstlogin route
   app.get("/login/updateyourpasswords", async (req, res) => {
     const user = req.session.user;
+    let tile = "Đăng nhập lần đầu";
+    if (req.query.tile == 'ok') {
+      tile = "Cập nhật mật khẩu";
+    }
     if (!user?.first) {
       return res.redirect('/');
     }
@@ -386,6 +366,7 @@ client.connect().then(() => {
       footer: "footer",
       avt: null,
       logout: true,
+      tile: tile
     });
   });
 
@@ -406,7 +387,13 @@ client.connect().then(() => {
       footer: "footer"
     });
   });
-
+  app.get("/bancansunhapdiemdanhgia", checkIfUserLoginRoute, async (req, res) => {
+    res.render("bancansunhapbangdiem", {
+      header: "header",
+      thongbao: "thongbao",
+      footer: "footer"
+    });
+  });
   // ban can su route
   app.get("/bancansu", checkIfUserLoginRoute, async (req, res) => {
     res.render("bancansu", {
@@ -424,7 +411,6 @@ client.connect().then(() => {
   });
 
   // quan li lop - doan khoa route
-  // doan khoa route
   app.get("/doan_khoa/quan_li_lop", checkIfUserLoginRoute, async (req, res) => {
     res.render("quan_li_lop", {
       header: "header",
@@ -432,22 +418,26 @@ client.connect().then(() => {
     });
   });
 
+  //quan li co van - doan khoa route
+  app.get("/doan_khoa/quan_li_cv", checkIfUserLoginRoute, async (req, res) => {
+    res.render("quan_li_cv", {
+      header: "header",
+      footer: "footer",
+    });
+  });
+
   // xac thuc route
   app.get("/xacthucOTP", async (req, res) => {
+    const user = req.session.user;
+    if (user) {
+      return res.redirect('/');
+    }
     const mssv = req.query.mssv;
     const dataUser = await client.db('database').collection('user_info').findOne({ _id: mssv });
     let emailToShow = '';
-    // Thêm tài liệu mới có thời gian hết hạn sau 1 phút
-    const OTPscode = await randomPassword();
-    await client.db('database').collection('OTP').insertOne({
-      _id: mssv,
-      otpcode: OTPscode,
-      expireAt: new Date(Date.now() + (60*5) * 1000) // Hết hạn sau 5 phút
-    });
     if (dataUser) {
       const email = dataUser.email;
       emailToShow = email.substring(0, 3) + '*'.repeat(email.indexOf('@') - 3) + email.substring(email.indexOf('@'));
-      await sendEmail(OTPscode, email);
     }
     res.render("xacthucOTP", {
       header: "header",
@@ -476,6 +466,10 @@ client.connect().then(() => {
 
   // Quen mat khau
   app.get("/quenmatkhau", async (req, res) => {
+    const user = req.session.user;
+    if (user) {
+      return res.redirect('/');
+    }
     res.render("quenmatkhau", {
       header: "header",
       footer: "footer",
@@ -648,24 +642,28 @@ client.connect().then(() => {
             req.session.cookie.maxAge = 3600000; // 1 hour
           }
           const sessionId = req.session.id;
-          const resl = await client.db(name_databases).collection('sessions_manager').findOne({ _id: user._id });
-          if (resl) {
-            await client.db(name_databases).collection('sessions_manager').updateOne(
-              { _id: user._id },
-              { $push: { sessionId: sessionId } }
-            );
-          } else {
-            await client.db(name_databases).collection('sessions_manager').insertOne(
-              {
-                _id: user._id,
-                sessionId: [sessionId]
-              }
-            )
-          }
+          await client.db(name_databases).collection('sessions_manager').updateOne(
+            { _id: user._id },
+            { $push: { sessionId: sessionId } },
+            { upsert: true }
+          );
+
           if (user.first == 'true') {
             res.status(200).json({ check: true });
           } else {
             res.status(200).json({ check: false });
+          }
+
+          let seasionIDs = await client.db(name_databases).collection('sessions_manager').findOne({ _id: data.mssv });
+          seasionIDs = seasionIDs.sessionId
+          const existingDocs = await client.db(name_databases).collection('sessions').find({ _id: { $in: seasionIDs } }).toArray();
+          const existingIDs = existingDocs.map(doc => doc._id);
+          const idsToDelete = seasionIDs.filter(id => !existingIDs.includes(id));
+          if (idsToDelete.length > 0) {
+            await client.db(name_databases).collection('sessions_manager').updateOne(
+              { _id: data.mssv },
+              { $pull: { sessionId: { $in: idsToDelete } } }
+            );
           }
         } else {
           // Đăng nhập không thành công
@@ -681,6 +679,10 @@ client.connect().then(() => {
   // Logout ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   app.get("/api/logout", checkIfUserLoginAPI, async (req, res) => {
     // Xóa thông tin phiên (session) của người dùng
+    await client.db(name_databases).collection('sessions_manager').updateOne(
+      { _id: req.session.user._id },
+      { $pull: { sessionId: req.session.id } }
+    );
     req.session.destroy((err) => {
       if (err) {
         console.error('SYSTEM | LOG_OUT | Failed to logout:', err);
@@ -733,7 +735,7 @@ client.connect().then(() => {
     }
   });
 
-  // Reset pass -------------------
+  // Reset pass ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   app.post("/api/resetpassword", async (req, res) => {
     try {
       const data = req.body;
@@ -741,25 +743,16 @@ client.connect().then(() => {
       const OTP = await client.db(name_databases).collection("OTP").findOne({ _id: data.mssv });
       if (OTP && (OTP.otpcode === data.otp)) {
         await client.db(name_databases).collection("OTP").deleteOne({ _id: data.mssv });
-        const user = await client.db(name_databases).collection('login_info').findOneAndUpdate({ _id: data.mssv }, { $set: { first: "true" } }, { returnDocument: "after" });
+        const user = await client.db(name_databases).collection('login_info').findOneAndUpdate({ _id: data.mssv }, { $set: { first: "false" } }, { returnDocument: "after" });
         // Đăng nhập thành công, lưu thông tin người dùng vào phiên
         req.session.user = user.value;
         req.session.cookie.maxAge = 3600000; // 1 hour
         const sessionId = req.session.id;
-        const resl = await client.db(name_databases).collection('sessions_manager').findOne({ _id: user.value._id });
-        if (resl) {
-          await client.db(name_databases).collection('sessions_manager').updateOne(
-            { _id: user.value._id },
-            { $push: { sessionId: sessionId } }
-          );
-        } else {
-          await client.db(name_databases).collection('sessions_manager').insertOne(
-            {
-              _id: user.value._id,
-              sessionId: [sessionId]
-            }
-          )
-        }
+        await client.db(name_databases).collection('sessions_manager').updateOne(
+          { _id: user._id },
+          { $push: { sessionId: sessionId } },
+          { upsert: true }
+        );
         res.sendStatus(200);
       } else { res.sendStatus(403); }
     } catch (err) {
@@ -767,6 +760,34 @@ client.connect().then(() => {
       res.sendStatus(500);
     }
   });
+
+  // Resent OTP ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  app.post("/api/resendotp", async (req, res) => {
+    try {
+      const mssv = req.body.mssv;
+      const dataUser = await client.db('database').collection('user_info').findOne({ _id: mssv });
+      // Thêm tài liệu mới có thời gian hết hạn sau 1 phút
+      const OTPscode = await randomPassword();
+      await client.db('database').collection('OTP').updateOne({ _id: mssv }, {
+        $set: {
+          otpcode: OTPscode,
+          expireAt: new Date(Date.now() + (60 * 5) * 1000) // Hết hạn sau 5 phút
+        }
+      },
+        { upsert: true }
+      );
+      if (dataUser) {
+        const email = dataUser.email;
+        await sendEmail(OTPscode, email);
+      }
+      res.sendStatus(200);
+    }
+    catch (err) {
+      console.log("SYSTEM | RESEND_OTP | ERROR | ", err);
+      res.sendStatus(500);
+    }
+  });
+
   // Đổi pass ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   app.post("/api/change_pass", checkIfUserLoginAPI, async (req, res) => {
     try {
@@ -876,7 +897,7 @@ client.connect().then(() => {
       //data = {year: "HK1_2022-2023", cls: "KTPM0121"}
       const school_year = data.year;
       let std_cls = data.cls;
-      
+
       // create uuid for download file
       const uuid = uuidv4();
 
@@ -1108,8 +1129,7 @@ client.connect().then(() => {
       const user = req.session.user;
       const data = req.body;
       //data = {year: "HK1_2022-2023", cls: "KTPM0121", std_list = []}
-      const school_year = data.year;
-      let std_cls = data.cls;
+
       // get staff member info :
       const marker = await client.db(name_databases).collection('user_info').findOne(
         { _id: user._id },
@@ -1122,51 +1142,39 @@ client.connect().then(() => {
       );
 
       // check for post data.cls if class define this mean they choose class so that must
-      if (!std_cls) {
-        std_cls = marker.class;
+      if (!data.cls) {
+        data.cls = marker.class;
       }
 
       // check if table is exist or not
       // update or add new table copy from std_table to staff_table
       for (let i = 0; i < data.std_list.length; i++) {
-        const std_table = await client.db(name_databases).collection(std_cls + '_std_table').findOne(
+        const std_table = await client.db(name_databases).collection(data.cls + '_std_table').findOne(
           {
             mssv: data.std_list[i],
             school_year: data.year
           }
         );
-        if (std_table) {
-          // update old table
-          let update = {
-            first: std_table.first,
-            second: std_table.second,
-            third: std_table.third,
-            fourth: std_table.fourth,
-            fifth: std_table.fifth,
-            img_ids: std_table.img_ids,
-            total: std_table.total,
-            marker: marker.last_name + " " + marker.first_name,
-            update_date: new Date()
-          }
 
-          await client.db(name_databases).collection(std_cls + '_stf_table').updateOne(
+        // update old table if exist else insert new one
+        // copy from student table and add marker name
+        if (std_table) {
+          std_table.marker = marker.last_name + " " + marker.first_name
+
+          await client.db(name_databases).collection(data.cls + '_stf_table').updateOne(
             {
               mssv: data.std_list[i],
               school_year: data.year
             },
             {
-              $set: update
-            }
+              $set: std_table
+            },
+            { upsert: true }
           );
-
-        } else { // entertainment area: https://youtu.be/CufIAJDVZvo
-          // copy from student table and add marker name
-          std_table.marker = marker.last_name + " " + marker.first_name
-          // create new table
-          await client.db(name_databases).collection(std_cls + '_stf_table').insertOne(std_table);
         }
       }
 
+      res.sendStatus(200);
     } catch (err) {
       console.log("SYSTEM | LOAD_SCORE_LIST | ERROR | ", err);
       res.sendStatus(500);
@@ -1175,7 +1183,7 @@ client.connect().then(() => {
   });
 
   // api danh sach sinh vien // có j sữa tên tiêng anh lại cho nó dồng bộ code nha Phát
-  app.post("/api/danhsachsinhvien_cv", checkIfUserLoginAPI, async (req, res) => {
+  app.post("/api/getStudentList", checkIfUserLoginAPI, async (req, res) => {
     const user = req.session.user;
     const data = req.body;
     const marker = await client.db(name_databases).collection('user_info').findOne(
@@ -1189,13 +1197,14 @@ client.connect().then(() => {
     if (!reqClass) {
       reqClass = marker.class;
     }
-
-    const student_list = await client.db(name_databases).collection('user_info').find(
-      { class: data.class },
-      { 'projection': { first_name: 1, last_name: 1 } })
-      .sort({ first_name: 1, last_name: 1 })
-      .toArray();
-    res.status(200).json(student_list);
+    if (marker.power[1]) {
+      const student_list = await client.db(name_databases).collection('user_info').find(
+        { class: reqClass },
+        { 'projection': { first_name: 1, last_name: 1 } })
+        .sort({ first_name: 1, last_name: 1 })
+        .toArray();
+      res.status(200).json(student_list);
+    }
 
   })
   // Xử lý đường link không có -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

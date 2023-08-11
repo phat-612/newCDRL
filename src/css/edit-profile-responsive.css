@@ -45,3 +45,54 @@
         flex-direction: column;
     }
 }
+
+@media screen and (max-width: 820px) and (min-width:601px){
+    .porfile_container {
+        flex-direction: column;
+    }
+
+    .profile_title {
+        padding-top: 20px;
+        margin: 0;
+    }
+
+    .profile_btn_gr {
+        width: 100%;
+        justify-content: space-around;
+    }
+
+    .profile_btn_gr_parent {
+        flex-direction: column-reverse;
+        align-items: center;
+    }
+
+    .profile_title {
+        font-size: 1.5rem;
+        padding: 30px 0;
+    }
+
+    .profile_btn_gr_parent {
+        height: 20rem;
+    }
+
+    .porfile_container_item {
+        flex-direction: column;
+    }
+
+    .info_input {
+        height: 4rem;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .container {
+        width: 100%;
+    }
+
+    .bt_av {
+        flex-direction: column;
+    }
+    .info_lable{
+        justify-content: flex-start;
+    }
+}

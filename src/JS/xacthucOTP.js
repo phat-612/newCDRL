@@ -3,7 +3,10 @@ var mykey = "0123456789qwertyuiopasdfghjklzxcvbnm".split("")
 otp_inputs.forEach((_) => {
   _.addEventListener("keyup", handle_next_input),
     _.addEventListener("paste", handle_paste_input);
-})
+});
+const url = new URL(currentUrl);
+const searchParams = new URLSearchParams(url.search);
+const mssvValue = searchParams.get('mssv');
 
 function handle_next_input(event) {
   // Kiểm tra nếu phím Control đã được nhấn
@@ -62,9 +65,6 @@ async function handle_otp() {
   for (let { value } of otp_inputs) {
     _finalKey += value;
   }
-  const url = new URL(currentUrl);
-  const searchParams = new URLSearchParams(url.search);
-  const mssvValue = searchParams.get('mssv');
   try {
     let postData = JSON.stringify({
       otp: _finalKey,
@@ -79,7 +79,7 @@ async function handle_otp() {
     };
     const response = await fetch('/api/resetpassword', requestOptions);
     if (response.ok) {
-      window.location.href = "/login/updateyourpasswords";
+      window.location.href = "/login/updateyourpasswords?tile=ok";
     } else if (response.status == 403) {
       notify('x', 'Sai OTP hoặc OTP đã hết hạn!');
       button_next.innerHTML = "Xác nhận";
@@ -112,28 +112,73 @@ button_next.onclick = () => {
   }
 }
 
-const otp_again = document.querySelector('.otp_again');
-const otp_times = document.querySelector('.times')
-otp_again.onclick = () => {
-  notify("n", 'Đã Gửi Lại OTP!')
-  startOtpCountdown(60);
+const otpAgain = document.querySelector('.otp_again');
+const otpTimes = document.querySelector('.times');
+otpAgain.onclick = async () => {
+  otpAgain.classList.add('disabled-link-otp-again');
+  try {
+    let postData = JSON.stringify({
+      mssv: mssvValue,
+    });
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: postData
+    };
+    const response = await fetch('/api/resendotp', requestOptions);
+    if (response.ok) {
+      otpAgain.classList.remove('disabled-link-otp-again');
+      notify("n", 'Đã gửi lại OTP!');
+      startOtpCountdown(60);
+
+    }
+  } catch (error) {
+    console.log(error);
+    otpAgain.classList.remove('disabled-link-otp-again');
+
+    notify('x', 'Có lỗi xảy ra!');
+  }
 
 };
-const otpTimes = document.querySelector('.times');
-const otpAgain = document.querySelector('.otp_again');
+
 function startOtpCountdown(seconds) {
+  sessionStorage.setItem("otp", seconds);
   otpTimes.style.display = 'block';
   otpAgain.style.display = 'none';
   otpTimes.textContent = "Vui lòng chờ " + seconds + " giây";
 
   const interval = setInterval(() => {
+    sessionStorage.setItem("otp", seconds);
+
     seconds--;
     otpTimes.textContent = "Vui lòng chờ " + seconds + " giây";
     if (seconds < 0) {
       clearInterval(interval);
+      sessionStorage.removeItem("otp");
       otpTimes.style.display = 'none';
       otpAgain.style.display = 'block';
     }
   }, 1000);
 }
-startOtpCountdown(60);
+
+if (sessionStorage.getItem("otp")) {
+  startOtpCountdown(sessionStorage.getItem("otp"));
+} else {
+  let postData = JSON.stringify({
+    mssv: mssvValue,
+  });
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: postData
+  };
+  fetch('/api/resendotp', requestOptions).catch(error => {
+    console.log(error);
+    notify('x', 'Có lỗi xảy ra!');
+  });
+  startOtpCountdown(60);
+}

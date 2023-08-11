@@ -111,8 +111,8 @@ body {
 }
 .modal_main{
   padding: 10px;
-  height: 350px;
-  /* overflow: auto; */
+  height: 450px;
+  overflow: auto;
 }
 
 .title-box {

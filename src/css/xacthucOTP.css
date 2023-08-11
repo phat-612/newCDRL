@@ -94,7 +94,6 @@ body {
     padding: 0.5rem;
     color: #533ad1;
     transition: 0.35s ease-in-out;
-    transition: opacity 0.3s ease-in-out;
 }
 
 .otp_again:hover {
@@ -177,4 +176,10 @@ body {
     color: #ec5b5b;
     display: flex;
     align-items: center;
+}
+
+.disabled-link-otp-again {
+    pointer-events: none;
+    border-radius: 0.5rem;
+    background: #c2c2c2;
 }

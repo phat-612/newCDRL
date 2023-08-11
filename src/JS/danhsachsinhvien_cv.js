@@ -33,9 +33,10 @@ function handleCheckboxChange() {
 }
 // chon lop
 $('.js_lop').on('change',async (event)=>{
+  let reqClass = event.target.value;
   try {
     let postData = JSON.stringify({
-        class: event.target.value
+        class: reqClass
     });
     const requestOptions = {
         method: 'POST',
@@ -44,7 +45,7 @@ $('.js_lop').on('change',async (event)=>{
         },
         body: postData
     };
-    const response = await fetch('/api/danhsachsinhvien_cv', requestOptions);
+    const response = await fetch('/api/getStudentList', requestOptions);
     if (response.ok) {
         const students = await response.json();
         console.log(students);

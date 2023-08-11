@@ -5,7 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/src/css/quanlihoatdong.css" />
-  <title>Quản Lí Hoạt Động</title>
+  <link rel="stylesheet" href="/src/css/quanlihoatdong_responsive.css" />
+  <title>Quản Lí Hoạt động</title>
 </head>
 
 <body>
@@ -24,16 +25,18 @@
               </select>
             </div>
           </div>
-          <span>Niên khóa</span>
-          <div class="selectbox nien_khoa">
-            <div class="select">
-              <select>
-                <option>2021-2022</option>
-                <option>2022-2023</option>
-              </select>
+          <div >
+            <span>Niên khóa</span>
+            <div class="selectbox nien_khoa">
+              <div class="select">
+                <select>
+                  <option>2021-2022</option>
+                  <option>2022-2023</option>
+                </select>
+              </div>
             </div>
+            <button class="button-35">Chọn</button>
           </div>
-          <button class="button-35">Chọn</button>
         </div>
         <div class="activity-board">
           <div class="control">
@@ -122,7 +125,7 @@
         <h3 class="sub-title descrip">Nội Dung Hoạt Động</h3>
         <textarea name="" id="" cols="30" rows="10" placeholder="Nhập nội dung hoạt động"></textarea>
       </div>
-      <div>
+      <div class="select_year">
         <div class="selectbox nien_khoa">
           <main id="select-main">
             <div class="select">
@@ -146,6 +149,10 @@
           <div><button class="button-35">Xong</button></div>
         </main>
       </div>
+    </div>
+    <div class="close_modal">
+    <i class="fa-brands fa-x-twitter"></i>
+
     </div>
   </div>
 </div>

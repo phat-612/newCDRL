@@ -1,15 +1,15 @@
+let curr_tb_year = "HK" + $(".hoc_ky select option:selected").text() + "_" + $(".nien_khoa select option:selected").text();
+
 $(document).on("click", ".export_btn", async function () {
   // disabled button until it done start down load
   $('.export_btn').prop('disabled', true);
   $('.export_btn').text('Downloading...')
   notify('!', 'Đợi chút đang xuất bảng điểm!');
   try {
-    const year = "HK" + $(".hoc_ky select option:selected").text() + "_" + $(".nien_khoa select option:selected").text();
-
     const requestOptions = {
       method: 'GET',
     };
-    const response = await fetch(`/api/exportClassScore?year=${year}`, requestOptions);
+    const response = await fetch(`/api/exportClassScore?year=${curr_tb_year}`, requestOptions);
     if (response.ok) {
       // reset export button to clickable
       $('.export_btn').prop('disabled', false);
@@ -42,35 +42,45 @@ $(document).on("click", ".export_btn", async function () {
 $(document).on("click", ".auto_mark_btn", async function () {
   // disabled button until it done start down load
   $('.auto_mark_btn').prop('disabled', true);
-  $('.auto_mark_btn').text('Loading...')
+  $('.auto_mark_btn').text('Loading...');
   try {
     // get all student was check
     let mssv_list = []
     $('table tbody .inp-cbx').each(function(){
-      if (this.checked) mssv_list.push(this.value);
+      let score = $(this).parent().parent().parent().find('.new_update').text().trim()
+      if (score != '0' && score != '-' && score != '' && this.checked) {
+        $(this).parent().parent().parent().find('.first_score').text(score)
+        mssv_list.push(this.value);
+      }
     })
 
-    const year = "HK" + $(".hoc_ky select option:selected").text() + "_" + $(".nien_khoa select option:selected").text();
-    
     const requestOptions = {
-      method: 'GET',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        year: curr_tb_year,
+        std_list: mssv_list
+      })
     };
-
-    const response = await fetch(`/api/loadScoresList?year=${year}`, requestOptions);
-    
-    if (response.ok) {
-
-      // reset export button to clickable
+    if (mssv_list.length > 0) {
+      const response = await fetch('/api/autoMark', requestOptions);
+      if (response.ok) {
+        $('.auto_mark_btn').prop('disabled', false);
+        $('.auto_mark_btn').text('Chấm bảng điểm đã chọn');
+        notify('n', 'Đã hoàn tất chấm điểm tự động những sinh viên được đánh dấu!')
+      }
+      else if (response.status == 500) {
+        // Error occurred during upload
+        notify('x', 'Có lỗi xảy ra!');
+      }
+    } else {
       $('.auto_mark_btn').prop('disabled', false);
-      $('.auto_mark_btn').text('Chấm bảng điểm đã chọn')
-      notify('n', 'Đã chấm tất cả bảng điểm được chọn.');
-    }
-    else if (response.status == 500) {
-      // Error occurred during upload
-      notify('x', 'Có lỗi xảy ra!');
+      $('.auto_mark_btn').text('Chấm bảng điểm đã chọn');
+      notify('!', 'Không có sinh viên được đánh dấu');
     }
   } catch (error) {
-    console.log(error);
     notify('x', 'Có lỗi xảy ra!');
   }
 });
@@ -108,7 +118,7 @@ $(document).on("click", ".load_list_btn", async function () {
           <td>${data.student_list[i]._id}</td>
           <td class='std_name_row'>${data.student_list[i].last_name + " " +  data.student_list[i].first_name}</td>
           <td class="new_update">${data.student_scores[i]}</td>
-          <td>${data.staff_scores[i]}</td>
+          <td class="first_score">${data.staff_scores[i]}</td>
           <td>${data.staff_name[i]}</td>
           <td>${data.department_scores[i]}</td>
           <td><a href="#">Chấm điểm</a></td>
@@ -120,6 +130,9 @@ $(document).on("click", ".load_list_btn", async function () {
           $('table tbody').children().eq(i).find('.std_name_row').append(`<span class="dau_sao">*</span>`);
         }
       } 
+
+      // update current table school year
+      curr_tb_year = year;
 
       // reset export button to clickable
       $('.load_list_btn').prop('disabled', false);
