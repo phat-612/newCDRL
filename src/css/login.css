@@ -24,7 +24,6 @@
   width: 100%;
   padding: 1rem 0;
   font-size: 1.6rem;
-  /* color: #fff; */
   margin-bottom: 3rem;
   border: none;
   border-bottom: 0.1rem solid #000;
@@ -38,7 +37,6 @@
   left: 0;
   padding: 1rem 0;
   font-size: 1.6rem;
-  /* color: #fff; */
   pointer-events: none;
   transition: 0.5s;
 }
@@ -75,29 +73,28 @@
   position: absolute;
   display: block;
 }
-.control{
+.control {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.login-box form a.quen_mk{
+.login-box form a.quen_mk {
   padding: 0.4rem 1rem;
   margin: 0;
   overflow: inherit;
   font-size: 1rem;
   letter-spacing: 0.2rem;
 }
-.quen_mk{
+.quen_mk {
   float: right;
 }
-@media screen and (max-width:600px) {
-  .login-box{
+@media screen and (max-width: 600px) {
+  .login-box {
     width: 95%;
   }
 }
 
-
-.eye{
+.eye {
   position: absolute;
   right: 1rem;
   top: 20%;

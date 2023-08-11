@@ -73,15 +73,20 @@
   <div class="modal add">
     <div class="modal_wrap add">
       <div class="modal_main">
-        <div class="content title">
-          <h2 class="title-box">THÊM SINH VIÊN</h2>
+        <h2 class="title-box">THÊM SINH VIÊN</h2>
+        <div class="inp-box">
+          <input type="text" name="mssv" class="mssv_input" required="" />
+          <label>Mã số sinh viên</label>
         </div>
-          <label for="md_mssv">MSSV</label>
-          <input id="md_mssv" type="text">
-          <label for="md_ho">Họ</label>
-          <input id="md_ho" type="text">
-          <label for="md_ten">Tên</label>
-          <input id="md_ten" type="text">
+        <div class="inp-box">
+          <input type="text" name="ho" class="ho_input" required="" />
+          <label>Họ</label>
+        </div>
+        <div class="inp-box">
+          <input type="text" name="ten" class="ten_input" required="" />
+          <label>Tên</label>
+        </div>
+        <div>
           <label for="md_ten">Vai trò</label>
           <div class="selectbox hoc_ky">
             <div class="select">
@@ -91,6 +96,8 @@
               </select>
             </div>
           </div>
+        </div>
+        <div>
           <label for="md_ten">Đảng viên</label>
           <div class="selectbox hoc_ky">
             <div class="select">
@@ -100,6 +107,8 @@
               </select>
             </div>
           </div>
+        </div>
+        <div>
           <label for="md_ten">Chấm điểm</label>
           <div class="selectbox hoc_ky">
             <div class="select">
@@ -109,6 +118,8 @@
               </select>
             </div>
           </div>
+        </div>
+        <div>
           <label for="md_ten">Lập bảng hoạt động</label>
           <div class="selectbox hoc_ky">
             <div class="select">
@@ -118,10 +129,8 @@
               </select>
             </div>
           </div>
-          
-        <div>
+        </div>
         <button class="button-35">Thêm</button></div>
-          
         </div>
       </div>
     </div>
