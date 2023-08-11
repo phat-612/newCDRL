@@ -21,6 +21,8 @@
 
 const express = require("express");
 const fs = require('fs');
+const nodemailer = require('nodemailer');
+const ejs = require('ejs');
 const https = require('https');
 const session = require('express-session');
 const cookie = require('cookie');
@@ -86,38 +88,38 @@ client.connect().then(() => {
   // mongodb database name
   const name_databases = 'database';
   // ------------------------------------------------------------------------------------------------
-  function sendEmail(password, email) {
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: 'nguytuan04@gmail.com',
-        pass: 'unjwfrdskgezbmym'
-      },
-    });
-    const emailTXT = fs.readFileSync(path.join('src', 'emailTemplate', 'email.txt'), 'utf8');
-    const emailHTML = fs.readFileSync(path.join('src', 'emailTemplate', 'email.ejs'), 'utf8');
+  async function sendEmail(password, email) {
+    try {
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'nguytuan04@gmail.com',
+          pass: 'unjwfrdskgezbmym'
+        },
+      });
 
-    const mailOptions = {
-      from: '"Quản lý điểm rèn luyện" <nguytuan04@gmail.com>',
-      to: `${email}`,
-      subject: 'Yêu cầu đặt lại mật khẩu',
-      text: emailTXT.replace('${password}', password),
-      html: ejs.render(emailHTML, { password: password }),
-      attachments: [{
-        filename: 'image.png',
-        path: './src/img/sv_logo_dashboard.png',
-        cid: 'fs1120020a17090af28b00b00263fc1ef1aasm843048pjb10' //same cid value as in the html img src
-      }]
-    };
+      const emailTXT = fs.readFileSync(path.join('src', 'emailTemplate', 'email.txt'), 'utf8');
+      const emailHTML = fs.readFileSync(path.join('src', 'emailTemplate', 'email.ejs'), 'utf8');
 
-    transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-        console.log('SYSTEM | SEND_EMAIL | ', error);
-      } else {
-        console.log(`SYSTEM | SEND_EMAIL | ${info.response}`);
-        // do something useful
-      }
-    });
+      const mailOptions = {
+        from: '"Quản lý điểm rèn luyện" <nguytuan04@gmail.com>',
+        to: email,
+        subject: 'Yêu cầu đặt lại mật khẩu',
+        text: emailTXT.replace('${password}', password),
+        html: ejs.render(emailHTML, { password: password }),
+        attachments: [{
+          filename: 'image.png',
+          path: './src/img/sv_logo_dashboard.png',
+          cid: 'fs1120020a17090af28b00b00263fc1ef1aasm843048pjb10' //same cid value as in the html img src
+        }]
+      };
+
+      const info = await transporter.sendMail(mailOptions);
+      // console.log(`SYSTEM | SEND_EMAIL | ${info.response}`);
+      // Thực hiện các hoạt động hữu ích khác sau khi gửi email thành công.
+    } catch (error) {
+      console.log('SYSTEM | SEND_EMAIL | ', error);
+    }
   }
 
   async function checkIfUserLoginAPI(req, res, next) {
@@ -141,7 +143,6 @@ client.connect().then(() => {
         return res.redirect('/login/updateyourpasswords');
       } else {
         const user_info = await client.db(name_databases).collection('user_info').findOne({ _id: user._id });
-        console.log(user);
         res.locals.avt = user_info.avt;
         res.locals.displayName = user_info.displayName;
       }
@@ -272,18 +273,25 @@ client.connect().then(() => {
   function randomPassword() {
     const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const number = "0123456789";
-    const allChars = upperCase + number
+    const allChars = upperCase + number;
 
-    let password = "";
-    password += upperCase[Math.floor(Math.random() * upperCase.length)];
-    password += number[Math.floor(Math.random() * number.length)];
+    return new Promise((resolve, reject) => {
+      try {
+        let password = "";
+        password += upperCase[Math.floor(Math.random() * upperCase.length)];
+        password += number[Math.floor(Math.random() * number.length)];
 
-    while (password.length < 6) {
-      password += allChars[Math.floor(Math.random() * allChars.length)];
-    }
-    console.log('SYSTEM | GEN_PASSWORD | OK')
-    return password;
-  };
+        while (password.length < 6) {
+          password += allChars[Math.floor(Math.random() * allChars.length)];
+        }
+        // console.log('SYSTEM | GEN_PASSWORD | OK')
+        resolve(password);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
 
   // Function to delete the file
   function deleteFile(filePath) {
@@ -429,11 +437,18 @@ client.connect().then(() => {
     const mssv = req.query.mssv;
     const dataUser = await client.db('database').collection('user_info').findOne({ _id: mssv });
     let emailToShow = '';
+    // Thêm tài liệu mới có thời gian hết hạn sau 1 phút
+    const OTPscode = await randomPassword();
+    await client.db('database').collection('OTP').insertOne({
+      _id: mssv,
+      otpcode: OTPscode,
+      expireAt: new Date(Date.now() + (60*5) * 1000) // Hết hạn sau 5 phút
+    });
     if (dataUser) {
       const email = dataUser.email;
       emailToShow = email.substring(0, 3) + '*'.repeat(email.indexOf('@') - 3) + email.substring(email.indexOf('@'));
+      await sendEmail(OTPscode, email);
     }
-
     res.render("xacthucOTP", {
       header: "header",
       footer: "footer",
@@ -458,6 +473,7 @@ client.connect().then(() => {
       footer: "footer",
     });
   });
+
   // Quen mat khau
   app.get("/quenmatkhau", async (req, res) => {
     res.render("quenmatkhau", {
@@ -467,6 +483,7 @@ client.connect().then(() => {
       avt: null,
     });
   });
+
   // thong tin ca nhan route
   app.get("/profile", checkIfUserLoginRoute, async (req, res) => {
     const user_info = await client.db(name_databases).collection('user_info').findOne({ _id: req.session.user._id });
@@ -705,7 +722,6 @@ client.connect().then(() => {
         {
           $set: {
             displayName: data.displayName,
-            email: data.email,
             avt: data.avt
           }
         }
@@ -725,7 +741,7 @@ client.connect().then(() => {
       const OTP = await client.db(name_databases).collection("OTP").findOne({ _id: data.mssv });
       if (OTP && (OTP.otpcode === data.otp)) {
         await client.db(name_databases).collection("OTP").deleteOne({ _id: data.mssv });
-        const user = await client.db(name_databases).collection('login_info').findOneAndUpdate({ _id: data.mssv }, { $set: { first: "true" } }, { returnDocument: "after"});
+        const user = await client.db(name_databases).collection('login_info').findOneAndUpdate({ _id: data.mssv }, { $set: { first: "true" } }, { returnDocument: "after" });
         // Đăng nhập thành công, lưu thông tin người dùng vào phiên
         req.session.user = user.value;
         req.session.cookie.maxAge = 3600000; // 1 hour
@@ -781,7 +797,7 @@ client.connect().then(() => {
   app.post("/api/first_login", checkIfUserLoginAPI, async (req, res) => {
     try {
       const data = req.body;
-      console.log(`SYSTEM | CHANGE_PASSWORD | Dữ liệu nhận được`, data);
+      // console.log(`SYSTEM | CHANGE_PASSWORD | Dữ liệu nhận được`, data);
       const old_pass = await client.db(name_databases).collection('login_info').findOne({ _id: req.session.user._id });
 
       if (old_pass.password == data.new_password) {
@@ -834,7 +850,7 @@ client.connect().then(() => {
     }
 
     // Xử lý các tệp đã tải lên ở đây
-    console.log('SYSTEM | UPLOAD_FILE | Files uploaded:', req.files);
+    // console.log('SYSTEM | UPLOAD_FILE | Files uploaded:', req.files);
     res.writeHead(200, { 'Content-Type': 'applicaiton/json' });
     res.end(JSON.stringify(await get_full_id(uploadDirectory, list_name)));
   });
@@ -860,8 +876,10 @@ client.connect().then(() => {
       //data = {year: "HK1_2022-2023", cls: "KTPM0121"}
       const school_year = data.year;
       let std_cls = data.cls;
+      
       // create uuid for download file
       const uuid = uuidv4();
+
       // get staff member info :
       const marker = await client.db(name_databases).collection('user_info').findOne(
         { _id: user._id },
@@ -1142,7 +1160,7 @@ client.connect().then(() => {
           );
 
         } else { // entertainment area: https://youtu.be/CufIAJDVZvo
-          // copy from stdent table and add marker name
+          // copy from student table and add marker name
           std_table.marker = marker.last_name + " " + marker.first_name
           // create new table
           await client.db(name_databases).collection(std_cls + '_stf_table').insertOne(std_table);
@@ -1158,7 +1176,20 @@ client.connect().then(() => {
 
   // api danh sach sinh vien // có j sữa tên tiêng anh lại cho nó dồng bộ code nha Phát
   app.post("/api/danhsachsinhvien_cv", checkIfUserLoginAPI, async (req, res) => {
+    const user = req.session.user;
     const data = req.body;
+    const marker = await client.db(name_databases).collection('user_info').findOne(
+      { _id: user._id },
+      {
+        power: 1,
+        class: 1,
+      }
+    );
+    let reqClass = data.class
+    if (!reqClass) {
+      reqClass = marker.class;
+    }
+
     const student_list = await client.db(name_databases).collection('user_info').find(
       { class: data.class },
       { 'projection': { first_name: 1, last_name: 1 } })

@@ -128,7 +128,7 @@ exports.uploadFileToDrive = async (filePath, id_folder = '1CyiiQwVN1_99jYcbQvy4M
         });
 
 
-        console.log('SYSTEM | DRIVE | File uploaded successfully! File ID:', res.data.id);
+        // console.log('SYSTEM | DRIVE | File uploaded successfully! File ID:', res.data.id);
         fs.unlink(filePath, (err) => {
             if (err) {
                 console.error('SYSTEM | DRIVE | ERR |', err);

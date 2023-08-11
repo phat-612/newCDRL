@@ -1,5 +1,4 @@
 // gia tri mac dinh
-const email_d = $('.email').val();
 const displayName_d = $('.display_name').val();
 const avt_d = $('.up-img').attr('src');
 if (!(avt_d == "")) {
@@ -76,10 +75,9 @@ function displayImage(file) {
 }
 
 function handleCancelButtonClick(event) {
-  const email = $('.email').val();
   const displayName = $('.display_name').val();
   const avt = $('.up-img').attr('src');
-  if (email != email_d || displayName != displayName_d || avt != avt_d) {
+  if (displayName != displayName_d || avt != avt_d) {
     if (confirm('Thay đổi của bạn sẽ không được lưu, tiếp tục?')) {
       window.location.href = "/";
     }
@@ -111,35 +109,30 @@ async function handleLogOutAllButtonClick(event) {
 
 async function handleSaveButtonClick(event) {
   try {
-    const email = $('.email').val();
     const displayName = $('.display_name').val();
     const avt = $('.up-img').attr('src');
-    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
-      notify('x', 'Email không đúng định dạng!');
+
+    let postData = JSON.stringify({
+      displayName: displayName,
+      avt: avt
+    });
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: postData
+    };
+    const response = await fetch('/api/updateInfo', requestOptions);
+    if (response.ok) {
+      notify('n', 'Đổi thông tin thành công!');
+      setTimeout(() => { window.location.reload(); },
+        2000)
+    } else if (response.status == 500) {
+      // Error occurred during upload
+      notify('x', 'Có lỗi xảy ra!');
     }
-    else {
-      let postData = JSON.stringify({
-        email: email,
-        displayName: displayName,
-        avt: avt
-      });
-      const requestOptions = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: postData
-      };
-      const response = await fetch('/api/updateInfo', requestOptions);
-      if (response.ok) {
-        notify('n', 'Đổi thông tin thành công!');
-        setTimeout(() => { window.location.reload(); },
-          2000)
-      } else if (response.status == 500) {
-        // Error occurred during upload
-        notify('x', 'Có lỗi xảy ra!');
-      }
-    }
+
   } catch (error) {
     console.log(error);
     notify('x', 'Có lỗi xảy ra!');

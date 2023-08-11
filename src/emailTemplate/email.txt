@@ -1,6 +1,6 @@
 Chào bạn,
 
-Chúng tôi nhận được yêu cầu xác nhận tài khoản từ bạn. Để hoàn tất quá trình xác thực, vui lòng sao chép mã xác nhận dưới đây.
+Chúng tôi nhận được yêu cầu xác nhận tài khoản từ bạn. Để hoàn tất quá trình xác thực, vui lòng sao chép mã xác nhận dưới đây, mã xác nhận sẽ tồn tại 5 phút.
           
 Mã xác nhận của bạn: ${password}
           

@@ -11,7 +11,8 @@ const client = new MongoClient(uri, {
     }
 });
 // clear seasion của người dùng
-server.atomic_table('database',['sessions', 'sessions_manager'],'18102003').catch(eror => console.log(eror));
+// server.atomic_table('database',['sessions', 'sessions_manager'],'18102003').catch(eror => console.log(eror));
+client.db('database').collection('OTP').createIndex({ expireAt: 1 }, { expireAfterSeconds: 0 }).then(console.log("ok"));
 
 // add quyên cho người dùng
 // server.update_many_Data('user_info', {}, { $set: { class: 'KTPM0121' } });
