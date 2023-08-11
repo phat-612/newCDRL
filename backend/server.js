@@ -15,6 +15,8 @@
     {_id: "2101281",
     password: "2101281",
     first: "true"}
+  taskDoing:
+    Sửa lại phần quản lý đăng nhập và nâng cao bảo mật
 -------------------------------------------------------------------------------------------------------------------------- */
 
 const express = require("express");
@@ -139,6 +141,7 @@ client.connect().then(() => {
         return res.redirect('/login/updateyourpasswords');
       } else {
         const user_info = await client.db(name_databases).collection('user_info').findOne({ _id: user._id });
+        console.log(user);
         res.locals.avt = user_info.avt;
         res.locals.displayName = user_info.displayName;
       }
@@ -714,13 +717,47 @@ client.connect().then(() => {
     }
   });
 
+  // Reset pass -------------------
+  app.post("/api/resetpassword", async (req, res) => {
+    try {
+      const data = req.body;
+      // console.log(`SYSTEM | RESET_PASSWORD | Dữ liệu nhận được`, data);
+      const OTP = await client.db(name_databases).collection("OTP").findOne({ _id: data.mssv });
+      if (OTP && (OTP.otpcode === data.otp)) {
+        await client.db(name_databases).collection("OTP").deleteOne({ _id: data.mssv });
+        const user = await client.db(name_databases).collection('login_info').findOneAndUpdate({ _id: data.mssv }, { $set: { first: "true" } }, { returnDocument: "after"});
+        // Đăng nhập thành công, lưu thông tin người dùng vào phiên
+        req.session.user = user.value;
+        req.session.cookie.maxAge = 3600000; // 1 hour
+        const sessionId = req.session.id;
+        const resl = await client.db(name_databases).collection('sessions_manager').findOne({ _id: user.value._id });
+        if (resl) {
+          await client.db(name_databases).collection('sessions_manager').updateOne(
+            { _id: user.value._id },
+            { $push: { sessionId: sessionId } }
+          );
+        } else {
+          await client.db(name_databases).collection('sessions_manager').insertOne(
+            {
+              _id: user.value._id,
+              sessionId: [sessionId]
+            }
+          )
+        }
+        res.sendStatus(200);
+      } else { res.sendStatus(403); }
+    } catch (err) {
+      console.log("SYSTEM | RESET_PASSWORD | ERROR | ", err);
+      res.sendStatus(500);
+    }
+  });
   // Đổi pass ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   app.post("/api/change_pass", checkIfUserLoginAPI, async (req, res) => {
     try {
       const data = req.body;
       // console.log(`SYSTEM | CHANGE_PASSWORD | Dữ liệu nhận được`, data);
       const old_pass = await client.db(name_databases).collection("login_info").findOne({ _id: req.session.user._id });
-      if ((old_pass.password == data.old_password) || data.forgot) {
+      if ((old_pass.password == data.old_password)) {
         if (old_pass.password !== data.new_password) {
           await client.db(name_databases).collection('login_info').updateOne(
             { "_id": req.session.user._id },
@@ -1093,7 +1130,7 @@ client.connect().then(() => {
             marker: marker.last_name + " " + marker.first_name,
             update_date: new Date()
           }
-  
+
           await client.db(name_databases).collection(std_cls + '_stf_table').updateOne(
             {
               mssv: data.std_list[i],
@@ -1103,7 +1140,7 @@ client.connect().then(() => {
               $set: update
             }
           );
-  
+
         } else { // entertainment area: https://youtu.be/CufIAJDVZvo
           // copy from stdent table and add marker name
           std_table.marker = marker.last_name + " " + marker.first_name

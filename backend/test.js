@@ -1,4 +1,4 @@
-const server = require('D:\\github\\newCDRL\\read_only\\mongodb.js');
+const server = require('../read_only/mongodb.js');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = "mongodb+srv://binhminh19112003:Zr3uGIK4dCymOXON@database.sefjqcb.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(uri, {

@@ -77,8 +77,14 @@ async function handle_otp() {
       },
       body: postData
     };
-    const response = await fetch('/api/danhsachsinhvien', requestOptions);
-    if (response.ok) { }
+    const response = await fetch('/api/resetpassword', requestOptions);
+    if (response.ok) {
+      window.location.href = "/login/updateyourpasswords";
+    } else if (response.status == 403) {
+      notify('x', 'Sai OTP hoặc OTP đã hết hạn!');
+      button_next.innerHTML = "Xác nhận";
+      button_next.disabled = false;
+    }
   } catch (error) {
     console.log(error);
     notify('x', 'Có lỗi xảy ra!');
