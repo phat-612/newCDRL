@@ -631,6 +631,17 @@ client.connect().then(() => {
           // Đăng nhập không thành công
           res.sendStatus(403);
         } else if (user._id === data.mssv && user.password === data.password) {
+          let seasionIDs = await client.db(name_databases).collection('sessions_manager').findOne({ _id: data.mssv });
+          seasionIDs = seasionIDs.sessionId;
+          const existingDocs = await client.db(name_databases).collection('sessions').find({ _id: { $in: seasionIDs } }).toArray();
+          const existingIDs = existingDocs.map(doc => doc._id);
+          const idsToDelete = seasionIDs.filter(id => !existingIDs.includes(id));
+          if (idsToDelete.length > 0) {
+            await client.db(name_databases).collection('sessions_manager').updateOne(
+              { _id: data.mssv },
+              { $pull: { sessionId: { $in: idsToDelete } } }
+            );
+          }
           // Đăng nhập thành công, lưu thông tin người dùng vào phiên
           req.session.user = user;
           // Kiểm tra xem người dùng có chọn "Remember me" không
@@ -654,17 +665,7 @@ client.connect().then(() => {
             res.status(200).json({ check: false });
           }
 
-          let seasionIDs = await client.db(name_databases).collection('sessions_manager').findOne({ _id: data.mssv });
-          seasionIDs = seasionIDs.sessionId
-          const existingDocs = await client.db(name_databases).collection('sessions').find({ _id: { $in: seasionIDs } }).toArray();
-          const existingIDs = existingDocs.map(doc => doc._id);
-          const idsToDelete = seasionIDs.filter(id => !existingIDs.includes(id));
-          if (idsToDelete.length > 0) {
-            await client.db(name_databases).collection('sessions_manager').updateOne(
-              { _id: data.mssv },
-              { $pull: { sessionId: { $in: idsToDelete } } }
-            );
-          }
+
         } else {
           // Đăng nhập không thành công
           res.sendStatus(403);
@@ -679,18 +680,39 @@ client.connect().then(() => {
   // Logout ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   app.get("/api/logout", checkIfUserLoginAPI, async (req, res) => {
     // Xóa thông tin phiên (session) của người dùng
-    await client.db(name_databases).collection('sessions_manager').updateOne(
-      { _id: req.session.user._id },
-      { $pull: { sessionId: req.session.id } }
-    );
+    const mssv = req.session.user._id;
     req.session.destroy((err) => {
       if (err) {
         console.error('SYSTEM | LOG_OUT | Failed to logout:', err);
         res.sendStatus(500);
       } else {
-        res.redirect('/login');
+        let seasionIDs;
+        async function processSessionIDs() {
+          try {
+            seasionIDs = await client.db(name_databases).collection('sessions_manager').findOne({ _id: mssv });
+            seasionIDs = seasionIDs.sessionId;
+            const existingDocs = await client.db(name_databases).collection('sessions').find({ _id: { $in: seasionIDs } }).toArray();
+            const existingIDs = existingDocs.map(doc => doc._id);
+            const idsToDelete = seasionIDs.filter(id => !existingIDs.includes(id));
+
+            if (idsToDelete.length > 0) {
+              await client.db(name_databases).collection('sessions_manager').updateOne(
+                { _id: mssv },
+                { $pull: { sessionId: { $in: idsToDelete } } }
+              );
+            }
+
+            res.redirect('/login'); // Chạy hàm dưới sau khi đã xử lý xong
+          } catch (error) {
+            console.error('SYSTEM | LOG_OUT | Failed to clean up sessions:', error);
+            res.sendStatus(500);
+          }
+        }
+
+        processSessionIDs();
       }
     });
+
   });
 
   // Đăng xuất tất cả thiết bị
