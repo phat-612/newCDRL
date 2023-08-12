@@ -1,0 +1,22 @@
+@media screen and (max-width:820px) and (min-width:601px) {}
+
+@media screen and (max-width:600px) {
+    .container {
+        padding-bottom: 8rem;
+    }
+
+    .column1 {
+        width: 11% !important;
+    }
+
+    .column2 {
+        width: 26% !important;
+    }
+
+    .a_nhapdiemdanhgia{
+        visibility: hidden;
+        width: 0 !important;
+        height: 0;
+        padding: 0 !important;
+    }
+}

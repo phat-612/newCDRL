@@ -11,8 +11,18 @@ const client = new MongoClient(uri, {
     }
 });
 // clear seasion của người dùng
-// server.atomic_table('database',['sessions', 'sessions_manager'],'18102003').catch(eror => console.log(eror));
-client.db('database').collection('OTP').createIndex({ expireAt: 1 }, { expireAfterSeconds: 0 }).then(console.log("ok"));
+// server.atomic_table('global',['sessions', 'sessions_manager'],'18102003').catch(eror => console.log(eror));
+// client.db('global').collection('OTP').createIndex({ expireAt: 1 }, { expireAfterSeconds: 0 }).then(console.log("ok"));
+// server.copy('KTPM','CNTT');
+client.db('global').collection('classes').findOne(
+    { _id: "KTPM0121" },
+    { projection: { _id: 0, years: 1 } }
+).then(cls => { console.log(cls.years); })
+
+
+
+
+
 
 // add quyên cho người dùng
 // server.update_many_Data('user_info', {}, { $set: { class: 'KTPM0121' } });

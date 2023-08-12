@@ -11,6 +11,20 @@
     0: true,
   }
 @RuriMeiko
+  classes (in global database)
+  0: {
+    "_id": "KTPM0121",
+    "dep": "CNTT",
+    "years": {
+      "2021-2022": [1, 2, 3],
+      "2022-2023": [1, 2, 3]
+    }
+  }
+  khoa -> nganh -> lop -> sinh vien + giao vien
+  sinh vien -> lop -> nganh -> khoa
+
+
+
   tài khoản mặt định:
     {_id: "2101281",
     password: "2101281",
@@ -86,7 +100,9 @@ client.connect().then(() => {
   const upload = multer({ storage: storage_file });
 
   // mongodb database name
-  const name_databases = 'database';
+  const name_databases = 'KTPM';
+  const name_global_databases = 'global';
+
   // ------------------------------------------------------------------------------------------------
   async function sendEmail(password, email) {
     try {
@@ -145,7 +161,7 @@ client.connect().then(() => {
         return res.redirect('/login/updateyourpasswords?tile=ok');
       }
       else {
-        const user_info = await client.db(name_databases).collection('user_info').findOne({ _id: user._id });
+        const user_info = await client.db(name_global_databases).collection('user_info').findOne({ _id: user._id }, { projection: { _id: 0, avt: 1, displayName: 1 } });
         res.locals.avt = user_info.avt;
         res.locals.displayName = user_info.displayName;
       }
@@ -161,10 +177,10 @@ client.connect().then(() => {
       for (const name of listName) {
         txtFilePaths.push(path.join(directoryPath, name))
       }
-      console.log(txtFilePaths)
+      // console.log(txtFilePaths)
       const processFiles = async () => {
         for (const filePath of txtFilePaths) {
-          console.log(filePath);
+          // console.log(filePath);
           list_id.push(await server.uploadFileToDrive(filePath));
         }
       };
@@ -191,7 +207,7 @@ client.connect().then(() => {
     next();
   };
 
-  async function mark(table, user, data, cls = undefined) {
+  async function mark(table, user, data, marker, cls) {
     // data = {
     //   first: [],
     //   second: [],
@@ -201,20 +217,8 @@ client.connect().then(() => {
     //   img_ids: [],
     //   total: 100,
     // }
-    const marker = await client.db(name_databases).collection('user_info').findOne(
-      { _id: user._id },
-      {
-        power: 1,
-        class: 1,
-        last_name: 1,
-        first_name: 1
-      }
-    );
-    const school_year = await client.db(name_databases).collection('school_year').findOne({});
-    // teacher could choose class to mark so if class have input use cls else use marker.class
-    if (!cls) {
-      cls = marker.class;
-    }
+
+    const school_year = await client.db(name_global_databases).collection('school_year').findOne({}, { projection: { _id: 0, year: 1 } });
 
     // update old table if exist or insert new tabl;e
     let update = {
@@ -235,7 +239,7 @@ client.connect().then(() => {
       update.marker = marker.last_name + " " + marker.first_name;
     }
 
-    await client.db(name_databases).collection(cls + table).updateOne(
+    await client.db(user.dep).collection(cls + table).updateOne(
       {
         mssv: user._id,
         school_year: school_year.year
@@ -269,14 +273,13 @@ client.connect().then(() => {
     });
   }
 
-
   // Function to delete the file
   function deleteFile(filePath) {
     fs.unlink(filePath, (err) => {
       if (err) {
         console.error('Error deleting file:', err);
       } else {
-        console.log('File deleted successfully.');
+        // console.log('File deleted successfully.');
       }
     });
   };
@@ -305,7 +308,7 @@ client.connect().then(() => {
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
-      client, dbName: 'database', crypto: {
+      client, dbName: 'global', crypto: {
         secret: authenticationKey
       }
     }),
@@ -433,7 +436,7 @@ client.connect().then(() => {
       return res.redirect('/');
     }
     const mssv = req.query.mssv;
-    const dataUser = await client.db('database').collection('user_info').findOne({ _id: mssv });
+    const dataUser = await client.db(name_global_databases).collection('user_info').findOne({ _id: mssv }, { projection: { _id: 0, email: 1 } });
     let emailToShow = '';
     if (dataUser) {
       const email = dataUser.email;
@@ -480,7 +483,7 @@ client.connect().then(() => {
 
   // thong tin ca nhan route
   app.get("/profile", checkIfUserLoginRoute, async (req, res) => {
-    const user_info = await client.db(name_databases).collection('user_info').findOne({ _id: req.session.user._id });
+    const user_info = await client.db(name_global_databases).collection('user_info').findOne({ _id: req.session.user._id }, { projection: { last_name: 1, first_name: 1, email: 1 } });
     res.render("edit-profile", {
       header: "header",
       footer: "footer",
@@ -491,17 +494,19 @@ client.connect().then(() => {
     });
   });
 
-  // danh sach sinh vien
+  // danh sach sinh vien // ông đổi lại vụ class nha liên hệ NBM để biết thêm chi tiết
   app.get("/danhsachsinhvien_cv", checkIfUserLoginRoute, async (req, res) => {
     const user = req.session.user;
-    const marker = await client.db(name_databases).collection('user_info').findOne(
+    const marker = await client.db(name_global_databases).collection('user_info').findOne(
       { _id: user._id },
       {
-        power: 1,
-        class: 1
+        projection: {
+          _id: 0,
+          class: 1
+        }
       }
     );
-    const student_list = await client.db(name_databases).collection('user_info').find(
+    const student_list = await client.db(name_global_databases).collection('user_info').find(
       { class: marker.class },
       { 'projection': { first_name: 1, last_name: 1 } })
       .sort({ first_name: 1, last_name: 1 })
@@ -518,22 +523,30 @@ client.connect().then(() => {
   // danh sach bang diem
   app.get("/danhsachbangdiem", checkIfUserLoginRoute, async (req, res) => {
     const user = req.session.user;
-    const school_year = await client.db(name_databases).collection('school_year').findOne({}, { year: 1 });
+    const school_year = await client.db(name_global_databases).collection('school_year').findOne(
+      {},
+      { projection: { _id: 0, year: 1 } });
     // get staff member info :
-    const marker = await client.db(name_databases).collection('user_info').findOne(
+    const marker = await client.db(name_global_databases).collection('user_info').findOne(
       { _id: user._id },
       {
-        power: 1,
-        class: 1
+        projection: {
+          _id: 0,
+          power: 1
+        }
       }
     );
     // check user login:
     if (marker.power[1]) {
+      const years = await client.db(name_global_databases).collection('classes').findOne(
+        { _id: user.cls[0] },
+        { projection: { _id: 0, years: 1 } }
+      );
+
       // get all student in staff member class:
-      const student_list = await client.db(name_databases).collection('user_info').find(
-        { class: marker.class },
-        { 'projection': { first_name: 1, last_name: 1 } })
-        .sort({ first_name: 1, last_name: 1 })
+      const student_list = await client.db(name_global_databases).collection('user_info').find(
+        { class: user.cls[0] },
+        { projection: { first_name: 1, last_name: 1 } })
         .toArray();
 
       // get all student total score from themself:
@@ -545,42 +558,46 @@ client.connect().then(() => {
         student_list: student_list,
         student_scores: [],
         staff_scores: [],
-        department_scores: []
+        department_scores: [],
+        cls: user.cls,
+        years: years.years
       }
 
       for (student of student_list) {
-        const curr_student_score = await client.db(name_databases)
-          .collection(marker.class + '_std_table')
+        const curr_student_score = await client.db(user.dep)
+          .collection(user.cls[0] + '_std_table')
           .findOne(
             {
               mssv: student._id,
               school_year: school_year.year
             },
             {
-              total: 1
+              projection: { total: 1 }
             }
           );
-        const curr_staff_score = await client.db(name_databases)
-          .collection(marker.class + '_stf_table')
+        const curr_staff_score = await client.db(user.dep)
+          .collection(user.cls[0] + '_stf_table')
           .findOne(
             {
               mssv: student._id,
               school_year: school_year.year
             },
             {
-              total: 1,
-              marker: 1
+              projection: {
+                total: 1,
+                marker: 1
+              }
             }
           );
-        const curr_departmentt_score = await client.db(name_databases)
-          .collection(marker.class + '_dep_table')
+        const curr_department_score = await client.db(user.dep)
+          .collection(user.cls[0] + '_dep_table')
           .findOne(
             {
               mssv: student._id,
               school_year: school_year.year
             },
             {
-              total: 1
+              projection: { total: 1 }
             }
           );
         // student
@@ -598,8 +615,8 @@ client.connect().then(() => {
           render.staff_name.push('-');
         }
         // department
-        if (curr_departmentt_score) {
-          render.department_scores.push(curr_departmentt_score.total);
+        if (curr_department_score) {
+          render.department_scores.push(curr_department_score.total);
         } else {
           render.department_scores.push('-');
         }
@@ -626,22 +643,37 @@ client.connect().then(() => {
       const user = req.session.user;
       if (!user) {
         //(log in database)
-        const user = await client.db(name_databases).collection('login_info').findOne({ _id: data.mssv });
+        let user = await client.db(name_global_databases).collection('login_info').findOne({ _id: data.mssv });
         if (user === null) {
           // Đăng nhập không thành công
           res.sendStatus(403);
         } else if (user._id === data.mssv && user.password === data.password) {
-          let seasionIDs = await client.db(name_databases).collection('sessions_manager').findOne({ _id: data.mssv });
-          seasionIDs = seasionIDs.sessionId;
-          const existingDocs = await client.db(name_databases).collection('sessions').find({ _id: { $in: seasionIDs } }).toArray();
-          const existingIDs = existingDocs.map(doc => doc._id);
-          const idsToDelete = seasionIDs.filter(id => !existingIDs.includes(id));
-          if (idsToDelete.length > 0) {
-            await client.db(name_databases).collection('sessions_manager').updateOne(
-              { _id: data.mssv },
-              { $pull: { sessionId: { $in: idsToDelete } } }
-            );
+          let seasionIDs = await client.db(name_global_databases).collection('sessions_manager').findOne({ _id: data.mssv });
+          if (seasionIDs) {
+            seasionIDs = seasionIDs.sessionId;
+            const existingDocs = await client.db(name_global_databases).collection('sessions').find({ _id: { $in: seasionIDs } }).toArray();
+            const existingIDs = existingDocs.map(doc => doc._id);
+            const idsToDelete = seasionIDs.filter(id => !existingIDs.includes(id));
+            if (idsToDelete.length > 0) {
+              await client.db(name_global_databases).collection('sessions_manager').updateOne(
+                { _id: data.mssv },
+                { $pull: { sessionId: { $in: idsToDelete } } }
+              );
+            }
           }
+
+          // get user class(cls) and department(dep)
+          const cls = await client.db(name_global_databases).collection('user_info').findOne(
+            { _id: data.mssv },
+            { projection: { _id: 0, class: 1 } }
+          );
+          const dep = await client.db(name_global_databases).collection('classes').findOne(
+            { _id: cls.class[0] },
+            { projection: { _id: 0, dep: 1 } }
+          );
+
+          user.cls = cls.class;
+          user.dep = dep.dep;
           // Đăng nhập thành công, lưu thông tin người dùng vào phiên
           req.session.user = user;
           // Kiểm tra xem người dùng có chọn "Remember me" không
@@ -653,7 +685,7 @@ client.connect().then(() => {
             req.session.cookie.maxAge = 3600000; // 1 hour
           }
           const sessionId = req.session.id;
-          await client.db(name_databases).collection('sessions_manager').updateOne(
+          await client.db(name_global_databases).collection('sessions_manager').updateOne(
             { _id: user._id },
             { $push: { sessionId: sessionId } },
             { upsert: true }
@@ -689,17 +721,19 @@ client.connect().then(() => {
         let seasionIDs;
         async function processSessionIDs() {
           try {
-            seasionIDs = await client.db(name_databases).collection('sessions_manager').findOne({ _id: mssv });
-            seasionIDs = seasionIDs.sessionId;
-            const existingDocs = await client.db(name_databases).collection('sessions').find({ _id: { $in: seasionIDs } }).toArray();
-            const existingIDs = existingDocs.map(doc => doc._id);
-            const idsToDelete = seasionIDs.filter(id => !existingIDs.includes(id));
+            seasionIDs = await client.db(name_global_databases).collection('sessions_manager').findOne({ _id: mssv });
+            if (seasionIDs) {
+              seasionIDs = seasionIDs.sessionId;
+              const existingDocs = await client.db(name_global_databases).collection('sessions').find({ _id: { $in: seasionIDs } }).toArray();
+              const existingIDs = existingDocs.map(doc => doc._id);
+              const idsToDelete = seasionIDs.filter(id => !existingIDs.includes(id));
 
-            if (idsToDelete.length > 0) {
-              await client.db(name_databases).collection('sessions_manager').updateOne(
-                { _id: mssv },
-                { $pull: { sessionId: { $in: idsToDelete } } }
-              );
+              if (idsToDelete.length > 0) {
+                await client.db(name_global_databases).collection('sessions_manager').updateOne(
+                  { _id: mssv },
+                  { $pull: { sessionId: { $in: idsToDelete } } }
+                );
+              }
             }
 
             res.redirect('/login'); // Chạy hàm dưới sau khi đã xử lý xong
@@ -719,15 +753,15 @@ client.connect().then(() => {
   app.get("/api/logoutAlldevice", checkIfUserLoginAPI, async (req, res) => {
     // Xóa thông tin phiên (session) của người dùng
     const _id = req.session.user._id;
-    const result = await client.db(name_databases).collection('sessions_manager').findOne({ _id: _id });
+    const result = await client.db(name_global_databases).collection('sessions_manager').findOne({ _id: _id });
     const listSeasionId = result.sessionId;
     listSeasionId.splice(listSeasionId.indexOf(req.session.id), 1);
-    await client.db(name_databases).collection('sessions_manager').updateOne(
+    await client.db(name_global_databases).collection('sessions_manager').updateOne(
       { _id: _id },
 
       { $pull: { sessionId: { $ne: req.session.id } } }
     );
-    await client.db(name_databases).collection('sessions').deleteMany({ _id: { $in: listSeasionId } });
+    await client.db(name_global_databases).collection('sessions').deleteMany({ _id: { $in: listSeasionId } });
     wss.clients.forEach((ws) => {
       if (listSeasionId.includes(ws.id)) {
         ws.send('reload');
@@ -741,7 +775,7 @@ client.connect().then(() => {
     try {
       const data = req.body;
       // console.log(`SYSTEM | UPDATE_INFO | Dữ liệu nhận được`, data);
-      await client.db(name_databases).collection('user_info').updateOne(
+      await client.db(name_global_databases).collection('user_info').updateOne(
         { "_id": req.session.user._id },
         {
           $set: {
@@ -762,15 +796,15 @@ client.connect().then(() => {
     try {
       const data = req.body;
       // console.log(`SYSTEM | RESET_PASSWORD | Dữ liệu nhận được`, data);
-      const OTP = await client.db(name_databases).collection("OTP").findOne({ _id: data.mssv });
+      const OTP = await client.db(name_global_databases).collection("OTP").findOne({ _id: data.mssv }, { projection: { _id: 0 } });
       if (OTP && (OTP.otpcode === data.otp)) {
-        await client.db(name_databases).collection("OTP").deleteOne({ _id: data.mssv });
-        const user = await client.db(name_databases).collection('login_info').findOneAndUpdate({ _id: data.mssv }, { $set: { first: "false" } }, { returnDocument: "after" });
+        await client.db(name_global_databases).collection("OTP").deleteOne({ _id: data.mssv });
+        const user = await client.db(name_global_databases).collection('login_info').findOneAndUpdate({ _id: data.mssv }, { $set: { first: "false" } }, { returnDocument: "after" });
         // Đăng nhập thành công, lưu thông tin người dùng vào phiên
         req.session.user = user.value;
         req.session.cookie.maxAge = 3600000; // 1 hour
         const sessionId = req.session.id;
-        await client.db(name_databases).collection('sessions_manager').updateOne(
+        await client.db(name_global_databases).collection('sessions_manager').updateOne(
           { _id: user._id },
           { $push: { sessionId: sessionId } },
           { upsert: true }
@@ -787,10 +821,10 @@ client.connect().then(() => {
   app.post("/api/resendotp", async (req, res) => {
     try {
       const mssv = req.body.mssv;
-      const dataUser = await client.db('database').collection('user_info').findOne({ _id: mssv });
+      const dataUser = await client.db(name_global_databases).collection('user_info').findOne({ _id: mssv }, { projection: { _id: 0, email: 1 } });
       // Thêm tài liệu mới có thời gian hết hạn sau 1 phút
       const OTPscode = await randomPassword();
-      await client.db('database').collection('OTP').updateOne({ _id: mssv }, {
+      await client.db(name_global_databases).collection('OTP').updateOne({ _id: mssv }, {
         $set: {
           otpcode: OTPscode,
           expireAt: new Date(Date.now() + (60 * 5) * 1000) // Hết hạn sau 5 phút
@@ -815,10 +849,10 @@ client.connect().then(() => {
     try {
       const data = req.body;
       // console.log(`SYSTEM | CHANGE_PASSWORD | Dữ liệu nhận được`, data);
-      const old_pass = await client.db(name_databases).collection("login_info").findOne({ _id: req.session.user._id });
+      const old_pass = await client.db(name_global_databases).collection("login_info").findOne({ _id: req.session.user._id }, { projection: { _id: 0, password: 1 } });
       if ((old_pass.password == data.old_password)) {
         if (old_pass.password !== data.new_password) {
-          await client.db(name_databases).collection('login_info').updateOne(
+          await client.db(name_global_databases).collection('login_info').updateOne(
             { "_id": req.session.user._id },
             { $set: { password: data.new_password } }
           );
@@ -841,17 +875,17 @@ client.connect().then(() => {
     try {
       const data = req.body;
       // console.log(`SYSTEM | CHANGE_PASSWORD | Dữ liệu nhận được`, data);
-      const old_pass = await client.db(name_databases).collection('login_info').findOne({ _id: req.session.user._id });
+      const old_pass = await client.db(name_global_databases).collection('login_info').findOne({ _id: req.session.user._id }, { projection: { _id: 0, password: 1 } });
 
       if (old_pass.password == data.new_password) {
         res.sendStatus(403);
       } else {
         delete req.session.user.first;
-        await client.db(name_databases).collection('login_info').updateOne(
+        await client.db(name_global_databases).collection('login_info').updateOne(
           { "_id": req.session.user._id },
           { $unset: { first: "" } }
         );
-        await client.db(name_databases).collection('login_info').updateOne(
+        await client.db(name_global_databases).collection('login_info').updateOne(
           { "_id": req.session.user._id },
           { $set: { password: data.new_password } }
         );
@@ -869,7 +903,18 @@ client.connect().then(() => {
     try {
       const user = req.session.user;
       const data = req.body;
-      await mark("_std_table", user, data);
+      const marker = await client.db(name_global_databases).collection('user_info').findOne(
+        { _id: user._id },
+        {
+          projection: {
+            _id: 0,
+            last_name: 1,
+            first_name: 1
+          }
+        }
+      );
+
+      await mark("_std_table", user, data, marker, user.cls[0]);
 
       res.sendStatus(200);
     } catch (err) {
@@ -916,33 +961,35 @@ client.connect().then(() => {
     try {
       const user = req.session.user;
       const data = req.query;
-      //data = {year: "HK1_2022-2023", cls: "KTPM0121"}
+      //data = {year: "HK1_2022-2023", cls: '1'}
       const school_year = data.year;
-      let std_cls = data.cls;
+      let cls = data.cls;
 
       // create uuid for download file
       const uuid = uuidv4();
 
       // get staff member info :
-      const marker = await client.db(name_databases).collection('user_info').findOne(
+      const marker = await client.db(name_global_databases).collection('user_info').findOne(
         { _id: user._id },
         {
-          power: 1,
-          class: 1
+          projection: {
+            _id: 0,
+            power: 1
+          }
         }
       );
 
       // check for post data.cls if class define this mean they choose class so that must
-      if (!std_cls) {
-        std_cls = marker.class
-      }
+      if (!cls) {
+        cls = 0;
+      };
 
       // check user login:
       if (marker.power[1]) {
         // get all student in staff member class:
-        const student_list = await client.db(name_databases).collection('user_info').find(
-          { class: std_cls },
-          { 'projection': { first_name: 1, last_name: 1 } })
+        const student_list = await client.db(name_global_databases).collection('user_info').find(
+          { class: user.cls[parseInt(cls)] },
+          { projection: { first_name: 1, last_name: 1 } })
           .sort({ first_name: 1, last_name: 1 })
           .toArray();
 
@@ -962,23 +1009,25 @@ client.connect().then(() => {
             student_list[i]._id,
             student_list[i].last_name,
             student_list[i].first_name,
-            std_cls
+            user.cls[parseInt(cls)]
           ];
 
-          const curr_departmentt_score = await client.db(name_databases)
-            .collection(std_cls + '_dep_table')
+          const curr_departmentt_score = await client.db(user.dep)
+            .collection(user.cls[parseInt(cls)] + '_dep_table')
             .findOne(
               {
                 mssv: student_list[i]._id,
                 school_year: school_year
               },
               {
-                first: 1,
-                second: 1,
-                third: 1,
-                fourth: 1,
-                fifth: 1,
-                total: 1
+                projection: {
+                  first: 1,
+                  second: 1,
+                  third: 1,
+                  fourth: 1,
+                  fifth: 1,
+                  total: 1
+                }
               }
             );
 
@@ -1042,28 +1091,30 @@ client.connect().then(() => {
     try {
       const user = req.session.user;
       const data = req.query;
-      //data = {year: "HK1_2022-2023", cls: "KTPM0121"}
+      //data = {year: "HK1_2022-2023", cls: "1"}
       const school_year = data.year;
-      let std_cls = data.cls;
+      let cls = data.cls;
       // get staff member info :
-      const marker = await client.db(name_databases).collection('user_info').findOne(
+      const marker = await client.db(name_global_databases).collection('user_info').findOne(
         { _id: user._id },
         {
-          power: 1,
-          class: 1
+          projection: {
+            _id: 0,
+            power: 1,
+          }
         }
       );
 
       // check for post data.cls if class define this mean they choose class so that must
-      if (!std_cls) {
-        std_cls = marker.class;
+      if (!cls) {
+        cls = 0;
       }
 
       if (marker.power[1]) {
         // get all student in staff member class:
-        const student_list = await client.db(name_databases).collection('user_info').find(
-          { class: std_cls },
-          { 'projection': { first_name: 1, last_name: 1 } })
+        const student_list = await client.db(name_global_databases).collection('user_info').find(
+          { class: user.cls[parseInt(cls)] },
+          { projection: { first_name: 1, last_name: 1 } })
           .sort({ first_name: 1, last_name: 1 })
           .toArray();
 
@@ -1077,38 +1128,47 @@ client.connect().then(() => {
         }
 
         for (student of student_list) {
-          const curr_student_score = await client.db(name_databases)
-            .collection(std_cls + '_std_table')
+          const curr_student_score = await client.db(user.dep)
+            .collection(user.cls[parseInt(cls)] + '_std_table')
             .findOne(
               {
                 mssv: student._id,
                 school_year: school_year.year
               },
               {
-                total: 1
+                projection: {
+                  _id: 0,
+                  total: 1
+                }
               }
             );
-          const curr_staff_score = await client.db(name_databases)
-            .collection(std_cls + '_stf_table')
+          const curr_staff_score = await client.db(user.dep)
+            .collection(user.cls[parseInt(cls)] + '_stf_table')
             .findOne(
               {
                 mssv: student._id,
                 school_year: school_year.year
               },
               {
-                total: 1,
-                marker: 1
+                projection: {
+                  _id: 0,
+                  total: 1,
+                  marker: 1
+                }
               }
             );
-          const curr_departmentt_score = await client.db(name_databases)
-            .collection(std_cls + '_dep_table')
+          const curr_departmentt_score = await client.db(user.dep)
+            .collection(user.cls[parseInt(cls)] + '_dep_table')
             .findOne(
               {
                 mssv: student._id,
                 school_year: school_year.year
               },
               {
-                total: 1
+                projection: {
+                  _id: 0,
+                  total: 1
+                }
               }
             );
           // student
@@ -1150,28 +1210,30 @@ client.connect().then(() => {
     try {
       const user = req.session.user;
       const data = req.body;
-      //data = {year: "HK1_2022-2023", cls: "KTPM0121", std_list = []}
+      let cls = data.cls;
+      //data = {year: "HK1_2022-2023", cls: "1", std_list = []}
 
       // get staff member info :
-      const marker = await client.db(name_databases).collection('user_info').findOne(
+      const marker = await client.db(name_global_databases).collection('user_info').findOne(
         { _id: user._id },
         {
-          power: 1,
-          class: 1,
-          last_name: 1,
-          first_name: 1
+          projection: {
+            _id: 0,
+            last_name: 1,
+            first_name: 1
+          }
         }
       );
 
       // check for post data.cls if class define this mean they choose class so that must
-      if (!data.cls) {
-        data.cls = marker.class;
+      if (!cls) {
+        cls = 0;
       }
 
       // check if table is exist or not
       // update or add new table copy from std_table to staff_table
       for (let i = 0; i < data.std_list.length; i++) {
-        const std_table = await client.db(name_databases).collection(data.cls + '_std_table').findOne(
+        const std_table = await client.db(name_databases).collection(user.cls[parseInt(cls)] + '_std_table').findOne(
           {
             mssv: data.std_list[i],
             school_year: data.year
@@ -1183,7 +1245,7 @@ client.connect().then(() => {
         if (std_table) {
           std_table.marker = marker.last_name + " " + marker.first_name
 
-          await client.db(name_databases).collection(data.cls + '_stf_table').updateOne(
+          await client.db(name_databases).collection(user.cls[parseInt(cls)] + '_stf_table').updateOne(
             {
               mssv: data.std_list[i],
               school_year: data.year
@@ -1208,11 +1270,14 @@ client.connect().then(() => {
   app.post("/api/getStudentList", checkIfUserLoginAPI, async (req, res) => {
     const user = req.session.user;
     const data = req.body;
-    const marker = await client.db(name_databases).collection('user_info').findOne(
+    const marker = await client.db(name_global_databases).collection('user_info').findOne(
       { _id: user._id },
       {
-        power: 1,
-        class: 1,
+        projection: {
+          _id: 0,
+          power: 1,
+          class: 1,
+        }
       }
     );
     let reqClass = data.class
@@ -1220,9 +1285,9 @@ client.connect().then(() => {
       reqClass = marker.class;
     }
     if (marker.power[1]) {
-      const student_list = await client.db(name_databases).collection('user_info').find(
+      const student_list = await client.db(name_global_databases).collection('user_info').find(
         { class: reqClass },
-        { 'projection': { first_name: 1, last_name: 1 } })
+        { projection: { first_name: 1, last_name: 1 } })
         .sort({ first_name: 1, last_name: 1 })
         .toArray();
       res.status(200).json(student_list);

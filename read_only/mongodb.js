@@ -6,11 +6,11 @@ const client = new MongoClient(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     serverApi: {
-      version: ServerApiVersion.v1,
-      strict: true,
-      deprecationErrors: true,
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true,
     }
-  });
+});
 exports.add_one_Data = async function (table, myobj) {
     try {
         // await client.connect();
@@ -160,6 +160,43 @@ exports.atomic = async function (databaseName, password) {
     else {
         console.log('SYSTEM | ATOMIC | Fail, admin comming to you (╬▔皿▔)╯!!!');
     }
+}
+
+exports.copy = async function (databaseName, new_databaseName) {
+    try {
+        // await client.connect();
+        const database = client.db(databaseName);
+        const new_database = client.db(new_databaseName);
+
+        // Lấy danh sách tên các collection hiện có
+        const collections = await database.listCollections().toArray();
+        const collectionNames = collections.map((collection) => collection.name);
+
+        // Xoá cơ sở dữ liệu hiện tại
+        // await database.dropDatabase();
+        console.log("SYSTEM | COPY_ATOMIC |\n______             _      ______ _            ______         _                   \n| ___ \\           | |     | ___ | |           |  _  \\       | |                  \n| |_/ / __ _ _ __ | |__   | |_/ | |__   ___   | | | |___ ___| |_ _ __ ___  _   _ \n| ___ \\/ _` | \'_ \\| \'_ \\  |  __/| \'_ \\ / _ \\  | | | / _ / __| __| \'__/ _ \\| | | |\n| |_/ | (_| | | | | | | | | |   | | | | (_) | | |/ |  __\\__ | |_| | | (_) | |_| |\n\\____/ \\__,_|_| |_|_| |_| \\_|   |_| |_|\\___/  |___/ \\___|___/\\__|_|  \\___/ \\__, |\n                                                                            __/ |\n                                                                           |___/ \n");
+
+        // Tạo lại các collection với tên cũ
+        for (const collectionName of collectionNames) {
+            // const namecheck = ['OTP', 'login_info', 'school_year', 'sessions', 'KTPM0121_user_info']
+            // if (namecheck.includes(collectionName)) {
+
+            await new_database.createCollection(collectionName);
+            const dataToCopy = await database.collection(collectionName).find({}).toArray();
+            if (dataToCopy.length === 0) {
+                console.log('Không có dữ liệu để sao chép.');
+            } else {
+                await new_database.collection(collectionName).insertMany(dataToCopy);
+            }
+            console.log('SYSTEM | COPY_ATOMIC | Recreate collection:', collectionName, 'successfull');
+
+            // }
+        }
+
+        // Các công việc khác, ví dụ: tạo các index, khởi tạo dữ liệu, vv.
+    } catch (e) { console.log(e); }
+
+
 }
 
 exports.atomic_table = async function (databaseName, tableList, password) {

@@ -56,4 +56,11 @@
         top: -7px;
         font-size: 2rem;
     }
+    .nien_khoa #select-main{
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .nien_khoa .select{
+        /* margin: 1rem; */
+    }
 }
