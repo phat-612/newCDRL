@@ -1,4 +1,5 @@
 // tat ca duoc check thi check cai tat ca
+let selectedFile
 function handleCheckboxChange() {
   let listCb = $(".inp-cbx");
   for (let i = 0; i < listCb.length; i++) {
@@ -104,6 +105,32 @@ $(document).ready(() => {
     console.log(3);
   });
 });
+// set text up file
+$('.inp_file').on('change',(event)=>{
+  selectedFile = event.target.files[0];
+  if(selectedFile){
+    $('.btn_input').text(selectedFile.name);
+  }
+});
+// up file
+$(".btn_upload").on("click",async () =>{
+  if (selectedFile){
+    const formData = new FormData();
+    formData.append('file', selectedFile);
 
-
+    try {
+      const response = await fetch('/api/createAccount', {
+        method: 'POST',
+        body: formData,
+      });
+      if (response.ok) {
+        notify('n', 'Thêm sinh viên')
+      } else {
+        notify('!', 'Thất bại')
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    }
+})
 

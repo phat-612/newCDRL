@@ -1,4 +1,5 @@
 /* Ghi chú: --------------------------------------------------------------------------------------------------------------
+Ban all who's name Nguyen Ngoc Long on this server file
 @dawn1810:
   phân quyền người dùng:
     0: nhập điểm sinh viên
@@ -30,7 +31,6 @@
     password: "2101281",
     first: "true"}
   taskDoing:
-    Sửa lại phần quản lý đăng nhập và nâng cao bảo mật
 -------------------------------------------------------------------------------------------------------------------------- */
 
 const express = require("express");
@@ -64,7 +64,6 @@ const client = new MongoClient(uri, {
 // ----------------------------------------------------------------
 client.connect().then(() => {
   // ----------------------------------------------------------------
-  const allowedMimeTypes = ['image/jpeg', 'image/png'];
   const app = express();
   const privateKey = fs.readFileSync(path.join('.certificate', 'localhost.key'), 'utf8');
   const certificate = fs.readFileSync(path.join('.certificate', 'localhost.crt'), 'utf8');
@@ -82,12 +81,6 @@ client.connect().then(() => {
 
   const storage_file = multer.diskStorage({
     destination: function (req, file, cb) {
-      if (!allowedMimeTypes.includes(file.mimetype)) {
-        console.log('SYSTEM | GET_NOVEL_LIST | ERROR | Lỗi định dạng file không đúng');
-
-        return cb(new Error('Invalid file type.'), null);
-      }
-
       // Trả về đường dẫn đến thư mục mới
       cb(null, uploadDirectory);
     },
@@ -293,6 +286,23 @@ client.connect().then(() => {
     }, twelveHours);
   };
 
+  // Function to sort name of student in list
+  function sortStudentName(std_list) {
+    std_list.sort((a, b) => {
+      const lastFirstNameWordA = a.first_name.split(' ').pop();
+      const lastFirstNameWordB = b.first_name.split(' ').pop();
+
+      const firstNameComparison = lastFirstNameWordA.localeCompare(lastFirstNameWordB, 'vi', { sensitivity: 'base' });
+      if (firstNameComparison !== 0) {
+        return firstNameComparison;
+      }
+
+      return a.last_name.localeCompare(b.last_name, 'vi', { sensitivity: 'base' });
+    });
+    return std_list;
+
+  }
+
 
   // Áp dụng middleware để chặn truy cập
   app.use(blockUnwantedPaths);
@@ -413,6 +423,14 @@ client.connect().then(() => {
     });
   });
 
+  // quan li bo mon - doan khoa route
+  app.get("/doan_khoa/quan_li_bm", checkIfUserLoginRoute, async (req, res) => {
+    res.render("quan_li_bm", {
+      header: "header",
+      footer: "footer",
+    });
+  });
+
   // quan li lop - doan khoa route
   app.get("/doan_khoa/quan_li_lop", checkIfUserLoginRoute, async (req, res) => {
     res.render("quan_li_lop", {
@@ -451,13 +469,22 @@ client.connect().then(() => {
     });
   });
 
-  // Quan li hoat dong route
+  // Quan li hoat dong lop route
   app.get("/bancansu/quanlihoatdong", checkIfUserLoginRoute, async (req, res) => {
     res.render("quanlihoatdong", {
       header: "header",
       footer: "footer",
     });
   });
+
+  // Quan li hoat dong khoa route
+  app.get("/doan_khoa/quan_li_hoat_dong_khoa", checkIfUserLoginRoute, async (req, res) => {
+    res.render("quan_li_hoat_dong_khoa", {
+      header: "header",
+      footer: "footer",
+    });
+  });
+
 
   // Danh gia hoat dong
   app.get("/bancansu/quanlihoatdong/danh_gia_hoat_dong", checkIfUserLoginRoute, async (req, res) => {
@@ -502,23 +529,22 @@ client.connect().then(() => {
       {
         projection: {
           _id: 0,
-          class: 1
+          power: 1
         }
       }
     );
-    const student_list = await client.db(name_global_databases).collection('user_info').find(
-      { class: marker.class },
-      { 'projection': { first_name: 1, last_name: 1 } })
-      .sort({ first_name: 1, last_name: 1 })
-      .toArray();
-
-    let render = {
-      header: "header",
-      footer: "footer",
-      student_list: student_list
+    if (marker.power[1]) {
+      res.render("danhsachsinhvien_cv", {
+        header: "header",
+        footer: "footer",
+        thongbao: "thongbao"
+      });
+    } else {
+      return res.redirect('/');
     }
 
-    res.render("danhsachsinhvien_cv", render);
+
+
   });
   // danh sach bang diem
   app.get("/danhsachbangdiem", checkIfUserLoginRoute, async (req, res) => {
@@ -544,10 +570,11 @@ client.connect().then(() => {
       );
 
       // get all student in staff member class:
-      const student_list = await client.db(name_global_databases).collection('user_info').find(
+      let student_list = await client.db(name_global_databases).collection('user_info').find(
         { class: user.cls[0] },
         { projection: { first_name: 1, last_name: 1 } })
         .toArray();
+      student_list = sortStudentName(student_list);
 
       // get all student total score from themself:
       let render = {
@@ -560,7 +587,8 @@ client.connect().then(() => {
         staff_scores: [],
         department_scores: [],
         cls: user.cls,
-        years: years.years
+        years: years.years,
+        curr_year: school_year.year
       }
 
       for (student of student_list) {
@@ -944,11 +972,11 @@ client.connect().then(() => {
   });
 
   // Create new account -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  app.get("/api/createAccount", checkIfUserLoginAPI, async (req, res) => {
+  app.post("/api/createAccount", upload.single('file'), checkIfUserLoginAPI, async (req, res) => {
     try {
       // read excel file:
       // create all account
-
+      console.log(req.file);
       res.sendStatus(200);
     } catch (err) {
       console.log("SYSTEM | MARK | ERROR | ", err);
@@ -1118,6 +1146,8 @@ client.connect().then(() => {
           .sort({ first_name: 1, last_name: 1 })
           .toArray();
 
+
+
         // get all student total score from themself:
         let result = {
           staff_name: [],
@@ -1133,7 +1163,7 @@ client.connect().then(() => {
             .findOne(
               {
                 mssv: student._id,
-                school_year: school_year.year
+                school_year: school_year
               },
               {
                 projection: {
@@ -1147,7 +1177,7 @@ client.connect().then(() => {
             .findOne(
               {
                 mssv: student._id,
-                school_year: school_year.year
+                school_year: school_year
               },
               {
                 projection: {
@@ -1162,7 +1192,7 @@ client.connect().then(() => {
             .findOne(
               {
                 mssv: student._id,
-                school_year: school_year.year
+                school_year: school_year
               },
               {
                 projection: {
@@ -1275,14 +1305,13 @@ client.connect().then(() => {
       {
         projection: {
           _id: 0,
-          power: 1,
-          class: 1,
+          power: 1
         }
       }
     );
     let reqClass = data.class
     if (!reqClass) {
-      reqClass = marker.class;
+      reqClass = user.cls[0];
     }
     if (marker.power[1]) {
       const student_list = await client.db(name_global_databases).collection('user_info').find(
@@ -1291,6 +1320,8 @@ client.connect().then(() => {
         .sort({ first_name: 1, last_name: 1 })
         .toArray();
       res.status(200).json(student_list);
+    } else {
+      return res.redirect('/');
     }
 
   })

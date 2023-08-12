@@ -13,6 +13,7 @@
   <div class="main">
     <%- include(header) %>
     <%- include(thongbao) %>
+    <% let cy = curr_year.split('_'); %>
     <div class="container">
       <div class="content">
         <div class="hk_nk">
@@ -20,8 +21,13 @@
           <div class="selectbox hoc_ky">
             <div class="select">
               <select>
-                <option value="1">1</option>
-                <option value="2">2</option>
+                <% for (let i = 1; i <= 2; i++) {%>
+                  <% if (i == parseInt(cy[0].slice(2))) {%>
+                    <option value="<%= i %>" selected="selected"><%= i %></option>
+                  <% } else { %>
+                    <option value="<%= i %>"><%= i %></option>
+                  <% } %>
+                <% } %>
               </select>
             </div>
           </div>
@@ -29,8 +35,13 @@
           <div class="selectbox nien_khoa">
             <div class="select">
               <select>
-                <option>2021-2022</option>
-                <option>2022-2023</option>
+                <% for (const key of Object.keys(years)) {%>
+                  <% if (key == cy[1]) {%>
+                    <option selected="selected"><%= key %></option>
+                  <% } else { %>
+                    <option><%= key %></option>
+                  <% } %>
+                <% } %>
               </select>
             </div>
           </div>
