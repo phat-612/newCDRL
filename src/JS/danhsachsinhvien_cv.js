@@ -117,7 +117,7 @@ $(".btn_upload").on("click",async () =>{
   if (selectedFile){
     const formData = new FormData();
     formData.append('file', selectedFile);
-
+    formData.append("cls", $(".js_lop").val());
     try {
       const response = await fetch('/api/createAccount', {
         method: 'POST',

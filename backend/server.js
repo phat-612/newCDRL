@@ -976,7 +976,37 @@ client.connect().then(() => {
     try {
       // read excel file:
       // create all account
-      console.log(req.file);
+      const fileStudents = req.file;
+      const workbook = await XlsxPopulate.fromFileAsync(fileStudents.path);
+      const sheet = workbook.sheet(0);
+      const values = sheet.usedRange().value();
+      //[['MSSV', 'Họ', 'Tên' ]]
+      let dataInsertUser = [];
+      let dataInsertLogin = [];
+      for (let i = 1; i < values.length; i++) {
+        dataInsertUser.push({
+          _id: values[i][0].toString(),
+          first_name: values[i][2],
+          last_name: values[i][1],
+          avt: "",
+          power: { 0: true },
+          class: [req.body.cls],
+          displayName: `${values[i][1]} ${values[i][2]}`,
+          email: "",
+        });
+        dataInsertLogin.push({
+          _id: values[i][0].toString(),
+          password: values[i][0].toString()
+        })
+      }
+      console.log(dataInsertUser);
+      console.log(dataInsertLogin);
+      // xoa file sau khi xu ly
+      fs.unlink(fileStudents.path, (err) => {
+        if (err) {
+          console.error("Lỗi khi xóa tệp:", err);
+        }
+      });
       res.sendStatus(200);
     } catch (err) {
       console.log("SYSTEM | MARK | ERROR | ", err);
