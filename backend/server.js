@@ -343,9 +343,28 @@ client.connect().then(() => {
 
   // index route
   app.get("/", checkIfUserLoginRoute, async (req, res) => {
+    const user = req.session.user;
+    const schoolYear = await client.db(name_global_databases).collection('school_year').findOne({}, { projection: { _id: 0, year: 1 } });
+    const schoolYearsToSearch = ['HK1_' + schoolYear.year.slice(4), 'HK2_' + schoolYear.year.slice(4)];
+    const studentTotalScores = await Promise.all(schoolYearsToSearch.map(async (year) => {
+      const studentTotalScore = await client.db(user.dep)
+        .collection(user.cls[0] + '_std_table')
+        .findOne(
+          {
+            mssv: user._id,
+            school_year: year
+          },
+          {
+            projection: { _id: 0, total: 1 }
+          }
+        );
+      return { total: studentTotalScore ? studentTotalScore.total : "Chưa có điểm" };
+    }));
+
     res.render("tracuu", {
       header: "header",
       footer: "footer",
+      bandiem: studentTotalScores,
     });
   });
 
@@ -981,26 +1000,42 @@ client.connect().then(() => {
       const sheet = workbook.sheet(0);
       const values = sheet.usedRange().value();
       //[['MSSV', 'Họ', 'Tên' ]]
-      let dataInsertUser = [];
-      let dataInsertLogin = [];
+      // let dataInsertUser = [];
+      // let dataInsertLogin = [];
       for (let i = 1; i < values.length; i++) {
-        dataInsertUser.push({
+        let dataInsertUser = {
           _id: values[i][0].toString(),
           first_name: values[i][2],
           last_name: values[i][1],
-          avt: "",
+          avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
           power: { 0: true },
           class: [req.body.cls],
           displayName: `${values[i][1]} ${values[i][2]}`,
           email: "",
-        });
-        dataInsertLogin.push({
+        };
+        let dataInsertLogin = {
           _id: values[i][0].toString(),
-          password: values[i][0].toString()
-        })
+          password: await randomPassword()
+        }
+        client.db('global').collection('user_info').updateOne({
+          _id: dataInsertUser._id
+        }, {
+          $set:dataInsertUser
+        },
+        {
+          upsert:true
+        });
+        client.db('global').collection('login_info').updateOne({
+          _id: dataInsertLogin._id
+        }, {
+          $set:dataInsertLogin
+        },
+        {
+          upsert:true
+        });
+        
+        console.log(`Thêm thành công ${dataInsertUser.displayName}`);
       }
-      console.log(dataInsertUser);
-      console.log(dataInsertLogin);
       // xoa file sau khi xu ly
       fs.unlink(fileStudents.path, (err) => {
         if (err) {
@@ -1359,31 +1394,21 @@ client.connect().then(() => {
   app.get("/api/getuserscore", checkIfUserLoginRoute, async (req, res) => {
     try {
       const user = req.session.user;
-      const mssv = req.session.user._id;
       const schoolYearParam = req.query.schoolYear;
-
-      let schoolYearsToSearch = [];
-
-      if (schoolYearParam === "2022-2023") {
-        schoolYearsToSearch = ["HK1_2022-2023", "HK2_2022-2023"];
-      } else {
-        schoolYearsToSearch = [schoolYearParam];
-      }
-
+      const schoolYearsToSearch = ['HK1_' + schoolYearParam, 'HK2_' + schoolYearParam];
       const studentTotalScores = await Promise.all(schoolYearsToSearch.map(async (year) => {
         const studentTotalScore = await client.db(user.dep)
           .collection(user.cls[0] + '_std_table')
           .findOne(
             {
-              mssv: mssv,
+              mssv: user._id,
               school_year: year
             },
             {
               projection: { _id: 0, total: 1 }
             }
           );
-
-        return { year: year, total: studentTotalScore ? studentTotalScore.total : "chưa có điểm" };
+        return { year: year, total: studentTotalScore ? studentTotalScore.total : "Chưa có điểm" };
       }));
       res.status(200).json(studentTotalScores);
     } catch (err) {
@@ -1391,7 +1416,7 @@ client.connect().then(() => {
     }
   });
 
-  
+
   // Xử lý đường link không có -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   app.get("*", async function (req, res) {
     res.sendStatus(404);

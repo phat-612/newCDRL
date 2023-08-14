@@ -14,14 +14,37 @@ const client = new MongoClient(uri, {
 // server.atomic_table('global',['sessions', 'sessions_manager'],'18102003').catch(eror => console.log(eror));
 // client.db('global').collection('OTP').createIndex({ expireAt: 1 }, { expireAfterSeconds: 0 }).then(console.log("ok"));
 // server.copy('KTPM','CNTT');
-client.db('global').collection('classes').findOne(
-    { _id: "KTPM0121" },
-    { projection: { _id: 0, years: 1 } }
-).then(cls => { console.log(cls.years); })
+// client.db('global').collection('classes').findOne(
+//     { _id: "KTPM0121" },
+//     { projection: { _id: 0, years: 1 } }
+// ).then(cls => { console.log(cls.years); })
 
+// thêm user info và login info
 
-
-
+client.db('global').collection('user_info').updateOne(
+    { _id: '2101111' },
+    {$set: {
+        _id: '2101111',
+        first_name: 'Phúc Đạt',
+        last_name: 'Phạm',
+        avt: '',
+        power: { '0': true },
+        class: [ 'KTPM0121' ],
+        displayName: 'Phạm Phúc Đạt',
+        email: ''
+    }},
+    {upsert: true}
+    
+).then(() => { console.log('them thong tin thanh cong'); })
+client.db('global').collection('login_info').updateOne(
+    { _id: '2101111' },
+    {$set:{
+        _id: '2101111',
+        password: '2101111'
+    }},
+    {upsert: true}
+    
+).then(() => { console.log('them tai khoan thanh cong'); })
 
 
 // add quyên cho người dùng
