@@ -1355,6 +1355,43 @@ client.connect().then(() => {
     }
 
   })
+
+  app.get("/api/getuserscore", checkIfUserLoginRoute, async (req, res) => {
+    try {
+      const user = req.session.user;
+      const mssv = req.session.user._id;
+      const schoolYearParam = req.query.schoolYear;
+
+      let schoolYearsToSearch = [];
+
+      if (schoolYearParam === "2022-2023") {
+        schoolYearsToSearch = ["HK1_2022-2023", "HK2_2022-2023"];
+      } else {
+        schoolYearsToSearch = [schoolYearParam];
+      }
+
+      const studentTotalScores = await Promise.all(schoolYearsToSearch.map(async (year) => {
+        const studentTotalScore = await client.db(user.dep)
+          .collection(user.cls[0] + '_std_table')
+          .findOne(
+            {
+              mssv: mssv,
+              school_year: year
+            },
+            {
+              projection: { _id: 0, total: 1 }
+            }
+          );
+
+        return { year: year, total: studentTotalScore ? studentTotalScore.total : "chưa có điểm" };
+      }));
+      res.status(200).json(studentTotalScores);
+    } catch (err) {
+      res.status(500).json({ error: "Lỗi hệ thống" });
+    }
+  });
+
+  
   // Xử lý đường link không có -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   app.get("*", async function (req, res) {
     res.sendStatus(404);
