@@ -98,16 +98,13 @@ $('.js_lop').on('change', async (event) => {
 $(document).ready(() => {
   $("#add-student").click(function () {
     $(".modal.add").show();
-    console.log(1);
   });
 
   $(".modal.add").click(function () {
     $(".modal.add").hide();
-    console.log(2);
   });
   $(".modal_wrap.add").click(function (e) {
     e.stopPropagation();
-    console.log(3);
   });
 });
 // set text up file
@@ -129,9 +126,21 @@ $(".btn_upload").on("click", async () => {
         body: formData,
       });
       if (response.ok) {
-        notify('n', 'Thêm sinh viên')
+        loadStudents(cls)
+        notify('n', 'Thêm sinh viên thành công')
+        const blobUrl = URL.createObjectURL(await response.blob());
+        // Tạo một thẻ <a> ẩn để tải xuống và nhấn vào nó
+        const downloadLink = document.createElement('a');
+        downloadLink.href = blobUrl;
+        downloadLink.download = 'Danh_sach_sinh_vien.xlsx'; // Đặt tên cho tệp tải xuống
+        downloadLink.style.display = 'none';
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        // Giải phóng URL tạm thời sau khi tải xuống hoàn thành
+        URL.revokeObjectURL(blobUrl);
+        
       } else {
-        notify('!', 'Thất bại')
+        notify('!', 'Thêm sinh viên thất bại ')
       }
     } catch (error) {
       console.log(error);

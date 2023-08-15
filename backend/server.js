@@ -7,6 +7,7 @@ Ban all who's name Nguyen Ngoc Long on this server file
     2: chấp điểm/ duyệ điểm (khoa)
     3: tạo hoạt động (ban cán sự, ???)
     4: cấp quyền (> cố vấn)
+    5: thêm || sửa bộ môn
     ...
   power = {
     0: true,
@@ -51,7 +52,7 @@ const { v4: uuidv4 } = require('uuid');
 const WebSocket = require('ws');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const { data } = require("node-persist");
-const uri = "mongodb+srv://binhminh19112003:Zr3uGIK4dCymOXON@database.sefjqcb.mongodb.net/?retryWrites=true&w=majority";
+const uri = "mongodb+srv://binhminh19112003:Zr3uGIK4dCymOXON@6aesieunhan.sefjqcb.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -77,7 +78,7 @@ client.connect().then(() => {
     "utf8"
   ).toString("hex");
   // ----------------------------------------------------------------
-  const uploadDirectory = path.join('.upload_temp', 'files');
+  const uploadDirectory = path.join('.upload_temp');
 
   const storage_file = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -318,7 +319,7 @@ client.connect().then(() => {
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
-      client, dbName: 'global', crypto: {
+      client, dbName: name_global_databases, crypto: {
         secret: authenticationKey
       }
     }),
@@ -358,7 +359,7 @@ client.connect().then(() => {
             projection: { _id: 0, total: 1 }
           }
         );
-      return { total: studentTotalScore ? studentTotalScore.total : "Chưa có điểm" };
+      return { year: year, total: studentTotalScore ? studentTotalScore.total : "Chưa có điểm" };
     }));
 
     res.render("tracuu", {
@@ -425,6 +426,7 @@ client.connect().then(() => {
       const user = req.session.user;
       const mssv = req.session.user._id;
       const schoolYearParam = req.query.schoolYear;
+      console.log(schoolYearParam)
       const studentTotalScore = await client.db(user.dep)
         .collection(user.cls[0] + '_std_table')
         .findOne(
@@ -433,7 +435,7 @@ client.connect().then(() => {
             school_year: schoolYearParam
           },
           {
-            projection: { _id: 0, first: 1, second: 1, third: 1, fourth: 1, fifth: 1, img_ids: 1, total: 1 }
+            projection: { _id: 0, first: 1, second: 1, third: 1, fourth: 1, fifth: 1, total: 1 }
           }
         );
 
@@ -444,13 +446,7 @@ client.connect().then(() => {
           footer: "footer",
           Score: studentTotalScore
         });
-      } else {
-        res.status(200).json({ total: "ban chua cham diem" });
-        res.render("sinvienxemdiem", {
-          header: "header",
-          thongbao: "thongbao",
-          footer: "footer",
-        });
+
       }
     } catch (err) {
       console.log(err)
@@ -468,9 +464,28 @@ client.connect().then(() => {
 
   // quan li bo mon - doan khoa route
   app.get("/doan_khoa/quan_li_bm", checkIfUserLoginRoute, async (req, res) => {
+    const user = req.session.user;
+
+    // get all branch of department:
+    const branchs = await client.db(name_global_databases).collection('branchs').find(
+      {
+        dep : user.dep
+      }, // find all data
+      {
+        projection: {
+          _id: 0,
+          name: 1,
+          dep_name: 1
+        }
+      }
+    ).toArray();
+
     res.render("quan_li_bm", {
       header: "header",
       footer: "footer",
+      thongbao: 'thongbao',
+      dep: branchs[0].dep_name, // every branch have same department
+      branchs: branchs
     });
   });
 
@@ -515,6 +530,13 @@ client.connect().then(() => {
   // Quan li hoat dong lop route
   app.get("/bancansu/quanlihoatdong", checkIfUserLoginRoute, async (req, res) => {
     res.render("quanlihoatdong", {
+      header: "header",
+      footer: "footer",
+    });
+  });
+
+  app.get("/bancansu", checkIfUserLoginRoute, async (req, res) => {
+    res.render("bancansu", {
       header: "header",
       footer: "footer",
     });
@@ -585,10 +607,8 @@ client.connect().then(() => {
     } else {
       return res.redirect('/');
     }
-
-
-
   });
+
   // danh sach bang diem
   app.get("/danhsachbangdiem", checkIfUserLoginRoute, async (req, res) => {
     const user = req.session.user;
@@ -738,8 +758,12 @@ client.connect().then(() => {
             { _id: data.mssv },
             { projection: { _id: 0, class: 1 } }
           );
-          const dep = await client.db(name_global_databases).collection('classes').findOne(
+          const branch = await client.db(name_global_databases).collection('classes').findOne(
             { _id: cls.class[0] },
+            { projection: { _id: 0, branch: 1 } }
+          );
+          const dep = await client.db(name_global_databases).collection('branchs').findOne(
+            { _id: branch.branch },
             { projection: { _id: 0, dep: 1 } }
           );
 
@@ -1024,9 +1048,9 @@ client.connect().then(() => {
       const sheet = workbook.sheet(0);
       const values = sheet.usedRange().value();
       //[['MSSV', 'Họ', 'Tên' ]]
-      // let dataInsertUser = [];
-      // let dataInsertLogin = [];
+      sheet.cell('D1').value('Password');
       for (let i = 1; i < values.length; i++) {
+        let pw = await randomPassword()
         let dataInsertUser = {
           _id: values[i][0].toString(),
           first_name: values[i][2],
@@ -1039,7 +1063,7 @@ client.connect().then(() => {
         };
         let dataInsertLogin = {
           _id: values[i][0].toString(),
-          password: await randomPassword()
+          password: pw
         }
         client.db('global').collection('user_info').updateOne({
           _id: dataInsertUser._id
@@ -1057,16 +1081,22 @@ client.connect().then(() => {
           {
             upsert: true
           });
-
-        console.log(`Thêm thành công ${dataInsertUser.displayName}`);
+        await sheet.cell(`D${i + 1}`).value(pw);
       }
+
+      // Write to file.
+      await workbook.toFileAsync(fileStudents.path);
+      res.download(fileStudents.path);
       // xoa file sau khi xu ly
-      fs.unlink(fileStudents.path, (err) => {
-        if (err) {
-          console.error("Lỗi khi xóa tệp:", err);
-        }
-      });
-      res.sendStatus(200);
+      setTimeout(() => {
+        fs.unlink(fileStudents.path, (err) => {
+          if (err) {
+            console.error("Lỗi khi xóa tệp:", err);
+          }
+        });
+      }, 10000)
+
+
     } catch (err) {
       console.log("SYSTEM | MARK | ERROR | ", err);
       res.sendStatus(500);
@@ -1420,7 +1450,7 @@ client.connect().then(() => {
         { projection: { first_name: 1, last_name: 1 } })
         .sort({ first_name: 1, last_name: 1 })
         .toArray();
-      res.status(200).json(student_list);
+      res.status(200).json(sortStudentName(student_list));
     } else {
       return res.redirect('/');
     }
@@ -1431,6 +1461,7 @@ client.connect().then(() => {
     try {
       const user = req.session.user;
       const schoolYearParam = req.query.schoolYear;
+
       const schoolYearsToSearch = ['HK1_' + schoolYearParam, 'HK2_' + schoolYearParam];
       const studentTotalScores = await Promise.all(schoolYearsToSearch.map(async (year) => {
         const studentTotalScore = await client.db(user.dep)
@@ -1444,8 +1475,21 @@ client.connect().then(() => {
               projection: { _id: 0, total: 1 }
             }
           );
-        return { year: year, total: studentTotalScore ? studentTotalScore.total : "Chưa có điểm" };
+        return { year: year.slice(0, 3), total: studentTotalScore ? studentTotalScore.total : "Chưa có điểm" };
       }));
+      res.status(200).json(studentTotalScores);
+    } catch (err) {
+      res.status(500).json({ error: "Lỗi hệ thống" });
+    }
+  });
+
+  // api add or edit branch of department base on it exist or not
+  app.post("/api/getuserscore", checkIfUserLoginRoute, async (req, res) => {
+    try {
+      const user = req.session.user;
+      const data = req.body; // data = {id: 'KTPM'}
+
+      
       res.status(200).json(studentTotalScores);
     } catch (err) {
       res.status(500).json({ error: "Lỗi hệ thống" });
