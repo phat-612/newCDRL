@@ -147,30 +147,11 @@ label {
   font-size: 1.8rem;
 }
 
-#select-main {
-  display: flex;
-  gap: 5rem;
-}
 
-#button-main {
+
+.box-button {
   display: flex;
   gap: 2rem;
   margin: 3rem 0rem 0rem 20rem;
 }
 
-/* 
-.button {
-    padding: 1rem;
-    background-color: white;
-}
-
-.button .button-1 {
-    margin-top: 2rem;
-    padding: 0.5rem;
-}
-
-.nien-khoa {
-    margin-left: 2rem;
-} */
-
-/* sub-box */

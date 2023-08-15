@@ -17,8 +17,8 @@
 
         <!-- Button -->
         <div class="content container__button">
-            <button class="button-35">Xoá Lớp</button>
-            <button class="button-35" id="add__class">Thêm Lớp</button>
+          <button class="button-35" id="add__class">Thêm Lớp</button>
+          <button class="button-35">Xoá Lớp</button>
         </div>
 
         <!-- Table -->
@@ -26,7 +26,13 @@
           <table>
             <thead>
               <tr>
-                <th></th>
+                <th>
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="all__row" class="inp-cbx" value="2" />
+                    <label for="all__row" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+                  </div>
+                </th>
                 <th>STT</th>
                 <th style="width: 15%;">Tên Lớp</th>
                 <th style="width: 15%;">Bộ Môn</th>
@@ -39,8 +45,8 @@
               <tr>
                 <td>
                   <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row0" class="inp-cbx" value="2" />
-                    <label for="row0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    <input type="checkbox" id="row__0" class="inp-cbx" value="2" />
+                    <label for="row__0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                     </label>
                   </div>
                 </td>
@@ -49,7 +55,7 @@
                 <td style="width: 20%;">Kỹ Thuật Phần Mềm</td>
                 <td style="width: 10%;">CNTT</td>
                 <td>
-                  <div class="selectbox hoc_ky">
+                  <div class="selectbox co__van">
                     <div class="select">
                       <select>
                         <option value="1">Nguyễn Xuân Hà Giang</option>
@@ -65,8 +71,8 @@
               <tr>
                 <td>
                   <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row1" class="inp-cbx" value="2" />
-                    <label for="row1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    <input type="checkbox" id="row__1" class="inp-cbx" value="2" />
+                    <label for="row__1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                     </label>
                   </div>
                 </td>
@@ -75,7 +81,7 @@
                 <td>Kỹ Thuật Phần Mềm</td>
                 <td>CNTT</td>
                 <td>
-                  <div class="selectbox hoc_ky">
+                  <div class="selectbox co__van">
                     <div class="select">
                       <select>
                         <option value="1">Nguyễn Xuân Hà Giang</option>
@@ -91,8 +97,8 @@
               <tr>
                 <td>
                   <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row2" class="inp-cbx" value="2" />
-                    <label for="row2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    <input type="checkbox" id="row__2" class="inp-cbx" value="2" />
+                    <label for="row__2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                     </label>
                   </div>
                 </td>
@@ -101,7 +107,7 @@
                 <td>Kỹ Thuật Phần Mềm</td>
                 <td>CNTT</td>
                 <td>
-                  <div class="selectbox hoc_ky">
+                  <div class="selectbox co__van">
                     <div class="select">
                       <select>
                         <option value="1">Nguyễn Xuân Hà Giang</option>
@@ -117,8 +123,8 @@
               <tr>
                 <td>
                   <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row3" class="inp-cbx" value="2" />
-                    <label for="row3" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    <input type="checkbox" id="row__3" class="inp-cbx" value="2" />
+                    <label for="row__3" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                     </label>
                   </div>
                 </td>
@@ -127,7 +133,7 @@
                 <td>Kỹ Thuật Phần Mềm</td>
                 <td>CNTT</td>
                 <td>
-                  <div class="selectbox hoc_ky">
+                  <div class="selectbox co__van">
                     <div class="select">
                       <select>
                         <option value="1">Nguyễn Xuân Hà Giang</option>
@@ -208,7 +214,7 @@
                       <option value="CNTT">Công Nghệ Thông Tin</option>
                     </select>
                   </div>
-      
+
                 </main>
               </div>
             </div>
@@ -222,11 +228,12 @@
           </div>
         </div>
       </div>
-        
+
     </div>
   </div>
   <%- include(footer) %>
 </body>
 
 <script src="/src/JS/quan_li_lop.js"></script>
+
 </html>

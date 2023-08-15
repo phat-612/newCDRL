@@ -461,21 +461,27 @@ td .select::after{
 .menu.open .button {
   opacity: 1;
   pointer-events: auto;
+  font-size: 20px;
+  background:  #98caea;
+
+}
+.menu.open .button.now{
+  background-color: #2986ca;
 }
 .menu.open .button:first-of-type {
+  color: red;
   bottom: 40px;
   right: 70px;
-  background: url("https://bassets.github.io/cam.svg") no-repeat 50%/50% #2986ca;
 }
 .menu.open .button:nth-of-type(2) {
+  color: yellow;
   bottom: 80px;
-  background: url("https://bassets.github.io/img.svg") no-repeat 50%/ 50% #2986ca;
   transition-delay: 0.05s;
 }
 .menu.open .button:last-of-type {
+  color: green;
   bottom: 40px;
   right: -70px;
-  background: url("https://bassets.github.io/music.svg") no-repeat 50% 45%/50% 45% #2986ca;
   transition-delay: 0.1s;
 }
 .button {

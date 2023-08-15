@@ -17,8 +17,8 @@
 
         <!-- Button -->
         <div class="content container__button">
-          <button class="button-35">Xoá Cố Vấn</button>
           <button class="button-35" id="add__class">Thêm Cố Vấn</button>
+          <button class="button-35">Xoá Cố Vấn</button>
         </div>
 
         <!-- Table -->
@@ -26,7 +26,13 @@
           <table>
             <thead>
               <tr>
-                <th></th>
+                <th>
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="row--all" class="inp-cbx" value="2" />
+                    <label for="row--all" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+                  </div>
+                </th>
                 <th>STT</th>
                 <th style="width: 25%;">Tên Cố Vấn Học Tập</th>
                 <th style="width: 25%;">Bộ Môn</th>
@@ -39,8 +45,8 @@
               <tr>
                 <td>
                   <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row0" class="inp-cbx" value="2" />
-                    <label for="row0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    <input type="checkbox" id="row--0" class="inp-cbx" value="2" />
+                    <label for="row--0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                     </label>
                   </div>
                 </td>
@@ -66,8 +72,8 @@
               <tr>
                 <td>
                   <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row0" class="inp-cbx" value="2" />
-                    <label for="row0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    <input type="checkbox" id="row--1" class="inp-cbx" value="2" />
+                    <label for="row--1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                     </label>
                   </div>
                 </td>
@@ -93,8 +99,8 @@
               <tr>
                 <td>
                   <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row0" class="inp-cbx" value="2" />
-                    <label for="row0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    <input type="checkbox" id="row--2" class="inp-cbx" value="2" />
+                    <label for="row--2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                     </label>
                   </div>
                 </td>
@@ -120,8 +126,8 @@
               <tr>
                 <td>
                   <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row0" class="inp-cbx" value="2" />
-                    <label for="row0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    <input type="checkbox" id="row--3" class="inp-cbx" value="2" />
+                    <label for="row--3" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                     </label>
                   </div>
                 </td>
@@ -158,12 +164,12 @@
             </div>
 
             <div class="content subtitle">
-              <h3 class="sub-title name">Họ Tên Cố Vấn</h3>
+              <h3 class="sub__title --name">Họ Tên Cố Vấn</h3>
               <textarea name="" id="" cols="30" rows="3" placeholder="Nhập họ tên Cố vấn cần chỉnh sửa"></textarea>
             </div>
 
             <div class="content teacher__account">
-              <h3 class="sub-title name">Tên Đăng Nhập</h3>
+              <h3 class="sub__title --acount">Tên Đăng Nhập</h3>
               <textarea name="" id="" cols="30" rows="3" placeholder="Nhập tên đăng nhập mới"></textarea>
             </div>
 
@@ -182,11 +188,9 @@
                 </main>
               </div>
             </div>
-            <div>
-              <main id="button-main">
+            <div class="box-button">
                 <div><button class="button-35">Hoàn Tác</button></div>
                 <div><button class="button-35">Xong</button></div>
-              </main>
             </div>
           </div>
         </div>
@@ -211,8 +215,6 @@
 
             <div>
               <div class="selectbox nien_khoa">
-                <main id="select-main">
-
                   <div class="select">
                     <label for="select-level">Bộ Môn</label>
                     <select id="select-level">
@@ -222,8 +224,6 @@
                       <option value="CNTT">Công Nghệ Thông Tin</option>
                     </select>
                   </div>
-
-                </main>
               </div>
             </div>
 

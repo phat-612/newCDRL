@@ -449,3 +449,99 @@ $(document).on("click", ".save-btn", async function () {
   notify('!', 'Đang upload phiếu điểm...');
   uploadImage();
 });
+
+
+// điểm
+
+function select_point0(){
+  for(let i =1 ; i<17; i++){
+    const mySelect = document.getElementById(`mySelect${i}`);
+    mySelect.value = 0
+    
+  }
+}
+
+function removeNow(){
+  $('.menu.open .button').removeClass('now');
+ 
+}
+$(document).on("click", ".button_medium",  function () {
+  $('.menu.open .button').removeClass('now');
+  
+  select_point0()
+  console.log('ok')
+  for(let i =1 ; i<13; i++){
+    const mySelect = document.getElementById(`mySelect${i}`);
+    const values = Array.from(mySelect.options).map(option => parseInt(option.value));
+    const maxValue = Math.max(...values);
+    
+    mySelect.value = maxValue.toString();
+  }
+  const mySelect11 = document.getElementById(`mySelect11`);
+    mySelect11.value = 0;
+    const mySelect8 = document.getElementById(`mySelect8`);
+    mySelect8.value = 0;
+  const check = document.getElementById('morning4');
+  if(!check.checked){
+    check.click()
+  }
+  $(this).addClass('now');
+
+});
+
+$(document).on("click", ".button_plus",  function () {
+  $('.menu.open .button').removeClass('now');
+  // $(this).addClass('now');
+
+  select_point0()
+  console.log('ok')
+  for(let i =1 ; i<14; i++){
+    const mySelect = document.getElementById(`mySelect${i}`);
+    const values = Array.from(mySelect.options).map(option => parseInt(option.value));
+    const maxValue = Math.max(...values);
+    
+    mySelect.value = maxValue.toString();
+  }
+  const mySelect11 = document.getElementById(`mySelect11`);
+    mySelect11.value = 0;
+    const mySelect7 = document.getElementById(`mySelect7`);
+    mySelect7.value = 5;
+  const check5 = document.getElementById('morning5');
+  if(!check5.checked){
+    check5.click()
+  }
+});
+
+$(document).on("click", ".button_premium",  function () {
+  $('.menu.open .button').removeClass('now');
+  // $(this).addClass('now');
+  select_point0()
+  console.log('ok')
+  for(let i =1 ; i<15; i++){
+    const mySelect = document.getElementById(`mySelect${i}`);
+    const values = Array.from(mySelect.options).map(option => parseInt(option.value));
+    const maxValue = Math.max(...values);
+    
+    mySelect.value = maxValue.toString();
+  }
+
+  const check6 = document.getElementById('morning6');
+  if(!check6.checked){
+    check6.click()
+  }
+  // const mySelect7 = document.getElementById(`mySelect7`);
+  // mySelect7.value = 5;
+  const check11 = document.getElementById('morning11');
+  if(!check11.checked){
+    check11.click()
+  }
+  else{
+    check11.click()
+    check11.click()
+
+  }
+
+
+});
+
+//   77     84       93

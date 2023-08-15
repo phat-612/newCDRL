@@ -148,7 +148,7 @@ $(document).on("click", ".load_list_btn", async function () {
     notify('x', 'Có lỗi xảy ra!');
   }
 });
-
+// all checkbox set (if all-cbx tick all checkboxs will tick otherwise untick all)
 $(document).on("change", ".all-cbx", async function () {
   if ($('.all-cbx')[0].checked) {
     $('table tbody .inp-cbx').prop('checked', true);
@@ -156,7 +156,7 @@ $(document).on("change", ".all-cbx", async function () {
     $('table tbody .inp-cbx').prop('checked', false);
   }
 });
-
+// if all checkboxs was check all-cbx will tick
 $(document).on("change", ".inp-cbx", async function () {
   let check = true
   $('table tbody .inp-cbx').each(function(){
