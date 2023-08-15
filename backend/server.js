@@ -419,21 +419,45 @@ client.connect().then(() => {
       footer: "footer"
     });
   });
-  app.get("/bancansunhapdiemdanhgia", checkIfUserLoginRoute, async (req, res) => {
-    res.render("bancansunhapbangdiem", {
-      header: "header",
-      thongbao: "thongbao",
-      footer: "footer"
-    });
-  });
-  // ban can su route
-  app.get("/bancansu", checkIfUserLoginRoute, async (req, res) => {
-    res.render("bancansu", {
-      header: "header",
-      footer: "footer",
-    });
-  });
+  // xem bang diem route
+  app.get("/xembangdiem", checkIfUserLoginRoute, async (req, res) => {
+    try {
+      const user = req.session.user;
+      const mssv = req.session.user._id;
+      const schoolYearParam = req.query.schoolYear;
+      const studentTotalScore = await client.db(user.dep)
+        .collection(user.cls[0] + '_std_table')
+        .findOne(
+          {
+            mssv: mssv,
+            school_year: schoolYearParam
+          },
+          {
+            projection: { _id: 0, first: 1, second: 1, third: 1, fourth: 1, fifth: 1, img_ids: 1 }
+          }
+        );
 
+      if (studentTotalScore) {
+        res.render("sinvienxemdiem", {
+          header: "header",
+          thongbao: "thongbao",
+          footer: "footer",
+          Score: studentTotalScore
+        });
+      } else {
+        res.status(200).json({ total: "ban chua cham diem" });
+        res.render("sinvienxemdiem", {
+          header: "header",
+          thongbao: "thongbao",
+          footer: "footer",
+        });
+      }
+    } catch (err) {
+      console.log(err)
+      res.status(500).json({ error: "Lỗi hệ thống" });
+    }
+
+  });
   // doan khoa route
   app.get("/doan_khoa", checkIfUserLoginRoute, async (req, res) => {
     res.render("doan_khoa", {
@@ -1020,20 +1044,20 @@ client.connect().then(() => {
         client.db('global').collection('user_info').updateOne({
           _id: dataInsertUser._id
         }, {
-          $set:dataInsertUser
+          $set: dataInsertUser
         },
-        {
-          upsert:true
-        });
+          {
+            upsert: true
+          });
         client.db('global').collection('login_info').updateOne({
           _id: dataInsertLogin._id
         }, {
-          $set:dataInsertLogin
+          $set: dataInsertLogin
         },
-        {
-          upsert:true
-        });
-        
+          {
+            upsert: true
+          });
+
         console.log(`Thêm thành công ${dataInsertUser.displayName}`);
       }
       // xoa file sau khi xu ly
