@@ -1,139 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/src/css/danhsachsinhvien.css" />
-    <title>Danh sách sinh viên</title>
-  </head>
-  <body>
-    <div class="main">
-      <%- include(header) %>
-      <div class="container">
-        <div class="content">
-          <span class="lop">Lớp:</span>
-          <div class="selectbox hoc_ky">
-            <div class="select">
-              <select class="js_lop">
-                <option value="0">Lớp</option>
-                <option value="KTPM0121">KTPM0121</option>
-              </select>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/src/css/danhsachsinhvien.css" />
+  <title>Danh sách sinh viên</title>
+</head>
+
+<body>
+  <div class="main">
+    <%- include(header) %>
+      <%- include(thongbao) %>
+        <div class="container">
+          <div class="content">
+            <span class="lop">Lớp:</span>
+            <div class="selectbox hoc_ky">
+              <div class="select">
+                <select class="js_lop">
+                  <option value="0">Lớp</option>
+                  <option value="KTPM0121">KTPM0121</option>
+                </select>
+              </div>
             </div>
-          </div>
-          <button class="button-35">File tạo danh sách SV</button>
-          <div class="chitiet">
-            <div class="control">
-              <div class="left">
-                <div class="file_input">
-                  <button class="btn_input button-35">Chọn file sinh viên</button>
-                  <input class="inp_file" type="file" />
+            <button class="button-35">File tạo danh sách SV</button>
+            <div class="chitiet">
+              <div class="control">
+                <div class="left">
+                  <div class="file_input">
+                    <button class="btn_input button-35">Chọn file sinh viên</button>
+                    <input class="inp_file" type="file" />
+                  </div>
+                  <button class="btn_upload button-35">Tải lên</button>
                 </div>
-                <button class="btn_upload button-35">Tải lên</button>
+                <div class="right">
+                  <button id="delete-student" class="button-35">Xóa</button>
+                  <button id="add-student" class="button-35">Thêm sinh viên</button>
+                </div>
               </div>
-              <div class="right">
-                <button class="button-35">Xóa</button>
-                <button id="add-student" class="button-35">Thêm sinh viên</button>
-              </div>
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width: 2%">
+                      <div class="checkbox-wrapper-4">
+                        <input type="checkbox" id="row0" class="inp-cbx" value="2" />
+                        <label for="row0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                        </label>
+                      </div>
+                    </th>
+                    <th style="width: 3%">STT</th>
+                    <th>MSSV</th>
+                    <th>Họ Tên</th>
+                    <th>Vai trò</th>
+                    <th style="width: 5%">Đảng viên</th>
+                    <th style="width: 5%">Chấm Lần</th>
+                    <th style="width: 5%">Lập hoạt động</th>
+                    <th style="width: 12%"></th>
+                  </tr>
+                </thead>
+                <tbody class="js_tbody">
+                </tbody>
+              </table>
             </div>
-            <table>
-              <thead>
-                <tr>
-                  <th style="width: 2%">
-                    <div class="checkbox-wrapper-4">
-                      <input
-                        type="checkbox"
-                        id="row0"
-                        class="inp-cbx"
-                        value="2"
-                      />
-                      <label for="row0" class="cbx"
-                        ><span> <svg height="10px" width="12px"></svg></span>
-                      </label>
-                    </div>
-                  </th>
-                  <th style="width: 3%">STT</th>
-                  <th>MSSV</th>
-                  <th>Họ Tên</th>
-                  <th>Vai trò</th>
-                  <th style="width: 5%">Đảng viên</th>
-                  <th style="width: 5%">Chấm Lần</th>
-                  <th style="width: 5%">Lập hoạt động</th>
-                  <th style="width: 12%"></th>
-                </tr>
-              </thead>
-              <tbody class="js_tbody">
-              </tbody>
-            </table>
+          </div>
+        </div>
+  </div>
+  <script src="/src/JS/danhsachsinhvien_cv.js"></script>
+</body>
+<div class="modal add">
+  <div class="modal_wrap add">
+    <div class="modal_main">
+      <h2 class="title-box">THÊM SINH VIÊN</h2>
+      <div class="inp-box">
+        <input type="text" name="mssv" class="mssv_input" required="" />
+        <label>Mã số sinh viên</label>
+      </div>
+      <div class="inp-box">
+        <input type="text" name="ho" class="ho_input" required="" />
+        <label>Họ</label>
+      </div>
+      <div class="inp-box">
+        <input type="text" name="ten" class="ten_input" required="" />
+        <label>Tên</label>
+      </div>
+      <div>
+        <label for="md_ten">Vai trò</label>
+        <div class="selectbox hoc_ky">
+          <div class="select">
+            <select class="">
+              <option value="0">Lớp viên</option>
+              <option value="1">Ban cán sự</option>
+            </select>
           </div>
         </div>
       </div>
-    </div>
-    <script src="/src/JS/danhsachsinhvien_cv.js"></script>
-  </body>
-  <div class="modal add">
-    <div class="modal_wrap add">
-      <div class="modal_main">
-        <h2 class="title-box">THÊM SINH VIÊN</h2>
-        <div class="inp-box">
-          <input type="text" name="mssv" class="mssv_input" required="" />
-          <label>Mã số sinh viên</label>
-        </div>
-        <div class="inp-box">
-          <input type="text" name="ho" class="ho_input" required="" />
-          <label>Họ</label>
-        </div>
-        <div class="inp-box">
-          <input type="text" name="ten" class="ten_input" required="" />
-          <label>Tên</label>
-        </div>
-        <div>
-          <label for="md_ten">Vai trò</label>
-          <div class="selectbox hoc_ky">
-            <div class="select">
-              <select class="">
-                <option value="0">Lớp viên</option>
-                <option value="1">Ban cán sự</option>
-              </select>
-            </div>
+      <div>
+        <label for="md_ten">Đảng viên</label>
+        <div class="selectbox hoc_ky">
+          <div class="select">
+            <select class="js_lop">
+              <option value="0">Không</option>
+              <option value="1">Có</option>
+            </select>
           </div>
-        </div>
-        <div>
-          <label for="md_ten">Đảng viên</label>
-          <div class="selectbox hoc_ky">
-            <div class="select">
-              <select class="js_lop">
-                <option value="0">Không</option>
-                <option value="1">Có</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div>
-          <label for="md_ten">Chấm điểm</label>
-          <div class="selectbox hoc_ky">
-            <div class="select">
-              <select class="js_lop">
-                <option value="0">Không</option>
-                <option value="1">Có</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div>
-          <label for="md_ten">Lập bảng hoạt động</label>
-          <div class="selectbox hoc_ky">
-            <div class="select">
-              <select class="js_lop">
-                <option value="0">Không</option>
-                <option value="1">Có</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <button class="button-35">Thêm</button></div>
         </div>
       </div>
+      <div>
+        <label for="md_ten">Chấm điểm</label>
+        <div class="selectbox hoc_ky">
+          <div class="select">
+            <select class="js_lop">
+              <option value="0">Không</option>
+              <option value="1">Có</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div>
+        <label for="md_ten">Lập bảng hoạt động</label>
+        <div class="selectbox hoc_ky">
+          <div class="select">
+            <select class="js_lop">
+              <option value="0">Không</option>
+              <option value="1">Có</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <button class="button-35">Thêm</button>
     </div>
   </div>
+</div>
+</div>
+</div>
 
 </html>

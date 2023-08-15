@@ -1072,7 +1072,19 @@ client.connect().then(() => {
       res.sendStatus(500);
     }
   });
-
+  app.post("/api/deleteAccount", checkIfUserLoginAPI, async (req, res) => {
+    try {
+      const listDelete = req.body.dataDelete;
+      for (let i = 0; i < listDelete.length; i++) {
+        client.db('global').collection('user_info').deleteOne({ _id: listDelete[i] })
+        client.db('global').collection('login_info').deleteOne({ _id: listDelete[i] })
+      }
+      res.sendStatus(200);
+    } catch (err) {
+      console.log("SYSTEM | MARK | ERROR | ", err);
+      res.sendStatus(500);
+    }
+  });
   // Export class score report --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   app.get("/api/exportClassScore", checkIfUserLoginAPI, async (req, res) => {
     try {

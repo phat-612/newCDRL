@@ -1,5 +1,6 @@
-// tat ca duoc check thi check cai tat ca
 let selectedFile
+let cls
+// tat ca duoc check thi check cai tat ca
 function handleCheckboxChange() {
   let listCb = $(".inp-cbx");
   for (let i = 0; i < listCb.length; i++) {
@@ -33,44 +34,43 @@ function handleCheckboxChange() {
   });
 }
 // chon lop
-$('.js_lop').on('change',async (event)=>{
-  let reqClass = event.target.value;
+async function loadStudents(cls) {
+  $('.js_tbody').empty()
   try {
     let postData = JSON.stringify({
-        class: reqClass
+      class: cls
     });
     const requestOptions = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: postData
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: postData
     };
     const response = await fetch('/api/getStudentList', requestOptions);
     if (response.ok) {
-        const students = await response.json();
-        console.log(students);
-        if (students.length != 0){
+      const students = await response.json();
+      if (students.length != 0) {
         let htmls = [];
-        for (let i = 0; i < students.length; i++){
+        for (let i = 0; i < students.length; i++) {
           htmls.push(`
           <tr>
             <td>
               <div class="checkbox-wrapper-4">
                 <input
                   type="checkbox"
-                  id="row${i+1}"
+                  id="row${i + 1}"
                   class="inp-cbx"
-                  value="${i+1}"
+                  value="${students[i]._id}"
                 />
-                <label for="row${i+1}" class="cbx"
+                <label for="row${i + 1}" class="cbx"
                   ><span> <svg height="10px" width="12px"></svg></span>
                 </label>
               </div>
             </td>
-            <td>${i+1}</td>
+            <td>${i + 1}</td>
             <td> ${students[i]._id} </td>
-            <td>${students[i].last_name + " " +  students[i].first_name}</td>
+            <td>${students[i].last_name + " " + students[i].first_name}</td>
             <td>Lớp viên</td>
             <td></td>
             <td></td>
@@ -79,15 +79,20 @@ $('.js_lop').on('change',async (event)=>{
           </tr>
         `)
         }
-        $('.js_tbody').append(htmls.join(''))}
-        else{
-          $('.js_tbody').empty()
-        }
-        handleCheckboxChange()
+        $('.js_tbody').append(htmls.join(''))
+      }
+      else {
+        $('.js_tbody').empty()
+      }
+      handleCheckboxChange()
     }
   } catch (error) {
     console.log(error);
   }
+}
+$('.js_lop').on('change', async (event) => {
+  cls = event.target.value;
+  loadStudents(cls)
 })
 // model
 $(document).ready(() => {
@@ -95,7 +100,7 @@ $(document).ready(() => {
     $(".modal.add").show();
     console.log(1);
   });
-  
+
   $(".modal.add").click(function () {
     $(".modal.add").hide();
     console.log(2);
@@ -106,15 +111,15 @@ $(document).ready(() => {
   });
 });
 // set text up file
-$('.inp_file').on('change',(event)=>{
+$('.inp_file').on('change', (event) => {
   selectedFile = event.target.files[0];
-  if(selectedFile){
+  if (selectedFile) {
     $('.btn_input').text(selectedFile.name);
   }
 });
 // up file
-$(".btn_upload").on("click",async () =>{
-  if (selectedFile){
+$(".btn_upload").on("click", async () => {
+  if (selectedFile) {
     const formData = new FormData();
     formData.append('file', selectedFile);
     formData.append("cls", $(".js_lop").val());
@@ -131,6 +136,36 @@ $(".btn_upload").on("click",async () =>{
     } catch (error) {
       console.log(error);
     }
-    }
+  }
 })
-
+// delete students
+$('#delete-student').on('click', async () => {
+  let cbxs = $('.inp-cbx')
+  let dataDelete = [];
+  for (let i = 1; i < cbxs.length; i++) {
+    if (cbxs[i].checked) {
+      dataDelete.push(cbxs[i].value);
+    }
+  }
+  try {
+    let postData = JSON.stringify({
+      dataDelete: dataDelete
+    });
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: postData
+    };
+    const response = await fetch('/api/deleteAccount', requestOptions);
+    if (response.ok) {
+      await loadStudents(cls)
+      notify('n', 'Xóa sinh viên thành công')
+    } else {
+      notify('!', 'Xóa sinh viên thất bại')
+    }
+  } catch (error) {
+    console.log(error);
+  }
+})
