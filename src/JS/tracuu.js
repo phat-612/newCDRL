@@ -3,7 +3,10 @@ $(document).ready(function () {
         const selectedYear = $("#mySelect2").val();
         const response = await fetch(`/api/getuserscore?schoolYear=${selectedYear}`);
         const data = await response.json();
-
+        const linka=document.querySelectorAll('#HK_');
+        linka.forEach((aa)=>{
+            aa.href=`/xembangdiem?schoolYear=HK1_${selectedYear}`
+        })
         data.forEach((item) => {
             const totalResultElement = $(`.total-result[data-year="${item.year}"]`);
             totalResultElement.text(`${item.total}`);
@@ -11,15 +14,4 @@ $(document).ready(function () {
 
         localStorage.setItem("schoolYear", selectedYear);
     });
-});
-
-$("#HK1_").on("click", async function (event) {
-    const selectedYear = $("#mySelect2").val();
-    // event.preventDefault()
-    localStorage.setItem("schoolYear", `HK1_${selectedYear}`);
-});
-$("#HK2_").on("click", async function (event) {
-    const selectedYear = $("#mySelect2").val();
-    // event.preventDefault()
-    localStorage.setItem("schoolYear", `HK2_${selectedYear}`);
 });
