@@ -1,4 +1,15 @@
+let old_name;
+let curr_edit;
+let new_name;
+
 $(document).on("click", "#edit__subject", async function () { // this way get all in group(id/name/class)
+  // get old name (here to change old name every time new edit row)
+  old_name = $(this).parent().parent().find('.b_name').text();
+  // check current line for future use
+  curr_edit = $(this).parent().parent();
+  // change text area value ò edit to old name whenever it open edit window
+  $('.edit .bname_input').val(old_name);
+  // show window
   $(".modal.edit").show();
 });
 
@@ -11,7 +22,65 @@ $(".modal_wrap.edit").click(function (e) {
 });
 
 $("#add__subject").click(function () {
+  // clear old name whenever it not edit
+  old_name = '';
+  // set curent edit to start
+  curr_edit = undefined;
+
   $(".modal.add").show();
+});
+
+$("#delete__subject").click(async function () {
+  // disable curr button
+  $(this).prop('disabled', 'true');
+
+  let rm_bs = []
+
+  $('table tbody .inp-cbx').each(function () {
+    if (this.checked) {
+      rm_bs.push(this.value);
+    }
+  })
+
+  if (rm_bs.length > 0) {
+    // request
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        rm_bs: rm_bs
+      })
+    };
+
+    const response = await fetch('/api/deleteBranchs', requestOptions);
+    if (response.ok) {
+      $('table tbody .inp-cbx').each(function () {
+        if (this.checked) {
+          // remove currline
+          $(this).parent().parent().parent().remove();
+        }
+      })
+      // rewrite all numbers of lines after remove 
+      let index = 1;
+      $('table tbody .nums').each(function () {
+        $(this).text(index);
+        index += 1;
+      });
+
+      // able curr button
+      $(this).prop('disabled', 'true');
+
+      notify('n', 'Đã xóa các bộ môn đc đánh dấu')
+    }
+    else if (response.status == 500) {
+      // Error occurred during upload
+      notify('x', 'Có lỗi xảy ra!');
+    }
+  } else {
+    notify('!', 'Không có bộ môn được đánh dấu');
+  }
 });
 
 $(".modal.add").click(function () {
@@ -29,9 +98,67 @@ $(".exist_btn").click(function () {
 });
 
 //save button
-$(".save_btn").click(function () {
-  $(".modal.add").hide();
-  $(".modal.edit").hide();
+$(".save_btn").click(async function () {
+
+  // disable curr button
+  $(this).prop('disabled', 'true');
+
+  // find input
+  $('.modal').each(function () {
+    if ($(this).is(":visible")) {
+      // get new name
+      new_name = $(this).find('.bname_input').val();
+    }
+  })
+
+  // request
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      old_name: old_name,
+      name: new_name
+    })
+  };
+
+  const response = await fetch('/api/addOrEditBranchs', requestOptions);
+  if (response.ok) {
+    if (curr_edit) {
+      // set current edit line name to new name
+      curr_edit.find('.b_name').text(new_name);
+    } else {
+      let length = $('table tbody tr').length;
+      $('table tbody').append(`
+        <tr>
+          <td>
+            <div class="checkbox-wrapper-4">
+              <input type="checkbox" id="row--${length}" class="inp-cbx" value="${new_name}" />
+              <label for="row--${length}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+              </label>
+            </div>
+          </td>
+          <td class="nums">${length + 1}</td>
+          <td class="b_name">${new_name}</td>
+          <td class="dep_name">${$('table tbody .dep_name').first().text()}</td>
+          <td>
+            <a id="edit__subject" href="#">Sửa</a>
+          </td>
+        </tr>
+      `)
+    }
+    // able curr button
+    $(this).prop('disabled', 'true');
+    // disappear curr dialog 
+    $(".modal.add").hide();
+    $(".modal.edit").hide();
+    notify('n', 'Đã hoàn tất thay đổi bộ môn')
+  }
+  else if (response.status == 500) {
+    // Error occurred during upload
+    notify('x', 'Có lỗi xảy ra!');
+  }
 });
 
 // all checkbox set (if all-cbx tick all checkboxs will tick otherwise untick all)
@@ -46,7 +173,7 @@ $(document).on("change", ".all-cbx", async function () {
 // if all checkboxs was check all-cbx will tick
 $(document).on("change", ".inp-cbx", async function () {
   let check = true
-  $('table tbody .inp-cbx').each(function(){
+  $('table tbody .inp-cbx').each(function () {
     if (!this.checked) check = false; return;
   })
 

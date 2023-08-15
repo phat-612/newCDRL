@@ -45,14 +45,14 @@
                 <tr>
                   <td>
                     <div class="checkbox-wrapper-4">
-                      <input type="checkbox" id="row--0" class="inp-cbx" value="2" />
-                      <label for="row--0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                      <input type="checkbox" id="row--<%- i %>" class="inp-cbx" value="<%= branchs[i].name %>" />
+                      <label for="row--<%- i %>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                       </label>
                     </div>
                   </td>
-                  <td><%= i + 1 %></td>
-                  <td><%= branchs[i].name %></td>
-                  <td><%= branchs[i].dep_name %></td>
+                  <td class="nums"><%= i + 1 %></td>
+                  <td class="b_name"><%= branchs[i].name %></td>
+                  <td class="dep_name"><%= dep %></td>
                   <td>
                     <a id="edit__subject" href="#">Sửa</a>
                   </td>
@@ -73,7 +73,7 @@
 
             <div class="content content--subtitle">
               <h3 class="sub__title name--subject">Tên Bộ Môn</h3>
-              <textarea name="" id="" cols="30" rows="3" placeholder="Nhập tên Bộ môn cần chỉnh sửa"></textarea>
+              <textarea class="bname_input" cols="30" rows="3" placeholder="Nhập tên Bộ môn cần chỉnh sửa"></textarea>
             </div>
 
             <div class="content subtitle">
@@ -81,7 +81,7 @@
             </div>
 
             <div class="box-button">
-                <div><button class="button-35 exist_btn">Hủy</button></div>
+                <div><button class="button-35 exist_btn">Hủy</button></div>   
                 <div><button class="button-35 save_btn">Lưu</button></div>
             </div>
           </div>
@@ -97,7 +97,7 @@
 
             <div class="content teacher__name">
               <h3 class="sub__title name--subject">Tên Bộ Môn</h3>
-              <textarea name="" id="" cols="30" rows="3" placeholder="Nhập tên Bộ môn mới (Bắt buộc)"></textarea>
+              <textarea class="bname_input" cols="30" rows="3" placeholder="Nhập tên Bộ môn mới (Bắt buộc)"></textarea>
             </div>
 
             <div class="content teacher__account">
@@ -105,7 +105,7 @@
             </div>
 
             <div class="box-button">
-                <div><button class="button-35 exist_btn">Hoàn Tác</button></div>
+                <div><button class="button-35 exist_btn">Hủy</button></div>
                 <div><button class="button-35 save_btn">Lưu</button></div>
             </div>
           </div>

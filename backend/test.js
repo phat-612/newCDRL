@@ -20,31 +20,35 @@ const client = new MongoClient(uri, {
 // ).then(cls => { console.log(cls.years); })
 
 // thêm user info và login info
+client.db('global').collection('user_info').findOne(
+    { _id: '2101381' },
+    { projection: { _id: 0, class: 1, power: 1 } }
+).then((ok) => { console.log(ok); })
 
-client.db('global').collection('user_info').updateOne(
-    { _id: '2101111' },
-    {$set: {
-        _id: '2101111',
-        first_name: 'Phúc Đạt',
-        last_name: 'Phạm',
-        avt: '',
-        power: { '0': true },
-        class: [ 'KTPM0121' ],
-        displayName: 'Phạm Phúc Đạt',
-        email: ''
-    }},
-    {upsert: true}
+// client.db('global').collection('user_info').updateOne(
+//     { _id: '2101111' },
+//     {$set: {
+//         _id: '2101111',
+//         first_name: 'Phúc Đạt',
+//         last_name: 'Phạm',
+//         avt: '',
+//         power: { '0': true },
+//         class: [ 'KTPM0121' ],
+//         displayName: 'Phạm Phúc Đạt',
+//         email: ''
+//     }},
+//     {upsert: true}
     
-).then(() => { console.log('them thong tin thanh cong'); })
-client.db('global').collection('login_info').updateOne(
-    { _id: '2101111' },
-    {$set:{
-        _id: '2101111',
-        password: '2101111'
-    }},
-    {upsert: true}
+// ).then(() => { console.log('them thong tin thanh cong'); })
+// client.db('global').collection('login_info').updateOne(
+//     { _id: '2101111' },
+//     {$set:{
+//         _id: '2101111',
+//         password: '2101111'
+//     }},
+//     {upsert: true}
     
-).then(() => { console.log('them tai khoan thanh cong'); })
+// ).then(() => { console.log('them tai khoan thanh cong'); })
 
 
 // add quyên cho người dùng
