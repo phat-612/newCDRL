@@ -47,3 +47,8 @@ function setscore5(fifthScores) {
     });
    document.getElementById("total_muc_5").innerText=calculateSum(fifthScores);  
 }
+
+function totalall(all){
+    document.getElementById("total_all").innerText=all;
+}
+

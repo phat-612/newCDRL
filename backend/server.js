@@ -433,7 +433,7 @@ client.connect().then(() => {
             school_year: schoolYearParam
           },
           {
-            projection: { _id: 0, first: 1, second: 1, third: 1, fourth: 1, fifth: 1, img_ids: 1 }
+            projection: { _id: 0, first: 1, second: 1, third: 1, fourth: 1, fifth: 1, img_ids: 1, total: 1 }
           }
         );
 
