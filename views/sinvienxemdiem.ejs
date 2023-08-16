@@ -90,11 +90,6 @@
 
               </td>
               <td>
-                <!-- <select style="width: 80%" class="comboMark" id="score_02" name="score_02">
-                  <option value="0">0</option>
-                  <option value="1">1</option>
-                  <option value="2" selected="">2</option>
-                </select> -->
                 <div class="score_1"><%=Score.first[1]%></div>
               </td>
               <td>
@@ -116,13 +111,6 @@
 
               </td>
               <td>
-                <!-- <select style="width: 80%" class="comboMark" id="score_03" name="score_03">
-                  <option value="0">0</option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4" selected="">4</option>
-                </select> -->
                 <div class="score_1"><%=Score.first[2]%></div>
               </td>
               <td>
@@ -202,178 +190,175 @@
                 <div class="score_1"><%=Scorestd.first[3]%>
       </div>
 
-      </td>
-      <td>
-        <div class="score_1"><%=Score.first[3]%></div>
-      </td>
-      <td>
-        <div class="score_1"><%=Scorek.first[3]%></div>
+              </td>
+              <td>
+                <div class="score_1"><%=Score.first[3]%></div>
+              </td>
+              <td>
+                <div class="score_1"><%=Scorek.first[3]%></div>
 
-      </td>
-      </tr>
-      <tr>
-        <td>
-          <p class="first-column-value">
-            đ. Đạt kết quả cao trong học tập
-          </p>
-        </td>
-        <td>5 điểm
-        </td>
-        <td class="score_1"> <%=Scorestd.first[4]%>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p class="first-column-value">
+                  đ. Đạt kết quả cao trong học tập
+                </p>
+              </td>
+              <td>5 điểm
+              </td>
+              <td class="score_1"> <%=Scorestd.first[4]%>
 
-        </td>
-        <td class="score_1"> <%=Score.first[4]%>
+              </td>
+              <td class="score_1"> <%=Score.first[4]%>
 
-        </td>
-        <td class="score_1"> <%=Scorek.first[4]%>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <p class="first-column-value">
-            - Loại Trung bình: Điểm số từ 2.0 đến 2.49
-          </p>
-        </td>
-        <td>2 điểm
-        </td>
-        <td>
-          <%if (Scorestd.first[4] == 2){%>
-          <div class="check_score"><i class="fa-solid fa-check"></i></div>
-          <%} else {%>
-          <div class="check_score"></div>
-          <%}%>   
-        </td>
-        <td>
-          <%if (Score.first[4] == 2){%>
-          <div class="check_score"><i class="fa-solid fa-check"></i></div>
-          <%} else {%>
-          <div class="check_score"></div>
-          <%}%>          
-        </td>
-        <td>
-          <%if (Scorek.first[4] == 2){%>
-          <div class="check_score"><i class="fa-solid fa-check"></i></div>
-          <%} else {%>
-          <div class="check_score"></div>
-          <%}%>  
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <p class="first-column-value">
-            - Loại Khá: Điểm số từ 2.5 đến 3.19
-          </p>
-        </td>
-        <td>3 điểm
-        </td>
-        <td>
-          <%if (Scorestd.first[4] == 3){%>
-          <div class="check_score"><i class="fa-solid fa-check"></i></div>
-          <%} else {%>
-          <div class="check_score"></div>
-          <%}%>    
-        </td>
-        <td>
-          <%if (Score.first[4] == 3){%>
-          <div class="check_score"><i class="fa-solid fa-check"></i></div>
-          <%} else {%>
-          <div class="check_score"></div>
-          <%}%>             
-        </td>
-        <td>
-          <%if (Scorek.first[4] == 3){%>
-          <div class="check_score"><i class="fa-solid fa-check"></i></div>
-          <%} else {%>
-          <div class="check_score"></div>
-          <%}%>   
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <p class="first-column-value">
-            - Loại Giỏi: Điểm số từ 3.2 đến 3.59
-          </p>
-        </td>
-        <td>4 điểm
-        </td>
-        <td>
-          <%if (Scorestd.first[4] == 4){%>
-          <div class="check_score"><i class="fa-solid fa-check"></i></div>
-          <%} else {%>
-          <div class="check_score"></div>
-          <%}%>  
-        </td>
-        <td>
-          <%if (Score.first[4] == 4){%>
-          <div class="check_score"><i class="fa-solid fa-check"></i></div>
-          <%} else {%>
-          <div class="check_score"></div>
-          <%}%>     
-          </td>
-        <td>
-          <%if (Scorek.first[4] == 4){%>
-          <div class="check_score"><i class="fa-solid fa-check"></i></div>
-          <%} else {%>
-          <div class="check_score"></div>
-          <%}%>  
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <p class="first-column-value">
-            - Loại Xuất sắc: Điểm số từ 3.6 đến 4.0
-          </p>
-        </td>
-        <td>5 điểm
-        </td>
-        <td>
-          <%if (Scorestd.first[4] == 5){%>
-          <div class="check_score"><i class="fa-solid fa-check"></i></div>
-          <%} else {%>
-          <div class="check_score"></div>
-          <%}%> 
-        </td>
-        <td>
-          <%if (Score.first[4] == 5){%>
-          <div class="check_score"><i class="fa-solid fa-check"></i></div>
-          <%} else {%>
-          <div class="check_score"></div>
-          <%}%> 
-        </td>
-        <td>
-          <%if (Scorek.first[4] == 5){%>
-          <div class="check_score"><i class="fa-solid fa-check"></i></div>
-          <%} else {%>
-          <div class="check_score"></div>
-          <%}%> 
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <p class="first-column-value">
-            Điểm tối đa nội dung 1 là 20 điểm
-          </p>
-        </td>
-        <td>
-        </td>
-        
-
-       
-        <td id="total_muc_1"> <%=  Scorestd.first[0] + Scorestd.first[1] + Scorestd.first[2] + Scorestd.first[3] + Scorestd.first[4] %> điểm
-        </td>
-        <%if (Score.first[0] == 'Chưa chấm') {%>
-        <td id="total_muc_1"> <%=  Score.first[0]%>
-          <%}else {%>
-        <td id="total_muc_1"> <%=  Score.first[0] + Score.first[1] + Score.first[2] + Score.first[3] + Score.first[4] %> điểm
-          <%}%>
-            </td>
-        <%if (Scorek.first[0] == 'Chưa chấm') {%>
-        <td id="total_muc_1"> <%=  Scorek.first[0]%>
-          <%}else {%>
-        <td id="total_muc_1"> <%=  Scorek.first[0] + Scorek.first[1] + Scorek.first[2] + Scorek.first[3] + Scorek.first[4] %> điểm
-          <%}%>
-        </td>
-      </tr>
+              </td>
+              <td class="score_1"> <%=Scorek.first[4]%>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p class="first-column-value">
+                  - Loại Trung bình: Điểm số từ 2.0 đến 2.49
+                </p>
+              </td>
+              <td>2 điểm
+              </td>
+              <td>
+                <%if (Scorestd.first[4] == 2){%>
+                <div class="check_score"><i class="fa-solid fa-check"></i></div>
+                <%} else {%>
+                <div class="check_score"></div>
+                <%}%>   
+              </td>
+              <td>
+                <%if (Score.first[4] == 2){%>
+                <div class="check_score"><i class="fa-solid fa-check"></i></div>
+                <%} else {%>
+                <div class="check_score"></div>
+                <%}%>          
+              </td>
+              <td>
+                <%if (Scorek.first[4] == 2){%>
+                <div class="check_score"><i class="fa-solid fa-check"></i></div>
+                <%} else {%>
+                <div class="check_score"></div>
+                <%}%>  
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p class="first-column-value">
+                  - Loại Khá: Điểm số từ 2.5 đến 3.19
+                </p>
+              </td>
+              <td>3 điểm
+              </td>
+              <td>
+                <%if (Scorestd.first[4] == 3){%>
+                <div class="check_score"><i class="fa-solid fa-check"></i></div>
+                <%} else {%>
+                <div class="check_score"></div>
+                <%}%>    
+              </td>
+              <td>
+                <%if (Score.first[4] == 3){%>
+                <div class="check_score"><i class="fa-solid fa-check"></i></div>
+                <%} else {%>
+                <div class="check_score"></div>
+                <%}%>             
+              </td>
+              <td>
+                <%if (Scorek.first[4] == 3){%>
+                <div class="check_score"><i class="fa-solid fa-check"></i></div>
+                <%} else {%>
+                <div class="check_score"></div>
+                <%}%>   
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p class="first-column-value">
+                  - Loại Giỏi: Điểm số từ 3.2 đến 3.59
+                </p>
+              </td>
+              <td>4 điểm
+              </td>
+              <td>
+                <%if (Scorestd.first[4] == 4){%>
+                <div class="check_score"><i class="fa-solid fa-check"></i></div>
+                <%} else {%>
+                <div class="check_score"></div>
+                <%}%>  
+              </td>
+              <td>
+                <%if (Score.first[4] == 4){%>
+                <div class="check_score"><i class="fa-solid fa-check"></i></div>
+                <%} else {%>
+                <div class="check_score"></div>
+                <%}%>     
+                </td>
+              <td>
+                <%if (Scorek.first[4] == 4){%>
+                <div class="check_score"><i class="fa-solid fa-check"></i></div>
+                <%} else {%>
+                <div class="check_score"></div>
+                <%}%>  
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p class="first-column-value">
+                  - Loại Xuất sắc: Điểm số từ 3.6 đến 4.0
+                </p>
+              </td>
+              <td>5 điểm
+              </td>
+              <td>
+                <%if (Scorestd.first[4] == 5){%>
+                <div class="check_score"><i class="fa-solid fa-check"></i></div>
+                <%} else {%>
+                <div class="check_score"></div>
+                <%}%> 
+              </td>
+              <td>
+                <%if (Score.first[4] == 5){%>
+                <div class="check_score"><i class="fa-solid fa-check"></i></div>
+                <%} else {%>
+                <div class="check_score"></div>
+                <%}%> 
+              </td>
+              <td>
+                <%if (Scorek.first[4] == 5){%>
+                <div class="check_score"><i class="fa-solid fa-check"></i></div>
+                <%} else {%>
+                <div class="check_score"></div>
+                <%}%> 
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p class="first-column-value">
+                  Điểm tối đa nội dung 1 là 20 điểm
+                </p>
+              </td>
+              <td>
+              </td>
+              <td id="total_muc_1"> <%=  Scorestd.first[0] + Scorestd.first[1] + Scorestd.first[2] + Scorestd.first[3] + Scorestd.first[4] %> điểm
+              </td>
+              <%if (Score.first[0] == 'Chưa chấm') {%>
+              <td id="total_muc_1"> <%=  Score.first[0]%>
+                <%}else {%>
+              <td id="total_muc_1"> <%=  Score.first[0] + Score.first[1] + Score.first[2] + Score.first[3] + Score.first[4] %> điểm
+                <%}%>
+                  </td>
+              <%if (Scorek.first[0] == 'Chưa chấm') {%>
+              <td id="total_muc_1"> <%=  Scorek.first[0]%>
+                <%}else {%>
+              <td id="total_muc_1"> <%=  Scorek.first[0] + Scorek.first[1] + Scorek.first[2] + Scorek.first[3] + Scorek.first[4] %> điểm
+                <%}%>
+              </td>
+            </tr>
       <tr class="tr-title">
         <td >
 
@@ -400,19 +385,17 @@
         <td>15 điểm
         </td>
         <td>
-          <div class="score_2"><%=Scorestd.second[0]%>
-    </div>
+            <div class="score_2"><%=Scorestd.second[0]%></div>
+        </td>
+        <td>
+          <div class="score_2"><%=Score.second[0]%></div>
+        </td>
+        <td>
+          <div class="score_2"><%=Scorek.second[0]%></div>
 
-    </td>
-    <td>
-      <div class="score_2"><%=Score.second[0]%></div>
-    </td>
-    <td>
-      <div class="score_2"><%=Scorek.second[0]%></div>
-
-    </td>
-    </tr>
-    <tr>
+        </td>
+      </tr>
+      <tr>
       <td>
         <p class="first-column-value">
           - Bị nhắc nhở trong việc thực hiện
@@ -482,144 +465,141 @@
         <td>10 điểm
         </td>
         <td>
-          <div class="score_2"><%=Scorestd.second[1]%>
-  </div>
-
-  </td>
-  <td>
-    <div class="score_2"><%=Score.second[1]%></div>
-  </td>
-  <td>
-    <div class="score_2"><%=Scorek.second[1]%></div>
-
-  </td>
-  </tr>
-  <tr>
-    <td>
-      <p class="first-column-value">
-        - Bị nhắc nhở trong việc thực hiện
-      </p>
-    </td>
-    <td>5 điểm
-    </td>
-    <td>
-      <%if (Scorestd.second[1] == 5){%>
-      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-      <%} else {%>
-      <div class="check_score"></div>
-      <%}%> 
-      </td>
-      <td>
-        <%if (Score.second[1] == 5){%>
-      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-      <%} else {%>
-      <div class="check_score"></div>
-      <%}%>      
-      </td>
-      <td>
-        <%if (Scorek.second[1] == 5){%>
-      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-      <%} else {%>
-      <div class="check_score"></div>
-      <%}%>  
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <p class="first-column-value">
-          - Bị xử lý kỷ luật từ mức khiển trách trở lên
-        </p>
-      </td>
-      <td>0 điểm
-      </td>
-      <td>
-        <%if (Scorestd.second[1] == 0){%>
-      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-      <%} else {%>
-      <div class="check_score"></div>
-      <%}%> 
-      </td>
-      <td>
-        <%if (Score.second[1] == 0){%>
-      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-      <%} else {%>
-      <div class="check_score"></div>
-      <%}%>         
-      </td>
-      <td>
-        <%if (Scorek.second[1] == 0){%>
-      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-      <%} else {%>
-      <div class="check_score"></div>
-      <%}%>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <p class="first-column-value">
-          Điểm tối đa nội dung 2 là 25 điểm
-        </p>
-      </td>
-      <td>
-      </td>
-      <td>
-        <%=Scorestd.second[0]+Scorestd.second[1]%> điểm
-
-      <%if (Score.first[0] == 'Chưa chấm') {%>
-    <td id="total_muc_1"> <%=  Score.first[0]%>
-      <%}else {%>
-    <td id="total_muc_2"> <%=Score.second[0]+Score.second[1]%> điểm
-      <%}%>
+          <div class="score_2"><%=Scorestd.second[1]%></div>
         </td>
-   
-      <%if (Scorek.first[0] == 'Chưa chấm') {%>
-    <td id="total_muc_2"> <%=  Scorek.first[0]%>
-      <%}else {%>
-    <td id="total_muc_2"> <%=Scorek.second[0]+Scorek.second[1]%> điểm
-      <%}%>
+        <td>
+          <div class="score_2"><%=Score.second[1]%></div>
+        </td>
+        <td>
+          <div class="score_2"><%=Scorek.second[1]%></div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p class="first-column-value">
+            - Bị nhắc nhở trong việc thực hiện
+          </p>
+        </td>
+        <td>5 điểm
+        </td>
+        <td>
+        <%if (Scorestd.second[1] == 5){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%> 
+        </td>
+        <td>
+          <%if (Score.second[1] == 5){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%>      
+        </td>
+        <td>
+          <%if (Scorek.second[1] == 5){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%>  
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p class="first-column-value">
+            - Bị xử lý kỷ luật từ mức khiển trách trở lên
+          </p>
+        </td>
+        <td>0 điểm
+        </td>
+        <td>
+          <%if (Scorestd.second[1] == 0){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%> 
+        </td>
+        <td>
+          <%if (Score.second[1] == 0){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%>         
+        </td>
+        <td>
+          <%if (Scorek.second[1] == 0){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p class="first-column-value">
+            Điểm tối đa nội dung 2 là 25 điểm
+          </p>
+        </td>
+        <td>
+        </td>
+        <td>
+          <%=Scorestd.second[0]+Scorestd.second[1]%> điểm
 
-    </td>
-  </tr>
-  <tr class="tr-title">
-    <td>
+        <%if (Score.first[0] == 'Chưa chấm') {%>
+      <td id="total_muc_1"> <%=  Score.first[0]%>
+        <%}else {%>
+      <td id="total_muc_2"> <%=Score.second[0]+Score.second[1]%> điểm
+        <%}%>
+          </td>
+    
+        <%if (Scorek.first[0] == 'Chưa chấm') {%>
+      <td id="total_muc_2"> <%=  Scorek.first[0]%>
+        <%}else {%>
+      <td id="total_muc_2"> <%=Scorek.second[0]+Scorek.second[1]%> điểm
+        <%}%>
 
-      <p class="title">3. Đánh giá về ý thức và kết quả tham gia các hoạt động
-        chính trị, xã hội, văn hoá, văn nghệ, thể thao, phòng
-        chống tội phạm và các tệ nạn xã hội</p>
+      </td>
+      </tr>
+      <tr class="tr-title">
+        <td>
 
-    </td>
-    <td>
-    </td>
-    <td>
-    </td>
-    <td>
-    </td>
-    <td>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <p class="first-column-value">
-        a. Tham gia tích cực các hoạt động chính trị, xã hội, văn
-        hoá, văn nghệ, thể thao và có sự trưởng thành của bản thân
-        qua các hoạt động rèn luyện:
-      </p>
-    </td>
-    <td>8 điểm
-    </td>
-    <td>
-      <div class="score_3"><%=Scorestd.third[0]%></div>
+          <p class="title">3. Đánh giá về ý thức và kết quả tham gia các hoạt động
+            chính trị, xã hội, văn hoá, văn nghệ, thể thao, phòng
+            chống tội phạm và các tệ nạn xã hội</p>
 
-    </td>
-    <td>
-      <div class="score_3"><%=Score.third[0]%></div>
-    </td>
-    <td>
-      <div class="score_3"><%=Scorek.third[0]%></div>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p class="first-column-value">
+            a. Tham gia tích cực các hoạt động chính trị, xã hội, văn
+            hoá, văn nghệ, thể thao và có sự trưởng thành của bản thân
+            qua các hoạt động rèn luyện:
+          </p>
+        </td>
+        <td>8 điểm
+        </td>
+        <td>
+          <div class="score_3"><%=Scorestd.third[0]%></div>
 
-    </td>
-  </tr>
-  <tr>
+        </td>
+        <td>
+          <div class="score_3"><%=Score.third[0]%></div>
+        </td>
+        <td>
+          <div class="score_3"><%=Scorek.third[0]%></div>
+
+        </td>
+      </tr>
+      <tr>
     <td>
       <p class="first-column-value">
         - Tích cực tham gia các hoạt động chính trị, xã hội, văn
@@ -649,7 +629,7 @@
       <div class="check_score"></div>
       <%}%> 
       </td>
-    </tr>
+      </tr>
     <tr>
       <td>
         <p class="first-column-value">
@@ -694,15 +674,15 @@
       <td>
         <div class="score_3"><%=Scorestd.third[1]%></div>
 
-    </td>
-    <td>
-      <div class="score_3"><%=Score.third[1]%></div>
-    </td>
-    <td>
-      <div class="score_3"><%=Scorek.third[1]%></div>
+      </td>
+      <td>
+        <div class="score_3"><%=Score.third[1]%></div>
+      </td>
+      <td>
+        <div class="score_3"><%=Scorek.third[1]%></div>
 
-    </td>
-  </tr>
+      </td>
+    </tr>
   <tr>
     <td>
       <p class="first-column-value">

@@ -1,7 +1,16 @@
 html {
   font-size: 62.5%;
 }
-
+:root{
+  --html-color: #e7ecf0;
+  --body-color: #fff;
+  --input-br:#d9d9d982;
+  --input-border:#0000004d;
+  --black-text:black;
+  --button-br:#d3d3d3;
+  --button-hover:#121212;
+  --porfile-titlebd:#aeaeae;
+}
 html,
 body {
   box-sizing: border-box;
@@ -17,12 +26,12 @@ body {
 }
 
 body {
-  background-color: #e7ecf0;
+  background-color: var(--html-color);
 }
 
 .container {
   width: 120rem;
-  background: #fff;
+  background: var(--body-color);
   margin: 0 auto;
   margin-top: 3rem;
   margin-bottom: 3rem;
@@ -99,7 +108,7 @@ body {
   font-size: 1.3rem;
   padding: 1rem 2rem;
   transition: 0.3s top ease-in-out;
-  background-color: #aeaeae;
+  background-color: var(--porfile-titlebd);
 }
 
 .modal_wrap_img_item {
@@ -149,7 +158,7 @@ body {
   position: fixed;
   top: 0;
   display: none;
-  background-color: #aeaeaebf;
+  background-color: var(--porfile-titlebd);
 }
 
 /* CSS cho dialog thêm ảnh */
@@ -228,7 +237,7 @@ body {
 }
 
 .modal_img_btn {
-  background-color: #aeaeae;
+  background-color: var(--porfile-titlebd);
   height: 16%;
   display: flex;
   justify-content: center;
@@ -243,7 +252,7 @@ body {
   align-items: center;
   padding: 1rem 3.5rem;
   background-color: #515050;
-  color: #fff;
+  color:var(--body-color);
   text-align: center;
   margin-right: 2rem;
   width: 9rem;
@@ -279,11 +288,11 @@ body {
   width: 13rem;
   height: 5rem;
   align-items: center;
-  background-color: #d3d3d3;
+  background-color: var(--button-br);
   border-radius: 1rem;
   box-shadow: transparent 0 0 0 3px, rgba(18, 18, 18, .1) 0 6px 20px;
   box-sizing: border-box;
-  color: #121212;
+  color: var(--black-text);
   cursor: pointer;
   display: inline-flex;
   font-family: Inter, sans-serif;
@@ -309,7 +318,7 @@ body {
 }
 
 .button-35:hover {
-  box-shadow: #121212 0 0 0 3px, transparent 0 0 0 0;
+  box-shadow: var(--button-hover) 0 0 0 3px, transparent 0 0 0 0;
 }
 
 .profile_title {
@@ -317,7 +326,7 @@ body {
   font-size: 2rem;
   text-align: center;
   border-bottom: 0.1rem solid;
-  border-color: #aeaeae;
+  border-color: var(--porfile-titlebd);
 }
 
 .right_container {

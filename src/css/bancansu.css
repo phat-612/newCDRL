@@ -1,14 +1,17 @@
 html {
   font-size: 62.5%;
 }
-
+:root{
+  --html-color: #e7ecf0;
+  --body-color: #fff;
+}
 * {
   padding: 0;
   margin: 0;
   box-sizing: content-box;
 }
 body {
-  background-color: #e7ecf0;
+  background-color: var(--html-color);
 }
 
 /* css tra cứu */
@@ -17,7 +20,7 @@ body {
 .submit-mark {
   margin-top: 2rem;
   max-width: 90rem;
-  background-color: #fff;
+  background-color: var(--body-color);
   margin-left: auto;
   margin-right: auto;
   border-radius: 0.8rem;

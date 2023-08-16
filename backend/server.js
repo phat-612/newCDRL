@@ -1529,13 +1529,13 @@ client.connect().then(() => {
       // must be department to use this api
       if (user.pow[5]) {
         // remove old branch
-        await client.db('global').collection('branchs').deleteOne(
+        await client.db(name_global_databases).collection('branchs').deleteOne(
           {
             _id: createId(data.old_name),
           }
         )
         // add new branch
-        await client.db('global').collection('branchs').insertOne(
+        await client.db(name_global_databases).collection('branchs').insertOne(
           {
             _id: createId(data.name),
             name: data.name,
@@ -1564,7 +1564,7 @@ client.connect().then(() => {
       if (user.pow[5]) {
         // remove all cheked branch in remove branchs líst
         for (let i = 0; i < data.rm_bs.length; i++) {
-          await client.db('global').collection('branchs').deleteOne(
+          await client.db(name_global_databases).collection('branchs').deleteOne(
             {
               _id: createId(data.rm_bs[i]),
             }
