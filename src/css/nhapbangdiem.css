@@ -2,8 +2,20 @@ html {
   font-size: 62.5%;
   position: relative;
 }
+:root{
+  --html-color: #e7ecf0;
+  --table-header:#cecece;
+  --table-line:#aeaeae;
+  --row-1:#f1f1f1;
+  --row-2:#ffffff;
+  --white-color:#fff;
+  --checkbox-check:rgb(143, 213, 229);
+  --checkbox-border:#c2c2c2;
+  --dropimg-color:#5c5c5c;
+  --upimg-body:#f6f6f6;
+}
 body {
-  background-color: #e7ecf0;
+  background-color: var(--html-color);
   margin: 0;
 }
 
@@ -13,7 +25,7 @@ table *{
   padding: 0;
 }
 table, th, td {
-  border: 1px solid #aeaeae;
+  border: 1px solid var(--table-line);
   border-collapse: collapse;
   font-weight: 600;
 }
@@ -30,13 +42,13 @@ text-align: center;
 
 }
 th {
-  background-color: rgb(206, 206, 206);
+  background-color: var(--table-header);
 }
 tr:nth-child(even) {
-  background-color: rgb(241, 241, 241);
+  background-color: var(--row-1);
 }
 tr:nth-child(odd) {
-  background-color: #ffffff;
+  background-color: var(--row-2);
 }
 td:nth-child(1){
   text-align: left;
@@ -61,7 +73,7 @@ td .title{
 
 .main-content {
   border-radius: 0.8rem;
-  background-color: #fff;
+  background-color: var(--white-color);
   width: 115.5rem;
   max-width: 95%;
   margin-top: 3rem;
@@ -90,7 +102,7 @@ td .title{
   font-size: 1.3rem;
   padding: 1rem 2rem;
   transition: 0.3s top ease-in-out;
-  background-color: #aeaeae;
+  background-color: var(--table-line);
   border-radius: 0.8rem;
 
 }
@@ -158,7 +170,7 @@ td .title{
   position: fixed;
   top: 0;
   display: none;
-  background-color: #aeaeaebf;
+  background-color: var(--table-line)bf;
 }
 
 /* CSS cho dialog thêm ảnh */
@@ -198,7 +210,7 @@ td .title{
   position: relative;
   justify-content: center;
   font-size: 2rem;
-  color: #5c5c5c;
+  color: var(--dropimg-color);
   border-radius: 0.8rem;
   transition: background 0.3s ease-in-out;
 }
@@ -241,7 +253,7 @@ td .title{
 }
 
 .modal_wrap_img {
-  background-color: #f6f6f6;
+  background-color: var(--upimg-body);
   display: flex;
   justify-content: space-between;
   padding: 1rem 2rem;
@@ -280,7 +292,7 @@ textarea::placeholder {
 }
 
 .modal_img_btn {
-  background-color: #aeaeae;
+  background-color: var(--table-line);
   height: 16%;
   display: flex;
   justify-content: center;
@@ -332,7 +344,7 @@ textarea::placeholder {
   top: 0.3rem;
   left: 0.2rem;
   fill: none;
-  stroke: #fff;
+  stroke: var(--white-color);
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -349,7 +361,7 @@ textarea::placeholder {
 }
 
 .checkbox-wrapper-4 .cbx:hover span:first-child {
-  border-color: #c2c2c2;
+  border-color: var(--checkbox-border);
 }
 
 .checkbox-wrapper-4 .inp-cbx {
@@ -358,8 +370,8 @@ textarea::placeholder {
 }
 
 .checkbox-wrapper-4 .inp-cbx:checked + .cbx span:first-child {
-  background: rgb(143, 213, 229);
-  border-color: #c2c2c2;
+  background: var(--checkbox-check);
+  border-color: var(--checkbox-border);
   animation: wave-4 0.4s ease;
 }
 
