@@ -217,17 +217,18 @@ client.connect().then(() => {
         projection: {
           _id: 0,
           year: 1,
+          start_day: 1,
           end_day: 1
         }
       });
 
     let today = new Date();
+    let start_day = new Date(school_year.start_day);
     let end_day = new Date(school_year.end_day);
-    let forever_day = Date("October 18, 2003 23:59:59");
-
+    let forever_day = Date("2003-10-18"); // special date
 
     // check if end mark time or not
-    if (today < end_day || end_day == forever_day) {
+    if ((start_day <= today && today < end_day) || end_day == forever_day) {
       // update old table if exist or insert new table
       let update = {
         mssv: user._id,
@@ -847,12 +848,11 @@ client.connect().then(() => {
       {
         projection: { year: 1, start_day: 1, end_day: 1 }
       });
-    
     // check if end day is foreverday or not 
     if (school_year.end_day.toISOString() == "2003-10-18T00:00:00.000Z") {
       school_year.end_day = undefined
     }
-    
+
     res.render("thoihan", {
       header: "header",
       thongbao: "thongbao",
@@ -1726,6 +1726,10 @@ client.connect().then(() => {
       const user = req.session.user;
       const data = req.body; // data = {sch_y: "HK1_2022-2023", start_day: '18/10/2023', end_day: '19/11/999999999999999999']}
 
+      // set end day to special date if it is ''
+      if (!data.end_day) {
+        data.end_day = new Date('2003-10-18'); // special date
+      }
       // must be department to use this api
       if (user.pow[6]) {
         await client.db(name_global_databases).collection('school_year').updateOne(

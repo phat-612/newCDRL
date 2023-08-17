@@ -17,18 +17,18 @@
         <h1>Thời hạn chấm điểm</h1>
         <div class="input-container nienkhoan">
           <label for="">Niên Khóa</label>
-          <div class="selectbox">
+          <div class="selectbox" >
             <div class="select">
               <select id="mySelect2">
                 <% const currentYear = new Date().getFullYear(); %>
                 <% for (let i = currentYear - 2; i < currentYear + 2; i++) { %>
-                  <% if (`${i}-${i + 1}` == school_year.year.split("_")[1]) { %>
-                    <option value="<%= `${i}-${i + 1}` %>" selected="selected"><%= `${i}-${i + 1}` %></option>
-                  <% } else { %>
-                    <option value="<%= `${i}-${i + 1}` %>"><%= `${i}-${i + 1}` %></option>
-                  <% } %> 
+                <% if (`${i}-${i + 1}` == school_year.year.split("_")[1]) { %>
+                <option value="<%= `${i}-${i + 1}` %>" selected="selected"><%= `${i}-${i + 1}` %></option>
+                <% } else { %>
+                <option value="<%= `${i}-${i + 1}` %>"><%= `${i}-${i + 1}` %></option>
                 <% } %>
-              </select>                                       
+                <% } %>
+              </select>
             </div>
           </div>
         </div>
@@ -55,14 +55,14 @@
           <h2>Trạng thái</h2>
           <div class="input-container chamdiem">
             <label for="">Chấm Điểm Rèn Luyện</label>
-            <div class="selectbox">
+            <div class="selectbox" style="padding-bottom: 0.3rem;">
               <label class="close_now" for="">Đang diễn ra</label>
               <div class="checkbox-wrapper-4">
 
                 <input type="checkbox" id="morning1" class="inp-cbx" value="2" checked />
                 <label for="morning1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                 </label>
-  
+
               </div>
             </div>
           </div>
@@ -83,7 +83,6 @@
       <div class="input-container time_start">
         <label for="">Thời gian bắt đầu </label>
         <div class="selectbox">
-
           <input type="date" class="time start_time" value="<%= school_year.start_day.toISOString().substring(0,10) %>">
         </div>
       </div>
@@ -91,16 +90,20 @@
         <label for="">Thời gian kết thúc</label>
         <div class="selectbox">
           <% if (school_year.end_day) {%>
-            <input type="date" class="end_time" value="<%= school_year.end_day.toISOString().substring(0,10) %>">
+          <input type="date" class="end_time" value="<%= school_year.end_day.toISOString().substring(0,10) %>">
           <% } else { %>
-            <input type="date" class="end_time">
+          <input type="date" class="end_time">
           <% } %>
         </div>
       </div>
+      <button class="button-35 up-btn setd_btn">
+        Đặt lịch
+      </button>
       <!-- <button class="button-35 up-btn save-btn">
         Lưu
       </button> -->
     </div>
   </div>
 </div>
+
 </html>
