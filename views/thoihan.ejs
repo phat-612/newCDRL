@@ -58,7 +58,7 @@
             <div class="selectbox">
               <label class="close_now" for="">Đang diễn ra</label>
               <div class="checkbox-wrapper-4">
-                
+
                 <input type="checkbox" id="morning1" class="inp-cbx" value="2" checked />
                 <label for="morning1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                 </label>
@@ -83,13 +83,18 @@
       <div class="input-container time_start">
         <label for="">Thời gian bắt đầu </label>
         <div class="selectbox">
-          <input type="date" class="time">
+
+          <input type="date" class="time start_time" value="<%= school_year.start_day.toISOString().substring(0,10) %>">
         </div>
       </div>
       <div class="input-container tiem_end">
         <label for="">Thời gian kết thúc</label>
         <div class="selectbox">
-          <input type="date" name="" id="">
+          <% if (school_year.end_day) {%>
+            <input type="date" class="end_time" value="<%= school_year.end_day.toISOString().substring(0,10) %>">
+          <% } else { %>
+            <input type="date" class="end_time">
+          <% } %>
         </div>
       </div>
       <!-- <button class="button-35 up-btn save-btn">

@@ -117,10 +117,16 @@
 
 /* popup */
 
+
 @media screen and (max-width:600px) {
   .toast {
     right: 1rem;
     left: 1rem;
+    transform: translateY(calc(100% + -15rem));
+    top: -8%;
+  }
 
+  .toast.active {
+    transform: translateY(100%);
   }
 }
