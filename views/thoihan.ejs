@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/src/css/thoihan.css">
+  <title>Document</title>
+</head>
+
+<body>
+  <div class="main">
+    <%- include(header) %>
+    <%- include(thongbao) %>
+    <div class="container">
+      <form class="duration_container">
+        <h1>Thời hạn chấm điểm</h1>
+        <div class="input-container nienkhoan">
+          <label for="">Niên Khóa</label>
+          <div class="selectbox">
+            <div class="select">
+              <select id="mySelect2">
+                <% const currentYear = new Date().getFullYear(); %>
+                <% for (let i = currentYear - 2; i < currentYear + 2; i++) { %>
+                  <% if (`${i}-${i + 1}` == school_year.year.split("_")[1]) { %>
+                    <option value="<%= `${i}-${i + 1}` %>" selected="selected"><%= `${i}-${i + 1}` %></option>
+                  <% } else { %>
+                    <option value="<%= `${i}-${i + 1}` %>"><%= `${i}-${i + 1}` %></option>
+                  <% } %> 
+                <% } %>
+              </select>                                       
+            </div>
+          </div>
+        </div>
+        <div class="input-container hocky">
+          <label for="">Học Kỳ </label>
+          <div class="selectbox">
+            <div class="select">
+              <select id="mySelect1">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="input-container">
+          <label for="">Lên Lịch</label>
+
+          <div class="more_auto"><i class="fa-solid fa-plus"></i></div>
+        </div>
+
+        <div class="">
+          <h2>Trạng thái</h2>
+          <div class="input-container chamdiem">
+            <label for="">Chấm Điểm Rèn Luyện</label>
+            <div class="selectbox">
+              <label class="close_now" for="">Đang diễn ra</label>
+              <div class="checkbox-wrapper-4">
+                
+                <input type="checkbox" id="morning1" class="inp-cbx" value="2" checked />
+                <label for="morning1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                </label>
+  
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="button-35 up-btn save-btn">
+          Lưu
+        </button>
+      </form>
+    </div>
+    <%- include(footer) %>
+  </div>
+  <script src="/src/JS/thoihan.js"></script>
+</body>
+<div class="modal">
+  <div class="modal_wrap">
+    <div class="time_auto">
+      <h2>Lên Lịch</h2>
+      <div class="input-container time_start">
+        <label for="">Thời gian bắt đầu </label>
+        <div class="selectbox">
+          <input type="date" class="time">
+        </div>
+      </div>
+      <div class="input-container tiem_end">
+        <label for="">Thời gian kết thúc</label>
+        <div class="selectbox">
+          <input type="date" name="" id="">
+        </div>
+      </div>
+      <!-- <button class="button-35 up-btn save-btn">
+        Lưu
+      </button> -->
+    </div>
+  </div>
+</div>
+</html>

@@ -20,26 +20,15 @@ function validateFile(file) {
 //////////////////////
 $(document).ready(function () {
   $(".post-btn").click(function () {
-    const modal_wrap_img = document.querySelectorAll(".modal_wrap_img");
-    if (modal_wrap_img.length < 5) {
-      $(".add-btn").css("display", "block");
-
-    };
     $(".modal").show();
   });
 
   $(".close-dialog").click(function () {
-    const modal_wrap_img = document.querySelectorAll(".modal_wrap_img");
-    for (const item of modal_wrap_img) {
-      if (item.querySelector('img').src === "") {
-        item.remove();
-        $(".no-img span").text($(".modal_img").children().length);
-      }
-    }
     $(".modal").hide();
   });
   $(".done-btn2").click(function () {
     const modal_wrap_img = document.querySelectorAll(".modal_wrap_img");
+
     for (const item of modal_wrap_img) {
       if (item.querySelector('img').src === "") {
         item.remove();
@@ -55,7 +44,7 @@ $(document).ready(function () {
       <div class="modal_wrap_img">
   
         <div class="modal_wrap_img_item">
-          <p>Kéo thả hình ảnh vào đây hoặc nhấn vào để tải lên.</p>
+          <p>Drag and drop an image here, or click to upload.</p>
           <input type="file" class="upload-input" style="display: none;">
           <img class="up-img">
           <button class="up-img-btn">
@@ -138,13 +127,6 @@ $(document).mouseup(function (e) {
 
   // if the target of the click isn't the container nor a descendant of the container
   if (container.is(e.target) && container.has(e.target).length === 0) {
-    const modal_wrap_img = document.querySelectorAll(".modal_wrap_img");
-    for (const item of modal_wrap_img) {
-      if (item.querySelector('img').src === "") {
-        item.remove();
-        $(".no-img span").text($(".modal_img").children().length);
-      }
-    };
     container.hide();
   }
 });
@@ -425,13 +407,13 @@ async function mark(img_ids) {
         getSelectValue("mySelect11"),
         getSelectValue("mySelect12"),
       ],
+      img_ids: img_ids,
       fifth: [
         getSelectValue("mySelect13"),
         getSelectValue("mySelect14"),
         getSelectValue("mySelect15"),
         getSelectValue("mySelect16"),
       ],
-      img_ids: img_ids,
       total: index_tier_1() +
         index_tier_2() +
         index_tier_3() +
@@ -448,7 +430,7 @@ async function mark(img_ids) {
     };
 
 
-    const response = await fetch('/api/std_mark', requestOptions);
+    const response = await fetch('/api/stf_mark', requestOptions);
     if (response.ok) {
       notify('n', 'Đã lưu phiếu đánh giá điểm rèn luyện thành công!')
     }

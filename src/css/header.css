@@ -2,9 +2,11 @@ html {
   font-size: 62.5%;
   font-family: Arial, Helvetica, sans-serif;
 }
+
 body {
   background-color: #e7ecf0;
 }
+
 * {
   margin: 0;
   padding: 0;
@@ -36,16 +38,20 @@ body {
   text-decoration: none;
   margin-right: 2rem;
 }
+
 .avatar {
   position: relative;
 }
+
 .avatar:hover .setting {
   display: block;
 }
+
 .avatar_wrap {
   display: flex;
   align-items: center;
 }
+
 .avatar img {
   height: 3.5rem;
   width: 3.5rem;
@@ -53,6 +59,7 @@ body {
   margin-right: 0.7rem;
   object-fit: cover;
 }
+
 .setting {
   width: 100%;
   min-width: 16rem;
@@ -64,12 +71,15 @@ body {
   top: 3.6rem;
   display: none;
 }
+
 .avatar_wrap:hover {
   cursor: pointer;
 }
+
 .setting li {
   text-transform: capitalize;
 }
+
 .setting li a {
   display: block;
   margin: 0;
@@ -81,6 +91,7 @@ body {
   border-radius: 0.3rem;
   cursor: pointer;
 }
+
 .setting li:hover a {
   color: black;
 }
@@ -93,12 +104,13 @@ body {
   top: -1rem;
   left: 0rem;
 }
+
 /* button chung */
 .button-35 {
   align-items: center;
   background-color: #d3d3d3;
   border-radius: 1rem;
-  box-shadow: transparent 0 0 0 3px, rgba(18, 18, 18, 0.1) 0 6px 20px;
+  box-shadow: transparent 0 0 0 0.3rem, rgba(18, 18, 18, 0.1) 0 0.6rem 2rem;
   box-sizing: border-box;
   color: #121212;
   cursor: pointer;
@@ -107,7 +119,7 @@ body {
   font-weight: 700;
   justify-content: center;
   line-height: 1;
-  margin: 9px;
+  margin: 0.9rem;
   outline: none;
   padding: 1rem 1.2rem;
   text-align: center;
@@ -121,7 +133,7 @@ body {
 }
 
 .button-35:hover {
-  box-shadow: #121212 0 0 0 3px, transparent 0 0 0 0;
+  box-shadow: #121212 0 0 0 0.3rem, transparent 0 0 0 0;
 }
 
 .button-35:active {
@@ -199,13 +211,13 @@ body {
   visibility: hidden;
 }
 
-.checkbox-wrapper-4 .inp-cbx:checked + .cbx span:first-child {
+.checkbox-wrapper-4 .inp-cbx:checked+.cbx span:first-child {
   background: rgb(143, 213, 229);
   border-color: #c2c2c2;
   animation: wave-4 0.4s ease;
 }
 
-.checkbox-wrapper-4 .inp-cbx:checked + .cbx span:first-child svg {
+.checkbox-wrapper-4 .inp-cbx:checked+.cbx span:first-child svg {
   stroke-dashoffset: 0;
 }
 
@@ -216,6 +228,7 @@ body {
   pointer-events: none;
   user-select: none;
 }
+
 @-moz-keyframes wave-4 {
   50% {
     transform: scale(0.9);
@@ -239,6 +252,7 @@ body {
     transform: scale(0.9);
   }
 }
+
 /* select box chung */
 .selectbox {
   display: inline-block;
@@ -288,34 +302,42 @@ body {
 .select:hover::after {
   color: rgb(143, 213, 229);
 }
+
 /* table chung */
 table,
 th,
 td {
-  border: 1px solid #aeaeae;
+  border: 0.1rem solid #aeaeae;
   border-collapse: collapse;
 }
+
 tr {
   transition: ease-in-out 0.1s;
 }
+
 tr:nth-child(even) {
   background-color: rgb(241, 241, 241);
 }
+
 tr:nth-child(odd) {
   background-color: #ffffff;
 }
+
 tr:hover {
   background-color: rgb(247 234 255);
 }
+
 th {
   background-color: rgb(206, 206, 206);
 }
+
 td a {
   text-decoration: none;
   color: rgb(117, 117, 255);
   user-select: none;
   transition: font-weight 0.1s ease;
 }
+
 td a:hover {
   color: rgb(79 79 235);
   font-weight: 600;
@@ -330,15 +352,18 @@ td a:hover {
     right: 0;
   }
 
-  .right-header > a {
+  .right-header>a {
     display: none;
   }
-  .avatar_wrap > p {
+
+  .avatar_wrap>p {
     display: none;
   }
+
   .setting {
     right: -13%;
   }
+
   .avatar:hover .setting {
     display: none;
   }

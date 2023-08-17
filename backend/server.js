@@ -8,6 +8,7 @@ Ban all who's name Nguyen Ngoc Long on this server file
     3: tạo hoạt động (ban cán sự, ???)
     4: cấp quyền (> cố vấn)
     5: thêm || sửa bộ môn
+    6: thiết lập thời hạn chấm điểm
     ...
   power = {
     0: true,
@@ -143,7 +144,6 @@ client.connect().then(() => {
 
   async function checkIfUserLoginRoute(req, res, next) {
     const user = req.session.user;
-
     if (!user) {
       // Cookie không tồn tại, chặn truy cập
       return res.redirect("/login");
@@ -211,37 +211,53 @@ client.connect().then(() => {
     //   total: 100,
     // }
 
-    const school_year = await client.db(name_global_databases).collection('school_year').findOne({}, { projection: { _id: 0, year: 1 } });
-
-    // update old table if exist or insert new tabl;e
-    let update = {
-      mssv: user._id,
-      school_year: school_year.year,
-      first: data.first,
-      second: data.second,
-      third: data.third,
-      fourth: data.fourth,
-      fifth: data.fifth,
-      img_ids: data.img_ids,
-      total: data.total,
-      update_date: new Date()
-    }
-
-    // if table is stf_table - mark by staff members or teacher
-    if (table == '_stf_table') {
-      update.marker = marker.last_name + " " + marker.first_name;
-    }
-
-    await client.db(user.dep).collection(cls + table).updateOne(
+    const school_year = await client.db(name_global_databases).collection('school_year').findOne(
+      {},
       {
+        projection: {
+          _id: 0,
+          year: 1,
+          end_day: 1
+        }
+      });
+
+    let today = new Date();
+    let end_day = new Date(school_year.end_day);
+    let forever_day = Date("October 18, 2003 23:59:59");
+
+
+    // check if end mark time or not
+    if (today < end_day || end_day == forever_day) {
+      // update old table if exist or insert new table
+      let update = {
         mssv: user._id,
-        school_year: school_year.year
-      },
-      {
-        $set: update
-      },
-      { upsert: true }
-    );
+        school_year: school_year.year,
+        first: data.first,
+        second: data.second,
+        third: data.third,
+        fourth: data.fourth,
+        fifth: data.fifth,
+        img_ids: data.img_ids,
+        total: data.total,
+        update_date: new Date()
+      }
+
+      // if table is stf_table - mark by staff members or teacher
+      if (table == '_stf_table') {
+        update.marker = marker.last_name + " " + marker.first_name;
+      }
+
+      await client.db(user.dep).collection(cls + table).updateOne(
+        {
+          mssv: user._id,
+          school_year: school_year.year
+        },
+        {
+          $set: update
+        },
+        { upsert: true }
+      );
+    }
   }
 
   function randomPassword() {
@@ -352,29 +368,59 @@ client.connect().then(() => {
 
   // index route
   app.get("/", checkIfUserLoginRoute, async (req, res) => {
-    const user = req.session.user;
-    const schoolYear = await client.db(name_global_databases).collection('school_year').findOne({}, { projection: { _id: 0, year: 1 } });
-    const schoolYearsToSearch = ['HK1_' + schoolYear.year.slice(4), 'HK2_' + schoolYear.year.slice(4)];
-    const studentTotalScores = await Promise.all(schoolYearsToSearch.map(async (year) => {
-      const studentTotalScore = await client.db(user.dep)
-        .collection(user.cls[0] + '_std_table')
-        .findOne(
-          {
-            mssv: user._id,
-            school_year: year
-          },
-          {
-            projection: { _id: 0, total: 1 }
-          }
-        );
-      return { year: year, total: studentTotalScore ? studentTotalScore.total : "Chưa có điểm" };
-    }));
+    try {
+      const user = req.session.user;
+      const schoolYear = await client.db(name_global_databases).collection('school_year').findOne({}, { projection: { _id: 0, year: 1 } });
+      const schoolYear_all = await client.db(name_global_databases).collection('classes').findOne({ _id: user.cls[0] }, { projection: { _id: 0, years: 1 } });
+      let schoolYearsToSearch = [];
+      for (let i = 0; i < schoolYear_all.years[schoolYear.year.slice(4)].length; i++) {
+        schoolYearsToSearch.push(`HK${i + 1}_` + schoolYear.year.slice(4));
+      }
+      const studentTotalScores = await Promise.all(schoolYearsToSearch.map(async (year) => {
+        let studentTotalScore = null;
 
-    res.render("tracuu", {
-      header: "header",
-      footer: "footer",
-      bandiem: studentTotalScores,
-    });
+        // Tìm trong bảng '_dep_table' trước
+        const depCollection = client.db(user.dep).collection('_dep_table');
+        const depDocument = await depCollection.findOne(
+          { mssv: user._id, school_year: year },
+          { projection: { _id: 0, total: 1 } }
+        );
+
+        if (depDocument) {
+          studentTotalScore = depDocument.total;
+        } else {
+          // Nếu không tìm thấy, tìm trong bảng '_std_table'
+          const stdCollection = client.db(user.dep).collection(user.cls[0] + '_std_table');
+          const stdDocument = await stdCollection.findOne(
+            { mssv: user._id, school_year: year },
+            { projection: { _id: 0, total: 1 } }
+          );
+
+          if (stdDocument) {
+            studentTotalScore = stdDocument.total;
+          } else {
+            // Nếu không tìm thấy, tìm trong bảng '_stf_table'
+            const stfCollection = client.db(user.dep).collection('_stf_table');
+            const stfDocument = await stfCollection.findOne(
+              { mssv: user._id, school_year: year },
+              { projection: { _id: 0, total: 1 } }
+            );
+
+            if (stfDocument) {
+              studentTotalScore = stfDocument.total;
+            }
+          }
+        }
+        return { year: year, total: studentTotalScore ? studentTotalScore : "Chưa có điểm" };
+      }));
+      res.render("tracuu", {
+        header: "header",
+        footer: "footer",
+        thongbao: "thongbao",
+        bandiem: studentTotalScores,
+        nienkhoa: Object.keys(schoolYear_all.years),
+      });
+    } catch (err) { console.log(err); }
   });
 
   // login route
@@ -423,6 +469,14 @@ client.connect().then(() => {
   // nhap bang diem route
   app.get("/nhapdiemdanhgia", checkIfUserLoginRoute, async (req, res) => {
     res.render("nhapbangdiem", {
+      header: "header",
+      thongbao: "thongbao",
+      footer: "footer"
+    });
+  });
+  // giang vien nhap diem route
+  app.get("/giangviennhapdiemdanhgia", checkIfUserLoginRoute, async (req, res) => {
+    res.render("giangviennhapbangdiem", {
       header: "header",
       thongbao: "thongbao",
       footer: "footer"
@@ -787,6 +841,21 @@ client.connect().then(() => {
 
   });
 
+  app.get("/thoihan", checkIfUserLoginRoute, async (req, res) => {
+    const school_year = await client.db(name_global_databases).collection('school_year').findOne(
+      {},
+      {
+        projection: { year: 1, start_day: 1, end_day: 1 }
+      });
+
+    res.render("thoihan", {
+      header: "header",
+      thongbao: "thongbao",
+      footer: "footer",
+      school_year: school_year
+    })
+  });
+
   // API SPACE ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   // Log in --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1059,7 +1128,7 @@ client.connect().then(() => {
     }
   });
 
-  // Save table and update old table ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  // Save table and update old table std------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   app.post("/api/std_mark", checkIfUserLoginAPI, async (req, res) => {
     try {
       const user = req.session.user;
@@ -1081,6 +1150,35 @@ client.connect().then(() => {
     } catch (err) {
       console.log("SYSTEM | MARK | ERROR | ", err);
       res.sendStatus(500);
+    }
+  });
+
+  // Save table and update old table stf------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  app.post("/api/stf_mark", checkIfUserLoginAPI, async (req, res) => {
+    if (user.pow[1]) {
+      try {
+        const user = req.session.user;
+        const data = req.body;
+        const marker = await client.db(name_global_databases).collection('user_info').findOne(
+          { _id: user._id },
+          {
+            projection: {
+              _id: 0,
+              last_name: 1,
+              first_name: 1
+            }
+          }
+        );
+
+        await mark("_stf_table", user, data, marker, user.cls[0]);
+
+        res.sendStatus(200);
+      } catch (err) {
+        console.log("SYSTEM | MARK | ERROR | ", err);
+        res.sendStatus(500);
+      }
+    } else {
+      return res.redirect('/');
     }
   });
 
@@ -1106,67 +1204,102 @@ client.connect().then(() => {
 
   // Create new account -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   app.post("/api/createAccount", upload.single('file'), checkIfUserLoginAPI, async (req, res) => {
-    try {
-      // read excel file:
-      // create all account
-      const fileStudents = req.file;
-      const workbook = await XlsxPopulate.fromFileAsync(fileStudents.path);
-      const sheet = workbook.sheet(0);
-      const values = sheet.usedRange().value();
-      //[['MSSV', 'Họ', 'Tên' ]]
-      sheet.cell('D1').value('Password');
-      for (let i = 1; i < values.length; i++) {
-        let pw = await randomPassword()
-        let dataInsertUser = {
-          _id: values[i][0].toString(),
-          first_name: values[i][2],
-          last_name: values[i][1],
-          avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
-          power: { 0: true },
-          class: [req.body.cls],
-          displayName: `${values[i][1]} ${values[i][2]}`,
-          email: "",
-        };
-        let dataInsertLogin = {
-          _id: values[i][0].toString(),
-          password: pw
-        }
-        client.db('global').collection('user_info').updateOne({
-          _id: dataInsertUser._id
-        }, {
-          $set: dataInsertUser
-        },
-          {
-            upsert: true
-          });
-        client.db('global').collection('login_info').updateOne({
-          _id: dataInsertLogin._id
-        }, {
-          $set: dataInsertLogin
-        },
-          {
-            upsert: true
-          });
-        await sheet.cell(`D${i + 1}`).value(pw);
-      }
-
-      // Write to file.
-      await workbook.toFileAsync(fileStudents.path);
-      res.download(fileStudents.path);
-      // xoa file sau khi xu ly
-      setTimeout(() => {
-        fs.unlink(fileStudents.path, (err) => {
-          if (err) {
-            console.error("Lỗi khi xóa tệp:", err);
+    const fileStudents = req.file;
+    if (fileStudents) {
+      try {
+        // read excel file:
+        // create all account
+        const workbook = await XlsxPopulate.fromFileAsync(fileStudents.path);
+        const sheet = workbook.sheet(0);
+        const values = sheet.usedRange().value();
+        //[['MSSV', 'Họ', 'Tên' ]]
+        sheet.cell('D1').value('Password');
+        for (let i = 1; i < values.length; i++) {
+          let pw = await randomPassword()
+          let dataInsertUser = {
+            _id: values[i][0].toString(),
+            first_name: values[i][2],
+            last_name: values[i][1],
+            avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
+            power: { 0: true },
+            class: [req.body.cls],
+            displayName: `${values[i][1]} ${values[i][2]}`,
+            email: "",
+          };
+          let dataInsertLogin = {
+            _id: values[i][0].toString(),
+            password: pw
           }
+          client.db('global').collection('user_info').updateOne({
+            _id: dataInsertUser._id
+          }, {
+            $set: dataInsertUser
+          },
+            {
+              upsert: true
+            });
+          client.db('global').collection('login_info').updateOne({
+            _id: dataInsertLogin._id
+          }, {
+            $set: dataInsertLogin
+          },
+            {
+              upsert: true
+            });
+          await sheet.cell(`D${i + 1}`).value(pw);
+        }
+
+        // Write to file.
+        await workbook.toFileAsync(fileStudents.path);
+        res.download(fileStudents.path);
+        // xoa file sau khi xu ly
+        setTimeout(() => {
+          fs.unlink(fileStudents.path, (err) => {
+            if (err) {
+              console.error("Lỗi khi xóa tệp:", err);
+            }
+          });
+        }, 10000)
+      } catch (err) {
+        console.log("SYSTEM | MARK | ERROR | ", err);
+        res.sendStatus(500);
+      }
+    } else {
+      console.log('them 1 sinh vien');
+      const dataStudent = req.body
+      let pw = await randomPassword()
+      let dataInsertUser = {
+        _id: dataStudent['mssv'].toString(),
+        first_name: dataStudent['ten'],
+        last_name: dataStudent['ho'],
+        avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
+        power: { 0: true },
+        class: [dataStudent['cls']],
+        displayName: `${dataStudent['ho']} ${dataStudent['ten']}`,
+        email: "",
+      };
+      let dataInsertLogin = {
+        _id: dataStudent['mssv'].toString(),
+        password: pw
+      }
+      client.db('global').collection('user_info').updateOne({
+        _id: dataInsertUser._id
+      }, {
+        $set: dataInsertUser
+      },
+        {
+          upsert: true
         });
-      }, 10000)
-
-
-    } catch (err) {
-      console.log("SYSTEM | MARK | ERROR | ", err);
-      res.sendStatus(500);
+      client.db('global').collection('login_info').updateOne({
+        _id: dataInsertLogin._id
+      }, {
+        $set: dataInsertLogin
+      },
+        {
+          upsert: true
+        });
     }
+    // xu ly sau khi them sinh vien
   });
   app.post("/api/deleteAccount", checkIfUserLoginAPI, async (req, res) => {
     try {
@@ -1496,6 +1629,7 @@ client.connect().then(() => {
   app.get("/api/getuserscore", checkIfUserLoginAPI, async (req, res) => {
     try {
       const user = req.session.user;
+      console.log(user);
       const schoolYearParam = req.query.schoolYear;
 
       const schoolYearsToSearch = ['HK1_' + schoolYearParam, 'HK2_' + schoolYearParam];
@@ -1581,11 +1715,40 @@ client.connect().then(() => {
     }
   });
 
+  // change mark deadline
+  app.post("/api/changeDeadLine", checkIfUserLoginAPI, async (req, res) => {
+    try {
+      const user = req.session.user;
+      const data = req.body; // data = {sch_y: "HK1_2022-2023", start_day: '18/10/2023', end_day: '19/11/999999999999999999']}
+
+      // must be department to use this api
+      if (user.pow[6]) {
+        await client.db(name_global_databases).collection('school_year').updateOne(
+          {},
+          {
+            $set: {
+              year: data.sch_y,
+              start_day: data.start_day,
+              end_day: data.end_day,
+            }
+          }
+        );
+      } else {
+        return res.redirect('/'); // back to home
+      }
+
+      res.sendStatus(200);
+    } catch (err) {
+      console.log("SYSTEM | CHANGE_DEADLINE | ERROR | ", err);
+      res.sendStatus(500);
+    }
+  });
+
+
   // Xử lý đường link không có -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   app.get("*", async function (req, res) {
     res.sendStatus(404);
   });
-
 
   // // WEBSOCKET SPACE ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   wss.on('connection', async (ws, req) => {

@@ -12,6 +12,7 @@
 <body>
   <div class="main">
     <%- include(header) %>
+    <%- include(thongbao) %>
     <div class="container">
       <!-- Nộp bảng điểm -->
       <!-- Nộp bảng chấm điểm -->
@@ -30,14 +31,18 @@
           <div class="nien-khoa">
             <p>Niên khóa</p>
             <div class="selectbox">
-              <div class="select">
+              <div class="select" style="margin: 0.9rem;">
                 <select id="mySelect2">
-                  <option value="2022-2023">2022-2023</option>
-                  <option value="2023-2024">2023-2024</option>
+                  <% for (let i = 0; i < nienkhoa.length; i++) {%>
+                  <%if (bandiem[0].year.slice(4) == nienkhoa[i]){%>
+                  <option selected value="<%=nienkhoa[i]%>"><%=nienkhoa[i]%></option>
+                  <%} else {%>
+                  <option value="<%=nienkhoa[i]%>"><%=nienkhoa[i]%></option>
+                  <%}%>
+                  <%}%>
                 </select>
               </div>
             </div>
-            <button class="button-35" id="page-button-1">Chọn</button>
           </div>
           <div class="sub-container">
             <div class="mark-box">
@@ -51,28 +56,20 @@
                   </tr>
                 </thead>
                 <tbody>
+                  <% for (let i = 0; i < bandiem.length; i++) {%>
+
                   <tr>
-                    <td>1</td>
-                    <td class="total-result" data-year="HK1_total"><%=bandiem[0].total%></td>
-                    <%if (bandiem[0].total != 'Chưa có điểm'){%>
-
-                    <td><a href="/xembangdiem?schoolYear=<%=bandiem[0].year%>" id="HK1">Xem Bảng Điểm</a></td>
+                    <td><%=i+1%></td>
+                    <td class="total-result" data-year="HK<%=i+1%>_total"><%=bandiem[i].total%></td>
+                    <%if (bandiem[i].total != 'Chưa có điểm'){%>
+                    <td><a href="/xembangdiem?schoolYear=<%=bandiem[i].year%>" id="HK<%=i+1%>">Xem Bảng Điểm</a></td>
                     <%} else {%>
-                    <td><a id="HK1" style="display: none;">Xem Bảng Điểm</a></td>
-
+                    <td><a id="HK<%=i+1%>" style="display: none;">Xem Bảng Điểm</a></td>
                     <%}%>
                   </tr>
-                  <tr>
-                      <td>2</td>
-                      <td class="total-result" data-year="HK2_total"><%=bandiem[1].total%></td>
-                    <%if (bandiem[1].total != 'Chưa có điểm'){%>
-                    <td><a href="/xembangdiem?schoolYear=<%=bandiem[1].year%>" id="HK2">Xem Bảng Điểm</a></td>
-                    <%} else {%>
-                    <td><a id="HK2" style="display: none;">Xem Bảng Điểm</a></td>
+                  <%}%>
 
-                    <%}%>
-                  </tr>
-              </tbody>
+                </tbody>
               </table>
             </div>
             <div class="activity-box">
@@ -122,7 +119,7 @@
     </div>
   </div>
   <%- include(footer) %>
-                    <script src="/src/JS/tracuu.js"></script>
+  <script src="/src/JS/tracuu.js"></script>
 </body>
 
 </html>

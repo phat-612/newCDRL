@@ -159,18 +159,18 @@
         <div class="modal_wrap edit">
           <div class="modal_main">
 
-            <div class="content title">
-              <h2 class="title-box">SỬA THÔNG TIN CỐ VẤN</h2>
+            <div class="content content--title">
+              <h2 class="content__title">SỬA THÔNG TIN BỘ MÔN</h2>
             </div>
 
-            <div class="content subtitle">
-              <h3 class="sub__title --name">Họ Tên Cố Vấn</h3>
-              <textarea name="" id="" cols="30" rows="3" placeholder="Nhập họ tên Cố vấn cần chỉnh sửa"></textarea>
+            <div class="content content--fullname">
+              <label for="teacher--name" class="content__fullname name--label">Họ Tên Cố Vấn</label>
+              <input type="text" class="content__fullname name--input" id="teacher--name" placeholder="Nhập tên bộ môn">
             </div>
 
-            <div class="content teacher__account">
-              <h3 class="sub__title --acount">Tên Đăng Nhập</h3>
-              <textarea name="" id="" cols="30" rows="3" placeholder="Nhập tên đăng nhập mới"></textarea>
+            <div class="content content--account">
+              <label for="teacher--account" class="content__account account--label">Tên Đăng Nhập</label>
+              <input type="text" class="content__account account--input" id="teacher--account" placeholder="Nhập tên bộ môn">
             </div>
 
             <div>
@@ -188,10 +188,12 @@
                 </main>
               </div>
             </div>
-            <div class="box-button">
-                <div><button class="button-35">Huỷ</button></div>
-                <div><button class="button-35">Xong</button></div>
-            </div>
+ 
+            <div class="content content--button">
+              <div><button class="button-35 exist_btn">Hủy</button></div>
+              <div><button class="button-35 save_btn">Lưu</button></div>
+          </div>
+          
           </div>
         </div>
       </div>

@@ -1,29 +1,35 @@
 .content {
-  max-width: 900px;
+  max-width: 90rem;
   width: 95%;
   margin: 0 auto;
   box-sizing: border-box;
 }
+
 .content .lop {
   font-size: 2rem;
 }
+
 .chitiet {
   background-color: #fff;
   padding: 1rem;
   border-radius: 0.8rem;
 }
+
 .chitiet .control {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+
 .file_input {
   position: relative;
   display: inline-block;
 }
+
 .file_input button {
   margin: 0;
 }
+
 .file_input input {
   position: absolute;
   left: 0;
@@ -37,13 +43,16 @@
 th {
   font-size: 2rem;
 }
+
 td {
   font-size: 1.6rem;
 }
+
 th,
 td {
   padding: 1rem;
 }
+
 tr td:nth-child(1),
 tr td:nth-child(2),
 tr td:nth-child(6),
@@ -52,8 +61,10 @@ tr td:nth-child(8),
 tr td:nth-child(9) {
   text-align: center;
 }
+
 tr td:nth-child(4) {
   text-transform: uppercase;
+
 }
 
 /* modal */
@@ -66,60 +77,92 @@ tr td:nth-child(4) {
   background-color: rgba(233, 233, 233, 0.6);
   display: none;
 }
+
+#md_vt {
+  background-color: #ffffff00;
+}
+
 .modal_wrap {
   position: absolute;
   top: 50%;
   left: 50%;
-  max-width: 800px;
+  max-width: 80rem;
   width: 95%;
   background: #fff;
   border-radius: 0.8rem;
   transform: translate(-50%, -50%);
 }
+
 .modal_main {
-  padding: 10px;
-  height: 550px;
+  padding: 2.8rem 3.8rem 1.2rem;
+  height: 55rem;
   overflow: auto;
 }
+
 .modal_main .title-box {
   font-size: 2.8rem;
   margin-bottom: 1.6rem;
-}
-.inp-box {
-  position: relative;
-}
-
-.inp-box input {
-  width: 100%;
-  padding: 1rem 0;
-  font-size: 1.6rem;
-  margin-bottom: 3rem;
-  border: none;
-  border-bottom: 0.1rem solid #000;
-  outline: none;
-  background: transparent;
-}
-
-.inp-box label {
+  background-color: orange;
+  display: inline-block;
+  padding: 1.6rem 2.7rem 1.6rem 10rem;
+  border-radius: 0.8rem;
+  left: -4rem;
   position: absolute;
-  top: 0;
-  left: 0;
-  padding: 1rem 0;
-  font-size: 1.6rem;
-  pointer-events: none;
-  transition: 0.5s;
 }
 
-.inp-box input:focus ~ label,
-.inp-box input:valid ~ label {
-  top: -2rem;
-  left: 0;
-  color: #bdb8b8;
-  font-size: 1.2rem;
+.modal_content {
+  margin-top: 8rem;
 }
-.modal_main label {
-  font-size: 1.6rem;
+
+.modal_content> :nth-child(n+4) {
+  background-color: #d9d9d982;
+  padding: 0.4rem;
+  align-items: center;
+  border-radius: 0.8rem;
 }
-.modal_main > div:nth-child(n + 5) {
-  margin-top: 16px;
+
+.porfile_container_item {
+  display: flex;
+  justify-content: space-between;
+  margin: 1.5rem 2rem;
+  min-height: 4rem;
+}
+
+.porfile_container_item .checkbox-wrapper-4 {
+  margin-right: 1rem;
+}
+
+.porfile_container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.info_lable {
+  padding-left: 1rem;
+  font-size: 2rem;
+  line-height: 2;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-around;
+}
+
+.info_input {
+  padding: 0 2rem;
+  width: 50%;
+  border-radius: 0.3em;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  background-color: #d9d9d982;
+  transition: box-shadow 0.1s linear;
+}
+
+.info_input:hover {
+  cursor: pointer;
+  background-color: #ffffff82;
+}
+
+.modal_main .button-35 {
+  position: absolute;
+  right: 0;
+  right: 5rem;
+  padding: 12px 30px;
 }
