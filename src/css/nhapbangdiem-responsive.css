@@ -79,4 +79,11 @@
         right: -3rem;
         transition-delay: 0.1s;
     }
+    .tr-title td:nth-of-type(1n+0){
+        border: 0;
+    }
+    .tr-title td:first-child{
+        border: 1px solid #aeaeae;
+    }
+
 }
