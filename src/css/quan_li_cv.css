@@ -87,7 +87,7 @@ body {
     background-color: rgba(158, 158, 158, 0.507);
   }
   
-  /* modal */
+/* modal */
 .modal{
   position: absolute;
   top: 0;
@@ -109,49 +109,81 @@ body {
   transform: translate(-50%, -50%);
 
 }
+
 .modal_main{
   padding: 10px;
-  height: 450px;
+  height: fit-content;
   overflow: auto;
 }
 
-.title-box {
-  font-size: 2rem;
-}
-
-.sub-title {
-  font-size: 1.5rem;
-}
-
-textarea {
-  width: 97%;
-  padding: 1rem;
-  margin: 1rem 1rem 0rem 0rem;
-  border-radius: 0.8rem;
-}
-
-/* Tùy chỉnh chú mờ */
-textarea::placeholder {
-  color: rgba(128, 128, 128, 0.5); /* Xám mờ với alpha 0.5 */
-  font-style: italic;
-}
-
-.content.selection {
-  display: flex;
-}
 
 label {
+  width: 15rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+
+/* content title */
+
+.content__title {
+  /* display: inline-block;
+
+  background-color: orange;
+  border-radius: 0.8rem;
+  position: absolute;
+  left: -25px;
+  padding: 6px 25px 6px 50px;
+  border: 1px solid rgba(0, 0, 0, 0.3); */
+  font-size: 1.5rem;
+  margin-bottom: 1.6rem;
+  background-color: orange;
+  display: inline-block;
+  padding: 6px 25px 6px 50px;
+  border-radius: 0.8rem;
+  left: -4rem;
+  position: absolute;
+}
+
+/* content subject */
+.content--fullname,
+.content--account{
   display: flex;
   align-items: center;
-  margin-right: 10px; /* Để tạo khoảng cách giữa label và select */
+  margin-top: 6rem;
+}
+
+/* input text */
+.name--input,
+.account--input {
+  flex: 1;
+  line-height: 3.5rem;
+  padding: 0 2rem;
+  border-radius: 0.3em;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  background-color: #d9d9d982;
+  transition: box-shadow 0.1s linear;
+}
+
+/* content department */
+/* .content__department {
   font-size: 1.8rem;
-}
+  margin-top: 2rem;
+} */
 
-
-
-.box-button {
+.content--button {
   display: flex;
-  gap: 2rem;
   margin: 3rem 0rem 0rem 20rem;
+  justify-content: flex-end;
 }
 
+.name--input:hover,
+.account--input:hover {
+  background-color: #fff;
+  color: #d9d9d982;
+}
+
+.name--input::placeholder,
+.account--input::placeholder{
+  color: #767676;
+}
