@@ -64,7 +64,7 @@ const client = new MongoClient(uri, {
   }
 });
 // ----------------------------------------------------------------
-client.connect().then(() => {
+client.connect().then(() => {                            
   // ----------------------------------------------------------------
   const app = express();
   const privateKey = fs.readFileSync(path.join('.certificate', 'localhost.key'), 'utf8');
@@ -848,11 +848,11 @@ client.connect().then(() => {
         projection: { year: 1, start_day: 1, end_day: 1 }
       });
     
-      console.log(Date("2003-10-19T14:10:30.000+00:00"));
     // check if end day is foreverday or not 
-    if (school_year.end_day == Date("October 18, 2003 23:59:59")) {
+    if (school_year.end_day.toISOString() == "2003-10-18T00:00:00.000Z") {
       school_year.end_day = undefined
     }
+    
     res.render("thoihan", {
       header: "header",
       thongbao: "thongbao",

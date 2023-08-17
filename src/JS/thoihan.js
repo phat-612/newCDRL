@@ -27,7 +27,7 @@ async function SaveButtonClick(event) {
     const school_year = $('#mySelect2').val();
     const mark = $('.inp-cbx').checked
     let start_day = new Date();
-    let end_day = new Date("October 18, 2003 23:59:59");;
+    let end_day = new Date("October 18, 2003");;
     
     // set start day to yesterday if user do not set it
     if ( $('.inp-cbx').checked) {
