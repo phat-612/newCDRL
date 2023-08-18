@@ -64,7 +64,7 @@ const client = new MongoClient(uri, {
   }
 });
 // ----------------------------------------------------------------
-client.connect().then(() => {                            
+client.connect().then(() => {
   // ----------------------------------------------------------------
   const app = express();
   const privateKey = fs.readFileSync(path.join('.certificate', 'localhost.key'), 'utf8');
@@ -843,11 +843,23 @@ client.connect().then(() => {
   });
 
   app.get("/thoihan", checkIfUserLoginRoute, async (req, res) => {
+    const curr_date = new Date();
     const school_year = await client.db(name_global_databases).collection('school_year').findOne(
       {},
       {
         projection: { year: 1, start_day: 1, end_day: 1 }
       });
+
+    // set cbx text 
+    let cbx = 'Đang diễn ra';
+    if (school_year.start_day <= curr_date && (curr_date <= school_year.end_day || school_year.end_day.toISOString() == "2003-10-18T00:00:00.000Z")) {
+      cbx = 'Đang diễn ra';
+    } else if (school_year.start_day > curr_date) {
+      cbx = 'Sắp diễn ra';
+    } else if (curr_date > school_year.end_day) {
+      cbx = 'Đã kết thúc';
+    }
+
     // check if end day is foreverday or not 
     if (school_year.end_day.toISOString() == "2003-10-18T00:00:00.000Z") {
       school_year.end_day = undefined
@@ -857,7 +869,8 @@ client.connect().then(() => {
       header: "header",
       thongbao: "thongbao",
       footer: "footer",
-      school_year: school_year
+      school_year: school_year,
+      cbx: cbx
     })
   });
 
@@ -1728,7 +1741,7 @@ client.connect().then(() => {
 
       // set end day to special date if it is ''
       if (!data.end_day) {
-        data.end_day = new Date('2003-10-18'); // special date
+        data.end_day = '2003-10-18'; // special date
       }
       // must be department to use this api
       if (user.pow[6]) {
@@ -1737,8 +1750,8 @@ client.connect().then(() => {
           {
             $set: {
               year: data.sch_y,
-              start_day: data.start_day,
-              end_day: data.end_day,
+              start_day: new Date(data.start_day), // change string to Date
+              end_day: new Date(data.end_day),
             }
           }
         );

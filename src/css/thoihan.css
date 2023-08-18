@@ -106,6 +106,8 @@
     margin: 15rem auto;
     /* padding: 2rem 2rem; */
     border-radius: 0.5rem;
+    position: relative;
+    display: grid;
 }
 
 .input-container {
@@ -127,9 +129,14 @@ label {
 h1{
     font-size: 25px;
     text-align: center;
-    border-bottom: 1px solid;
     padding: 20px;
     text-transform: uppercase;
+    border-bottom: 1px solid ;
+    /* font-size: 2.8rem; */
+  
+}
+.content{
+  margin-top: 90px;
 }
 h2{
     font-size: 20px;
@@ -268,7 +275,8 @@ h2{
     right: -50%;
     padding: 1.2rem 2rem !important;
     margin-bottom: 2.5rem !important;
-    transform: translate(-50%, 10px);
+    transform: translate(-50%, 2px);
+    width: 10rem;
 }
 .more_auto{
     border: 1px solid;
@@ -289,6 +297,18 @@ h2{
     padding: 2rem;
     margin: 2rem;
 }
+.time_auto h2{
+  font-size: 25px;
+  font-size: 2.8rem;
+  margin-bottom: 1.6rem;
+  background-color: #6984e0;
+  display: inline-block;
+  padding: 1.6rem 2.7rem 1.6rem 6rem;
+  border-radius: 0.8rem;
+  left: -4rem;
+  top: 20px;
+  position: absolute;
+}
 
 .modal {
     width: 100%;
@@ -307,8 +327,8 @@ h2{
     left: 50%;
     position: absolute;
     max-width: 90rem;
-    width: 50%;
-    height: 30rem;
+    width: 52rem;
+    height: 33rem;
     transform: translate(-50%, -50%);
     background-color: rgb(255, 255, 255);
     border-radius: 0.8rem;

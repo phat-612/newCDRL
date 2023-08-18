@@ -15,9 +15,10 @@
     <div class="container">
       <form class="duration_container">
         <h1>Thời hạn chấm điểm</h1>
+
         <div class="input-container nienkhoan">
           <label for="">Niên Khóa</label>
-          <div class="selectbox" >
+          <div class="selectbox">
             <div class="select">
               <select id="mySelect2">
                 <% const currentYear = new Date().getFullYear(); %>
@@ -55,21 +56,41 @@
           <h2>Trạng thái</h2>
           <div class="input-container chamdiem">
             <label for="">Chấm Điểm Rèn Luyện</label>
-            <div class="selectbox" style="padding-bottom: 0.3rem;">
-              <label class="close_now" for="">Đang diễn ra</label>
-              <div class="checkbox-wrapper-4">
-
-                <input type="checkbox" id="morning1" class="inp-cbx" value="2" checked />
-                <label for="morning1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                </label>
-
+            <% if (cbx == 'Đang diễn ra') {%>
+              <div class="selectbox" style="padding-bottom: 0.3rem;">
+                <label class="close_now" for="">Đang diễn ra</label>
+                <div class="checkbox-wrapper-4">
+                  <input type="checkbox" id="morning1" class="inp-cbx" value="2" checked />
+                  <label for="morning1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                  </label>
+                </div>
               </div>
-            </div>
+            <% } else if (cbx == 'Sắp diễn ra') {%>
+              <div class="selectbox" style="padding-bottom: 0.3rem;">
+                <label class="close_now" for="">Sắp diễn ra</label>
+                <div class="checkbox-wrapper-4">
+                  <input type="checkbox" id="morning1" class="inp-cbx" value="2"/>
+                  <label for="morning1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                  </label>
+                </div>
+              </div>
+            <% } else if (cbx == 'Đã kết thúc') {%>
+              <div class="selectbox" style="padding-bottom: 0.3rem;">
+                <label class="close_now" for="">Đã diễn ra</label>
+                <div class="checkbox-wrapper-4">
+                  <input type="checkbox" id="morning1" class="inp-cbx" value="2"/>
+                  <label for="morning1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                  </label>
+                </div>
+              </div>
+            <% } %>
+
           </div>
         </div>
         <button class="button-35 up-btn save-btn">
           Lưu
         </button>
+
       </form>
     </div>
     <%- include(footer) %>
@@ -80,25 +101,27 @@
   <div class="modal_wrap">
     <div class="time_auto">
       <h2>Lên Lịch</h2>
-      <div class="input-container time_start">
-        <label for="">Thời gian bắt đầu </label>
-        <div class="selectbox">
-          <input type="date" class="time start_time" value="<%= school_year.start_day.toISOString().substring(0,10) %>">
+      <div class="content">
+        <div class="input-container time_start">
+          <label for="">Thời gian bắt đầu </label>
+          <div class="selectbox">
+            <input type="date" class="time start_time" value="<%= school_year.start_day.toISOString().substring(0,10) %>">
+          </div>
         </div>
-      </div>
-      <div class="input-container tiem_end">
-        <label for="">Thời gian kết thúc</label>
-        <div class="selectbox">
-          <% if (school_year.end_day) {%>
-          <input type="date" class="end_time" value="<%= school_year.end_day.toISOString().substring(0,10) %>">
-          <% } else { %>
-          <input type="date" class="end_time">
-          <% } %>
+        <div class="input-container tiem_end">
+          <label for="">Thời gian kết thúc</label>
+          <div class="selectbox">
+            <% if (school_year.end_day) {%>
+            <input type="date" class="end_time" value="<%= school_year.end_day.toISOString().substring(0,10) %>">
+            <% } else { %>
+            <input type="date" class="end_time">
+            <% } %>
+          </div>
         </div>
+        <button class="button-35 up-btn setd_btn">
+          Đặt lịch
+        </button>
       </div>
-      <button class="button-35 up-btn setd_btn">
-        Đặt lịch
-      </button>
       <!-- <button class="button-35 up-btn save-btn">
         Lưu
       </button> -->
