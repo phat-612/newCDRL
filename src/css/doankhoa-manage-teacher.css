@@ -120,6 +120,7 @@ tr:hover {
 
 .add_teacher {
   display: flex;
+  margin: 3rem 0;
 }
 
 .sub-title {
@@ -146,31 +147,12 @@ label {
 
 /* content title */
 
-.content__title {
-  /* display: inline-block;
-
-  background-color: orange;
-  border-radius: 0.8rem;
-  position: absolute;
-  left: -25px;
-  padding: 6px 25px 6px 50px;
-  border: 1px solid rgba(0, 0, 0, 0.3); */
-  font-size: 1.5rem;
-  margin-bottom: 1.6rem;
-  background-color: orange;
-  display: inline-block;
-  padding: 6px 25px 6px 50px;
-  border-radius: 0.8rem;
-  left: -4rem;
-  position: absolute;
-}
-
 /* content subject */
 .content--fullname,
 .content--account {
   display: flex;
   align-items: center;
-  margin-top: 6rem;
+  margin: 2rem 0;
 }
 
 /* input text */
@@ -218,14 +200,42 @@ label {
   flex-direction: row-reverse;
   margin-top: 3rem;
 }
-.add_teacher_lable{
-  width:32%;
+
+.add_teacher_lable {
+  width: 32%;
 }
-.selectbox{
+
+.selectbox {
   margin: 0 !important;
 }
 
-.content h2, .content h2{
+.content__title_change {
   padding-bottom: 1rem;
   text-align: center;
+  background-color: #fd9d9d;
+  border-radius: 10px;
+  width: 30rem;
+  position: absolute;
+  left: -16px;
+  top: 2rem;
+}
+
+.title-box {
+  text-align: center;
+  background-color: #fd9d9d;
+  border-radius: 10px;
+  width: 21rem;
+  position: absolute;
+  left: -30px;
+  top: 2rem;
+}
+
+.change_info {
+  padding: 3rem 0;
+}
+
+.add_teacher_model {
+
+  padding: 3rem;
+
 }

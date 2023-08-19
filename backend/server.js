@@ -372,6 +372,8 @@ client.connect().then(() => {
   app.get("/", checkIfUserLoginRoute, async (req, res) => {
     try {
       const user = req.session.user;
+      const permi = await client.db(name_global_databases).collection('user_info').findOne({ _id: user._id }, { projection: { _id: 0, pos: 1 } });
+
       const schoolYear = await client.db(name_global_databases).collection('school_year').findOne({}, { projection: { _id: 0, year: 1 } });
       const schoolYear_all = await client.db(name_global_databases).collection('classes').findOne({ _id: user.cls[0] }, { projection: { _id: 0, years: 1 } });
       let schoolYearsToSearch = [];
@@ -415,13 +417,39 @@ client.connect().then(() => {
         }
         return { year: year, total: studentTotalScore ? studentTotalScore : "Chưa có điểm" };
       }));
-      res.render("sinhvien-index", {
-        header: "global-header",
-        footer: "global-footer",
-        thongbao: "global-notifications",
-        bandiem: studentTotalScores,
-        nienkhoa: Object.keys(schoolYear_all.years),
-      });
+      if (permi.pos == 3) {
+        res.render("sinhvien-index", {
+          header: "global-header",
+          footer: "global-footer",
+          thongbao: "global-notifications",
+          bandiem: studentTotalScores,
+          nienkhoa: Object.keys(schoolYear_all.years),
+        });
+      } else if (permi.pos == 2) {
+        res.render("bancansu-index", {
+          header: "global-header",
+          footer: "global-footer",
+          thongbao: "global-notifications",
+          bandiem: studentTotalScores,
+          nienkhoa: Object.keys(schoolYear_all.years),
+        });
+      } else if (permi.pos == 1) {
+        res.render("doankhoa-index", {
+          header: "global-header",
+          footer: "global-footer",
+          thongbao: "global-notifications",
+          bandiem: studentTotalScores,
+          nienkhoa: Object.keys(schoolYear_all.years),
+        });
+      } else {
+        res.render("sinhvien-index", {
+          header: "global-header",
+          footer: "global-footer",
+          thongbao: "global-notifications",
+          bandiem: studentTotalScores,
+          nienkhoa: Object.keys(schoolYear_all.years),
+        });
+      }
     } catch (err) { console.log(err); }
   });
 
@@ -641,7 +669,7 @@ client.connect().then(() => {
     });
   });
 
-  // Quan li hoat dong lop route
+  // ban can su quan ly hoat dong
   app.get("/bancansu/quanlihoatdong", checkIfUserLoginRoute, async (req, res) => {
     res.render("bancansu-manage-activities", {
       header: "global-header",
@@ -649,7 +677,7 @@ client.connect().then(() => {
     });
   });
 
-  // Danh gia hoat dong
+  // danh gia hoat dong
   app.get("/bancansu/quanlihoatdong/danh_gia_hoat_dong", checkIfUserLoginRoute, async (req, res) => {
     res.render("bancansu-activity-assessment", {
       header: "global-header",
@@ -761,6 +789,110 @@ client.connect().then(() => {
 
   });
 
+  // danh sach bang diem khoa
+  app.get("/doan_khoa/danhsachbangdiem", checkIfUserLoginRoute, async (req, res) => {
+    const user = req.session.user;
+    const school_year = await client.db(name_global_databases).collection('school_year').findOne(
+      {},
+      { projection: { _id: 0, year: 1 } }
+    );
+    // check user login:
+    if (user.pow[1]) {
+      const years = await client.db(name_global_databases).collection('classes').findOne(
+        { _id: user.cls[0] },
+        { projection: { _id: 0, years: 1 } }
+      );
+
+      // get all student in staff member class:
+      let student_list = await client.db(name_global_databases).collection('user_info').find(
+        { class: user.cls[0] },
+        { projection: { first_name: 1, last_name: 1 } })
+        .toArray();
+      student_list = sortStudentName(student_list);
+
+      // get all student total score from themself:
+      let render = {
+        header: "global-header",
+        footer: "global-footer",
+        thongbao: "global-notifications",
+        staff_name: [],
+        student_list: student_list,
+        student_scores: [],
+        staff_scores: [],
+        department_scores: [],
+        cls: user.cls,
+        years: years.years,
+        curr_year: school_year.year
+      }
+
+      for (student of student_list) {
+        const curr_student_score = await client.db(user.dep)
+          .collection(user.cls[0] + '_std_table')
+          .findOne(
+            {
+              mssv: student._id,
+              school_year: school_year.year
+            },
+            {
+              projection: { total: 1 }
+            }
+          );
+        const curr_staff_score = await client.db(user.dep)
+          .collection(user.cls[0] + '_stf_table')
+          .findOne(
+            {
+              mssv: student._id,
+              school_year: school_year.year
+            },
+            {
+              projection: {
+                total: 1,
+                marker: 1
+              }
+            }
+          );
+        const curr_department_score = await client.db(user.dep)
+          .collection(user.cls[0] + '_dep_table')
+          .findOne(
+            {
+              mssv: student._id,
+              school_year: school_year.year
+            },
+            {
+              projection: { total: 1 }
+            }
+          );
+        // student
+        if (curr_student_score) {
+          render.student_scores.push(curr_student_score.total);
+        } else {
+          render.student_scores.push('-');
+        }
+        // staff member
+        if (curr_staff_score) {
+          render.staff_scores.push(curr_staff_score.total);
+          render.staff_name.push(curr_staff_score.marker);
+        } else {
+          render.staff_scores.push('-');
+          render.staff_name.push('-');
+        }
+        // department
+        if (curr_department_score) {
+          render.department_scores.push(curr_department_score.total);
+        } else {
+          render.department_scores.push('-');
+        }
+      }
+
+      res.render("doankhoa-grade-list", render);
+    }
+    else { // user not staff members 
+      // redirect to home
+      return res.redirect('/');
+    }
+
+  });
+
   // doan khoa route
   app.get("/doan_khoa", checkIfUserLoginRoute, async (req, res) => {
     res.render("doankhoa-index", {
@@ -818,9 +950,43 @@ client.connect().then(() => {
 
   //quan li co van - doan khoa route
   app.get("/doan_khoa/quan_li_cv", checkIfUserLoginRoute, async (req, res) => {
+    // get user name and class
+    const teacher = await client.db(name_global_databases).collection('user_info').find(
+      { pos: 2 },
+      {
+        projection: {
+          first_name: 1,
+          last_name: 1,
+          class: 1
+        }
+      }
+    ).toArray();
+
+    teacher = sortStudentName(teacher);
+    let branch_list = [];
+    for (let i = 0; i < teacher.length; i++) {
+      const cls = await client.db(name_global_databases).collection('branchs').findOne(
+        { _id: teacher[i].class[0] },
+        {
+          projection: { branch: 1 }
+        }
+      );
+      const branch = await client.db(name_global_databases).collection('branchs').findOne(
+        { _id: cls.branch },
+        {
+          projection: { name: 1 }
+        }
+      );
+
+      branch_list.push(branch.name);
+    }
+
     res.render("doankhoa-manage-teacher", {
       header: "global-header",
       footer: "global-footer",
+      thongbao: "global-notifications",
+      teachers: teacher,
+      branchs: branch_list
     });
   });
 
@@ -845,7 +1011,6 @@ client.connect().then(() => {
       return res.redirect('/');
     }
   });
-
 
   app.get("/doan_khoa/thoihan", checkIfUserLoginRoute, async (req, res) => {
     const curr_date = new Date();
