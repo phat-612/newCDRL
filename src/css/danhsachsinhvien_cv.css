@@ -94,7 +94,7 @@ tr td:nth-child(4) {
 }
 
 .modal_main {
-  padding: 2.8rem 3.8rem 1.2rem;
+  padding: 2.8rem 3.8rem 2.8rem;
   height: 55rem;
   overflow: auto;
 }

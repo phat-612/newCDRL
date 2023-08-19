@@ -9,6 +9,7 @@ Ban all who's name Nguyen Ngoc Long on this server file
     4: cấp quyền (> cố vấn)
     5: thêm || sửa bộ môn
     6: thiết lập thời hạn chấm điểm
+    7: quản lý lớp
     ...
   power = {
     0: true,
@@ -414,10 +415,10 @@ client.connect().then(() => {
         }
         return { year: year, total: studentTotalScore ? studentTotalScore : "Chưa có điểm" };
       }));
-      res.render("tracuu", {
-        header: "header",
-        footer: "footer",
-        thongbao: "thongbao",
+      res.render("sinhvien-index", {
+        header: "global-header",
+        footer: "global-footer",
+        thongbao: "global-notifications",
         bandiem: studentTotalScores,
         nienkhoa: Object.keys(schoolYear_all.years),
       });
@@ -430,10 +431,10 @@ client.connect().then(() => {
     if (user) {
       return res.redirect('/');
     }
-    res.render("login", {
-      header: "header",
-      thongbao: "thongbao",
-      footer: "footer",
+    res.render("global-login", {
+      header: "global-header",
+      thongbao: "global-notifications",
+      footer: "global-footer",
       avt: null,
     });
   });
@@ -448,41 +449,83 @@ client.connect().then(() => {
     if (!user?.first) {
       return res.redirect('/');
     }
-    res.render("firstlogin", {
-      header: "header",
-      thongbao: "thongbao",
-      footer: "footer",
+    res.render("global-first-login", {
+      header: "global-header",
+      thongbao: "global-notifications",
+      footer: "global-footer",
       avt: null,
       logout: true,
       tile: tile
     });
   });
 
+  // xac thuc route
+  app.get("/xacthucOTP", async (req, res) => {
+    const user = req.session.user;
+    if (user) {
+      return res.redirect('/');
+    }
+    const mssv = req.query.mssv;
+    const dataUser = await client.db(name_global_databases).collection('user_info').findOne({ _id: mssv }, { projection: { _id: 0, email: 1 } });
+    let emailToShow = '';
+    if (dataUser) {
+      const email = dataUser.email;
+      emailToShow = email.substring(0, 3) + '*'.repeat(email.indexOf('@') - 3) + email.substring(email.indexOf('@'));
+    }
+    res.render("global-verify-otp", {
+      header: "global-header",
+      footer: "global-footer",
+      avt: null,
+      thongbao: "global-notifications",
+      email: emailToShow,
+    });
+  });
+
+  // thong tin ca nhan route
+  app.get("/profile", checkIfUserLoginRoute, async (req, res) => {
+    const user_info = await client.db(name_global_databases).collection('user_info').findOne({ _id: req.session.user._id }, { projection: { last_name: 1, first_name: 1, email: 1 } });
+    res.render("global-edit-profile", {
+      header: "global-header",
+      footer: "global-footer",
+      name: user_info.last_name + " " + user_info.first_name,
+      mssv: user_info._id,
+      email: user_info.email,
+      thongbao: "global-notifications"
+    });
+  });
+
   // doi password route
   app.get("/profile/change_pass", checkIfUserLoginRoute, async (req, res) => {
-    res.render("changepass", {
-      header: "header",
-      thongbao: "thongbao",
-      footer: "footer",
+    res.render("global-change-password", {
+      header: "global-header",
+      thongbao: "global-notifications",
+      footer: "global-footer",
+    });
+  });
+
+  // Quen mat khau
+  app.get("/quenmatkhau", async (req, res) => {
+    const user = req.session.user;
+    if (user) {
+      return res.redirect('/');
+    }
+    res.render("global-forgot-password", {
+      header: "global-header",
+      footer: "global-footer",
+      thongbao: "global-notifications",
+      avt: null,
     });
   });
 
   // nhap bang diem route
   app.get("/nhapdiemdanhgia", checkIfUserLoginRoute, async (req, res) => {
-    res.render("nhapbangdiem", {
-      header: "header",
-      thongbao: "thongbao",
-      footer: "footer"
+    res.render("sinhvien-enter-grades", {
+      header: "global-header",
+      thongbao: "global-notifications",
+      footer: "global-footer"
     });
   });
-  // giang vien nhap diem route
-  app.get("/giangviennhapdiemdanhgia", checkIfUserLoginRoute, async (req, res) => {
-    res.render("giangviennhapbangdiem", {
-      header: "header",
-      thongbao: "thongbao",
-      footer: "footer"
-    });
-  });
+
   // xem bang diem route
   app.get("/xembangdiem", checkIfUserLoginRoute, async (req, res) => {
     try {
@@ -563,10 +606,10 @@ client.connect().then(() => {
       }
 
       if (studentTotalScore) {
-        res.render("sinvienxemdiem", {
-          header: "header",
-          thongbao: "thongbao",
-          footer: "footer",
+        res.render("sinhvien-view-grades", {
+          header: "global-header",
+          thongbao: "global-notifications",
+          footer: "global-footer",
           Scorestd: studentTotalScore,
           Score: stfTotalScore,
           Scorek: depTotalScore
@@ -580,166 +623,42 @@ client.connect().then(() => {
     }
 
   });
-  // doan khoa route
-  app.get("/doan_khoa", checkIfUserLoginRoute, async (req, res) => {
-    res.render("doan_khoa", {
-      header: "header",
-      footer: "footer",
+
+  // ban can su route
+  app.get("/bancansu", checkIfUserLoginRoute, async (req, res) => {
+    res.render("bancansu-index", {
+      header: "global-header",
+      footer: "global-footer",
     });
   });
 
-  // quan li bo mon - doan khoa route
-  app.get("/doan_khoa/quan_li_bm", checkIfUserLoginRoute, async (req, res) => {
-    const user = req.session.user;
-
-    // get all branch of department:
-    const branchs = await client.db(name_global_databases).collection('branchs').find(
-      {
-        dep: user.dep
-      }, // find all data
-      {
-        projection: {
-          _id: 0,
-          name: 1,
-        }
-      }
-    ).toArray();
-
-    // get department name:
-    const dep_name = await client.db(name_global_databases).collection('deps').findOne(
-      {
-        _id: user.dep
-      }, // find all data
-      {
-        projection: {
-          _id: 0,
-          name: 1,
-        }
-      }
-    );
-
-    res.render("quan_li_bm", {
-      header: "header",
-      footer: "footer",
-      thongbao: 'thongbao',
-      dep: dep_name.name, // every branch have same department
-      branchs: branchs
-    });
-  });
-
-  // quan li lop - doan khoa route
-  app.get("/doan_khoa/quan_li_lop", checkIfUserLoginRoute, async (req, res) => {
-    res.render("quan_li_lop", {
-      header: "header",
-      footer: "footer",
-    });
-  });
-
-  //quan li co van - doan khoa route
-  app.get("/doan_khoa/quan_li_cv", checkIfUserLoginRoute, async (req, res) => {
-    res.render("quan_li_cv", {
-      header: "header",
-      footer: "footer",
-    });
-  });
-
-  // xac thuc route
-  app.get("/xacthucOTP", async (req, res) => {
-    const user = req.session.user;
-    if (user) {
-      return res.redirect('/');
-    }
-    const mssv = req.query.mssv;
-    const dataUser = await client.db(name_global_databases).collection('user_info').findOne({ _id: mssv }, { projection: { _id: 0, email: 1 } });
-    let emailToShow = '';
-    if (dataUser) {
-      const email = dataUser.email;
-      emailToShow = email.substring(0, 3) + '*'.repeat(email.indexOf('@') - 3) + email.substring(email.indexOf('@'));
-    }
-    res.render("xacthucOTP", {
-      header: "header",
-      footer: "footer",
-      avt: null,
-      thongbao: "thongbao",
-      email: emailToShow,
+  // ban can su / giang vien nhap diem route
+  app.get("/bancansu/nhapdiemdanhgia", checkIfUserLoginRoute, async (req, res) => {
+    res.render("bancansu-manage-grades", {
+      header: "global-header",
+      thongbao: "global-notifications",
+      footer: "global-footer"
     });
   });
 
   // Quan li hoat dong lop route
   app.get("/bancansu/quanlihoatdong", checkIfUserLoginRoute, async (req, res) => {
-    res.render("quanlihoatdong", {
-      header: "header",
-      footer: "footer",
+    res.render("bancansu-manage-activities", {
+      header: "global-header",
+      footer: "global-footer",
     });
   });
-
-  app.get("/bancansu", checkIfUserLoginRoute, async (req, res) => {
-    res.render("bancansu", {
-      header: "header",
-      footer: "footer",
-    });
-  });
-
-  // Quan li hoat dong khoa route
-  app.get("/doan_khoa/quan_li_hoat_dong_khoa", checkIfUserLoginRoute, async (req, res) => {
-    res.render("quan_li_hoat_dong_khoa", {
-      header: "header",
-      footer: "footer",
-    });
-  });
-
 
   // Danh gia hoat dong
   app.get("/bancansu/quanlihoatdong/danh_gia_hoat_dong", checkIfUserLoginRoute, async (req, res) => {
-    res.render("danh_gia_hoat_dong", {
-      header: "header",
-      footer: "footer",
+    res.render("bancansu-activity-assessment", {
+      header: "global-header",
+      footer: "global-footer",
     });
-  });
-
-  // Quen mat khau
-  app.get("/quenmatkhau", async (req, res) => {
-    const user = req.session.user;
-    if (user) {
-      return res.redirect('/');
-    }
-    res.render("quenmatkhau", {
-      header: "header",
-      footer: "footer",
-      thongbao: "thongbao",
-      avt: null,
-    });
-  });
-
-  // thong tin ca nhan route
-  app.get("/profile", checkIfUserLoginRoute, async (req, res) => {
-    const user_info = await client.db(name_global_databases).collection('user_info').findOne({ _id: req.session.user._id }, { projection: { last_name: 1, first_name: 1, email: 1 } });
-    res.render("edit-profile", {
-      header: "header",
-      footer: "footer",
-      name: user_info.last_name + " " + user_info.first_name,
-      mssv: user_info._id,
-      email: user_info.email,
-      thongbao: "thongbao"
-    });
-  });
-
-  // danh sach sinh vien // ông đổi lại vụ class nha liên hệ NBM để biết thêm chi tiết
-  app.get("/danhsachsinhvien_cv", checkIfUserLoginRoute, async (req, res) => {
-    const user = req.session.user;
-    if (user.pow[1]) {
-      res.render("danhsachsinhvien_cv", {
-        header: "header",
-        footer: "footer",
-        thongbao: "thongbao"
-      });
-    } else {
-      return res.redirect('/');
-    }
   });
 
   // danh sach bang diem
-  app.get("/danhsachbangdiem", checkIfUserLoginRoute, async (req, res) => {
+  app.get("/bancansu/danhsachbangdiem", checkIfUserLoginRoute, async (req, res) => {
     const user = req.session.user;
     const school_year = await client.db(name_global_databases).collection('school_year').findOne(
       {},
@@ -761,9 +680,9 @@ client.connect().then(() => {
 
       // get all student total score from themself:
       let render = {
-        header: "header",
-        footer: "footer",
-        thongbao: "thongbao",
+        header: "global-header",
+        footer: "global-footer",
+        thongbao: "global-notifications",
         staff_name: [],
         student_list: student_list,
         student_scores: [],
@@ -833,7 +752,7 @@ client.connect().then(() => {
         }
       }
 
-      res.render("danhsachbangdiem", render);
+      res.render("bancansu-grade-list", render);
     }
     else { // user not staff members 
       // redirect to home
@@ -842,7 +761,93 @@ client.connect().then(() => {
 
   });
 
-  app.get("/thoihan", checkIfUserLoginRoute, async (req, res) => {
+  // doan khoa route
+  app.get("/doan_khoa", checkIfUserLoginRoute, async (req, res) => {
+    res.render("doankhoa-index", {
+      header: "global-header",
+      footer: "global-footer",
+    });
+  });
+
+  // quan li bo mon - doan khoa route
+  app.get("/doan_khoa/quan_li_bm", checkIfUserLoginRoute, async (req, res) => {
+    const user = req.session.user;
+
+    // get all branch of department:
+    const branchs = await client.db(name_global_databases).collection('branchs').find(
+      {
+        dep: user.dep
+      }, // find all data
+      {
+        projection: {
+          _id: 0,
+          name: 1,
+        }
+      }
+    ).toArray();
+
+    // get department name:
+    const dep_name = await client.db(name_global_databases).collection('deps').findOne(
+      {
+        _id: user.dep
+      }, // find all data
+      {
+        projection: {
+          _id: 0,
+          name: 1,
+        }
+      }
+    );
+
+    res.render("doankhoa-manage-departments", {
+      header: "global-header",
+      footer: "global-footer",
+      thongbao: 'global-notifications',
+      dep: dep_name.name, // every branch have same department
+      branchs: branchs
+    });
+  });
+
+  // quan li lop - doan khoa route
+  app.get("/doan_khoa/quan_li_lop", checkIfUserLoginRoute, async (req, res) => {
+    res.render("doankhoa-manage-classes", {
+      header: "global-header",
+      footer: "global-footer",
+    });
+  });
+
+  //quan li co van - doan khoa route
+  app.get("/doan_khoa/quan_li_cv", checkIfUserLoginRoute, async (req, res) => {
+    res.render("doankhoa-manage-teacher", {
+      header: "global-header",
+      footer: "global-footer",
+    });
+  });
+
+  // Quan li hoat dong khoa route
+  app.get("/doan_khoa/quan_li_hoat_dong_khoa", checkIfUserLoginRoute, async (req, res) => {
+    res.render("doankhoa-manage-activities", {
+      header: "global-header",
+      footer: "global-footer",
+    });
+  });
+
+  // danh sach sinh vien // ông đổi lại vụ class nha liên hệ NBM để biết thêm chi tiết
+  app.get("/doan_khoa/danhsachsinhvien_cv", checkIfUserLoginRoute, async (req, res) => {
+    const user = req.session.user;
+    if (user.pow[1]) {
+      res.render("doankhoa-student-list", {
+        header: "global-header",
+        footer: "global-footer",
+        thongbao: "global-notifications"
+      });
+    } else {
+      return res.redirect('/');
+    }
+  });
+
+
+  app.get("/doan_khoa/thoihan", checkIfUserLoginRoute, async (req, res) => {
     const curr_date = new Date();
     const school_year = await client.db(name_global_databases).collection('school_year').findOne(
       {},
@@ -865,10 +870,10 @@ client.connect().then(() => {
       school_year.end_day = undefined
     }
 
-    res.render("thoihan", {
-      header: "header",
-      thongbao: "thongbao",
-      footer: "footer",
+    res.render("doankhoa-time", {
+      header: "global-header",
+      thongbao: "global-notifications",
+      footer: "global-footer",
       school_year: school_year,
       cbx: cbx
     })
@@ -1628,18 +1633,24 @@ client.connect().then(() => {
     const user = req.session.user;
     const data = req.body;
     let reqClass = data.class
-    if (!reqClass) {
-      reqClass = user.cls[0];
+    // if (!reqClass) {
+    //   reqClass = user.cls[0];
+    // }
+    if (reqClass) {
+
+      if (user.pow[1]) {
+        const student_list = await client.db(name_global_databases).collection('user_info').find(
+          { class: reqClass },
+          { projection: { first_name: 1, last_name: 1 } })
+          .sort({ first_name: 1, last_name: 1 })
+          .toArray();
+        res.status(200).json(sortStudentName(student_list));
+      } else {
+        return res.redirect('/');
+      }
     }
-    if (user.pow[1]) {
-      const student_list = await client.db(name_global_databases).collection('user_info').find(
-        { class: reqClass },
-        { projection: { first_name: 1, last_name: 1 } })
-        .sort({ first_name: 1, last_name: 1 })
-        .toArray();
-      res.status(200).json(sortStudentName(student_list));
-    } else {
-      return res.redirect('/');
+    else {
+      res.sendStatus(404);
     }
 
   })
@@ -1647,7 +1658,6 @@ client.connect().then(() => {
   app.get("/api/getuserscore", checkIfUserLoginAPI, async (req, res) => {
     try {
       const user = req.session.user;
-      console.log(user);
       const schoolYearParam = req.query.schoolYear;
 
       const schoolYearsToSearch = ['HK1_' + schoolYearParam, 'HK2_' + schoolYearParam];

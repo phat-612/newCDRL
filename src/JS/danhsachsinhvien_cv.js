@@ -106,8 +106,8 @@ $(document).ready(() => {
     e.stopPropagation();
   });
   // them tung sinh vien
-  $('.js_md_add').on('click',async ()=>{
-    if (cls == 0){
+  $('.js_md_add').on('click', async () => {
+    if (cls == 0) {
       notify('!', 'Vui lòng chọn lớp')
     }
     const inpMssv = $("#md_mssv")
@@ -185,7 +185,7 @@ $(".btn_upload").on("click", async () => {
         downloadLink.click();
         // Giải phóng URL tạm thời sau khi tải xuống hoàn thành
         URL.revokeObjectURL(blobUrl);
-        
+
       } else {
         notify('!', 'Thêm sinh viên thất bại ')
       }
@@ -203,25 +203,30 @@ $('#delete-student').on('click', async () => {
       dataDelete.push(cbxs[i].value);
     }
   }
-  try {
-    let postData = JSON.stringify({
-      dataDelete: dataDelete
-    });
-    const requestOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: postData
-    };
-    const response = await fetch('/api/deleteAccount', requestOptions);
-    if (response.ok) {
-      await loadStudents(cls)
-      notify('n', 'Xóa sinh viên thành công')
-    } else {
-      notify('!', 'Xóa sinh viên thất bại')
+  if (dataDelete) {
+    try {
+      let postData = JSON.stringify({
+        dataDelete: dataDelete
+      });
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: postData
+      };
+      const response = await fetch('/api/deleteAccount', requestOptions);
+      if (response.ok) {
+        await loadStudents(cls)
+        notify('n', 'Xóa sinh viên thành công')
+      } else {
+        notify('!', 'Xóa sinh viên thất bại')
+      }
+    } catch (error) {
+      console.log(error);
     }
-  } catch (error) {
-    console.log(error);
+  } {
+    notify('!', 'Vui lòng chọn sinh viên')
+
   }
 })
