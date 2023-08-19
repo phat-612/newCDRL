@@ -1,20 +1,22 @@
 const fs = require('fs');
 const path = require('path');
 
-const folderPath = 'views'; // Thay thế bằng đường dẫn thư mục của bạn
+function printDirectoryTree(folderPath, indent = '') {
+    const folderName = path.basename(folderPath);
 
-fs.readdir(folderPath, (err, files) => {
-    if (err) {
-        console.error('Lỗi khi đọc thư mục:', err);
-        return;
-    }
-
-    console.log('Các tập tin trong thư mục:');
-    files.forEach(file => {
-        const filePath = path.join(folderPath, file);
-        const stats = fs.statSync(filePath);
-        if (stats.isFile()) {
-            console.log(file);
+    if (folderName !== 'node_modules') {
+        console.log(indent + folderName + '/');
+        
+        if (fs.existsSync(folderPath)) {
+            const items = fs.readdirSync(folderPath).sort();
+            items.forEach(item => {
+                const itemPath = path.join(folderPath, item);
+                if (fs.statSync(itemPath).isDirectory()) {
+                    printDirectoryTree(itemPath, indent + '    ');
+                }
+            });
         }
-    });
-});
+    }
+}
+const folderPath = 'C:\\Users\\Ruri Meiko\\Desktop\\Code\\Git\\newCDRL\\';
+printDirectoryTree(folderPath);
