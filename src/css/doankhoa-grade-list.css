@@ -1,0 +1,103 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: content-box;
+  }
+  .content {
+    max-width: 91rem;
+    margin-left: auto;
+    margin-right: auto;
+    /* background-color: beige; */
+  }
+  .content .hk_nk {
+    font-size: 2rem;
+    padding: 1rem;
+  }
+  .hk_nk .select::after{
+    
+  }
+  .hk_nk .select select{
+    font-size: inherit;
+  }
+  .hk_nk .select select option{
+    text-align: center;
+  }
+  .danh_sach_bang_diem {
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: #fff;
+    font-size: 1.6rem;
+    border-radius: 0.8rem;
+  }
+  .danh_sach_bang_diem .control{
+    display: flex;
+    justify-content: space-between;
+  }
+  .danh_sach_bang_diem .chu_thich {
+    margin: 2rem 0;
+  }
+  
+  .danh_sach_bang_diem .dau_sao {
+    text-align: center;
+    display: inline-block;
+    color: red;
+    width: 1.5rem;
+  }
+  
+  .danh_sach_bang_diem .mau_vang {
+    display: inline-block;
+    border-radius: 0.3rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: rgb(251, 251, 138);
+  }
+  
+  .new_update{
+    background-color: rgb(251, 251, 138);
+  }
+  /* css table */
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+  th{
+    font-size: 2rem;
+  }
+  td{
+  font-size: 1.6rem;
+  text-align: center;
+  }
+  th, td{
+    padding: 1rem;
+  }
+  table tr td:nth-child(4){
+    text-transform: uppercase;
+    text-align: center;
+  }
+  table tr td:nth-child(7){
+    text-align: center;
+  }
+  table tr td:nth-child(9){
+    
+    padding: 0;
+  }
+  table tr td:nth-child(9) a{
+    text-decoration: none;
+    color: rgb(117, 117, 255);
+  }
+  th {
+    background-color: rgb(241, 241, 241);
+  }
+  tr:nth-child(even) {
+    background-color: rgb(241, 241, 241);
+  }
+  tr:nth-child(odd) {
+    background-color: #ffffff;
+  }
+  
+  tr:hover{
+    background-color: rgba(158, 158, 158, 0.507);
+  }
+  
+  
+  
