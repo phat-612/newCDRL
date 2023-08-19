@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="/src/css/quan_li_cv.css" />
+  <link rel="stylesheet" href="/src/css/doankhoa-manage-teacher.css" />
   <title>Quản Lí Cố Vấn</title>
 </head>
 
@@ -205,20 +205,21 @@
               <h2 class="title-box">THÊM CỐ VẤN</h2>
             </div>
 
-            <div class="content teacher__name">
-              <h3 class="sub-title name">Họ Tên Cố Vấn</h3>
-              <textarea name="" id="" cols="30" rows="3" placeholder="Nhập họ tên Cố vấn mới (Bắt buộc)"></textarea>
+            <div class="content teacher__name add_teacher">
+              <h3 class="sub-title name add_teacher_lable">Họ Tên Cố Vấn</h3>
+              <input type="text" class="content__fullname name--input" placeholder="Nhập họ tên Cố vấn mới (Bắt buộc)">
             </div>
 
-            <div class="content teacher__account">
-              <h3 class="sub-title name">Tên Đăng Nhập</h3>
-              <textarea name="" id="" cols="30" rows="3" placeholder="Nhập tên đăng nhập cần khởi tạo (Bắt buộc)"></textarea>
+
+            <div class="content teacher__account add_teacher">
+              <h3 class="sub-title name add_teacher_lable">Tên Đăng Nhập</h3>
+              <input type="text" class="content__fullname name--input" placeholder="Nhập tên đăng nhập cần khởi tạo (Bắt buộc)">
             </div>
 
             <div>
               <div class="selectbox nien_khoa">
                   <div class="select">
-                    <label for="select-level">Bộ Môn</label>
+                    <label class="add_teacher_lable" for="select-level ">Bộ Môn</label>
                     <select id="select-level">
                       <option value="KTPM-0121">Kỹ Thuật Phần Mềm</option>
                       <option value="KHDL">Khoa Học Dữ Liệu</option>
@@ -244,6 +245,6 @@
   <%- include(footer) %>
 </body>
 
-<script src="/src/JS/quan_li_cv.js"></script>
+<script src="/src/JS/doankhoa-manage-teacher.js"></script>
 
 </html>

@@ -12,6 +12,10 @@ body {
   padding: 0;
 }
 
+:root{
+  var
+}
+
 .header {
   background-color: #fff;
   box-shadow: 0rem 1.5rem 1rem -1.5rem #70707042;

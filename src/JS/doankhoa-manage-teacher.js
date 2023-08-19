@@ -20,6 +20,6 @@ $(".modal.add").click(function () {
 $(".modal_wrap.add").click(function (e) {
   e.stopPropagation();
 });
-$(".modal.edit").click(function () {
+$(".exist_btn").click(function () {
   $(".modal.edit").hide();
 });
