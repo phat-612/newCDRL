@@ -3,7 +3,7 @@
 **Tác giả**: 
 - Nguyễn Lê Tấn Đạt (aka Nguyễn Lê Tấn Đạt)
 - Nguyễn Văn Phát (aka Nguyễn Phát)
-- Nguyễn Hưng Thịnh (aka Nguyễn Hưng Thịnh)
+- Nguyễn Hưng Thịnh (aka HT-Kill_All)
 - Nguyễn Ngọc Long (aka Long Đại Đế)
 - Nguyễn Trần Hoàng Long (aka nthl đang)
 - Nguyễn Bình Minh (aka Saitama mạnh nhất vũ trụ)
