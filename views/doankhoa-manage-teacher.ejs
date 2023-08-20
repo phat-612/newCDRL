@@ -28,7 +28,7 @@
               <tr>
                 <th>
                   <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row--all" class="inp-cbx" value="2" />
+                    <input type="checkbox" id="row--all" class="inp-cbx all-cbx" value="2" />
                     <label for="row--all" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                     </label>
                   </div>
@@ -36,31 +36,33 @@
                 <th>STT</th>
                 <th style="width: 25%;">Tên Cố Vấn Học Tập</th>
                 <th style="width: 25%;">Bộ Môn</th>
-                <th style="width: 10%;">Khoa</th>
-                <th style="width: 5%;">Lớp Phân Công</th>
+                <th style="width: 25%;">Lớp Phân Công</th>
                 <th>Cập Nhập</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row--0" class="inp-cbx" value="2" />
-                    <label for="row--0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                  </div>
-                </td>
-                <td>1</td>
-                <td>Nguyễn Thị Hồng Yến</td>
-                <td>Kỹ Thuật Phần Mềm</td>
-                <td>CNTT</td>
-                <td>
-                  KTPM0121
-                </td>
-                <td>
-                  <a id="edit__class" href="#">Sửa</a>
-                </td>
-              </tr>
+              <% for (let i = 0; i < teachers.length; i++) { %>
+                <tr>
+                  <td>
+                    <div class="checkbox-wrapper-4">
+                      <input type="checkbox" id="row--<%= i %>" class="inp-cbx" value="<%= teachers[i]._id %>" />
+                      <label for="row--<%= i %>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                      </label>
+                    </div>
+                  </td>
+                  <td><%= i + 1 %></td>
+                  <td><%= teachers[i].first_name + " " + teachers[i].last_name %></td>
+                  <td class="b_name"><%= branchs[i] %></td>
+                  <td>
+                    <% for (let j = 0; j < teachers[i].class.length; j++) {%>
+                      <%= teachers[i].class[j] %>
+                    <% } %>
+                  </td>
+                  <td>
+                    <a id="edit__class" href="#">Sửa</a>
+                  </td>
+                </tr>
+              <% } %>
             </tbody>
           </table>
         </div>
@@ -90,10 +92,9 @@
                   <div class="select">
                     <label for="select-level">Bộ Môn</label>
                     <select id="select-level">
-                      <option value="KTPM-0121">Kỹ Thuật Phần Mềm</option>
-                      <option value="KHDL">Khoa Học Dữ Liệu</option>
-                      <option value="HTTT">Hệ Thống Thông Tin</option>
-                      <option value="CNTT">Công Nghệ Thông Tin</option>
+                      <% for (let i = 0; i < all_branchs.length; i++) { %>
+                        <option value="<%= all_branchs[i]._id %>"><%= all_branchs[i].name %></option>
+                      <% } %>
                     </select>
                   </div>
                 </main>
@@ -132,10 +133,9 @@
                   <div class="select">
                     <label class="add_teacher_lable" for="select-level ">Bộ Môn</label>
                     <select id="select-level">
-                      <option value="KTPM-0121">Kỹ Thuật Phần Mềm</option>
-                      <option value="KHDL">Khoa Học Dữ Liệu</option>
-                      <option value="HTTT">Hệ Thống Thông Tin</option>
-                      <option value="CNTT">Công Nghệ Thông Tin</option>
+                      <% for (let i = 0; i < all_branchs.length; i++) { %>
+                        <option value="<%= all_branchs[i]._id %>"><%= all_branchs[i].name %></option>
+                      <% } %>
                     </select>
                   </div>
               </div>
@@ -143,8 +143,8 @@
 
             <div>
               <main id="button-main">
-                <div><button class="button-35">Hoàn Tác</button></div>
-                <div><button class="button-35">Xong</button></div>
+                <div><button class="button-35">Hủy</button></div>
+                <div><button class="button-35">Lưu</button></div>
               </main>
             </div>
           </div>

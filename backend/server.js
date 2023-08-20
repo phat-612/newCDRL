@@ -950,8 +950,18 @@ client.connect().then(() => {
 
   //quan li co van - doan khoa route
   app.get("/doan_khoa/quan_li_cv", checkIfUserLoginRoute, async (req, res) => {
+    // get all branch
+    const all_branchs = await client.db(name_global_databases).collection('branchs').find(
+      {},
+      {
+        projection: { 
+          name: 1 
+        }
+      }
+    ).toArray();
+    
     // get user name and class
-    const teacher = await client.db(name_global_databases).collection('user_info').find(
+    const teachers = await client.db(name_global_databases).collection('user_info').find(
       { pos: 2 },
       {
         projection: {
@@ -961,20 +971,26 @@ client.connect().then(() => {
         }
       }
     ).toArray();
-
-    teacher = sortStudentName(teacher);
+    
     let branch_list = [];
-    for (let i = 0; i < teacher.length; i++) {
-      const cls = await client.db(name_global_databases).collection('branchs').findOne(
-        { _id: teacher[i].class[0] },
+    for (let i = 0; i < teachers.length; i++) {
+      const cls = await client.db(name_global_databases).collection('classes').findOne(
+        { _id: teachers[i].class[0] },
         {
-          projection: { branch: 1 }
+          projection: { 
+            _id: 0,
+            branch: 1 
+          }
         }
       );
+
       const branch = await client.db(name_global_databases).collection('branchs').findOne(
         { _id: cls.branch },
         {
-          projection: { name: 1 }
+          projection: { 
+            _id: 0,
+            name: 1 
+          }
         }
       );
 
@@ -985,8 +1001,9 @@ client.connect().then(() => {
       header: "global-header",
       footer: "global-footer",
       thongbao: "global-notifications",
-      teachers: teacher,
-      branchs: branch_list
+      teachers: teachers,
+      branchs: branch_list,
+      all_branchs: all_branchs
     });
   });
 

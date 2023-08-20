@@ -1,4 +1,13 @@
-$("#edit__class").click(function () {
+$(document).on("click", "#edit__class", async function () {
+  // set combo box of edit one to curr branch 
+  const curr_branch = $(this).parent().parent().find('.b_name').text();
+  $('.modal.edit #select-level option').each(function() {
+    if ($(this).text() == curr_branch) { // check for option that equal to curr branch
+      $(this).prop("selected", 'selected'); // sellect this option 
+    }
+
+  });
+
   $(".modal.edit").show();
 });
 
@@ -17,9 +26,34 @@ $("#add__class").click(function () {
 $(".modal.add").click(function () {
   $(".modal.add").hide();
 });
+
 $(".modal_wrap.add").click(function (e) {
   e.stopPropagation();
 });
+
 $(".exist_btn").click(function () {
   $(".modal.edit").hide();
+});
+
+// all checkbox set (if all-cbx tick all checkboxs will tick otherwise untick all)
+$(document).on("change", ".all-cbx", async function () {
+  if ($('.all-cbx')[0].checked) {
+    $('table tbody .inp-cbx').prop('checked', true);
+  } else {
+    $('table tbody .inp-cbx').prop('checked', false);
+  }
+});
+
+// if all checkboxs was check all-cbx will tick
+$(document).on("change", ".inp-cbx", async function () {
+  let check = true
+  $('table tbody .inp-cbx').each(function () {
+    if (!this.checked) check = false; return;
+  })
+
+  if (check) {
+    $('.all-cbx').prop('checked', true);
+  } else {
+    $('.all-cbx').prop('checked', false);
+  }
 });
