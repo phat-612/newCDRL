@@ -11,6 +11,7 @@
 <body>
   <div class="main">
     <%- include(header) %>
+    <%- include(thongbao) %>
     <div class="container">
 
       <div class="box-table">
@@ -72,38 +73,40 @@
         <div class="modal_wrap edit">
           <div class="modal_main">
 
-            <div class="content content--title change_info">
+            <div class="content title content--title change_info">
               <h2 class="content__title content__title_change">SỬA THÔNG TIN BỘ MÔN</h2>
             </div>
 
-            <div class="content content--fullname">
-              <label for="teacher--name" class="content__fullname name--label">Họ Tên Cố Vấn</label>
-              <input type="text" class="content__fullname name--input" id="teacher--name" placeholder="Nhập tên bộ môn">
-            </div>
-
-            <div class="content content--account">
-              <label for="teacher--account" class="content__account account--label">Tên Đăng Nhập</label>
-              <input type="text" class="content__account account--input" id="teacher--account" placeholder="Nhập tên bộ môn">
-            </div>
-
-            <div>
-              <div class="selectbox nien_khoa">
-                <main id="select-main">
-                  <div class="select">
-                    <label for="select-level">Bộ Môn</label>
-                    <select id="select-level">
-                      <% for (let i = 0; i < all_branchs.length; i++) { %>
-                        <option value="<%= all_branchs[i]._id %>"><%= all_branchs[i].name %></option>
-                      <% } %>
-                    </select>
-                  </div>
-                </main>
+            <div class="content_main">
+              <div class="content content--fullname">
+                <label for="teacher--name" class="content__fullname name--label">Họ Tên Cố Vấn</label>
+                <input type="text" class="content__fullname name--input" id="teacher--name" placeholder="Nhập tên bộ môn">
               </div>
-            </div>
- 
-            <div class="content content--button">
-              <div><button class="button-35 exist_btn">Hủy</button></div>
-              <div><button class="button-35 save_btn">Lưu</button></div>
+  
+              <div class="content content--account">
+                <label for="teacher--account" class="content__account account--label">Tên Đăng Nhập</label>
+                <input type="text" class="content__account account--input" id="teacher--account" placeholder="Nhập tên bộ môn">
+              </div>
+  
+              <div>
+                <div class="selectbox nien_khoa">
+                  <main id="select-main">
+                    <div class="select">
+                      <label for="select-level">Bộ Môn</label>
+                      <select id="select-level">
+                        <% for (let i = 0; i < all_branchs.length; i++) { %>
+                          <option value="<%= all_branchs[i]._id %>"><%= all_branchs[i].name %></option>
+                        <% } %>
+                      </select>
+                    </div>
+                  </main>
+                </div>
+              </div>
+   
+              <div class="content content--button">
+                <div><button class="button-35 exist_btn">Hủy</button></div>
+                <div><button class="button-35 save_btn">Lưu</button></div>
+              </div>
             </div>
           
           </div>
@@ -117,35 +120,37 @@
               <h2 class="title-box">THÊM CỐ VẤN</h2>
             </div>
 
-            <div class="content teacher__name add_teacher">
-              <h3 class="sub-title name add_teacher_lable">Họ Tên Cố Vấn</h3>
-              <input type="text" class="content__fullname name--input" placeholder="Nhập họ tên Cố vấn mới (Bắt buộc)">
-            </div>
-
-
-            <div class="content teacher__account add_teacher">
-              <h3 class="sub-title name add_teacher_lable">Tên Đăng Nhập</h3>
-              <input type="text" class="content__fullname account--input" placeholder="Nhập tên đăng nhập cần khởi tạo (Bắt buộc)">
-            </div>
-
-            <div>
-              <div class="selectbox nien_khoa">
-                  <div class="select">
-                    <label class="add_teacher_lable" for="select-level ">Bộ Môn</label>
-                    <select id="select-level">
-                      <% for (let i = 0; i < all_branchs.length; i++) { %>
-                        <option value="<%= all_branchs[i]._id %>"><%= all_branchs[i].name %></option>
-                      <% } %>
-                    </select>
-                  </div>
+            <div class="content_main">
+              <div class="content teacher__name add_teacher">
+                <h3 class="sub-title name add_teacher_lable">Họ Tên Cố Vấn</h3>
+                <input type="text" class="content__fullname name--input" placeholder="Nhập họ tên Cố vấn mới (Bắt buộc)">
               </div>
-            </div>
-
-            <div>
-              <main id="button-main">
-                <div><button class="button-35 exist_btn">Hủy</button></div>
-                <div><button class="button-35 save_btn">Lưu</button></div>
-              </main>
+  
+  
+              <div class="content teacher__account add_teacher">
+                <h3 class="sub-title name add_teacher_lable">Tên Đăng Nhập</h3>
+                <input type="text" class="content__fullname account--input" placeholder="Nhập tên đăng nhập cần khởi tạo (Bắt buộc)">
+              </div>
+  
+              <div>
+                <div class="selectbox nien_khoa">
+                    <div class="select">
+                      <label class="add_teacher_lable" for="select-level ">Bộ Môn</label>
+                      <select id="select-level">
+                        <% for (let i = 0; i < all_branchs.length; i++) { %>
+                          <option value="<%= all_branchs[i]._id %>"><%= all_branchs[i].name %></option>
+                        <% } %>
+                      </select>
+                    </div>
+                </div>
+              </div>
+  
+              <div>
+                <main id="button-main">
+                  <div><button class="button-35 exist_btn">Hủy</button></div>
+                  <div><button class="button-35 save_btn">Lưu</button></div>
+                </main>
+              </div>
             </div>
           </div>
         </div>

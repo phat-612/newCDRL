@@ -143,6 +143,17 @@
     background-color: rgba(233, 233, 233, .6);
     display: none;
   }
+  .subject--input {
+    margin-top: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
+    line-height: 4rem;
+    padding: 0 2rem;
+    border-radius: 0.3em;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    background-color: var(--input-hover);
+    transition: box-shadow 0.1s linear;
+  }
   
   .modal_wrap {
     position: absolute;

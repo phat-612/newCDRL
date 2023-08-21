@@ -10,7 +10,7 @@
 }
 
 .chitiet {
-  background-color: #fff;
+  background-color: var(--white-color);
   padding: 1rem;
   border-radius: 0.8rem;
 }
@@ -74,12 +74,13 @@ tr td:nth-child(4) {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(233, 233, 233, 0.6);
+  background-color: var(--model-color);
   display: none;
 }
 
 #md_vt {
-  background-color: #ffffff00;
+  background-color: var(--select-bg);
+  box-shadow:none;
 }
 
 .modal_wrap {
@@ -88,7 +89,7 @@ tr td:nth-child(4) {
   left: 50%;
   max-width: 80rem;
   width: 95%;
-  background: #fff;
+  background: var(--white-color);
   border-radius: 0.8rem;
   transform: translate(-50%, -50%);
 }
@@ -102,7 +103,7 @@ tr td:nth-child(4) {
 .modal_main .title-box {
   font-size: 2.8rem;
   margin-bottom: 1.6rem;
-  background-color: #6984e0;
+  background-color: var(--td-a);
   display: inline-block;
   padding: 1.6rem 2.7rem 1.6rem 10rem;
   border-radius: 0.8rem;
@@ -115,7 +116,7 @@ tr td:nth-child(4) {
 }
 
 .modal_content> :nth-child(n+4) {
-  background-color: #d9d9d982;
+  background-color: var(--input-hover);
   padding: 0.4rem;
   align-items: center;
   border-radius: 0.8rem;
@@ -151,7 +152,7 @@ tr td:nth-child(4) {
   width: 50%;
   border-radius: 0.3em;
   border: 1px solid rgba(0, 0, 0, 0.3);
-  background-color: #d9d9d982;
+  background-color: var(--input-hover);
   transition: box-shadow 0.1s linear;
 }
 

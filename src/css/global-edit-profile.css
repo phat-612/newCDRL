@@ -25,13 +25,11 @@ body {
   box-sizing: content-box;
 }
 
-body {
-  background-color: var(--html-color);
-}
+
 
 .container {
   width: 120rem;
-  background: var(--body-color);
+  background: var(--white-color);
   margin: 0 auto;
   margin-top: 3rem;
   margin-bottom: 3rem;
@@ -70,7 +68,7 @@ body {
   width: 50%;
   border-radius: 0.3em;
   border: 1px solid rgba(0, 0, 0, 0.3);
-  background-color: #d9d9d982;
+  background-color: var(--input-hover);
   transition: box-shadow 0.1s linear;
 }
 
@@ -117,7 +115,7 @@ body {
   position: relative;
   overflow: hidden;
   cursor: pointer;
-  border: 0.2rem dashed black;
+  border: 0.2rem dashed var(--black-color);
 }
 
 .up-img {
@@ -140,8 +138,8 @@ body {
   margin-top: 4rem;
   padding: 1rem 4rem;
   font-size: 2rem;
-  background-color: #000;
-  color: #fff;
+  background-color: var(--black-color);
+  color: var(--white-color);
   margin-right: 1rem;
   margin-bottom: 3rem;
   border-radius: 0.8rem;
@@ -171,7 +169,7 @@ body {
   width: 90rem;
   height: 50rem;
   transform: translate(-50%, -50%);
-  background-color: rgb(255, 255, 255);
+  background-color: var(--modal-color);
 }
 
 .close-dialog {
@@ -206,7 +204,7 @@ body {
 
 .drop_img:hover {
   background: #9e9e9e;
-  color: white;
+  color: var(--white-color);
 }
 
 .modal_img {

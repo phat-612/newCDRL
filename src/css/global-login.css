@@ -26,7 +26,7 @@
   font-size: 1.6rem;
   margin-bottom: 3rem;
   border: none;
-  border-bottom: 0.1rem solid #000;
+  border-bottom: 0.1rem solid var(--black-color);
   outline: none;
   background: transparent;
 }

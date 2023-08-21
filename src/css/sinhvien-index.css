@@ -8,16 +8,13 @@
     box-sizing: content-box;
   }
 
-  body {
-    background-color: #e7ecf0;
-  }
 
   /* css tra cứu */
   .tra-cuu,
   .submit-mark {
     margin-top: 2rem;
     max-width: 90rem;
-    background-color: #fff;
+    background-color: var(--white-color);
     margin-left: auto;
     margin-right: auto;
     border-radius: 0.8rem;
@@ -41,7 +38,7 @@
 
   .button {
     padding: 1rem;
-    background-color: white;
+    background-color: var(--white-color);
   }
 
   .button .button-1 {

@@ -1,4 +1,4 @@
-$("#edit__class").click(function () {
+$(document).on("click", "#edit__class", async function () {
     $(".modal.edit").show();
   });
 

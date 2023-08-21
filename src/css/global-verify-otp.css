@@ -27,7 +27,7 @@ body {
 
 .title p {
     font-size: 16px;
-    color: #000000;
+    color: var(--black-color);
 }
 
 .title p.msg {
@@ -39,7 +39,7 @@ body {
 
 .otp-input-fields {
     margin: auto;
-    background-color: white;
+    background-color: var(--white-color);
     box-shadow: 0px 0px 8px 0px #020250 44;
     max-width: 50rem;
     width: auto;
@@ -76,7 +76,7 @@ body {
 
 .otp-input-fields input:focus {
     border-width: 2px;
-    border-color: #000000;
+    border-color: var(--black-color);
     font-size: 20px;
 }
 
@@ -134,7 +134,7 @@ body {
 
 .otp-form {
     position: absolute;
-    background-color: #fff;
+    background-color: var(--white-color);
     top: 50%;
     left: 50%;
     transform: translate(-50%, -40%);

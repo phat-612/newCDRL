@@ -31,8 +31,8 @@ Ban all who's name Nguyen Ngoc Long on this server file
 
 
   tài khoản mặt định:
-    {_id: "2101281",
-    password: "2101281",
+    {_id: "19112003",
+    password: "18102003",
     first: "true"}
   taskDoing:
 -------------------------------------------------------------------------------------------------------------------------- */
@@ -146,6 +146,7 @@ client.connect().then(() => {
 
   async function checkIfUserLoginRoute(req, res, next) {
     const user = req.session.user;
+    console.log(user);
     if (!user) {
       // Cookie không tồn tại, chặn truy cập
       return res.redirect("/login");
@@ -469,6 +470,7 @@ client.connect().then(() => {
   });
 
   // firstlogin route
+
   app.get("/login/updateyourpasswords", async (req, res) => {
     const user = req.session.user;
     let tile = "Đăng nhập lần đầu";
@@ -490,24 +492,35 @@ client.connect().then(() => {
 
   // xac thuc route
   app.get("/xacthucOTP", async (req, res) => {
-    const user = req.session.user;
-    if (user) {
-      return res.redirect('/');
+    try {
+      const user = req.session.user;
+      if (user) {
+        return res.redirect('/');
+      }
+      const mssv = req.query.mssv;
+      const dataUser = await client.db(name_global_databases).collection('user_info').findOne({ _id: mssv }, { projection: { _id: 0, email: 1 } });
+      let emailToShow = '';
+      if (dataUser) {
+        const email = dataUser.email;
+        emailToShow = email.substring(0, 3) + '*'.repeat(email.indexOf('@') - 3) + email.substring(email.indexOf('@'));
+      }
+      res.render("global-verify-otp", {
+        header: "global-header",
+        footer: "global-footer",
+        avt: null,
+        thongbao: "global-notifications",
+        email: emailToShow,
+      });
+    } catch (err) {
+      console.log(err);
+      res.render("global-verify-otp", {
+        header: "global-header",
+        footer: "global-footer",
+        avt: null,
+        thongbao: "global-notifications",
+        email: "",
+      });
     }
-    const mssv = req.query.mssv;
-    const dataUser = await client.db(name_global_databases).collection('user_info').findOne({ _id: mssv }, { projection: { _id: 0, email: 1 } });
-    let emailToShow = '';
-    if (dataUser) {
-      const email = dataUser.email;
-      emailToShow = email.substring(0, 3) + '*'.repeat(email.indexOf('@') - 3) + email.substring(email.indexOf('@'));
-    }
-    res.render("global-verify-otp", {
-      header: "global-header",
-      footer: "global-footer",
-      avt: null,
-      thongbao: "global-notifications",
-      email: emailToShow,
-    });
   });
 
   // thong tin ca nhan route
@@ -521,6 +534,7 @@ client.connect().then(() => {
       email: user_info.email,
       thongbao: "global-notifications"
     });
+
   });
 
   // doi password route
@@ -951,53 +965,55 @@ client.connect().then(() => {
 
   //quan li co van - doan khoa route
   app.get("/doan_khoa/quan_li_cv", checkIfUserLoginRoute, async (req, res) => {
-    // get all branch
-    const all_branchs = await client.db(name_global_databases).collection('branchs').find(
-      {},
-      {
-        projection: {
-          name: 1
-        }
-      }
-    ).toArray();
-
-    // get user name and class
-    const teachers = await client.db(name_global_databases).collection('user_info').find(
-      { pos: 2 },
-      {
-        projection: {
-          first_name: 1,
-          last_name: 1,
-          class: 1,
-          branch: 1
-        }
-      }
-    ).toArray();
-
-    let branch_list = [];
-    for (let i = 0; i < teachers.length; i++) {
-
-      const branch = await client.db(name_global_databases).collection('branchs').findOne(
-        { _id: teachers.branch },
+    try {
+      // get all branch
+      const all_branchs = await client.db(name_global_databases).collection('branchs').find(
+        {},
         {
           projection: {
-            _id: 0,
             name: 1
           }
         }
-      );
+      ).toArray();
 
-      branch_list.push(branch.name);
+      // get user name and class
+      const teachers = await client.db(name_global_databases).collection('user_info').find(
+        { pos: 2 },
+        {
+          projection: {
+            first_name: 1,
+            last_name: 1,
+            class: 1,
+            branch: 1
+          }
+        }
+      ).toArray();
+      let branch_list = [];
+      for (let i = 0; i < teachers.length; i++) {
+        const branch = await client.db(name_global_databases).collection('branchs').findOne(
+          { _id: teachers[i].branch },
+          {
+            projection: {
+              _id: 0,
+              name: 1
+            }
+          }
+        );
+        branch_list.push(branch.name);
+      }
+
+      res.render("doankhoa-manage-teacher", {
+        header: "global-header",
+        footer: "global-footer",
+        thongbao: "global-notifications",
+        teachers: teachers,
+        branchs: branch_list,
+        all_branchs: all_branchs
+      });
     }
-
-    res.render("doankhoa-manage-teacher", {
-      header: "global-header",
-      footer: "global-footer",
-      thongbao: "global-notifications",
-      teachers: teachers,
-      branchs: branch_list,
-      all_branchs: all_branchs
-    });
+    catch (err) {
+      console.log(err);
+    }
   });
 
   // Quan li hoat dong khoa route
@@ -1403,6 +1419,16 @@ client.connect().then(() => {
   // Create new account -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   app.post("/api/createAccount", upload.single('file'), checkIfUserLoginAPI, async (req, res) => {
     const fileStudents = req.file;
+    function generateEmail(inputString) {
+      let output ='';
+      let s1 = 'ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠạẢảẤấẦầẨẩẪẫẬậẮắẰằẲẳẴẵẶặẸẹẺẻẼẽẾếỀềỂểỄễỆệỈỉỊịỌọỎỏỐốỒồỔổỖỗỘộỚớỜờỞởỠỡỢợỤụỦủỨứỪừỬửỮữỰựỲỳỴỵỶỷỸỹ'
+      let s0= 'AAAAEEEIIOOOOUUYaaaaeeeiioooouuyAaDdIiUuOoUuAaAaAaAaAaAaAaAaAaAaAaAaEeEeEeEeEeEeEeEeIiIiOoOoOoOoOoOoOoOoOoOoOoOoUuUuUuUuUuUuUuYyYyYyYy'
+      // if  (inputString.isUppercase()) {
+      //   output += 
+      // }
+
+      return output + '@student.ctuet.edu.vn';
+    }
     if (fileStudents) {
       try {
         // read excel file:
@@ -1422,7 +1448,8 @@ client.connect().then(() => {
             power: { 0: true },
             class: [req.body.cls],
             displayName: `${values[i][1]} ${values[i][2]}`,
-            email: "",
+            email: generateEmail(`${values[i][1]} ${values[i][2]} ${values[i][0].toString()}`),
+            pos: 3
           };
           let dataInsertLogin = {
             _id: values[i][0].toString(),
@@ -1466,15 +1493,30 @@ client.connect().then(() => {
       console.log('them 1 sinh vien');
       const dataStudent = req.body
       let pw = await randomPassword()
+      let power
+      if (dataStudent['vaitro'] == '1') {
+        power = {
+          0: true,
+          1: true,
+          3: true,
+        }
+      } else {
+        power = {
+          0: true,
+          1: dataStudent['chamdiem'],
+          3: dataStudent['lbhd'],
+        }
+      }
       let dataInsertUser = {
         _id: dataStudent['mssv'].toString(),
         first_name: dataStudent['ten'],
         last_name: dataStudent['ho'],
         avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
-        power: { 0: true },
+        power: power,
         class: [dataStudent['cls']],
         displayName: `${dataStudent['ho']} ${dataStudent['ten']}`,
-        email: "",
+        email: generateEmail(`${dataStudent['ho']} ${dataStudent['ten']} ${dataStudent['mssv'].toString()}`),
+        pos: 3
       };
       let dataInsertLogin = {
         _id: dataStudent['mssv'].toString(),
@@ -1496,8 +1538,21 @@ client.connect().then(() => {
         {
           upsert: true
         });
+      // xu ly sau khi them sinh vien
+      const uuid = uuidv4();
+      const workbook = await XlsxPopulate.fromFileAsync("./src/excelTemplate/Tao_danh_sach_lop_moi.xlsx");
+      await workbook.toFileAsync(path.join('.downloads', uuid + ".xlsx"));
+      res.download(path.join('.downloads', uuid + ".xlsx"));
+      // xoa file sau khi xu ly
+      setTimeout(() => {
+        fs.unlink(path.join('.downloads', uuid + ".xlsx"), (err) => {
+          if (err) {
+            console.error("Lỗi khi xóa tệp:", err);
+          }
+        });
+      }, 10000)
     }
-    // xu ly sau khi them sinh vien
+
   });
   app.post("/api/deleteAccount", checkIfUserLoginAPI, async (req, res) => {
     try {

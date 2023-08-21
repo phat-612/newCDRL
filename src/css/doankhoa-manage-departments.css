@@ -8,15 +8,12 @@ html {
   box-sizing: content-box;
 }
 
-body {
-  background-color: #e7ecf0;
-}
 
 /* css tra cứu */
 .box-table {
   margin-top: 2rem;
   max-width: 90rem;
-  background-color: #fff;
+  background-color: var(--white-color);
   margin-left: auto;
   margin-right: auto;
   border-radius: 0.8rem;
@@ -51,7 +48,7 @@ td {
 table,
 th,
 td {
-  border: 1px solid black;
+  border: 1px solid var(--black-color);
   border-collapse: collapse;
 }
 
@@ -69,21 +66,6 @@ td {
   padding: 1rem;
 }
 
-th {
-  background-color: rgb(241, 241, 241);
-}
-
-tr:nth-child(even) {
-  background-color: rgb(241, 241, 241);
-}
-
-tr:nth-child(odd) {
-  background-color: #ffffff;
-}
-
-tr:hover {
-  background-color: rgba(158, 158, 158, 0.507);
-}
 
 .table {
   margin-top: 3rem;
@@ -99,7 +81,7 @@ table{
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(233, 233, 233, .6);
+  background-color: var(--modal-color);
   display: none;
 }
 
@@ -109,7 +91,7 @@ table{
   left: 50%;
   max-width: 800px;
   width: 45%;
-  background: #fff;
+  background: var(--white-color);
   border-radius: 0.8rem;
   transform: translate(-50%, -50%);
 
@@ -134,7 +116,7 @@ table{
 .content__title {
   font-size: 2.8rem;
   margin-bottom: 2rem;
-  background-color: #6984e0;
+  background-color: var(--td-a);
   display: inline-block;
   padding: 1.6rem 2.7rem 1.6rem 6rem;
   border-radius: 0.8rem;
@@ -163,7 +145,7 @@ table{
   padding: 0 2rem;
   border-radius: 0.3em;
   border: 1px solid rgba(0, 0, 0, 0.3);
-  background-color: #d9d9d982;
+  background-color: var(--input-hover);
   transition: box-shadow 0.1s linear;
 }
 
@@ -180,7 +162,7 @@ table{
 }
 
 .content__subject.subject--input:hover {
-  background-color: #fff;
+  background-color: var(--white-color);
 }
 
 .content__subject.subject--input::placeholder {

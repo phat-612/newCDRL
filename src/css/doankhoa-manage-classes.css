@@ -8,15 +8,12 @@ html {
     box-sizing: content-box;
 }
 
-body {
-    background-color: #e7ecf0;
-}
 
 /* css tra cứu */
 .box-table {
     margin-top: 2rem;
     max-width: 90rem;
-    background-color: #fff;
+    background-color: var(--white-color);
     margin-left: auto;
     margin-right: auto;
     border-radius: 0.8rem;
@@ -59,7 +56,7 @@ body {
 
   /* css table */
   table, th, td {
-    border: 1px solid black;
+    border: 1px solid var(--black-color);
     border-collapse: collapse;
   }
   th{
@@ -73,19 +70,6 @@ body {
     padding: 1rem;
   }
 
-  th {
-    background-color: rgb(241, 241, 241);
-  }
-  tr:nth-child(even) {
-    background-color: rgb(241, 241, 241);
-  }
-  tr:nth-child(odd) {
-    background-color: #ffffff;
-  }
-  
-  tr:hover{
-    background-color: rgba(158, 158, 158, 0.507);
-  }
   
   /* modal */
 .modal{
@@ -94,7 +78,7 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(233, 233, 233,.6);
+  background-color: var(--modal-color);
   display: none;
 }
 
@@ -104,7 +88,7 @@ body {
   left: 50%;
   max-width: 500px;
   width: 95%;
-  background: #fff;
+  background: var(--white-color);
   border-radius:0.8rem;
   transform: translate(-50%, -50%);
 
@@ -115,9 +99,45 @@ body {
   /* overflow: auto; */
 }
 
-.title-box {
+.content.title {
   font-size: 2rem;
+  margin-bottom: 2rem;
+  background-color:var(--td-a);
+  display: inline-block;
+  padding: 1.6rem 2.7rem 1.6rem 6rem;
+  border-radius: 0.8rem;
+  left: -4rem;
+  top:2rem;
+  position: absolute;
 }
+.title-box{
+  padding: 0!important;
+  font-size: 2.8rem!important;
+
+}
+.content_main{
+  margin-top: 10rem;
+  
+}
+.subtitle{
+  display: flex;
+  align-items: center;
+  margin: 0rem 2rem 2rem 0rem;
+
+}
+.input--label{
+  width: 10rem;
+}
+.content__subject.subject--input {
+  flex: 1;
+  line-height: 4rem;
+  padding: 0 2rem;
+  border-radius: 0.3em;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  background-color: var(--input-hover);
+  transition: box-shadow 0.1s linear;
+}
+
 
 .sub-title {
   font-size: 1.5rem;

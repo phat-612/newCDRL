@@ -8,6 +8,7 @@ $(document).on("click", "#edit__subject", async function () { // this way get al
   // check current line for future use
   curr_edit = $(this).parent().parent();
   // change text area value ò edit to old name whenever it open edit window
+  
   $('.edit .bname_input').val(old_name);
   // show window
   $(".modal.edit").show();
@@ -99,65 +100,68 @@ $(".exist_btn").click(function () {
 
 //save button
 $(".save_btn").click(async function () {
-
-  // disable curr button
-  $(this).prop('disabled', 'true');
-
-  // find input
-  $('.modal').each(function () {
-    if ($(this).is(":visible")) {
-      // get new name
-      new_name = $(this).find('.bname_input').val();
-    }
-  })
-
-  // request
-  const requestOptions = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      old_name: old_name,
-      name: new_name
-    })
-  };
-
-  const response = await fetch('/api/addOrEditBranchs', requestOptions);
-  if (response.ok) {
-    if (curr_edit) {
-      // set current edit line name to new name
-      curr_edit.find('.b_name').text(new_name);
-    } else {
-      let length = $('table tbody tr').length;
-      $('table tbody').append(`
-        <tr>
-          <td>
-            <div class="checkbox-wrapper-4">
-              <input type="checkbox" id="row--${length}" class="inp-cbx" value="${new_name}" />
-              <label for="row--${length}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-              </label>
-            </div>
-          </td>
-          <td class="nums">${length + 1}</td>
-          <td class="b_name">${new_name}</td>
-          <td class="dep_name">${$('table tbody .dep_name').first().text()}</td>
-          <td>
-            <a id="edit__subject" href="#">Sửa</a>
-          </td>
-        </tr>
-      `)
-    }
-    // able curr button
+  if ($('.modal.add .subject--input').val()) { // check if user enter info or not
+    // disable curr button
     $(this).prop('disabled', 'true');
-    // disappear curr dialog 
-    $(".modal.add").hide();
-    $(".modal.edit").hide();
-    notify('n', 'Đã hoàn tất thay đổi bộ môn')
-  }
-  else if (response.status == 500) {
-    // Error occurred during upload
-    notify('x', 'Có lỗi xảy ra!');
+  
+    // find input
+    $('.modal').each(function () {
+      if ($(this).is(":visible")) {
+        // get new name
+        new_name = $(this).find('.bname_input').val();
+      }
+    })
+  
+    // request
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        old_name: old_name,
+        name: new_name
+      })
+    };
+  
+    const response = await fetch('/api/addOrEditBranchs', requestOptions);
+    if (response.ok) {
+      if (curr_edit) {
+        // set current edit line name to new name
+        curr_edit.find('.b_name').text(new_name);
+      } else {
+        let length = $('table tbody tr').length;
+        $('table tbody').append(`
+          <tr>
+            <td>
+              <div class="checkbox-wrapper-4">
+                <input type="checkbox" id="row--${length}" class="inp-cbx" value="${new_name}" />
+                <label for="row--${length}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                </label>
+              </div>
+            </td>
+            <td class="nums">${length + 1}</td>
+            <td class="b_name">${new_name}</td>
+            <td class="dep_name">${$('table tbody .dep_name').first().text()}</td>
+            <td>
+              <a id="edit__subject" href="#">Sửa</a>
+            </td>
+          </tr>
+        `)
+      }
+      // able curr button
+      $(this).prop('disabled', 'true');
+      // disappear curr dialog 
+      $(".modal.add").hide();
+      $(".modal.edit").hide();
+      notify('n', 'Đã hoàn tất thay đổi bộ môn')
+    }
+    else if (response.status == 500) {
+      // Error occurred during upload
+      notify('x', 'Có lỗi xảy ra!');
+    }
+  } else {
+    notify('!', 'Hãy nhập đầy đủ thông tin!');
   }
 });
 

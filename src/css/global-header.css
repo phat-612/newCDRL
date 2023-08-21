@@ -26,6 +26,15 @@ html {
 
   /* bancansu-grade */
   --mauvang-ne:rgb(251, 251, 138);
+  /* modal */
+  --modal-color:rgba(233, 233, 233,.6);
+  /* input */
+  --input-hover:#d9d9d982;
+  --input-placeholder:#767676;
+  /* table border */
+  --table-border:#aeaeae;
+  --select-bg:#ffffff00;
+  --red-color:red;
 }
 body {
   background-color: var(--html-color);
@@ -290,7 +299,9 @@ body {
 .selectbox button:hover {
   background-color: rgb(43, 255, 0);
 }
-
+td .select select {
+  box-shadow: none !important;
+}
 .select select {
   font-size: 1.6rem;
   padding: 1rem 1.6rem 1rem 0.7rem;
@@ -315,6 +326,7 @@ body {
   justify-content: center;
   min-width: 8rem;
   border-radius: 0.25em;
+  align-items: center;
   /* overflow: hidden; */
 }
 
@@ -372,6 +384,27 @@ td a:hover {
   color: var(--td-ahover);
   font-weight: 600;
 }
+
+
+
+
+/* modal */
+.content.title {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  background-color:var(--td-a);
+  display: inline-block;
+  padding: 1.6rem 2.7rem 1.6rem 6rem;
+  border-radius: 0.8rem;
+  left: -4rem;
+  top:2rem;
+  position: absolute;
+}
+.content_main{
+  margin-top: 10rem;
+}
+
+
 
 /* responsive */
 @media screen and (max-width: 600px) {

@@ -146,6 +146,17 @@ $(document).ready(() => {
       if (response.ok) {
         await loadStudents(cls)
         notify('n', 'Thêm sinh viên thành công')
+        $(".modal.add").hide();
+        const blobUrl = URL.createObjectURL(await response.blob());
+        // Tạo một thẻ <a> ẩn để tải xuống và nhấn vào nó
+        const downloadLink = document.createElement('a');
+        downloadLink.href = blobUrl;
+        downloadLink.download = 'Danh_sach_sinh_vien.xlsx'; // Đặt tên cho tệp tải xuống
+        downloadLink.style.display = 'none';
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        // Giải phóng URL tạm thời sau khi tải xuống hoàn thành
+        URL.revokeObjectURL(blobUrl);
       } else {
         notify('!', 'Thêm sinh viên thất bại')
       }
@@ -203,7 +214,7 @@ $('#delete-student').on('click', async () => {
       dataDelete.push(cbxs[i].value);
     }
   }
-  if (dataDelete) {
+  if (dataDelete.length > 0) {
     try {
       let postData = JSON.stringify({
         dataDelete: dataDelete
@@ -225,8 +236,7 @@ $('#delete-student').on('click', async () => {
     } catch (error) {
       console.log(error);
     }
-  } {
+  } else {
     notify('!', 'Vui lòng chọn sinh viên')
-
   }
 })

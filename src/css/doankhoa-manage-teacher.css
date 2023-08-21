@@ -8,15 +8,12 @@ html {
   box-sizing: content-box;
 }
 
-body {
-  background-color: #e7ecf0;
-}
 
 /* css tra cứu */
 .box-table {
   margin-top: 2rem;
   max-width: 90rem;
-  background-color: #fff;
+  background-color: var(--white-color);
   margin-left: auto;
   margin-right: auto;
   border-radius: 0.8rem;
@@ -26,11 +23,6 @@ body {
   padding: 1rem;
 }
 
-.content h2,
-.content h2 {
-  font-size: 2rem;
-  padding: 1rem;
-}
 
 .content p {
   display: inline-block;
@@ -61,7 +53,7 @@ td {
 table,
 th,
 td {
-  border: 1px solid black;
+  border: 1px solid var(--black-color);
   border-collapse: collapse;
 }
 
@@ -79,21 +71,6 @@ td {
   padding: 1rem;
 }
 
-th {
-  background-color: rgb(241, 241, 241);
-}
-
-tr:nth-child(even) {
-  background-color: rgb(241, 241, 241);
-}
-
-tr:nth-child(odd) {
-  background-color: #ffffff;
-}
-
-tr:hover {
-  background-color: rgba(158, 158, 158, 0.507);
-}
 
 /* modal */
 .modal {
@@ -102,7 +79,7 @@ tr:hover {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(233, 233, 233, .6);
+  background-color: var(--model-color);
   display: none;
 }
 
@@ -112,7 +89,7 @@ tr:hover {
   left: 50%;
   max-width: 500px;
   width: 95%;
-  background: #fff;
+  background: var(--white-color);
   border-radius: 0.8rem;
   transform: translate(-50%, -50%);
 
@@ -121,6 +98,7 @@ tr:hover {
 .add_teacher {
   display: flex;
   margin: 3rem 0;
+  align-items: center;
 }
 
 .sub-title {
@@ -163,7 +141,7 @@ label {
   padding: 0 2rem;
   border-radius: 0.3em;
   border: 1px solid rgba(0, 0, 0, 0.3);
-  background-color: #d9d9d982;
+  background-color: var(--input-hover);
   transition: box-shadow 0.1s linear;
 }
 
@@ -181,13 +159,13 @@ label {
 
 .name--input:hover,
 .account--input:hover {
-  background-color: #fff;
-  color: #d9d9d982;
+  background-color: var(--button-color);
+  color: var(--black-text);
 }
 
 .name--input::placeholder,
 .account--input::placeholder {
-  color: #767676;
+  color: var(--input-placeholder);
 }
 
 .nien_khoa {
@@ -209,26 +187,9 @@ label {
   margin: 0 !important;
 }
 
-.content__title_change {
-  padding-bottom: 1rem;
-  text-align: center;
-  background-color: #fd9d9d;
-  border-radius: 10px;
-  width: 30rem;
-  position: absolute;
-  left: -16px;
-  top: 2rem;
-}
 
-.title-box {
-  text-align: center;
-  background-color: #fd9d9d;
-  border-radius: 10px;
-  width: 21rem;
-  position: absolute;
-  left: -30px;
-  top: 2rem;
-}
+
+
 
 .change_info {
   padding: 3rem 0;
