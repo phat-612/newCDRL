@@ -101,7 +101,7 @@
 }
 
 .duration_container {
-    background-color: #fff;
+    background-color:var(--white-color);
     width: 50rem;
     margin: 15rem auto;
     /* padding: 2rem 2rem; */
@@ -254,17 +254,17 @@ h2{
     font-weight: 600;
   }
   input[type="date"]{
-    background-color: #d3d3d3;
+    background-color: var(--button-color);
     padding: 5px;
     font-family: "Roboto Mono",monospace;
-    color: #000;
+    color: var(--black-color);
     font-size: 1.8rem;
     border: none;
     outline: none;
     border-radius: 0.8rem;
 }
 ::-webkit-calendar-picker-indicator{
-    background-color: #ffffff;
+    background-color: var(--white-color);
     padding: 0.5rem;
     cursor: pointer;
     border-radius: 3px;
@@ -291,7 +291,7 @@ h2{
     margin-right: 9px;
 }
 .more_auto:hover{
-    background-color: #e4dfdf;
+    background-color: var(--button-color);
 }
 .time_auto{
     padding: 2rem;
@@ -301,7 +301,7 @@ h2{
   font-size: 25px;
   font-size: 2.8rem;
   margin-bottom: 1.6rem;
-  background-color: #6984e0;
+  background-color: var(--td-a);
   display: inline-block;
   padding: 1.6rem 2.7rem 1.6rem 6rem;
   border-radius: 0.8rem;
@@ -316,7 +316,7 @@ h2{
     position: fixed;
     top: 0;
     display: none;
-    background-color: var(--table-line)bf;
+    background-color: var(--table-line);
   }
   
   /* CSS cho dialog thêm ảnh */
