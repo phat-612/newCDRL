@@ -1,18 +1,12 @@
 html {
   font-size: 62.5%;
 }
-:root{
-  --html-color: #e7ecf0;
-  --body-color: #fff;
-}
 * {
   padding: 0;
   margin: 0;
   box-sizing: content-box;
 }
-body {
-  background-color: var(--html-color);
-}
+
 
 /* css tra cứu */
 .tra_cuu,

@@ -15,7 +15,7 @@
   height: 2.5rem;
   text-align: center;
   cursor: pointer;
-  background: #fff;
+  background: var(--white-color);
   box-shadow: 4px 2px 8px;
 }
 .close_modal:hover{
@@ -40,7 +40,7 @@
 .activity-board {
   margin-top: 2rem;
   padding: 1rem;
-  background-color: #fff;
+  background-color: var(--white-color);
   font-size: 1.6rem;
   border-radius: 0.8rem;
 }
@@ -113,7 +113,7 @@ tr:nth-child(even) {
 }
 
 tr:nth-child(odd) {
-  background-color: #ffffff;
+  background-color: var(--white-color)fff;
 }
 
 tr:hover {
@@ -138,7 +138,7 @@ tr:hover {
   left: 50%;
   max-width: 800px;
   width: 95%;
-  background: #fff;
+  background: var(--white-color);
   border-radius: 0.8rem;
   transform: translate(-50%, -50%);
 
