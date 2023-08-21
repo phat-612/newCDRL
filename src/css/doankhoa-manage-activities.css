@@ -33,6 +33,18 @@
     font-size: 2rem;
     padding: 1rem;
   }
+  .year_full{
+    display: flex;
+    padding-bottom: 1rem;
+  }
+  .hk{
+    width: 38%;
+    display: flex;
+    align-items: center;
+  }
+  .hk span{
+    width: 30%;
+  }
   
   /* activity-board */
   

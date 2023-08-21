@@ -2,9 +2,33 @@ html {
   font-size: 62.5%;
   font-family: Arial, Helvetica, sans-serif;
 }
+:root{
+  --html-color: #e7ecf0;
+  --header-text:#667580;
+  --black-color:black;
+  --white-color:#fff;
+  --checkbox-active:rgb(143, 213, 229);
+  --tr-hover:rgb(247 234 255);
+  --table-header:rgb(206, 206, 206);
+  --td-a:rgb(117, 117, 255);
+  --td-ahover:rgb(79 79 235);
+  --header-boxshadow:#70707042;
+  --button-color:#d3d3d3;
+  --checkbox-boxshadow:rgba(0, 16, 75, 0.05);
+  --checkbox-border:#9b9ea7;
+  --checkbox-border-hover:#c2c2c2;
+  --tb-white:rgb(241, 241, 241);
 
+  /* login */
+  --login-a:rgb(98, 98, 232);
+  --login-boxshadow:rgba(0, 0, 0, 0.6);
+  --lonin-input-focus:#bdb8b8;
+
+  /* bancansu-grade */
+  --mauvang-ne:rgb(251, 251, 138);
+}
 body {
-  background-color: #e7ecf0;
+  background-color: var(--html-color);
 }
 
 * {
@@ -12,13 +36,13 @@ body {
   padding: 0;
 }
 
-:root{
+/* :root{
   var
-}
+} */
 
 .header {
-  background-color: #fff;
-  box-shadow: 0rem 1.5rem 1rem -1.5rem #70707042;
+  background-color: var(--white-color);
+  box-shadow: 0rem 1.5rem 1rem -1.5rem var(--header-boxshadow);
 }
 
 .header-content {
@@ -27,7 +51,7 @@ body {
   width: 100%;
   justify-content: space-around;
   align-items: center;
-  color: #667580;
+  color: var(--header-text);
   font-size: 1.2rem;
 }
 
@@ -38,7 +62,7 @@ body {
 }
 
 .right-header a {
-  color: #667580;
+  color: var(--header-text);
   text-decoration: none;
   margin-right: 2rem;
 }
@@ -69,7 +93,7 @@ body {
   min-width: 16rem;
   position: absolute;
   padding: 0.1rem;
-  background-color: #fff;
+  background-color: var(--white-color);
   box-shadow: 0rem 0.3rem 0.4rem 0.1rem rgba(0, 0, 0, 0.398);
   list-style: none;
   top: 3.6rem;
@@ -91,13 +115,13 @@ body {
 }
 
 .setting li:hover {
-  background-color: rgba(171, 162, 162, 0.842);
+  background-color: var(--table-header);
   border-radius: 0.3rem;
   cursor: pointer;
 }
 
 .setting li:hover a {
-  color: black;
+  color: var(--black-color);
 }
 
 .setting::before {
@@ -112,11 +136,11 @@ body {
 /* button chung */
 .button-35 {
   align-items: center;
-  background-color: #d3d3d3;
+  background-color: var(--button-color);
   border-radius: 1rem;
-  box-shadow: transparent 0 0 0 0.3rem, rgba(18, 18, 18, 0.1) 0 0.6rem 2rem;
+  box-shadow: transparent 0 0 0 0.3rem, #797272 0 1px 3px 0px;
   box-sizing: border-box;
-  color: #121212;
+  color: var(--black-color);
   cursor: pointer;
   font-family: Inter, sans-serif;
   font-size: 1.8rem;
@@ -137,7 +161,7 @@ body {
 }
 
 .button-35:hover {
-  box-shadow: #121212 0 0 0 0.3rem, transparent 0 0 0 0;
+  box-shadow: var(--black-color) 0 0 0 0.3rem, transparent 0 0 0 0;
 }
 
 .button-35:active {
@@ -147,7 +171,7 @@ body {
 
 .button-35 a {
   text-decoration: none;
-  color: #000;
+  color: var(--black-color);
 }
 
 .button-35:active a {
@@ -180,9 +204,9 @@ body {
   height: 1.8rem;
   border-radius: 0.4rem;
   transform: scale(1);
-  border: 0.1rem solid #9b9ea7;
+  border: 0.1rem solid var(--checkbox-border);
   transition: all 0.2s ease;
-  box-shadow: 0 0.1rem 0.1rem rgba(0, 16, 75, 0.05);
+  box-shadow: 0 0.1rem 0.1rem var(--checkbox-boxshadow);
 }
 
 .checkbox-wrapper-4 .cbx span:first-child svg {
@@ -190,7 +214,7 @@ body {
   top: 0.3rem;
   left: 0.2rem;
   fill: none;
-  stroke: #fff;
+  stroke: var(--white-color);
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -207,7 +231,7 @@ body {
 }
 
 .checkbox-wrapper-4 .cbx:hover span:first-child {
-  border-color: #c2c2c2;
+  border-color: var(--checkbox-border-hover);
 }
 
 .checkbox-wrapper-4 .inp-cbx {
@@ -216,8 +240,8 @@ body {
 }
 
 .checkbox-wrapper-4 .inp-cbx:checked+.cbx span:first-child {
-  background: rgb(143, 213, 229);
-  border-color: #c2c2c2;
+  background: var(--checkbox-active);
+  border-color: var(--checkbox-border-hover);
   animation: wave-4 0.4s ease;
 }
 
@@ -264,7 +288,7 @@ body {
 }
 
 .selectbox button:hover {
-  background-color: rgb(47, 44, 44);
+  background-color: rgb(43, 255, 0);
 }
 
 .select select {
@@ -277,9 +301,11 @@ body {
   box-shadow: none;
   flex: 1;
   background-image: none;
-  background-color: #d3d3d3;
+  background-color: var(--button-color);
   border-radius: 0.8rem;
   cursor: pointer;
+  box-shadow: transparent 0 0 0 0.3rem, #797272 0 1px 3px 0px;
+
 }
 
 .select {
@@ -304,7 +330,7 @@ body {
 }
 
 .select:hover::after {
-  color: rgb(143, 213, 229);
+  color: var(--checkbox-active);
 }
 
 /* table chung */
@@ -320,30 +346,30 @@ tr {
 }
 
 tr:nth-child(even) {
-  background-color: rgb(241, 241, 241);
+  background-color:var(--table-white);
 }
 
 tr:nth-child(odd) {
-  background-color: #ffffff;
+  background-color: var(--white-color);
 }
 
 tr:hover {
-  background-color: rgb(247 234 255);
+  background-color: var(--tr-hover);
 }
 
 th {
-  background-color: rgb(206, 206, 206);
+  background-color: var(--table-header);
 }
 
 td a {
   text-decoration: none;
-  color: rgb(117, 117, 255);
+  color: var(--td-a);
   user-select: none;
   transition: font-weight 0.1s ease;
 }
 
 td a:hover {
-  color: rgb(79 79 235);
+  color: var(--td-ahover);
   font-weight: 600;
 }
 

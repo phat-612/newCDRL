@@ -13,9 +13,7 @@
   font-size: 2rem;
   padding: 1rem;
 }
-.hk_nk .select::after{
-  
-}
+
 .hk_nk .select select{
   font-size: inherit;
 }
@@ -25,7 +23,7 @@
 .danh_sach_bang_diem {
   margin-top: 2rem;
   padding: 1rem;
-  background-color: #fff;
+  background-color: var(--white-color);
   font-size: 1.6rem;
   border-radius: 0.8rem;
 }
@@ -49,15 +47,15 @@
   border-radius: 0.3rem;
   width: 1.5rem;
   height: 1.5rem;
-  background-color: rgb(251, 251, 138);
+  background-color: var(--mauvang-ne);
 }
 
 .new_update{
-  background-color: rgb(251, 251, 138);
+  background-color: var(--mauvang-ne);
 }
 /* css table */
 table, th, td {
-  border: 1px solid black;
+  border: 1px solid var(--black-color);
   border-collapse: collapse;
 }
 th{
@@ -83,20 +81,8 @@ table tr td:nth-child(9){
 }
 table tr td:nth-child(9) a{
   text-decoration: none;
-  color: rgb(117, 117, 255);
-}
-th {
-  background-color: rgb(241, 241, 241);
-}
-tr:nth-child(even) {
-  background-color: rgb(241, 241, 241);
-}
-tr:nth-child(odd) {
-  background-color: #ffffff;
+  color: var(--login-a);
 }
 
-tr:hover{
-  background-color: rgba(158, 158, 158, 0.507);
-}
 
 

@@ -51,7 +51,7 @@
                     </div>
                   </td>
                   <td><%= i + 1 %></td>
-                  <td><%= teachers[i].first_name + " " + teachers[i].last_name %></td>
+                  <td class="t_name"><%= teachers[i].first_name + " " + teachers[i].last_name %></td>
                   <td class="b_name"><%= branchs[i] %></td>
                   <td>
                     <% for (let j = 0; j < teachers[i].class.length; j++) {%>
@@ -104,7 +104,7 @@
             <div class="content content--button">
               <div><button class="button-35 exist_btn">Hủy</button></div>
               <div><button class="button-35 save_btn">Lưu</button></div>
-          </div>
+            </div>
           
           </div>
         </div>
@@ -125,7 +125,7 @@
 
             <div class="content teacher__account add_teacher">
               <h3 class="sub-title name add_teacher_lable">Tên Đăng Nhập</h3>
-              <input type="text" class="content__fullname name--input" placeholder="Nhập tên đăng nhập cần khởi tạo (Bắt buộc)">
+              <input type="text" class="content__fullname account--input" placeholder="Nhập tên đăng nhập cần khởi tạo (Bắt buộc)">
             </div>
 
             <div>
@@ -143,8 +143,8 @@
 
             <div>
               <main id="button-main">
-                <div><button class="button-35">Hủy</button></div>
-                <div><button class="button-35">Lưu</button></div>
+                <div><button class="button-35 exist_btn">Hủy</button></div>
+                <div><button class="button-35 save_btn">Lưu</button></div>
               </main>
             </div>
           </div>

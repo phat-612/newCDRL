@@ -197,8 +197,8 @@ label {
 
 #button-main {
   display: flex;
-  flex-direction: row-reverse;
   margin-top: 3rem;
+  justify-content: flex-end;
 }
 
 .add_teacher_lable {

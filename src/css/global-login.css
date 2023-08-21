@@ -3,7 +3,7 @@
   margin: 0;
 }
 .login-box {
-  background-color: #fff;
+  background-color: var(--white-color);
   position: absolute;
   top: 50%;
   left: 50%;
@@ -12,7 +12,7 @@
   transform: translate(-50%, -50%);
   /* background: rgba(24, 20, 20, 0.987); */
   box-sizing: border-box;
-  box-shadow: 0 0.5rem 2.5rem rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0.5rem 2.5rem var(--login-boxshadow);
   border-radius: 1rem;
 }
 
@@ -45,7 +45,7 @@
 .login-box .user-box input:valid ~ label {
   top: -2rem;
   left: 0;
-  color: #bdb8b8;
+  color: var(--lonin-input-focus);
   font-size: 1.2rem;
 }
 
@@ -53,7 +53,7 @@
   position: relative;
   display: inline-block;
   padding: 1rem 2rem;
-  color: rgb(98, 98, 232);
+  color: var(--login-a);
   font-size: 1.6rem;
   text-decoration: none;
   text-transform: uppercase;

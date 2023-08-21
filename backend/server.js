@@ -10,6 +10,7 @@ Ban all who's name Nguyen Ngoc Long on this server file
     5: thêm || sửa bộ môn
     6: thiết lập thời hạn chấm điểm
     7: quản lý lớp
+    8: quản lý cố ván
     ...
   power = {
     0: true,
@@ -954,12 +955,12 @@ client.connect().then(() => {
     const all_branchs = await client.db(name_global_databases).collection('branchs').find(
       {},
       {
-        projection: { 
-          name: 1 
+        projection: {
+          name: 1
         }
       }
     ).toArray();
-    
+
     // get user name and class
     const teachers = await client.db(name_global_databases).collection('user_info').find(
       { pos: 2 },
@@ -967,29 +968,21 @@ client.connect().then(() => {
         projection: {
           first_name: 1,
           last_name: 1,
-          class: 1
+          class: 1,
+          branch: 1
         }
       }
     ).toArray();
-    
+
     let branch_list = [];
     for (let i = 0; i < teachers.length; i++) {
-      const cls = await client.db(name_global_databases).collection('classes').findOne(
-        { _id: teachers[i].class[0] },
-        {
-          projection: { 
-            _id: 0,
-            branch: 1 
-          }
-        }
-      );
 
       const branch = await client.db(name_global_databases).collection('branchs').findOne(
-        { _id: cls.branch },
+        { _id: teachers.branch },
         {
-          projection: { 
+          projection: {
             _id: 0,
-            name: 1 
+            name: 1
           }
         }
       );
@@ -1898,7 +1891,7 @@ client.connect().then(() => {
     }
   });
 
-  // delete cheked branchs
+  // api delete cheked branchs
   app.post("/api/deleteBranchs", checkIfUserLoginAPI, async (req, res) => {
     try {
       const user = req.session.user;
@@ -1958,6 +1951,73 @@ client.connect().then(() => {
     }
   });
 
+  // api add or edit teacher of department base on it exist or not
+  app.post("/api/addOrEditTeachers", checkIfUserLoginAPI, async (req, res) => {
+    try {
+      const user = req.session.user;
+      const data = req.body; // data = {old_id: "19112003", new_id: "`18102003", new_name: "Nguyễn Văn A", branch: "KTPM"}
+
+      // must be department to use this api
+      if (user.pow[8]) {
+        // remove old teachers
+        await client.db(name_global_databases).collection('user_info').deleteOne(
+          {
+            _id: data.old_id,
+          }
+        )
+        // add new teachers
+        await client.db(name_global_databases).collection('branchs').insertOne(
+          {
+            first_name: data.new_name.split(' ').slice(0, -1).join(' '),
+            last_name: data.new_name.split(' ').slice(-1).join(' '),
+            avt: "",
+            power: {
+              "0": true,
+              // tất cả các quyền của giáo viên
+            },
+            class: [],
+            displayName: data.new_name, // here before pop
+            branch: data.branch,
+            email: "",
+            pos: 2
+          }
+        );
+
+      } else {
+        return res.redirect('/'); // back to home
+      }
+
+      res.sendStatus(200);
+    } catch (err) {
+      console.log("SYSTEM | ADD_OR_EDIT_BRANCHS | ERROR | ", err);
+      res.sendStatus(500);
+    }
+  });
+
+  // api delete teachers checked
+  app.post("/api/deleteTeachers", checkIfUserLoginAPI, async (req, res) => {
+    try {
+      const user = req.session.user;
+      const data = req.body; // data = {rm_ts: ["19112003" (teacher_id), ...]}
+
+      // must be department to use this api
+      if (user.pow[8]) {
+        // remove all cheked branch in remove branchs líst
+        await client.db(name_global_databases).collection('user_info').deleteMany(
+          {
+            _id: { $in: data.rm_ts },
+          }
+        );
+      } else {
+        return res.redirect('/'); // back to home
+      }
+
+      res.sendStatus(200);
+    } catch (err) {
+      console.log("SYSTEM | DELETE_BRANCHS | ERROR | ", err);
+      res.sendStatus(500);
+    }
+  });
 
   // Xử lý đường link không có -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   app.get("*", async function (req, res) {

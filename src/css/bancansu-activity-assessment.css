@@ -11,7 +11,7 @@ html {
 .content {
     margin-top: 2rem;
     max-width: 90rem;
-    background-color: #fff;
+    background-color: var(--white-color);
     margin-left: auto;
     margin-right: auto;
     border-radius: 0.8rem;
@@ -23,7 +23,7 @@ html {
     padding: 1rem;
 }
 .information {
-    background-color: rgb(241, 241, 241);
+    background-color: var(--tb-white);
     margin: 2rem;
     border-radius: 0.8rem;
 }
@@ -41,7 +41,7 @@ html {
 .evaluation {
     margin-top: 2rem;
     padding: 1rem;
-    background-color: #fff;
+    background-color: var(--white-color);
     font-size: 1.6rem;
     border-radius: 0.8rem;
 }
@@ -64,17 +64,7 @@ td {
 
 table tr td:nth-child(9) a {
     text-decoration: none;
-    color: rgb(117, 117, 255);
+    color: var(--login-a);
 }
 
-th {
-    background-color: #cecece;
-}
 
-tr:nth-child(even) {
-    background-color: rgb(241, 241, 241);
-}
-
-tr:nth-child(odd) {
-    background-color: #ffffff;
-}
