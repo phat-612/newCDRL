@@ -77,7 +77,7 @@ async function loadStudents(cls) {
             <td>${i + 1}</td>
             <td> ${students[i]._id} </td>
             <td>${students[i].last_name + " " + students[i].first_name}</td>
-            <td>Lớp viên</td>
+            <td>${students[i].role}</td>
             <td></td>
             <td></td>
             <td></td>

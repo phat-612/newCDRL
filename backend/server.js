@@ -2,7 +2,7 @@
 Ban all who's name Nguyen Ngoc Long on this server file
 @dawn1810:
   phân quyền người dùng:
-    0: nhập điểm và tra cứu đie sinh viên (sinh viên)
+    0: nhập điểm và tra cứu điểm bản thân (sinh viên)
     1: chấm điểm lần 1 (ban cán sự, giáo viên)
     2: chấp điểm lần 2 || duyệt điểm (khoa)
     3: quản lý hoạt động (ban cán sự, giáo viên)
@@ -14,12 +14,17 @@ Ban all who's name Nguyen Ngoc Long on this server file
     ...
     
     role sv [0]
-
     role bancansu [0, 1, 3]
-
     role gv [ 1, 3, 4]
-
     role khoa [1,2,3,4,5,6,7,8]
+
+  admin: 19112003 | 18102003
+  khoa: 16102003 | 29092006 
+  giáo viên: 10022003 | 21072003
+  học sinh: 000000 | 1
+  ban cán sự 2 quyền: 11110000 | 1
+  ban cán sự 1 quyền chấm điểm: 11110001 | 1
+  ban cán sự 1 quyền hoạt động: 11110002 | 1
 
   power = {
     0: true,
@@ -159,9 +164,9 @@ client.connect().then(() => {
       // Cookie không tồn tại, chặn truy cập
       return res.redirect("/login");
     } else {
-      if ((user.first == 'true')) {
+      if ((user.first == 'new_user')) {
         return res.redirect('/login/updateyourpasswords');
-      } else if ((user.first == 'false')) {
+      } else if ((user.first == 'otp')) {
         return res.redirect('/login/updateyourpasswords?tile=ok');
       }
       else {
@@ -1392,6 +1397,7 @@ client.connect().then(() => {
     }
     catch (err) {
       console.log(err);
+      res.sendStatus(500);
     }
   });
 
@@ -1514,7 +1520,7 @@ client.connect().then(() => {
             { upsert: true }
           );
 
-          if (user.first == 'true') {
+          if (user.first == 'new_user') {
             res.status(200).json({ check: true });
           } else {
             res.status(200).json({ check: false });
@@ -1622,7 +1628,7 @@ client.connect().then(() => {
       const OTP = await client.db(name_global_databases).collection("OTP").findOne({ _id: data.mssv }, { projection: { _id: 0 } });
       if (OTP && (OTP.otpcode === data.otp)) {
         await client.db(name_global_databases).collection("OTP").deleteOne({ _id: data.mssv });
-        const user = await client.db(name_global_databases).collection('login_info').findOneAndUpdate({ _id: data.mssv }, { $set: { first: "false" } }, { returnDocument: "after" });
+        const user = await client.db(name_global_databases).collection('login_info').findOneAndUpdate({ _id: data.mssv }, { $set: { first: "otp" } }, { returnDocument: "after" });
         // Đăng nhập thành công, lưu thông tin người dùng vào phiên
         let seasionIDs = await client.db(name_global_databases).collection('sessions_manager').findOne({ _id: data.mssv });
         if (seasionIDs) {
@@ -1834,30 +1840,31 @@ client.connect().then(() => {
   // Create new account -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   app.post("/api/createAccount", upload.single('file'), checkIfUserLoginAPI, async (req, res) => {
     const user = req.session.user;
-    if(user.pow[4] || user.pow[7]){
+    if (user.pow[4] || user.pow[7]) {
       const fileStudents = req.file;
-      function generateEmail(str) {
-        let s1 = 'ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠạẢảẤấẦầẨẩẪẫẬậẮắẰằẲẳẴẵẶặẸẹẺẻẼẽẾếỀềỂểỄễỆệỈỉỊịỌọỎỏỐốỒồỔổỖỗỘộỚớỜờỞởỠỡỢợỤụỦủỨứỪừỬửỮữỰựỲỳỴỵỶỷỸỹ'
-        let s0 = 'AAAAEEEIIOOOOUUYaaaaeeeiioooouuyAaDdIiUuOoUuAaAaAaAaAaAaAaAaAaAaAaAaEeEeEeEeEeEeEeEeIiIiOoOoOoOoOoOoOoOoOoOoOoOoUuUuUuUuUuUuUuYyYyYyYy'
-        let newStr = ''
+      async function generateEmail(str) {
+        let s1 = 'ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠạẢảẤấẦầẨẩẪẫẬậẮắẰằẲẳẴẵẶặẸẹẺẻẼẽẾếỀềỂểỄễỆệỈỉỊịỌọỎỏỐốỒồỔổỖỗỘộỚớỜờỞởỠỡỢợỤụỦủỨứỪừỬửỮữỰựỲỳỴỵỶỷỸỹ';
+        let s0 = 'AAAAEEEIIOOOOUUYaaaaeeeiioooouuyAaDdIiUuOoUuAaAaAaAaAaAaAaAaAaAaAaAaEeEeEeEeEeEeEeEeEeIiIiOoOoOoOoOoOoOoOoOoOoOoUuUuUuUuUuUuUuYyYyYyYy';
+        let newStr = '';
         let listSpace = [];
         for (let i = 0; i < str.length; i++) {
           if (s1.indexOf(str[i]) != -1) {
-            newStr += s0[s1.indexOf(str[i])]
+            newStr += s0[s1.indexOf(str[i])];
           } else {
-            newStr += str[i]
+            newStr += str[i];
           }
           if (str[i] == ' ') {
-            listSpace.push(i)
+            listSpace.push(i);
           }
         }
-        let output = newStr[0]
+        let output = newStr[0];
         for (let i = 0; i < listSpace.length - 2; i++) {
-          output += newStr.charAt(listSpace[i] + 1)
+          output += newStr.charAt(listSpace[i] + 1);
         }
-        output += newStr.slice(listSpace[listSpace.length - 2] + 1).replace(/\s/g, "");
-        return output.toLowerCase() + '@student.ctuet.edu.vn'
+        output += newStr.slice(listSpace[listSpace.length - 2] + 1).replace(/\s/g, '');
+        return output.toLowerCase() + '@student.ctuet.edu.vn';
       }
+
       if (fileStudents) {
         try {
           // read excel file:
@@ -1870,8 +1877,8 @@ client.connect().then(() => {
           sheet.cell('D1').value('Email');
           sheet.cell('E1').value('Password');
           for (let i = 1; i < values.length; i++) {
-            let pw = await randomPassword()
-            let email = generateEmail(`${values[i][1]} ${values[i][2]} ${values[i][0].toString()}`)
+            let pw = await randomPassword();
+            let email = await generateEmail(`${values[i][1]} ${values[i][2]} ${values[i][0].toString()}`);
             let dataInsertUser = {
               _id: values[i][0].toString(),
               first_name: values[i][2],
@@ -1884,7 +1891,8 @@ client.connect().then(() => {
             };
             let dataInsertLogin = {
               _id: values[i][0].toString(),
-              password: pw
+              password: pw,
+              first: "new_user"
             }
             client.db('global').collection('user_info').updateOne({
               _id: dataInsertUser._id
@@ -1930,7 +1938,7 @@ client.connect().then(() => {
         // console.log('them 1 sinh vien');
         const dataStudent = req.body
         let pw = await randomPassword()
-        let email = generateEmail(`${dataStudent['ho']} ${dataStudent['ten']} ${dataStudent['mssv'].toString()}`)
+        let email = await generateEmail(`${dataStudent['ho']} ${dataStudent['ten']} ${dataStudent['mssv'].toString()}`)
         let power
         if (dataStudent['vaitro'] == '1') {
           power = {
@@ -1957,7 +1965,8 @@ client.connect().then(() => {
         };
         let dataInsertLogin = {
           _id: dataStudent['mssv'].toString(),
-          password: pw
+          password: pw,
+          first: "new_user"
         }
         client.db('global').collection('user_info').updateOne({
           _id: dataInsertUser._id
@@ -2000,16 +2009,16 @@ client.connect().then(() => {
           });
         }, 2000)
       }
-  } else{
-    res.send(403);
-  }
+    } else {
+      res.send(403);
+    }
   });
   app.get("/api/getTemplateAddStudent", upload.single('file'), checkIfUserLoginAPI, async (req, res) => {
     res.download("./src/excelTemplate/Tao_danh_sach_lop_moi.xlsx");
   });
   app.post("/api/deleteAccount", checkIfUserLoginAPI, async (req, res) => {
     const user = req.session.user;
-    if(user.pow[4] || user.pow[7]){
+    if (user.pow[4] || user.pow[7]) {
       try {
         const listDelete = req.body.dataDelete;
         for (let i = 0; i < listDelete.length; i++) {
@@ -2021,9 +2030,9 @@ client.connect().then(() => {
         console.log("SYSTEM | MARK | ERROR | ", err);
         res.sendStatus(500);
       }
-  } else{
-    res.send(403);
-  }
+    } else {
+      res.send(403);
+    }
   });
   // Export class score report --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   app.get("/api/exportClassScore", checkIfUserLoginAPI, async (req, res) => {
@@ -2044,12 +2053,10 @@ client.connect().then(() => {
 
       // check user login:
       if (user.pow[1]) {
-        // get all student in staff member class:
-        const student_list = await client.db(name_global_databases).collection('user_info').find(
-          { class: user.cls[parseInt(cls)] },
+        const student_list = sortStudentName(await client.db(name_global_databases).collection('user_info').find(
+          { class: reqClass, "power.0": { $exists: true } },
           { projection: { first_name: 1, last_name: 1 } })
-          .sort({ first_name: 1, last_name: 1 })
-          .toArray();
+          .toArray());
 
         // get all student total score from themself:
         let scores = [];
@@ -2159,12 +2166,10 @@ client.connect().then(() => {
       }
 
       if (user.pow[1]) {
-        // get all student in staff member class:
-        const student_list = await client.db(name_global_databases).collection('user_info').find(
-          { class: user.cls[parseInt(cls)] },
+        const student_list = sortStudentName(await client.db(name_global_databases).collection('user_info').find(
+          { class: reqClass, "power.0": { $exists: true } },
           { projection: { first_name: 1, last_name: 1 } })
-          .sort({ first_name: 1, last_name: 1 })
-          .toArray();
+          .toArray());
 
 
 
@@ -2325,14 +2330,28 @@ client.connect().then(() => {
     //   reqClass = user.cls[0];
     // }
     if (reqClass) {
-
       if (user.pow[1]) {
-        const student_list = await client.db(name_global_databases).collection('user_info').find(
-          { class: reqClass },
-          { projection: { first_name: 1, last_name: 1 } })
-          .sort({ first_name: 1, last_name: 1 })
-          .toArray();
-        res.status(200).json(sortStudentName(student_list));
+        const student_list = sortStudentName(await client.db(name_global_databases).collection('user_info').find(
+          { class: reqClass, "power.0": { $exists: true } },
+          { projection: { first_name: 1, last_name: 1, power: 1 } })
+          .toArray());
+        const transformedData = student_list.map(item => {
+          let role = 'UnKnow'; // Giả định giá trị mặc định là 'unknow'
+
+          if (item.power['1'] || item.power['3']) {
+            role = 'Ban cán sự';
+          } else if (item.power['0']) {
+            role = 'Sinh viên';
+          }
+
+          return {
+            _id: item._id,
+            first_name: item.first_name,
+            last_name: item.last_name,
+            role
+          };
+        });
+        res.status(200).json(transformedData);
       } else {
         return res.redirect('/');
       }
