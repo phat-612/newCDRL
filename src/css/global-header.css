@@ -35,6 +35,10 @@ html {
   --table-border:#aeaeae;
   --select-bg:#ffffff00;
   --red-color:red;
+
+  /* OTP */
+  --otp-input:#ededea;
+  
 }
 body {
   background-color: var(--html-color);
@@ -349,7 +353,7 @@ td .select select {
 table,
 th,
 td {
-  border: 0.1rem solid #aeaeae;
+  border: 0.1rem solid var(--table-border);
   border-collapse: collapse;
 }
 
@@ -358,7 +362,7 @@ tr {
 }
 
 tr:nth-child(even) {
-  background-color:var(--table-white);
+  background-color:var(--tb-white);
 }
 
 tr:nth-child(odd) {

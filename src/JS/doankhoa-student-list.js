@@ -33,6 +33,10 @@ function handleCheckboxChange() {
     }
   });
 }
+function editStudent(event){
+  event.preventDefault();
+  row = 
+}
 // chon lop
 async function loadStudents(cls) {
   $('.js_tbody').empty()
@@ -75,7 +79,7 @@ async function loadStudents(cls) {
             <td></td>
             <td></td>
             <td></td>
-            <td><a href="">Chỉnh sửa</a></td>
+            <td><a href="#" onclick="editStudent(event)>Chỉnh sửa</a></td>
           </tr>
         `)
         }
@@ -109,6 +113,7 @@ $(document).ready(() => {
   $('.js_md_add').on('click', async () => {
     if (cls == 0) {
       notify('!', 'Vui lòng chọn lớp')
+      return 
     }
     const inpMssv = $("#md_mssv")
     const inpHo = $("#md_ho")
@@ -151,7 +156,7 @@ $(document).ready(() => {
         // Tạo một thẻ <a> ẩn để tải xuống và nhấn vào nó
         const downloadLink = document.createElement('a');
         downloadLink.href = blobUrl;
-        downloadLink.download = 'Danh_sach_sinh_vien.xlsx'; // Đặt tên cho tệp tải xuống
+        downloadLink.download = `${inpMssv.val()}.xlsx`; // Đặt tên cho tệp tải xuống
         downloadLink.style.display = 'none';
         document.body.appendChild(downloadLink);
         downloadLink.click();
@@ -240,3 +245,32 @@ $('#delete-student').on('click', async () => {
     notify('!', 'Vui lòng chọn sinh viên')
   }
 })
+// get file template new student
+$('.js_get_template').on('click',async () =>{
+  try {
+    const requestOptions = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    const response = await fetch('/api/getTemplateAddStudent', requestOptions);
+    if (response.ok) {
+      const blobUrl = URL.createObjectURL(await response.blob());
+      // Tạo một thẻ <a> ẩn để tải xuống và nhấn vào nó
+      const downloadLink = document.createElement('a');
+      downloadLink.href = blobUrl;
+      downloadLink.download = 'Danh_sach_sinh_vien.xlsx'; // Đặt tên cho tệp tải xuống
+      downloadLink.style.display = 'none';
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      // Giải phóng URL tạm thời sau khi tải xuống hoàn thành
+      URL.revokeObjectURL(blobUrl);
+      notify('n', 'Đã tải xuống file thêm sinh viên')
+    } else {
+      notify('!', 'Tải xuống thất bại thất bại')
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
