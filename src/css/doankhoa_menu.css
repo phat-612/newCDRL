@@ -70,7 +70,7 @@
     overflow: hidden;
     animation: closeMenu 300ms ease-in-out forwards;
   }
-  .menu a {
+  .menu .menu_item {
     padding: 12px 24px;
     margin: 0 16px;
     color: var(--secoColor);
@@ -79,13 +79,13 @@
     text-align: center;
     transition: filter 200ms linear 0s;
   }
-  .menu a:nth-of-type(1) {
+  .menu .menu_item:nth-of-type(1) {
     padding-top: 24px;
   }
-  .menu a:nth-last-of-type(1) {
+  .menu .menu_item:nth-last-of-type(1) {
     border-bottom: none;
   }
-  .menu a:hover {
+  .menu .menu_item:hover {
     filter: brightness(200%);
   }
   details::before {
