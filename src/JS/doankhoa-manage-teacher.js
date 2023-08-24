@@ -69,7 +69,9 @@ $(".save_btn").click(async function () {
     })
 
     // new name, branch
-    
+    const new_name = $(this).parent().parent().find('#teacher--name').val();
+    const curr_branchs =  $(this).parent().parent().find('#select-level:selected').val();
+
 
     // request
     const requestOptions = {
@@ -80,8 +82,8 @@ $(".save_btn").click(async function () {
       body: JSON.stringify({
         old_id: old_id,
         new_id: new_id,
-        new_name: $(this).parent().parent().find('#teacher--name').val(),
-        branch: $(this).parent().parent().find('#select-level:selected').val()
+        new_name: new_name,
+        branch: curr_branchs
       })
     };
 
@@ -89,27 +91,24 @@ $(".save_btn").click(async function () {
     if (response.ok) {
       if (curr_edit) {
         // set current edit line to new version
-
-        curr_edit.find('.b_name').text(new_name);
+        curr_edit.find('.inp-cbx').val(new_id)
+        curr_edit.find('.t_name').text(new_name);
+        curr_edit.find('.b_name').text(curr_branchs);
       } else {
         let length = $('table tbody tr').length;
         $('table tbody').append(`
           <tr>
           <td>
             <div class="checkbox-wrapper-4">
-              <input type="checkbox" id="row--<%= i %>" class="inp-cbx" value="<%= teachers[i]._id %>" />
-              <label for="row--<%= i %>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+              <input type="checkbox" id="row--${length-1}" class="inp-cbx" value="${new_id}" />
+              <label for="row--${length-1}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
               </label>
             </div>
           </td>
-          <td><%= i + 1 %></td>
-          <td class="t_name"><%= teachers[i].first_name + " " + teachers[i].last_name %></td>
-          <td class="b_name"><%= branchs[i] %></td>
-          <td>
-            <% for (let j = 0; j < teachers[i].class.length; j++) {%>
-              <%= teachers[i].class[j] %>
-            <% } %>
-          </td>
+          <td>${length}</td>
+          <td class="t_name">${new_name}</td>
+          <td class="b_name">${curr_branchs}</td>
+          <td></td>
           <td>
             <a id="edit__class" href="#">Sửa</a>
           </td>

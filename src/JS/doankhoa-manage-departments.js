@@ -154,7 +154,7 @@ $(".save_btn").click(async function () {
       // disappear curr dialog 
       $(".modal.add").hide();
       $(".modal.edit").hide();
-      notify('n', 'Đã hoàn tất thay đổi bộ môn')
+      notify('n', 'Đã hoàn tất cập nhật bộ môn');
     }
     else if (response.status == 500) {
       // Error occurred during upload

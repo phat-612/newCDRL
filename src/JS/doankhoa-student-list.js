@@ -35,7 +35,9 @@ function handleCheckboxChange() {
 }
 function editStudent(event){
   event.preventDefault();
-  row = 
+  const row = event.target.closest('tr');
+  const mssv = row.querySelector('td:nth-child(3)').textContent.trim();
+  console.log(mssv);
 }
 // chon lop
 async function loadStudents(cls) {
@@ -79,11 +81,14 @@ async function loadStudents(cls) {
             <td></td>
             <td></td>
             <td></td>
-            <td><a href="#" onclick="editStudent(event)>Chỉnh sửa</a></td>
+            <td><a href="#">Chỉnh sửa</a></td>
           </tr>
         `)
         }
         $('.js_tbody').append(htmls.join(''))
+        $('tr a').on('click',(event)=>{
+          editStudent(event);
+        })
       }
       else {
         $('.js_tbody').empty()

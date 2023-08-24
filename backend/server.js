@@ -1185,6 +1185,8 @@ client.connect().then(() => {
     res.render("doankhoa-index", {
       header: "global-header",
       footer: "global-footer",
+      menu: "doankhoa_menu",
+
     });
   });
 
