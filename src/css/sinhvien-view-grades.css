@@ -3,7 +3,6 @@ html {
     position: relative;
   }
   body {
-    background-color: #e7ecf0;
     margin: 0;
   }
   
@@ -149,7 +148,7 @@ html {
     position: fixed;
     top: 0;
     display: none;
-    background-color: #aeaeaebf;
+    background-color: var(--modal-color);
   }
   
   /* CSS cho dialog thêm ảnh */
@@ -163,7 +162,7 @@ html {
     width: 100%;
     height: 50rem;
     transform: translate(-50%, -50%);
-    background-color: var(modal-color);
+    background-color: var(--modal-color);
   }
   
   .close-dialog {
@@ -287,108 +286,7 @@ html {
     margin: 0;
   }
   
-  /* css check box */
-  .checkbox-wrapper-4 * {
-    box-sizing: border-box;
-  }
   
-  .checkbox-wrapper-4 .cbx {
-    -webkit-user-select: none;
-    user-select: none;
-    cursor: pointer;
-    border-radius: 0.6rem;
-    transition: all 0.2s ease;
-    display: inline-block;
-  }
-  
-  .checkbox-wrapper-4 .cbx span {
-    float: left;
-    vertical-align: middle;
-    transform: translate3d(0, 0, 0);
-  }
-  
-  .checkbox-wrapper-4 .cbx span:first-child {
-    position: relative;
-    width: 1.8rem;
-    height: 1.8rem;
-    border-radius: 0.4rem;
-    transform: scale(1);
-    border: 0.1rem solid #cccfdb;
-    transition: all 0.2s ease;
-    box-shadow: 0 0.1rem 0.1rem rgba(0, 16, 75, 0.05);
-  }
-  
-  .checkbox-wrapper-4 .cbx span:first-child svg {
-    position: absolute;
-    top: 0.3rem;
-    left: 0.2rem;
-    fill: none;
-    stroke: var(--white-color);
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-dasharray: 1.6rem;
-    stroke-dashoffset: 1.6rem;
-    transition: all 0.3s ease;
-    transition-delay: 0.1s;
-    transform: translate3d(0, 0, 0);
-  }
-  
-  .checkbox-wrapper-4 .cbx span:last-child {
-    padding-left: 0.8rem;
-    line-height: 1.8rem;
-  }
-  
-  .checkbox-wrapper-4 .cbx:hover span:first-child {
-    border-color: #c2c2c2;
-  }
-  
-  .checkbox-wrapper-4 .inp-cbx {
-    position: absolute;
-    visibility: hidden;
-  }
-  
-  .checkbox-wrapper-4 .inp-cbx:checked + .cbx span:first-child {
-    background: rgb(143, 213, 229);
-    border-color: #c2c2c2;
-    animation: wave-4 0.4s ease;
-  }
-  
-  .checkbox-wrapper-4 .inp-cbx:checked + .cbx span:first-child svg {
-    stroke-dashoffset: 0;
-  }
-  
-  .checkbox-wrapper-4 .inline-svg {
-    position: absolute;
-    width: 0;
-    height: 0;
-    pointer-events: none;
-    user-select: none;
-  }
-  
-  @-moz-keyframes wave-4 {
-    50% {
-      transform: scale(0.9);
-    }
-  }
-  
-  @-webkit-keyframes wave-4 {
-    50% {
-      transform: scale(0.9);
-    }
-  }
-  
-  @-o-keyframes wave-4 {
-    50% {
-      transform: scale(0.9);
-    }
-  }
-  
-  @keyframes wave-4 {
-    50% {
-      transform: scale(0.9);
-    }
-  }
   
   /*------------------- combo box -------------------*/
   td .select select{

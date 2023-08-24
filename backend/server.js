@@ -2,16 +2,25 @@
 Ban all who's name Nguyen Ngoc Long on this server file
 @dawn1810:
   phân quyền người dùng:
-    0: nhập điểm sinh viên
-    1: chấm điểm lần 1 (ban cán sự, cố vấn học tập)
-    2: chấp điểm/ duyệ điểm (khoa)
-    3: tạo hoạt động (ban cán sự, ???)
-    4: cấp quyền (> cố vấn)
-    5: thêm || sửa bộ môn
-    6: thiết lập thời hạn chấm điểm
-    7: quản lý lớp
-    8: quản lý cố ván
+    0: nhập điểm và tra cứu đie sinh viên (sinh viên)
+    1: chấm điểm lần 1 (ban cán sự, giáo viên)
+    2: chấp điểm lần 2 || duyệt điểm (khoa)
+    3: quản lý hoạt động (ban cán sự, giáo viên)
+    4: cấp quyền cho học sinh (giáo viên)
+    5: quản lý bộ môn (khoa)
+    6: thiết lập thời hạn chấm điểm (khoa)
+    7: quản lý lớp (khoa)
+    8: quản lý cố vấn (khoa)
     ...
+    
+    role sv [0]
+
+    role bancansu [0, 1, 3]
+
+    role gv [ 1, 3, 4]
+
+    role khoa [1,2,3,4,5,6,7,8]
+
   power = {
     0: true,
   }
@@ -54,7 +63,6 @@ const XlsxPopulate = require('xlsx-populate');
 const { v4: uuidv4 } = require('uuid');
 const WebSocket = require('ws');
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const { data } = require("node-persist");
 const uri = "mongodb+srv://binhminh19112003:Zr3uGIK4dCymOXON@6aesieunhan.sefjqcb.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
@@ -146,7 +154,7 @@ client.connect().then(() => {
 
   async function checkIfUserLoginRoute(req, res, next) {
     const user = req.session.user;
-    console.log(user);
+    // console.log(user);
     if (!user) {
       // Cookie không tồn tại, chặn truy cập
       return res.redirect("/login");
@@ -224,14 +232,13 @@ client.connect().then(() => {
           end_day: 1
         }
       });
-
-    let today = new Date();
-    let start_day = new Date(school_year.start_day);
-    let end_day = new Date(school_year.end_day);
-    let forever_day = Date("2003-10-18"); // special date
+    let today = new Date().getTime();
+    let start_day = new Date(school_year.start_day).getTime();
+    let end_day = new Date(school_year.end_day).getTime();
+    let forever_day = new Date("2003-10-18").getTime(); // special date
 
     // check if end mark time or not
-    if ((start_day <= today && today < end_day) || end_day == forever_day) {
+    if (start_day <= today && (today < end_day || end_day == forever_day)) {
       // update old table if exist or insert new table
       let update = {
         mssv: user._id,
@@ -245,6 +252,7 @@ client.connect().then(() => {
         total: data.total,
         update_date: new Date()
       }
+      console.log(update);
 
       // if table is stf_table - mark by staff members or teacher
       if (table == '_stf_table') {
@@ -325,7 +333,7 @@ client.connect().then(() => {
 
   // Function to create id for string (get all start letter of words and cobine together)
   function createId(str) {
-    let arr = str.trim().split(" ");
+    let arr = str.toUpperCase().trim().split(" ");
     let id = '';
     for (let i of arr) {
       id += i.charAt(0);
@@ -371,10 +379,9 @@ client.connect().then(() => {
   // ROUTE SPACE ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   // index route
-  app.get("/", checkIfUserLoginRoute, async (req, res) => {
+  app.get("/new", checkIfUserLoginRoute, async (req, res) => {
     try {
       const user = req.session.user;
-      const permi = await client.db(name_global_databases).collection('user_info').findOne({ _id: user._id }, { projection: { _id: 0, pos: 1 } });
 
       const schoolYear = await client.db(name_global_databases).collection('school_year').findOne({}, { projection: { _id: 0, year: 1 } });
       const schoolYear_all = await client.db(name_global_databases).collection('classes').findOne({ _id: user.cls[0] }, { projection: { _id: 0, years: 1 } });
@@ -419,24 +426,69 @@ client.connect().then(() => {
         }
         return { year: year, total: studentTotalScore ? studentTotalScore : "Chưa có điểm" };
       }));
-      if (permi.pos == 3) {
+
+      res.render("index", {
+        header: "global-header",
+        footer: "global-footer",
+        thongbao: "global-notifications",
+        bandiem: studentTotalScores,
+        pow: user.pow,
+        nienkhoa: Object.keys(schoolYear_all.years),
+      });
+
+    } catch (err) { console.log(err); }
+  });
+
+  app.get("/", checkIfUserLoginRoute, async (req, res) => {
+    try {
+      const user = req.session.user;
+
+      const schoolYear = await client.db(name_global_databases).collection('school_year').findOne({}, { projection: { _id: 0, year: 1 } });
+      const schoolYear_all = await client.db(name_global_databases).collection('classes').findOne({ _id: user.cls[0] }, { projection: { _id: 0, years: 1 } });
+      let schoolYearsToSearch = [];
+      if (schoolYear_all.years[schoolYear.year.slice(4)]) {
+        for (let i = 0; i < schoolYear_all.years[schoolYear.year.slice(4)].length; i++) {
+          schoolYearsToSearch.push(`HK${i + 1}_` + schoolYear.year.slice(4));
+        }
+        const studentTotalScores = await Promise.all(schoolYearsToSearch.map(async (year) => {
+          let studentTotalScore = null;
+
+          // Tìm trong bảng '_dep_table' trước
+          const depCollection = client.db(user.dep).collection('_dep_table');
+          const depDocument = await depCollection.findOne(
+            { mssv: user._id, school_year: year },
+            { projection: { _id: 0, total: 1 } }
+          );
+
+          if (depDocument) {
+            studentTotalScore = depDocument.total;
+          } else {
+            // Nếu không tìm thấy, tìm trong bảng '_std_table'
+            const stdCollection = client.db(user.dep).collection(user.cls[0] + '_std_table');
+            const stdDocument = await stdCollection.findOne(
+              { mssv: user._id, school_year: year },
+              { projection: { _id: 0, total: 1 } }
+            );
+
+            if (stdDocument) {
+              studentTotalScore = stdDocument.total;
+            } else {
+              // Nếu không tìm thấy, tìm trong bảng '_stf_table'
+              const stfCollection = client.db(user.dep).collection('_stf_table');
+              const stfDocument = await stfCollection.findOne(
+                { mssv: user._id, school_year: year },
+                { projection: { _id: 0, total: 1 } }
+              );
+
+              if (stfDocument) {
+                studentTotalScore = stfDocument.total;
+              }
+            }
+          }
+          return { year: year, total: studentTotalScore ? studentTotalScore : "Chưa có điểm" };
+        }));
+
         res.render("sinhvien-index", {
-          header: "global-header",
-          footer: "global-footer",
-          thongbao: "global-notifications",
-          bandiem: studentTotalScores,
-          nienkhoa: Object.keys(schoolYear_all.years),
-        });
-      } else if (permi.pos == 2) {
-        res.render("bancansu-index", {
-          header: "global-header",
-          footer: "global-footer",
-          thongbao: "global-notifications",
-          bandiem: studentTotalScores,
-          nienkhoa: Object.keys(schoolYear_all.years),
-        });
-      } else if (permi.pos == 1) {
-        res.render("doankhoa-index", {
           header: "global-header",
           footer: "global-footer",
           thongbao: "global-notifications",
@@ -444,14 +496,9 @@ client.connect().then(() => {
           nienkhoa: Object.keys(schoolYear_all.years),
         });
       } else {
-        res.render("sinhvien-index", {
-          header: "global-header",
-          footer: "global-footer",
-          thongbao: "global-notifications",
-          bandiem: studentTotalScores,
-          nienkhoa: Object.keys(schoolYear_all.years),
-        });
+        res.status(403).send('Sinh viên đã tốt nghiệp');
       }
+
     } catch (err) { console.log(err); }
   });
 
@@ -562,11 +609,31 @@ client.connect().then(() => {
 
   // nhap bang diem route
   app.get("/nhapdiemdanhgia", checkIfUserLoginRoute, async (req, res) => {
-    res.render("sinhvien-enter-grades", {
-      header: "global-header",
-      thongbao: "global-notifications",
-      footer: "global-footer"
-    });
+    const school_year = await client.db(name_global_databases).collection('school_year').findOne(
+      {},
+      {
+        projection: {
+          _id: 0,
+          year: 1,
+          start_day: 1,
+          end_day: 1
+        }
+      });
+    let today = new Date().getTime();
+    let start_day = new Date(school_year.start_day).getTime();
+    let end_day = new Date(school_year.end_day).getTime();
+    let forever_day = new Date("2003-10-18").getTime(); // special date
+
+    // check if end mark time or not
+    if (start_day <= today && (today < end_day || end_day == forever_day)) {
+      res.render("sinhvien-enter-grades", {
+        header: "global-header",
+        thongbao: "global-notifications",
+        footer: "global-footer"
+      });
+    } else {
+      res.redirect("/");
+    }
   });
 
   // xem bang diem route
@@ -667,6 +734,23 @@ client.connect().then(() => {
 
   });
 
+
+  // giao vien route
+  app.get("/giaovien", checkIfUserLoginRoute, async (req, res) => {
+    res.render("teacher-index", {
+      header: "global-header",
+      footer: "global-footer",
+
+    });
+  });
+  app.get("/giaovien/quanlyquyen", checkIfUserLoginRoute, async (req, res) => {
+    res.render("teacher_QL_sv", {
+      header: "global-header",
+      footer: "global-footer",
+      thongbao: "global-notifications",
+
+    });
+  });
   // ban can su route
   app.get("/bancansu", checkIfUserLoginRoute, async (req, res) => {
     res.render("bancansu-index", {
@@ -677,11 +761,100 @@ client.connect().then(() => {
 
   // ban can su / giang vien nhap diem route
   app.get("/bancansu/nhapdiemdanhgia", checkIfUserLoginRoute, async (req, res) => {
-    res.render("bancansu-manage-grades", {
-      header: "global-header",
-      thongbao: "global-notifications",
-      footer: "global-footer"
-    });
+    try {
+      const user = req.session.user;
+      const mssv = req.query.studentId;
+      const schoolYearParam = req.query.schoolYear;
+      const studentTotalScore = await client.db(user.dep)
+        .collection(user.cls[0] + '_std_table')
+        .findOne(
+          {
+            mssv: mssv,
+            school_year: schoolYearParam
+          },
+          {
+            projection: { _id: 0, first: 1, second: 1, third: 1, fourth: 1, fifth: 1, total: 1 }
+          }
+        );
+
+      let stfTotalScore = await client.db(user.dep)
+        .collection(user.cls[0] + '_stf_table')
+        .findOne(
+          {
+            mssv: mssv,
+            school_year: schoolYearParam
+          },
+          {
+            projection: { _id: 0, first: 1, second: 1, third: 1, fourth: 1, fifth: 1, total: 1 }
+          }
+        );
+
+
+      let depTotalScore = await client.db(user.dep)
+        .collection(user.cls[0] + '_dep_table')
+        .findOne(
+          {
+            mssv: mssv,
+            school_year: schoolYearParam
+          },
+          {
+            projection: { _id: 0, first: 1, second: 1, third: 1, fourth: 1, fifth: 1, total: 1 }
+          }
+        );
+      nulltable = {
+        "fifth": [
+          'Chưa chấm',
+          'Chưa chấm',
+          'Chưa chấm',
+          'Chưa chấm'
+        ],
+        "first": [
+          'Chưa chấm',
+          'Chưa chấm',
+          'Chưa chấm',
+          'Chưa chấm',
+          'Chưa chấm'
+        ],
+        "fourth": [
+          'Chưa chấm',
+          'Chưa chấm',
+          'Chưa chấm'
+        ],
+        "second": [
+          'Chưa chấm',
+          'Chưa chấm'
+        ],
+        "third": [
+          'Chưa chấm',
+          'Chưa chấm',
+          'Chưa chấm'
+        ],
+        "total": 'Chưa chấm'
+      }
+      if (!stfTotalScore) {
+        stfTotalScore = nulltable
+      }
+      if (!depTotalScore) {
+        depTotalScore = nulltable
+      }
+
+      if (studentTotalScore) {
+        res.render("bancansu-manage-grades", {
+          header: "global-header",
+          thongbao: "global-notifications",
+          footer: "global-footer",
+          Scorestd: studentTotalScore,
+          Score: stfTotalScore,
+          Scorek: depTotalScore
+        });
+
+      }
+      else { res.sendStatus(404); }
+    } catch (err) {
+      console.log(err)
+      res.status(500).json({ error: "Lỗi hệ thống" });
+    }
+
   });
 
   // ban can su quan ly hoat dong
@@ -811,6 +984,7 @@ client.connect().then(() => {
       {},
       { projection: { _id: 0, year: 1 } }
     );
+    console.log(school_year)
     // check user login:
     if (user.pow[1]) {
       const years = await client.db(name_global_databases).collection('classes').findOne(
@@ -878,6 +1052,7 @@ client.connect().then(() => {
             }
           );
         // student
+        console.log(curr_student_score)
         if (curr_student_score) {
           render.student_scores.push(curr_student_score.total);
         } else {
@@ -904,6 +1079,103 @@ client.connect().then(() => {
     else { // user not staff members 
       // redirect to home
       return res.redirect('/');
+    }
+
+  });
+  // doan khoa grade
+  app.get("/khoaxembangdiem", checkIfUserLoginRoute, async (req, res) => {
+    try {
+      const user = req.session.user;
+      const mssv = req.session.user._id;
+      const schoolYearParam = req.query.schoolYear;
+      const studentTotalScore = await client.db(user.dep)
+        .collection(user.cls[0] + '_std_table')
+        .findOne(
+          {
+            mssv: mssv,
+            school_year: schoolYearParam
+          },
+          {
+            projection: { _id: 0, first: 1, second: 1, third: 1, fourth: 1, fifth: 1, total: 1 }
+          }
+        );
+
+      let stfTotalScore = await client.db(user.dep)
+        .collection(user.cls[0] + '_stf_table')
+        .findOne(
+          {
+            mssv: mssv,
+            school_year: schoolYearParam
+          },
+          {
+            projection: { _id: 0, first: 1, second: 1, third: 1, fourth: 1, fifth: 1, total: 1 }
+          }
+        );
+
+
+      let depTotalScore = await client.db(user.dep)
+        .collection(user.cls[0] + '_dep_table')
+        .findOne(
+          {
+            mssv: mssv,
+            school_year: schoolYearParam
+          },
+          {
+            projection: { _id: 0, first: 1, second: 1, third: 1, fourth: 1, fifth: 1, total: 1 }
+          }
+        );
+      nulltable = {
+        "fifth": [
+          'Chưa chấm',
+          'Chưa chấm',
+          'Chưa chấm',
+          'Chưa chấm'
+        ],
+        "first": [
+          'Chưa chấm',
+          'Chưa chấm',
+          'Chưa chấm',
+          'Chưa chấm',
+          'Chưa chấm'
+        ],
+        "fourth": [
+          'Chưa chấm',
+          'Chưa chấm',
+          'Chưa chấm'
+        ],
+        "second": [
+          'Chưa chấm',
+          'Chưa chấm'
+        ],
+        "third": [
+          'Chưa chấm',
+          'Chưa chấm',
+          'Chưa chấm'
+        ],
+        "total": 'Chưa chấm'
+      }
+      if (!stfTotalScore) {
+        stfTotalScore = nulltable
+      }
+      if (!depTotalScore) {
+        depTotalScore = nulltable
+      }
+
+      if (studentTotalScore) {
+        res.render("sinhvien-view-grades", {
+          header: "global-header",
+          thongbao: "global-notifications",
+          footer: "global-footer",
+          Scorestd: studentTotalScore,
+          Score: stfTotalScore,
+          Scorek: depTotalScore
+        });
+
+      }
+      else { res.sendStatus(404); }
+    } catch (err) {
+      console.log(err)
+      res.status(500).json({ error: "Lỗi hệ thống" });
     }
 
   });
@@ -955,6 +1227,110 @@ client.connect().then(() => {
     });
   });
 
+  //  khoa danh sach bang diem 
+  // app.get("/doan_khoa/khoadanhsachbangdiem", checkIfUserLoginRoute, async (req, res) => {
+  //   const user = req.session.user;
+  //   const school_year = await client.db(name_global_databases).collection('school_year').findOne(
+  //     {},
+  //     { projection: { _id: 0, year: 1 } }
+  //   );
+  //   // check user login:
+  //   if (user.pow[1]) {
+  //     const years = await client.db(name_global_databases).collection('classes').findOne(
+  //       { _id: user.cls[0] },
+  //       { projection: { _id: 0, years: 1 } }
+  //     );
+
+  //     // get all student in staff member class:
+  //     let student_list = await client.db(name_global_databases).collection('user_info').find(
+  //       { class: user.cls[0] },
+  //       { projection: { first_name: 1, last_name: 1 } })
+  //       .toArray();
+  //     student_list = sortStudentName(student_list);
+
+  //     // get all student total score from themself:
+  //     let render = {
+  //       header: "global-header",
+  //       footer: "global-footer",
+  //       thongbao: "global-notifications",
+  //       staff_name: [],
+  //       student_list: student_list,
+  //       student_scores: [],
+  //       staff_scores: [],
+  //       department_scores: [],
+  //       cls: user.cls,
+  //       years: years.years,
+  //       curr_year: school_year.year
+  //     }
+
+  //     for (student of student_list) {
+  //       const curr_student_score = await client.db(user.dep)
+  //         .collection(user.cls[0] + '_std_table')
+  //         .findOne(
+  //           {
+  //             mssv: student._id,
+  //             school_year: school_year.year
+  //           },
+  //           {
+  //             projection: { total: 1 }
+  //           }
+  //         );
+  //       const curr_staff_score = await client.db(user.dep)
+  //         .collection(user.cls[0] + '_stf_table')
+  //         .findOne(
+  //           {
+  //             mssv: student._id,
+  //             school_year: school_year.year
+  //           },
+  //           {
+  //             projection: {
+  //               total: 1,
+  //               marker: 1
+  //             }
+  //           }
+  //         );
+  //       const curr_department_score = await client.db(user.dep)
+  //         .collection(user.cls[0] + '_dep_table')
+  //         .findOne(
+  //           {
+  //             mssv: student._id,
+  //             school_year: school_year.year
+  //           },
+  //           {
+  //             projection: { total: 1 }
+  //           }
+  //         );
+  //       // student
+  //       if (curr_student_score) {
+  //         render.student_scores.push(curr_student_score.total);
+  //       } else {
+  //         render.student_scores.push('-');
+  //       }
+  //       // staff member
+  //       if (curr_staff_score) {
+  //         render.staff_scores.push(curr_staff_score.total);
+  //         render.staff_name.push(curr_staff_score.marker);
+  //       } else {
+  //         render.staff_scores.push('-');
+  //         render.staff_name.push('-');
+  //       }
+  //       // department
+  //       if (curr_department_score) {
+  //         render.department_scores.push(curr_department_score.total);
+  //       } else {
+  //         render.department_scores.push('-');
+  //       }
+  //     }
+
+  //     res.render("bancansu-grade-list", render);
+  //   }
+  //   else { // user not staff members 
+  //     // redirect to home
+  //     return res.redirect('/');
+  //   }
+
+  // });
+
   // quan li lop - doan khoa route
   app.get("/doan_khoa/quan_li_lop", checkIfUserLoginRoute, async (req, res) => {
     res.render("doankhoa-manage-classes", {
@@ -978,7 +1354,7 @@ client.connect().then(() => {
 
       // get user name and class
       const teachers = await client.db(name_global_databases).collection('user_info').find(
-        { pos: 2 },
+        { "power.4": { $exists: true } }, // user is teacher
         {
           projection: {
             first_name: 1,
@@ -988,6 +1364,7 @@ client.connect().then(() => {
           }
         }
       ).toArray();
+
       let branch_list = [];
       for (let i = 0; i < teachers.length; i++) {
         const branch = await client.db(name_global_databases).collection('branchs').findOne(
@@ -1025,9 +1402,9 @@ client.connect().then(() => {
   });
 
   // danh sach sinh vien // ông đổi lại vụ class nha liên hệ NBM để biết thêm chi tiết
-  app.get("/doan_khoa/danhsachsinhvien_cv", checkIfUserLoginRoute, async (req, res) => {
+  app.get("/doan_khoa/danhsachsinhvien", checkIfUserLoginRoute, async (req, res) => {
     const user = req.session.user;
-    if (user.pow[1]) {
+    if (user.pow[4] || user.pow[7]) {
       res.render("doankhoa-student-list", {
         header: "global-header",
         footer: "global-footer",
@@ -1245,8 +1622,44 @@ client.connect().then(() => {
         await client.db(name_global_databases).collection("OTP").deleteOne({ _id: data.mssv });
         const user = await client.db(name_global_databases).collection('login_info').findOneAndUpdate({ _id: data.mssv }, { $set: { first: "false" } }, { returnDocument: "after" });
         // Đăng nhập thành công, lưu thông tin người dùng vào phiên
-        req.session.user = user.value;
+        let seasionIDs = await client.db(name_global_databases).collection('sessions_manager').findOne({ _id: data.mssv });
+        if (seasionIDs) {
+          seasionIDs = seasionIDs.sessionId;
+          const existingDocs = await client.db(name_global_databases).collection('sessions').find({ _id: { $in: seasionIDs } }).toArray();
+          const existingIDs = existingDocs.map(doc => doc._id);
+          const idsToDelete = seasionIDs.filter(id => !existingIDs.includes(id));
+          if (idsToDelete.length > 0) {
+            await client.db(name_global_databases).collection('sessions_manager').updateOne(
+              { _id: data.mssv },
+              { $pull: { sessionId: { $in: idsToDelete } } }
+            );
+          }
+        }
+
+        // get user class(cls), power and department(dep)
+        const cls = await client.db(name_global_databases).collection('user_info').findOne(
+          { _id: data.mssv },
+          { projection: { _id: 0, class: 1, power: 1 } }
+        );
+        const branch = await client.db(name_global_databases).collection('classes').findOne(
+          { _id: cls.class[0] },
+          { projection: { _id: 0, branch: 1 } }
+        );
+        const dep = await client.db(name_global_databases).collection('branchs').findOne(
+          { _id: branch.branch },
+          { projection: { _id: 0, dep: 1 } }
+        );
+
+        user.cls = cls.class;
+        user.pow = cls.power;
+        user.dep = dep.dep;
+        // Đăng nhập thành công, lưu thông tin người dùng vào phiên
+        req.session.user = user;
+        // Kiểm tra xem người dùng có chọn "Remember me" không
+
+        // Thiết lập thời gian sống cookie lại về mặc định (1 giờ)
         req.session.cookie.maxAge = 3600000; // 1 hour
+
         const sessionId = req.session.id;
         await client.db(name_global_databases).collection('sessions_manager').updateOne(
           { _id: user._id },
@@ -1418,154 +1831,197 @@ client.connect().then(() => {
 
   // Create new account -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   app.post("/api/createAccount", upload.single('file'), checkIfUserLoginAPI, async (req, res) => {
-    const fileStudents = req.file;
-    function generateEmail(inputString) {
-      let output ='';
-      let s1 = 'ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠạẢảẤấẦầẨẩẪẫẬậẮắẰằẲẳẴẵẶặẸẹẺẻẼẽẾếỀềỂểỄễỆệỈỉỊịỌọỎỏỐốỒồỔổỖỗỘộỚớỜờỞởỠỡỢợỤụỦủỨứỪừỬửỮữỰựỲỳỴỵỶỷỸỹ'
-      let s0= 'AAAAEEEIIOOOOUUYaaaaeeeiioooouuyAaDdIiUuOoUuAaAaAaAaAaAaAaAaAaAaAaAaEeEeEeEeEeEeEeEeIiIiOoOoOoOoOoOoOoOoOoOoOoOoUuUuUuUuUuUuUuYyYyYyYy'
-      // if  (inputString.isUppercase()) {
-      //   output += 
-      // }
-
-      return output + '@student.ctuet.edu.vn';
-    }
-    if (fileStudents) {
-      try {
-        // read excel file:
-        // create all account
-        const workbook = await XlsxPopulate.fromFileAsync(fileStudents.path);
-        const sheet = workbook.sheet(0);
-        const values = sheet.usedRange().value();
-        //[['MSSV', 'Họ', 'Tên' ]]
-        sheet.cell('D1').value('Password');
-        for (let i = 1; i < values.length; i++) {
-          let pw = await randomPassword()
-          let dataInsertUser = {
-            _id: values[i][0].toString(),
-            first_name: values[i][2],
-            last_name: values[i][1],
-            avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
-            power: { 0: true },
-            class: [req.body.cls],
-            displayName: `${values[i][1]} ${values[i][2]}`,
-            email: generateEmail(`${values[i][1]} ${values[i][2]} ${values[i][0].toString()}`),
-            pos: 3
-          };
-          let dataInsertLogin = {
-            _id: values[i][0].toString(),
-            password: pw
+    const user = req.session.user;
+    if(user.pow[4] || user.pow[7]){
+      const fileStudents = req.file;
+      function generateEmail(str) {
+        let s1 = 'ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠạẢảẤấẦầẨẩẪẫẬậẮắẰằẲẳẴẵẶặẸẹẺẻẼẽẾếỀềỂểỄễỆệỈỉỊịỌọỎỏỐốỒồỔổỖỗỘộỚớỜờỞởỠỡỢợỤụỦủỨứỪừỬửỮữỰựỲỳỴỵỶỷỸỹ'
+        let s0 = 'AAAAEEEIIOOOOUUYaaaaeeeiioooouuyAaDdIiUuOoUuAaAaAaAaAaAaAaAaAaAaAaAaEeEeEeEeEeEeEeEeIiIiOoOoOoOoOoOoOoOoOoOoOoOoUuUuUuUuUuUuUuYyYyYyYy'
+        let newStr = ''
+        let listSpace = [];
+        for (let i = 0; i < str.length; i++) {
+          if (s1.indexOf(str[i]) != -1) {
+            newStr += s0[s1.indexOf(str[i])]
+          } else {
+            newStr += str[i]
           }
-          client.db('global').collection('user_info').updateOne({
-            _id: dataInsertUser._id
-          }, {
-            $set: dataInsertUser
-          },
-            {
-              upsert: true
-            });
-          client.db('global').collection('login_info').updateOne({
-            _id: dataInsertLogin._id
-          }, {
-            $set: dataInsertLogin
-          },
-            {
-              upsert: true
-            });
-          await sheet.cell(`D${i + 1}`).value(pw);
+          if (str[i] == ' ') {
+            listSpace.push(i)
+          }
         }
-
-        // Write to file.
-        await workbook.toFileAsync(fileStudents.path);
-        res.download(fileStudents.path);
+        let output = newStr[0]
+        for (let i = 0; i < listSpace.length - 2; i++) {
+          output += newStr.charAt(listSpace[i] + 1)
+        }
+        output += newStr.slice(listSpace[listSpace.length - 2] + 1).replace(/\s/g, "");
+        return output.toLowerCase() + '@student.ctuet.edu.vn'
+      }
+      if (fileStudents) {
+        try {
+          // read excel file:
+          // create all account
+          const workbook = await XlsxPopulate.fromFileAsync(fileStudents.path);
+          const sheet = workbook.sheet(0);
+          const values = sheet.usedRange().value();
+          let maxWidthEmail = 0;
+          //[['MSSV', 'Họ', 'Tên' ]]
+          sheet.cell('D1').value('Email');
+          sheet.cell('E1').value('Password');
+          for (let i = 1; i < values.length; i++) {
+            let pw = await randomPassword()
+            let email = generateEmail(`${values[i][1]} ${values[i][2]} ${values[i][0].toString()}`)
+            let dataInsertUser = {
+              _id: values[i][0].toString(),
+              first_name: values[i][2],
+              last_name: values[i][1],
+              avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
+              power: { 0: true },
+              class: [req.body.cls],
+              displayName: `${values[i][1]} ${values[i][2]}`,
+              email: email
+            };
+            let dataInsertLogin = {
+              _id: values[i][0].toString(),
+              password: pw
+            }
+            client.db('global').collection('user_info').updateOne({
+              _id: dataInsertUser._id
+            }, {
+              $set: dataInsertUser
+            },
+              {
+                upsert: true
+              });
+            client.db('global').collection('login_info').updateOne({
+              _id: dataInsertLogin._id
+            }, {
+              $set: dataInsertLogin
+            },
+              {
+                upsert: true
+              });
+            await sheet.cell(`D${i + 1}`).value(email);
+            await sheet.cell(`E${i + 1}`).value(pw);
+            const range = sheet.range(`D${i + 1}:E${i + 1}`);
+            range.style({ border: true });
+            if (email.length > maxWidthEmail) {
+              maxWidthEmail = email.length
+            }
+          }
+          // Write to file.
+          sheet.column('D').width(maxWidthEmail);
+          await workbook.toFileAsync(fileStudents.path);
+          res.download(fileStudents.path);
+          // xoa file sau khi xu ly
+          setTimeout(() => {
+            fs.unlink(fileStudents.path, (err) => {
+              if (err) {
+                console.error("Lỗi khi xóa tệp:", err);
+              }
+            });
+          }, 2000)
+        } catch (err) {
+          console.log("SYSTEM | MARK | ERROR | ", err);
+          res.sendStatus(500);
+        }
+      } else {
+        // console.log('them 1 sinh vien');
+        const dataStudent = req.body
+        let pw = await randomPassword()
+        let email = generateEmail(`${dataStudent['ho']} ${dataStudent['ten']} ${dataStudent['mssv'].toString()}`)
+        let power
+        if (dataStudent['vaitro'] == '1') {
+          power = {
+            0: true,
+            1: true,
+            3: true,
+          }
+        } else {
+          power = {
+            0: true,
+            1: dataStudent['chamdiem'],
+            3: dataStudent['lbhd'],
+          }
+        }
+        let dataInsertUser = {
+          _id: dataStudent['mssv'].toString(),
+          first_name: dataStudent['ten'],
+          last_name: dataStudent['ho'],
+          avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
+          power: power,
+          class: [dataStudent['cls']],
+          displayName: `${dataStudent['ho']} ${dataStudent['ten']}`,
+          email: email
+        };
+        let dataInsertLogin = {
+          _id: dataStudent['mssv'].toString(),
+          password: pw
+        }
+        client.db('global').collection('user_info').updateOne({
+          _id: dataInsertUser._id
+        }, {
+          $set: dataInsertUser
+        },
+          {
+            upsert: true
+          });
+        client.db('global').collection('login_info').updateOne({
+          _id: dataInsertLogin._id
+        }, {
+          $set: dataInsertLogin
+        },
+          {
+            upsert: true
+          });
+        // xu ly sau khi them sinh vien
+        const uuid = uuidv4();
+        const workbook = await XlsxPopulate.fromFileAsync("./src/excelTemplate/Tao_danh_sach_lop_moi.xlsx");
+        const sheet = workbook.sheet(0);
+        await sheet.cell(`A2`).value(dataStudent['mssv'].toString());
+        await sheet.cell(`B2`).value(dataStudent['ho']);
+        await sheet.cell(`C2`).value(dataStudent['ten']);
+        await sheet.cell(`D1`).value('Email');
+        await sheet.cell(`E1`).value('Password');
+        await sheet.cell(`D2`).value(email);
+        await sheet.cell(`E2`).value(pw);
+        let range = sheet.range(`D2:E2`);
+        range.style({ border: true });
+        sheet.column('D').width(email.length);
+        await workbook.toFileAsync(path.join('.downloads', uuid + ".xlsx"));
+        res.download(path.join('.downloads', uuid + ".xlsx"));
         // xoa file sau khi xu ly
         setTimeout(() => {
-          fs.unlink(fileStudents.path, (err) => {
+          fs.unlink(path.join('.downloads', uuid + ".xlsx"), (err) => {
             if (err) {
               console.error("Lỗi khi xóa tệp:", err);
             }
           });
-        }, 10000)
+        }, 2000)
+      }
+  } else{
+    res.send(403);
+  }
+  });
+  app.get("/api/getTemplateAddStudent", upload.single('file'), checkIfUserLoginAPI, async (req, res) => {
+    res.download("./src/excelTemplate/Tao_danh_sach_lop_moi.xlsx");
+  });
+  app.post("/api/deleteAccount", checkIfUserLoginAPI, async (req, res) => {
+    const user = req.session.user;
+    if(user.pow[4] || user.pow[7]){
+      try {
+        const listDelete = req.body.dataDelete;
+        for (let i = 0; i < listDelete.length; i++) {
+          client.db('global').collection('user_info').deleteOne({ _id: listDelete[i] })
+          client.db('global').collection('login_info').deleteOne({ _id: listDelete[i] })
+        }
+        res.sendStatus(200);
       } catch (err) {
         console.log("SYSTEM | MARK | ERROR | ", err);
         res.sendStatus(500);
       }
-    } else {
-      console.log('them 1 sinh vien');
-      const dataStudent = req.body
-      let pw = await randomPassword()
-      let power
-      if (dataStudent['vaitro'] == '1') {
-        power = {
-          0: true,
-          1: true,
-          3: true,
-        }
-      } else {
-        power = {
-          0: true,
-          1: dataStudent['chamdiem'],
-          3: dataStudent['lbhd'],
-        }
-      }
-      let dataInsertUser = {
-        _id: dataStudent['mssv'].toString(),
-        first_name: dataStudent['ten'],
-        last_name: dataStudent['ho'],
-        avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
-        power: power,
-        class: [dataStudent['cls']],
-        displayName: `${dataStudent['ho']} ${dataStudent['ten']}`,
-        email: generateEmail(`${dataStudent['ho']} ${dataStudent['ten']} ${dataStudent['mssv'].toString()}`),
-        pos: 3
-      };
-      let dataInsertLogin = {
-        _id: dataStudent['mssv'].toString(),
-        password: pw
-      }
-      client.db('global').collection('user_info').updateOne({
-        _id: dataInsertUser._id
-      }, {
-        $set: dataInsertUser
-      },
-        {
-          upsert: true
-        });
-      client.db('global').collection('login_info').updateOne({
-        _id: dataInsertLogin._id
-      }, {
-        $set: dataInsertLogin
-      },
-        {
-          upsert: true
-        });
-      // xu ly sau khi them sinh vien
-      const uuid = uuidv4();
-      const workbook = await XlsxPopulate.fromFileAsync("./src/excelTemplate/Tao_danh_sach_lop_moi.xlsx");
-      await workbook.toFileAsync(path.join('.downloads', uuid + ".xlsx"));
-      res.download(path.join('.downloads', uuid + ".xlsx"));
-      // xoa file sau khi xu ly
-      setTimeout(() => {
-        fs.unlink(path.join('.downloads', uuid + ".xlsx"), (err) => {
-          if (err) {
-            console.error("Lỗi khi xóa tệp:", err);
-          }
-        });
-      }, 10000)
-    }
-
-  });
-  app.post("/api/deleteAccount", checkIfUserLoginAPI, async (req, res) => {
-    try {
-      const listDelete = req.body.dataDelete;
-      for (let i = 0; i < listDelete.length; i++) {
-        client.db('global').collection('user_info').deleteOne({ _id: listDelete[i] })
-        client.db('global').collection('login_info').deleteOne({ _id: listDelete[i] })
-      }
-      res.sendStatus(200);
-    } catch (err) {
-      console.log("SYSTEM | MARK | ERROR | ", err);
-      res.sendStatus(500);
-    }
+  } else{
+    res.send(403);
+  }
   });
   // Export class score report --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   app.get("/api/exportClassScore", checkIfUserLoginAPI, async (req, res) => {
@@ -2010,33 +2466,55 @@ client.connect().then(() => {
   app.post("/api/addOrEditTeachers", checkIfUserLoginAPI, async (req, res) => {
     try {
       const user = req.session.user;
-      const data = req.body; // data = {old_id: "19112003", new_id: "`18102003", new_name: "Nguyễn Văn A", branch: "KTPM"}
+      const data = req.body; // data = {old_id: "19112003", new_id: "18102003", new_name: "Nguyễn Văn A", branch: "KTPM"}
 
       // must be department to use this api
       if (user.pow[8]) {
+        // find to get old pass ò teacher before remove it
+        const teacher_pass = await client.db(name_global_databases).collection('login_info').findOne(
+          {
+            _id: data.old_id,
+          },
+          {
+            projection: {
+              password: 1
+            }
+          }
+        )
         // remove old teachers
         await client.db(name_global_databases).collection('user_info').deleteOne(
           {
             _id: data.old_id,
           }
         )
-        // add new teachers
-        await client.db(name_global_databases).collection('branchs').insertOne(
+        await client.db(name_global_databases).collection('login_info').deleteOne(
           {
+            _id: data.old_id,
+          }
+        )
+        // add new teachers
+        await client.db(name_global_databases).collection('user_info').insertOne(
+          {
+            _id: data.new_id,
             first_name: data.new_name.split(' ').slice(0, -1).join(' '),
             last_name: data.new_name.split(' ').slice(-1).join(' '),
             avt: "",
             power: {
-              "0": true,
+              "4": true,
               // tất cả các quyền của giáo viên
             },
             class: [],
             displayName: data.new_name, // here before pop
             branch: data.branch,
             email: "",
-            pos: 2
           }
         );
+        await client.db(name_global_databases).collection('login_info').insertOne(
+          {
+            _id: data.new_id,
+            password: teacher_pass.password
+          }
+        )
 
       } else {
         return res.redirect('/'); // back to home

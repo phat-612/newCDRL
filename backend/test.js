@@ -1,4 +1,3 @@
-const server = require('../read_only/mongodb.js');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = "mongodb+srv://binhminh19112003:Zr3uGIK4dCymOXON@database.sefjqcb.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(uri, {
@@ -20,11 +19,22 @@ const client = new MongoClient(uri, {
 // ).then(cls => { console.log(cls.years); })
 
 // thêm user info và login info
-client.db('global').collection('user_info').findOne(
-    { _id: '2101381' },
-    { projection: { _id: 0, class: 1, power: 1 } }
-).then((ok) => { console.log(ok); })
+// client.db('global').collection('user_info').findOne(
+//     { _id: '2101381' },
+//     { projection: { _id: 0, class: 1, power: 1 } }
+// ).then((ok) => { console.log(ok); })
 
+client.db('global').collection('user_info').find(
+    { "power.4" : { $exists : true }}, // user is teacher
+    {
+      projection: {
+        first_name: 1,
+        last_name: 1,
+        class: 1,
+        branch: 1
+      }
+    }
+  ).toArray().then((ok) => { console.log(ok); });
 // client.db('global').collection('user_info').updateOne(
 //     { _id: '2101111' },
 //     {$set: {

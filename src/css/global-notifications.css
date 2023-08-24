@@ -11,7 +11,7 @@
   top: 17%;
   right: 3rem;
   border-radius: 1.2rem;
-  background: white;
+  background: var(--white-color);
   padding: 2rem 3.5rem 2rem 2.5rem;
   box-shadow: 0 0.6rem 2rem -0.5rem rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -55,7 +55,8 @@
 .message .text {
   font-size: 1.6rem;
   font-weight: 400;
-  color: #666666;
+  color: var(--black-color);
+  opacity: .5;
 }
 
 .text-2 {
@@ -65,6 +66,7 @@
 .message .text.text-1 {
   font-weight: 600;
   color: #333;
+  opacity: 1;
 }
 
 .toast .close1 {
@@ -80,6 +82,7 @@
   right: 10px;
   top: 10px;
   cursor: pointer;
+  color: var(--black-color);
 }
 
 .toast .close1:hover {

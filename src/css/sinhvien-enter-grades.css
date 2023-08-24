@@ -2,18 +2,6 @@ html {
   font-size: 62.5%;
   position: relative;
 }
-:root{
-  --html-color: #e7ecf0;
-  --table-header:#cecece;
-  --table-line:#aeaeae;
-  --row-1:#f1f1f1;
-  --row-2:#ffffff;
-  --white-color:#fff;
-  --checkbox-check:rgb(143, 213, 229);
-  --checkbox-border:#c2c2c2;
-  --dropimg-color:#5c5c5c;
-  --upimg-body:#f6f6f6;
-}
 body {
   background-color: var(--html-color);
   margin: 0;
@@ -25,7 +13,7 @@ table *{
   padding: 0;
 }
 table, th, td {
-  border: 1px solid var(--table-line);
+  border: 1px solid var(--table-border);
   border-collapse: collapse;
   font-weight: 600;
 }
@@ -45,10 +33,10 @@ th {
   background-color: var(--table-header);
 }
 tr:nth-child(even) {
-  background-color: var(--row-1);
+  background-color: var(--tb-white);
 }
 tr:nth-child(odd) {
-  background-color: var(--row-2);
+  background-color: var(--white-color);
 }
 td:nth-child(1){
   text-align: left;
@@ -102,7 +90,7 @@ td .title{
   font-size: 1.3rem;
   padding: 1rem 2rem;
   transition: 0.3s top ease-in-out;
-  background-color: var(--table-line);
+  background-color: var(--table-border);
   border-radius: 0.8rem;
 
 }
@@ -170,7 +158,7 @@ td .title{
   position: fixed;
   top: 0;
   display: none;
-  background-color: var(--table-line)bf;
+  background-color: var(--table-border)bf;
 }
 
 /* CSS cho dialog thêm ảnh */
@@ -210,7 +198,7 @@ td .title{
   position: relative;
   justify-content: center;
   font-size: 2rem;
-  color: var(--dropimg-color);
+  color: var(#5c5c5c);
   border-radius: 0.8rem;
   transition: background 0.3s ease-in-out;
 }
@@ -253,7 +241,7 @@ td .title{
 }
 
 .modal_wrap_img {
-  background-color: var(--upimg-body);
+  background-color: var(#f6f6f6);
   display: flex;
   justify-content: space-between;
   padding: 1rem 2rem;
@@ -292,7 +280,7 @@ textarea::placeholder {
 }
 
 .modal_img_btn {
-  background-color: var(--table-line);
+  background-color: var(--table-border);
   height: 16%;
   display: flex;
   justify-content: center;
@@ -361,7 +349,7 @@ textarea::placeholder {
 }
 
 .checkbox-wrapper-4 .cbx:hover span:first-child {
-  border-color: var(--checkbox-border);
+  border-color: var(--checkbox-border-hover);
 }
 
 .checkbox-wrapper-4 .inp-cbx {
@@ -370,8 +358,8 @@ textarea::placeholder {
 }
 
 .checkbox-wrapper-4 .inp-cbx:checked + .cbx span:first-child {
-  background: var(--checkbox-check);
-  border-color: var(--checkbox-border);
+  background: var(--checkbox-active);
+  border-color: var(--checkbox-border-hover);
   animation: wave-4 0.4s ease;
 }
 

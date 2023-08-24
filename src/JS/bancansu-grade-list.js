@@ -1,5 +1,4 @@
 let curr_tb_year = "HK" + $(".hoc_ky select option:selected").text() + "_" + $(".nien_khoa select option:selected").text();
-
 $(document).on("click", ".export_btn", async function () {
   // disabled button until it done start down load
   $('.export_btn').prop('disabled', true);
@@ -96,9 +95,8 @@ $(document).on("click", ".load_list_btn", async function () {
     const requestOptions = {
       method: 'GET',
     };
-
-    const response = await fetch(`/api/loadScoresList?year=${year}`, requestOptions);
     
+    const response = await fetch(`/api/loadScoresList?year=${year}`, requestOptions);
     if (response.ok) {
       const data = await response.json();
       // empty old table:
@@ -121,7 +119,7 @@ $(document).on("click", ".load_list_btn", async function () {
           <td class="first_score">${data.staff_scores[i]}</td>
           <td>${data.staff_name[i]}</td>
           <td>${data.department_scores[i]}</td>
-          <td><a href="#">Chấm điểm</a></td>
+          <td><a class="set_score_btn">Chấm điểm</a></td>
         </tr>
         `);
 
@@ -129,8 +127,12 @@ $(document).on("click", ".load_list_btn", async function () {
         if(data.student_scores[i] == '-' ||  data.student_scores[i]== 0){
           $('table tbody').children().eq(i).find('.std_name_row').append(`<span class="dau_sao">*</span>`);
         }
+        
       } 
-
+      $('.set_score_btn').click(function() {
+        const studentId = $(this).closest('tr').find('td:nth-child(3)').text();
+        this.href = `/bancansu/nhapdiemdanhgia?schoolYear=${curr_tb_year}&studentId=${studentId}`
+      });
       // update current table school year
       curr_tb_year = year;
 
@@ -168,4 +170,12 @@ $(document).on("change", ".inp-cbx", async function () {
   } else {
     $('.all-cbx').prop('checked', false);
   }
+});
+
+
+
+// cham diem 
+$('.set_score_btn').click(function() {
+  const studentId = $(this).closest('tr').find('td:nth-child(3)').text();
+  this.href = `/bancansu/nhapdiemdanhgia?schoolYear=${curr_tb_year}&studentId=${studentId}`
 });

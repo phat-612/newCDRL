@@ -3,6 +3,10 @@ let old_id;
 let new_id;
 
 $(document).on("click", "#edit__class", async function () {
+  // get old name (here to change old name every time new edit row)
+  old_id = $(this).parent().parent().find('.inp-cbx').val();
+  // check current line for future use
+  curr_edit = $(this).parent().parent();
   // set name input as selected teacher's name
   $('.modal.edit .name--input').val($(this).parent().parent().find('.t_name').text());
   // set acount input as selected teacher's account
@@ -50,77 +54,82 @@ $(".exist_btn").click(function () {
 });
 
 //save button
-// $(".save_btn").click(async function () {
+$(".save_btn").click(async function () {
 
-//   if ($('.modal .name--input').val() && $('.modal .account--input').val()) {
-//     // disable curr button
-//     $(this).prop('disabled', 'true');
+  if ($('.modal .name--input').val() && $('.modal .account--input').val()) {
+    // disable curr button
+    $(this).prop('disabled', 'true');
 
-//     // find input
-//     $('.modal').each(function () {
-//       if ($(this).is(":visible")) {
-//         // get new name
-//         new_name = $(this).find('.bname_input').val();
-//       }
-//     })
+    // find input
+    $('.modal').each(function () {
+      if ($(this).is(":visible")) {
+        // get new name
+        new_id = $(this).find('.account--input').val();
+      }
+    })
 
-//     // request
-//     const requestOptions = {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json'
-//       },
-//       body: JSON.stringify({
-//         old_name: old_name,
-//         name: new_name
-//       })
-//     };
+    // new name, branch
+    
+    // request
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        old_id: old_id,
+        new_id: new_id,
+        new_name: $(this).parent().parent().find('#teacher--name').val(),
+        branch: $(this).parent().parent().find('#select-level:selected').val()
+      })
+    };
 
-//     const response = await fetch('/api/addOrEditTeachers', requestOptions);
-//     if (response.ok) {
-//       if (curr_edit) {
-//         // set current edit line name to new name
-//         curr_edit.find('.b_name').text(new_name);
-//       } else {
-//         let length = $('table tbody tr').length;
-//         $('table tbody').append(`
-//           <tr>
-//           <td>
-//             <div class="checkbox-wrapper-4">
-//               <input type="checkbox" id="row--<%= i %>" class="inp-cbx" value="<%= teachers[i]._id %>" />
-//               <label for="row--<%= i %>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-//               </label>
-//             </div>
-//           </td>
-//           <td><%= i + 1 %></td>
-//           <td class="t_name"><%= teachers[i].first_name + " " + teachers[i].last_name %></td>
-//           <td class="b_name"><%= branchs[i] %></td>
-//           <td>
-//             <% for (let j = 0; j < teachers[i].class.length; j++) {%>
-//               <%= teachers[i].class[j] %>
-//             <% } %>
-//           </td>
-//           <td>
-//             <a id="edit__class" href="#">Sửa</a>
-//           </td>
-//         </tr>
-//         `)
-//       }
-//       // able curr button
-//       $(this).prop('disabled', 'true');
-//       // disappear curr dialog 
-//       $(".modal.add").hide();
-//       $(".modal.edit").hide();
-//       notify('n', 'Đã hoàn tất thay đổi bộ môn')
-//     }
-//     else if (response.status == 500) {
-//       // Error occurred during upload
-//       notify('x', 'Có lỗi xảy ra!');
-//     }
-//   } else {
-//     notify('!', 'Hãy nhập đầy đủ thông tin!');
-//   }
-// });
+    const response = await fetch('/api/addOrEditTeachers', requestOptions);
+    if (response.ok) {
+      if (curr_edit) {
+        // set current edit line to new version
+
+        curr_edit.find('.b_name').text(new_name);
+      } else {
+        let length = $('table tbody tr').length;
+        $('table tbody').append(`
+          <tr>
+          <td>
+            <div class="checkbox-wrapper-4">
+              <input type="checkbox" id="row--<%= i %>" class="inp-cbx" value="<%= teachers[i]._id %>" />
+              <label for="row--<%= i %>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+              </label>
+            </div>
+          </td>
+          <td><%= i + 1 %></td>
+          <td class="t_name"><%= teachers[i].first_name + " " + teachers[i].last_name %></td>
+          <td class="b_name"><%= branchs[i] %></td>
+          <td>
+            <% for (let j = 0; j < teachers[i].class.length; j++) {%>
+              <%= teachers[i].class[j] %>
+            <% } %>
+          </td>
+          <td>
+            <a id="edit__class" href="#">Sửa</a>
+          </td>
+        </tr>
+        `)
+      }
+      // able curr button
+      $(this).prop('disabled', 'false');
+      // disappear curr dialog 
+      $(".modal.add").hide();
+      $(".modal.edit").hide();
+      notify('n', 'Đã hoàn tất cập nhật giáo viên.')
+    }
+    else if (response.status == 500) {
+      // Error occurred during upload
+      notify('x', 'Có lỗi xảy ra!');
+    }
+  } else {
+    notify('!', 'Hãy nhập đầy đủ thông tin!');
+  }
+});
 
 // all checkbox set (if all-cbx tick all checkboxs will tick otherwise untick all)
 $(document).on("change", ".all-cbx", async function () {

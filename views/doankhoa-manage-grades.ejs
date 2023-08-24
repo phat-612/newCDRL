@@ -42,7 +42,9 @@
           <tbody>
             <tr class="tr-title">
               <td>
+
                 <p class="title">1. Đánh giá về ý thức học tập</p>
+
               </td>
               <td>
               </td>
@@ -70,20 +72,8 @@
                 <div class="score_1"><%=Score.first[0]%></div>
               </td>
               <td>
-                <div class="selectbox">
-                  <div class="select">
-                    <select id="mySelect1">
-                      <option value="0">0</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                      <option value="6">6</option>
-                      <option value="7">7</option>
-                    </select>
-                  </div>
-                </div>
+                <div class="score_1"><%=Scorek.first[0]%></div>
+
               </td>
             </tr>
             <tr>
@@ -103,20 +93,8 @@
                 <div class="score_1"><%=Score.first[1]%></div>
               </td>
               <td>
-                <!-- <select style="width: 80%" class="comboMark" id="score_02" name="score_02">
-                  <option value="0">0</option>
-                  <option value="1">1</option>
-                  <option value="2" selected="">2</option>
-                </select> -->
-                <div class="selectbox">
-                  <div class="select">
-                    <select id="mySelect2">
-                      <option value="0">0</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </select>
-                  </div>
-                </div>
+                <div class="score_1"><%=Scorek.first[1]%></div>
+
               </td>
             </tr>
             <tr>
@@ -136,24 +114,8 @@
                 <div class="score_1"><%=Score.first[2]%></div>
               </td>
               <td>
-                <!-- <select style="width: 80%" class="comboMark" id="score_03" name="score_03">
-                  <option value="0">0</option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4" selected="">4</option>
-                </select> -->
-                <div class="selectbox">
-                  <div class="select">
-                    <select id="mySelect3">
-                      <option value="0">0</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                    </select>
-                  </div>
-                </div>
+                <div class="score_1"><%=Scorek.first[2]%></div>
+
               </td>
             </tr>
             <tr>
@@ -179,13 +141,11 @@
                 <%}%>  
               </td>
               <td>
-                <div class="checkbox-wrapper-4">
-                  <input type="checkbox" id="morning1" class="inp-cbx" value="2" />
-                  <label for="morning1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                  </label>
-
-                </div>
-                <div id="hoverbox_01" class="pop-up-bc-tooltip"></div>
+                <%if (Scorek.first[2] == 2){%>
+                <div class="check_score"><i class="fa-solid fa-check"></i></div>
+                <%} else {%>
+                <div class="check_score"></div>
+                <%}%>  
               </td>
             </tr>
             <tr>
@@ -211,14 +171,11 @@
                 <%}%>  
               </td>
               <td>
-                <div class="checkbox-wrapper-4">
-                  <input type="checkbox" id="morning2" class="inp-cbx" value="0" checked />
-                  <label for="morning2" class="cbx">
-                    <span> <svg height="10px" width="12px"></svg></span>
-                  </label>
-
-                </div>
-                <div id="hoverbox_02" class="pop-up-bc-tooltip"></div>
+                <%if (Scorek.first[2] == 0){%>
+                <div class="check_score"><i class="fa-solid fa-check"></i></div>
+                <%} else {%>
+                <div class="check_score"></div>
+                <%}%>
               </td>
             </tr>
             <tr>
@@ -238,15 +195,8 @@
                 <div class="score_1"><%=Score.first[3]%></div>
               </td>
               <td>
-                <div class="selectbox">
-                  <div class="select">
-                    <select id="mySelect4">
-                      <option value="0">0</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </select>
-                  </div>
-                </div>
+                <div class="score_1"><%=Scorek.first[3]%></div>
+
               </td>
             </tr>
             <tr>
@@ -263,7 +213,8 @@
               <td class="score_1"> <%=Score.first[4]%>
 
               </td>
-              <td id="score_05">0 điểm</td>
+              <td class="score_1"> <%=Scorek.first[4]%>
+              </td>
             </tr>
             <tr>
               <td>
@@ -288,13 +239,11 @@
                 <%}%>          
               </td>
               <td>
-                <div class="checkbox-wrapper-4">
-                  <input type="checkbox" id="morning3" class="inp-cbx" value="2" />
-                  <label for="morning3" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                  </label>
-
-                </div>
-                <div id="hoverbox_03" class="pop-up-bc-tooltip"></div>
+                <%if (Scorek.first[4] == 2){%>
+                <div class="check_score"><i class="fa-solid fa-check"></i></div>
+                <%} else {%>
+                <div class="check_score"></div>
+                <%}%>  
               </td>
             </tr>
             <tr>
@@ -320,13 +269,11 @@
                 <%}%>             
               </td>
               <td>
-                <div class="checkbox-wrapper-4">
-                  <input type="checkbox" id="morning4" class="inp-cbx" value="3" />
-                  <label for="morning4" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                  </label>
-
-                </div>
-                <div id="hoverbox_04" class="pop-up-bc-tooltip"></div>
+                <%if (Scorek.first[4] == 3){%>
+                <div class="check_score"><i class="fa-solid fa-check"></i></div>
+                <%} else {%>
+                <div class="check_score"></div>
+                <%}%>   
               </td>
             </tr>
             <tr>
@@ -351,16 +298,13 @@
                 <div class="check_score"></div>
                 <%}%>     
                 </td>
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="morning5" class="inp-cbx" value="4" />
-                    <label for="morning5" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-  
-                  </div>
-  
-                  <div id="hoverbox_05" class="pop-up-bc-tooltip"></div>
-                </td>
+              <td>
+                <%if (Scorek.first[4] == 4){%>
+                <div class="check_score"><i class="fa-solid fa-check"></i></div>
+                <%} else {%>
+                <div class="check_score"></div>
+                <%}%>  
+              </td>
             </tr>
             <tr>
               <td>
@@ -385,13 +329,11 @@
                 <%}%> 
               </td>
               <td>
-                <div class="checkbox-wrapper-4">
-                  <input type="checkbox" id="morning6" class="inp-cbx" value="5" />
-                  <label for="morning6" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                  </label>
-
-                </div>
-                <div id="hoverbox_06" class="pop-up-bc-tooltip"></div>
+                <%if (Scorek.first[4] == 5){%>
+                <div class="check_score"><i class="fa-solid fa-check"></i></div>
+                <%} else {%>
+                <div class="check_score"></div>
+                <%}%> 
               </td>
             </tr>
             <tr>
@@ -449,28 +391,8 @@
           <div class="score_2"><%=Score.second[0]%></div>
         </td>
         <td>
-          <div class="selectbox">
-            <div class="select">
-              <select id="mySelect5">
-                <option value="0">0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-                <option value="11">11</option>
-                <option value="12">12</option>
-                <option value="13">13</option>
-                <option value="14">14</option>
-                <option value="15">15</option>
-              </select>
-            </div>
-          </div>
+          <div class="score_2"><%=Scorek.second[0]%></div>
+
         </td>
       </tr>
       <tr>
@@ -496,13 +418,11 @@
         <%}%>
         </td>
         <td>
-          <div class="checkbox-wrapper-4">
-            <input type="checkbox" id="morning7" class="inp-cbx" value="10" />
-            <label for="morning7" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-            </label>
-
-          </div>
-          <div id="hoverbox_07" class="pop-up-bc-tooltip"></div>
+          <%if (Scorek.second[0] == 10){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%>
         </td>
       </tr>
       <tr>
@@ -528,13 +448,11 @@
         <%}%>     
         </td>
         <td>
-          <div class="checkbox-wrapper-4">
-            <input type="checkbox" id="morning8" class="inp-cbx" value="0" checked />
-            <label for="morning8" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-            </label>
-
-          </div>
-          <div id="hoverbox_08" class="pop-up-bc-tooltip"></div>
+          <%if (Scorek.second[0] == 0){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%> 
         </td>
       </tr>
       <tr>

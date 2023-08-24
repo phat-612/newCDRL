@@ -33,7 +33,7 @@ $('.login_btn').on('click', async function (e) {
                 // Error occurred during upload
                 notify('!', 'Sai thông tin đăng nhập');
             } else if (response.status == 404) {
-                notify('x', 'Đã đăng nhập rồi!');
+                window.location.href = "/";
             }
         } catch (error) {
             console.log(error);

@@ -1,8 +1,8 @@
 function update_cbx() {
   // check to cahnge text before checkbox
-  const curr_date = new Date();
-  const start_date = new Date($('.start_time').val());
-  const end_date = new Date($('.end_time').val());
+  const curr_date = new Date().getTime();
+  const start_date = new Date($('.start_time').val()).getTime();
+  const end_date = new Date($('.end_time').val()).getTime();
 
   if (start_date <= end_date || !$('.end_time').val()) {
     if (start_date <= curr_date && (curr_date <= end_date || !$('.end_time').val())) {

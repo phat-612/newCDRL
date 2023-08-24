@@ -108,13 +108,9 @@ th {
   background-color: rgb(241, 241, 241);
 }
 
-tr:nth-child(even) {
-  background-color: rgb(241, 241, 241);
-}
 
-tr:nth-child(odd) {
-  background-color: var(--white-color)fff;
-}
+
+
 
 tr:hover {
   background-color: rgba(158, 158, 158, 0.507);
@@ -128,7 +124,7 @@ tr:hover {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(233, 233, 233, .6);
+  background-color: var(--modal-color);
   display: none;
 }
 
@@ -167,7 +163,8 @@ textarea {
 
 /* Tùy chỉnh chú mờ */
 textarea::placeholder {
-  color: rgba(128, 128, 128, 0.5);
+  color: var(--black-color);
+  opacity: 0.5;
   /* Xám mờ với alpha 0.5 */
   font-style: italic;
 }
@@ -193,4 +190,7 @@ label {
   display: flex;
   gap: 3rem;
   margin: 2rem 0rem 0rem 50rem;
+}
+.content_main {
+  margin-top: 7rem!important;
 }

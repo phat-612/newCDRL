@@ -52,7 +52,7 @@
   .activity-board {
     margin-top: 2rem;
     padding: 1rem;
-    background-color: #fff;
+    background-color: var(--white-color);
     font-size: 1.6rem;
     border-radius: 0.8rem;
   }
@@ -120,13 +120,7 @@
     background-color: rgb(241, 241, 241);
   }
   
-  tr:nth-child(even) {
-    background-color: rgb(241, 241, 241);
-  }
   
-  tr:nth-child(odd) {
-    background-color: #ffffff;
-  }
   
   tr:hover {
     background-color: rgba(158, 158, 158, 0.507);
@@ -140,7 +134,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(233, 233, 233, .6);
+    background-color: var(--modal-color);
     display: none;
   }
   .subject--input {
@@ -190,7 +184,8 @@
   
   /* Tùy chỉnh chú mờ */
   textarea::placeholder {
-    color: rgba(128, 128, 128, 0.5);
+    color: var(--black-color);
+    opacity: 0.5;
     /* Xám mờ với alpha 0.5 */
     font-style: italic;
   }

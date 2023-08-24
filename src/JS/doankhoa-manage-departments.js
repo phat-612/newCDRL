@@ -71,7 +71,7 @@ $("#delete__subject").click(async function () {
       });
 
       // able curr button
-      $(this).prop('disabled', 'true');
+      $(this).prop('disabled', 'false');
 
       notify('n', 'Đã xóa các bộ môn đc đánh dấu')
     }
@@ -110,7 +110,7 @@ $(".save_btn").click(async function () {
         // get new name
         new_name = $(this).find('.bname_input').val();
       }
-    })
+    });
   
     // request
     const requestOptions = {
@@ -150,7 +150,7 @@ $(".save_btn").click(async function () {
         `)
       }
       // able curr button
-      $(this).prop('disabled', 'true');
+      $(this).prop('disabled', 'false');
       // disappear curr dialog 
       $(".modal.add").hide();
       $(".modal.edit").hide();
