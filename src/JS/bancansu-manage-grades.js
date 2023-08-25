@@ -386,6 +386,7 @@ async function uploadImage() {
 async function mark(img_ids) {
   try {
     let postData = JSON.stringify({
+      school_year:"HK1_2022-2023",
       first: [
         getSelectValue("mySelect1"),
         getSelectValue("mySelect2"),

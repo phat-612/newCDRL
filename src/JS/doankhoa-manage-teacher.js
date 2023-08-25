@@ -69,7 +69,8 @@ $(".save_btn").click(async function () {
     $('.normal-cbx').each(function () {
       if ($(this).val() == acc) { // check have same id with existed ids
         notify('!', 'ID đã tồn tại!');
-        // end hàm và không gửi lên yêu cầu cho se
+        // end function and not request
+        return;
       }
     });
 

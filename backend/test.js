@@ -25,7 +25,10 @@ const client = new MongoClient(uri, {
 // ).then((ok) => { console.log(ok); })
 
 client.db('global').collection('user_info').find(
-    { "power.4" : { $exists : true }}, // user is teacher
+    { 
+      "power.4" : { $exists : true },
+      "power.1" : { $exists : true }
+    }, // user is teacher
     {
       projection: {
         first_name: 1,

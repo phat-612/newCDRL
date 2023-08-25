@@ -101,6 +101,9 @@ $(document).on("click", ".load_list_btn", async function () {
     
     if (response.ok) {
       const data = await response.json();
+      const year_available=data.year_available.year
+      console.log(data.year_available)
+
       // empty old table:
       $('table tbody').empty();
       // load new table:
@@ -121,7 +124,7 @@ $(document).on("click", ".load_list_btn", async function () {
           <td class="first_score">${data.staff_scores[i]}</td>
           <td>${data.staff_name[i]}</td>
           <td>${data.department_scores[i]}</td>
-          <td><a href="#">Chấm điểm</a></td>
+          <td><a class="chamdiem">Chấm điểm</a></td>
         </tr>
         `);
 
@@ -130,6 +133,15 @@ $(document).on("click", ".load_list_btn", async function () {
           $('table tbody').children().eq(i).find('.std_name_row').append(`<span class="dau_sao">*</span>`);
         }
       } 
+      $('.chamdiem').click(function() {
+        if(year_available>=curr_tb_year){
+          const studentId = $(this).closest('tr').find('td:nth-child(3)').text();
+          this.href = `/bancansu/nhapdiemdanhgia?schoolYear=${curr_tb_year}&studentId=${studentId}`
+        }
+        else{
+          notify('!', 'chưa mở chấm điểm vui lòng chọn năm khác.');
+        }
+      });
 
       // update current table school year
       curr_tb_year = year;
@@ -169,3 +181,14 @@ $(document).on("change", ".inp-cbx", async function () {
     $('.all-cbx').prop('checked', false);
   }
 });
+// $('.chamdiem').click(function() {
+//   console.log('haha')
+//   if(year_available>=curr_tb_year){
+//     const studentId = $(this).closest('tr').find('td:nth-child(3)').text();
+//     console.log(studentId)
+//     // this.href = `/doankhoa/nhapdiemdanhgia?schoolYear=${curr_tb_year}&studentId=${studentId}`
+//   }
+//   else{
+//     notify('!', 'chưa mở chấm điểm vui lòng chọn năm khác.');
+//   }
+// });

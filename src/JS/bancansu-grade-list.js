@@ -99,6 +99,9 @@ $(document).on("click", ".load_list_btn", async function () {
     const response = await fetch(`/api/loadScoresList?year=${year}`, requestOptions);
     if (response.ok) {
       const data = await response.json();
+      const year_available=data.year_available.year
+    
+
       // empty old table:
       $('table tbody').empty();
       // load new table:
@@ -130,8 +133,13 @@ $(document).on("click", ".load_list_btn", async function () {
         
       } 
       $('.set_score_btn').click(function() {
-        const studentId = $(this).closest('tr').find('td:nth-child(3)').text();
-        this.href = `/bancansu/nhapdiemdanhgia?schoolYear=${curr_tb_year}&studentId=${studentId}`
+        if(year_available>=curr_tb_year){
+          const studentId = $(this).closest('tr').find('td:nth-child(3)').text();
+          this.href = `/bancansu/nhapdiemdanhgia?schoolYear=${curr_tb_year}&studentId=${studentId}`
+        }
+        else{
+          notify('!', 'chưa mở chấm điểm vui lòng chọn năm khác.');
+        }
       });
       // update current table school year
       curr_tb_year = year;
@@ -176,6 +184,11 @@ $(document).on("change", ".inp-cbx", async function () {
 
 // cham diem 
 $('.set_score_btn').click(function() {
-  const studentId = $(this).closest('tr').find('td:nth-child(3)').text();
-  this.href = `/bancansu/nhapdiemdanhgia?schoolYear=${curr_tb_year}&studentId=${studentId}`
+  if(year_available>=curr_tb_year){
+    const studentId = $(this).closest('tr').find('td:nth-child(3)').text();
+    this.href = `/bancansu/nhapdiemdanhgia?schoolYear=${curr_tb_year}&studentId=${studentId}`
+  }
+  else{
+    notify('!', 'chưa mở chấm điểm vui lòng chọn năm khác.');
+  }
 });

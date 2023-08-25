@@ -1,6 +1,9 @@
 let selectedFile
 let cls
-// tat ca duoc check thi check cai tat ca
+let dataStudents = {
+  0: {},
+}
+// tat ca duoc check thi check cai tat ca 
 function handleCheckboxChange() {
   let listCb = $(".inp-cbx");
   for (let i = 0; i < listCb.length; i++) {
@@ -33,15 +36,35 @@ function handleCheckboxChange() {
     }
   });
 }
-function editStudent(event){
+function editStudent(event) {
   event.preventDefault();
   const row = event.target.closest('tr');
   const mssv = row.querySelector('td:nth-child(3)').textContent.trim();
-  console.log(mssv);
+  const studentInfo = dataStudents[cls].filter((item) => item._id ==mssv)[0];
+  console.log(studentInfo);
+  const inpMssv = $("#md_mssv")
+  const inpHo = $("#md_ho")
+  const inpTen = $("#md_ten")
+  const inpVt = $("#md_vt")
+  const inpDv = $("#md_dv")
+  const inpCd = $("#md_cd")
+  const inpLbhd = $("#md_lbhd")
+
+  inpMssv.val(studentInfo._id)
+  inpHo.val(studentInfo.last_name)
+  inpTen.val(studentInfo.first_name)
+  inpVt.prop('selectedIndex', studentInfo.cham_diem || studentInfo.lap_hoat_dong ? 1 : 0);
+  inpDv.prop('checked', studentInfo.dang_vien);
+  inpCd.prop('checked', studentInfo.cham_diem);
+  inpLbhd.prop('checked', studentInfo.lap_hoat_dong);
+  $('.js_md_add').text('Cập nhật');
 }
 // chon lop
 async function loadStudents(cls) {
   $('.js_tbody').empty()
+  // if (dataStudents.hasOwnProperty(cls)) {
+
+  // }
   try {
     let postData = JSON.stringify({
       class: cls
@@ -56,6 +79,7 @@ async function loadStudents(cls) {
     const response = await fetch('/api/getStudentList', requestOptions);
     if (response.ok) {
       const students = await response.json();
+      dataStudents[cls] = students;
       if (students.length != 0) {
         let htmls = [];
         for (let i = 0; i < students.length; i++) {
@@ -78,16 +102,17 @@ async function loadStudents(cls) {
             <td> ${students[i]._id} </td>
             <td>${students[i].last_name + " " + students[i].first_name}</td>
             <td>${students[i].role}</td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>${students[i].dang_vien ? 'X' : ''}</td>
+            <td>${students[i].cham_diem ? 'X' : ''}</td>
+            <td>${students[i].lap_hoat_dong ? 'X' : ''}</td>
             <td><a href="#">Chỉnh sửa</a></td>
           </tr>
         `)
         }
         $('.js_tbody').append(htmls.join(''))
-        $('tr a').on('click',(event)=>{
+        $('tr a').on('click', (event) => {
           editStudent(event);
+          $(".modal.add").show();
         })
       }
       else {
@@ -110,15 +135,22 @@ $(document).ready(() => {
   });
   $(".modal.add").click(function () {
     $(".modal.add").hide();
+    $('.js_md_add').text('Thêm');
   });
   $(".modal_wrap.add").click(function (e) {
     e.stopPropagation();
   });
+  // huy bo
+  $('.js_md_cancel').on('click', async () => {
+    $('.js_md_add').text('Thêm');
+    $(".modal.add").hide();
+  });
+
   // them tung sinh vien
   $('.js_md_add').on('click', async () => {
     if (cls == 0) {
       notify('!', 'Vui lòng chọn lớp')
-      return 
+      return
     }
     const inpMssv = $("#md_mssv")
     const inpHo = $("#md_ho")
@@ -127,14 +159,15 @@ $(document).ready(() => {
     const inpDv = $("#md_dv")
     const inpCd = $("#md_cd")
     const inpLbhd = $("#md_lbhd")
-    console.log(inpMssv.val());
-    console.log(inpHo.val());
-    console.log(inpTen.val());
-    console.log(inpVt.val());
-    console.log(inpDv.prop('checked'));
-    console.log(inpCd.prop('checked'));
-    console.log(inpLbhd.prop('checked'));
+    // console.log(inpMssv.val());
+    // console.log(inpHo.val());
+    // console.log(inpTen.val());
+    // console.log(inpVt.val());
+    // console.log(inpDv.prop('checked'));
+    // console.log(inpCd.prop('checked'));
+    // console.log(inpLbhd.prop('checked'));
     try {
+      let updateStudent = $('.js_md_add').text() == 'Cập nhật';
       let postData = JSON.stringify({
         mssv: inpMssv.val(),
         ho: inpHo.val(),
@@ -143,7 +176,8 @@ $(document).ready(() => {
         dangvien: inpDv.prop('checked'),
         chamdiem: inpCd.prop('checked'),
         lbhd: inpLbhd.prop('checked'),
-        cls: cls
+        cls,
+        updateStudent
       });
       const requestOptions = {
         method: 'POST',
@@ -154,26 +188,59 @@ $(document).ready(() => {
       };
       const response = await fetch('/api/createAccount', requestOptions);
       if (response.ok) {
-        await loadStudents(cls)
-        notify('n', 'Thêm sinh viên thành công')
-        $(".modal.add").hide();
-        const blobUrl = URL.createObjectURL(await response.blob());
-        // Tạo một thẻ <a> ẩn để tải xuống và nhấn vào nó
-        const downloadLink = document.createElement('a');
-        downloadLink.href = blobUrl;
-        downloadLink.download = `${inpMssv.val()}.xlsx`; // Đặt tên cho tệp tải xuống
-        downloadLink.style.display = 'none';
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        // Giải phóng URL tạm thời sau khi tải xuống hoàn thành
-        URL.revokeObjectURL(blobUrl);
-      } else {
-        notify('!', 'Thêm sinh viên thất bại')
-      }
+        if (!updateStudent){
+          await loadStudents(cls)
+          notify('n', 'Thêm sinh viên thành công')
+          const blobUrl = URL.createObjectURL(await response.blob());
+          // Tạo một thẻ <a> ẩn để tải xuống và nhấn vào nó
+          const downloadLink = document.createElement('a');
+          downloadLink.href = blobUrl;
+          downloadLink.download = `${inpMssv.val()}.xlsx`; // Đặt tên cho tệp tải xuống
+          downloadLink.style.display = 'none';
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          // Giải phóng URL tạm thời sau khi tải xuống hoàn thành
+          URL.revokeObjectURL(blobUrl);
+          $('.js_md_add').text('Thêm');
+        } else{
+          notify('n', 'Cập nhật sinh viên thành công')
+        }
+      }else {
+          if (updateStudent){
+            notify('!', 'Thêm sinh viên thất bại')
+          } else{
+            notify('!', 'Cập nhật sinh viên thất bại')
+          }
+        }
+      $(".modal.add").hide();
     } catch (error) {
       console.log(error);
     }
   })
+
+  $('#md_vt').change(async function () {
+    if ($(this).val() == 1) {
+      $('#md_cd').prop('checked', true);
+      $('#md_lbhd').prop('checked', true);
+    } else {
+      $('#md_cd').prop('checked', false);
+      $('#md_lbhd').prop('checked', false);
+    }
+  });
+  $('#md_cd').change(async function () {
+    if ($('#md_cd').prop('checked') || $('#md_lbhd').prop('checked')) {
+      $('#md_vt').val('1');
+    } else {
+      $('#md_vt').val('0');
+    }
+  });
+  $('#md_lbhd').change(async function () {
+    if ($('#md_cd').prop('checked') || $('#md_lbhd').prop('checked')) {
+      $('#md_vt').val('1');
+    } else {
+      $('#md_vt').val('0');
+    }
+  });
 });
 // set text up file
 $('.inp_file').on('change', (event) => {
@@ -251,7 +318,7 @@ $('#delete-student').on('click', async () => {
   }
 })
 // get file template new student
-$('.js_get_template').on('click',async () =>{
+$('.js_get_template').on('click', async () => {
   try {
     const requestOptions = {
       method: 'GET',

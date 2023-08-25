@@ -39,6 +39,10 @@
   height: 100%;
   cursor: pointer;
 }
+.file_input input:hover {
+  box-shadow: var(--black-color) 0 0 0 0.3rem, transparent 0 0 0 0;
+
+}
 
 th {
   font-size: 2rem;
@@ -112,7 +116,7 @@ tr td:nth-child(4) {
 }
 
 .modal_content {
-  margin-top: 8rem;
+  margin-top: 7.3rem;
 }
 
 .modal_content> :nth-child(n+4) {
@@ -162,8 +166,16 @@ tr td:nth-child(4) {
 }
 
 .modal_main .button-35 {
-  position: absolute;
-  right: 0;
-  right: 5rem;
+  /* position: absolute; */
+  /* right: 0; */
+  /* right: 5rem; */
   padding: 12px 30px;
+}
+
+.controlbtn {
+  display: flex;
+  flex-direction: row-reverse;
+}
+.js_md_cancel {
+  right: 18rem !important;
 }

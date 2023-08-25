@@ -8,7 +8,7 @@ $(document).on("click", "#edit__subject", async function () { // this way get al
   // check current line for future use
   curr_edit = $(this).parent().parent();
   // change text area value ò edit to old name whenever it open edit window
-  
+
   $('.edit .bname_input').val(old_name);
   // show window
   $(".modal.edit").show();
@@ -33,7 +33,9 @@ $("#add__subject").click(function () {
 
 $("#delete__subject").click(async function () {
   // disable curr button
-  $(this).prop('disabled', 'true');
+  $(this).prop('disabled', true);
+
+  notify('!', 'Đang xóa dữ liệu!')
 
   let rm_bs = []
 
@@ -71,7 +73,7 @@ $("#delete__subject").click(async function () {
       });
 
       // able curr button
-      $(this).prop('disabled', 'false');
+      $(this).prop('disabled', false);
 
       notify('n', 'Đã xóa các bộ môn đc đánh dấu')
     }
@@ -100,10 +102,12 @@ $(".exist_btn").click(function () {
 
 //save button
 $(".save_btn").click(async function () {
-  if ($('.modal.add .subject--input').val()) { // check if user enter info or not
+  if ($(this).parent().parent().parent().find('.subject--input').val()) { // check if user enter info or not
     // disable curr button
-    $(this).prop('disabled', 'true');
-  
+    $(this).prop('disabled', true);
+
+    notify('!', 'Đang cập nhật dữ liệu!')
+
     // find input
     $('.modal').each(function () {
       if ($(this).is(":visible")) {
@@ -111,7 +115,7 @@ $(".save_btn").click(async function () {
         new_name = $(this).find('.bname_input').val();
       }
     });
-  
+
     // request
     const requestOptions = {
       method: 'POST',
@@ -123,7 +127,7 @@ $(".save_btn").click(async function () {
         name: new_name
       })
     };
-  
+
     const response = await fetch('/api/addOrEditBranchs', requestOptions);
     if (response.ok) {
       if (curr_edit) {
@@ -150,7 +154,7 @@ $(".save_btn").click(async function () {
         `)
       }
       // able curr button
-      $(this).prop('disabled', 'false');
+      $(this).prop('disabled', false);
       // disappear curr dialog 
       $(".modal.add").hide();
       $(".modal.edit").hide();

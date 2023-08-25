@@ -14,13 +14,24 @@
       <%- include(thongbao) %>
         <div class="container">
           <div class="content" style="margin-top:2rem">
-            
+            <span class="lop">Lớp:</span>
+            <div class="selectbox hoc_ky">
+              <div class="select">
+                <select class="js_lop">
+                  <option value="0">Lớp</option>
+                  <option value="KTPM0121">KTPM0121</option>
+                </select>
+              </div>
+            </div>
+            <button class="js_get_template button-35">File tạo danh sách SV</button>
             <div class="chitiet">
               <div class="control">
                 <div class="left">
                   <div class="file_input">
-                    <button class="btn_input button-35">Chọn file sinh viên</button>
+                    <button class="btn_input button-35">Chọn file sinh viên
                     <input class="inp_file" type="file" />
+
+                    </button>
                   </div>
                   <button class="btn_upload button-35">Tải lên</button>
                 </div>
@@ -56,12 +67,67 @@
           </div>
         </div>
   </div>
-  <script src="/src/JS/doankhoa-student-list.js"></script>
+  <script src="/src/JS/teacher-QL-sv.js"></script>
 </body>
 <div class="modal add">
   <div class="modal_wrap add">
     <div class="modal_main">
       <h2 class="title-box">THÊM SINH VIÊN</h2>
+      <div class="modal_content">
+        <div class="porfile_container_item">
+          <label class="info_lable" for="md_mssv">Mã Số Sinh Viên </label><input id="md_mssv" type="text" value="" class="info_input" />
+        </div>
+        <div class="porfile_container_item">
+          <label class="info_lable" for="md_ho">Họ</label><input id="md_ho" type="text" value="" class="info_input" />
+        </div>
+        <div class="porfile_container_item">
+          <label class="info_lable" for="md_ten">Tên</label>
+          <input id="md_ten" type="text" value="" class="info_input" />
+        </div>
+        <div class="porfile_container_item">
+          <label class="info_lable" for="">Vai trò</label>
+          <div class="selectbox">
+            <div class="select">
+              <select id="md_vt" class="js_md_vt">
+                <option value="0">Lớp viên</option>
+                <option value="1">Ban cán sự</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="porfile_container_item">
+          <label class="info_lable" for="">Đảng viên</label>
+          <div class="checkbox-wrapper-4">
+            <input type="checkbox" id="md_dv" class="inp-cbx" value="2" />
+            <label for="md_dv" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+            </label>
+          </div>
+        </div>
+        <div class="porfile_container_item">
+          <label class="info_lable" for="">Chấm điểm</label>
+          <div class="checkbox-wrapper-4">
+            <input type="checkbox" id="md_cd" class="inp-cbx" value="2" />
+            <label for="md_cd" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+            </label>
+          </div>
+        </div>
+        <div class="porfile_container_item">
+          <label class="info_lable" for="">Lập bảng hoạt động</label>
+          <div class="checkbox-wrapper-4">
+            <input type="checkbox" id="md_lbhd" class="inp-cbx" value="2" />
+            <label for="md_lbhd" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <button class="js_md_add button-35">Thêm</button>
+    </div>
+  </div>
+</div>
+<div class="modal edit">
+  <div class="modal_wrap edit">
+    <div class="modal_main">
+      <h2 class="title-box">SỬA SINH VIÊN</h2>
       <div class="modal_content">
         <div class="porfile_container_item">
           <label class="info_lable" for="md_mssv">Mã Số Sinh Viên </label><input id="md_mssv" type="text" value="" class="info_input" />

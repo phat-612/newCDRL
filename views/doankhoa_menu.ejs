@@ -10,24 +10,26 @@
     <details>
         <summary></summary>
         <nav class="menu">
-          <div class="menu_item">Bộ Môn</div>
-          <div class="menu_item">
-            <span>Lớp</span>
+          <a href="doan_khoa/quan_li_bm" class="menu_item">Bộ Môn</a>
+          <div class="menu_item menu_item_more">
+            <span>Lớp <i class="fa-solid fa-chevron-down"></i></span>
             <nav class="lop_item">
-              <div class="menu_item">Danh sách lớp</div>
-              <div class="menu_item">Danh sách cố vấn</div>
+              <div class="menu_item lop_item_more"><a href="doan_khoa/quan_li_lop">Danh sách lớp</a></div>
+              <div class="menu_item lop_item_more"><a href="doan_khoa/quan_li_cv">Danh sách cố vấn</a></div>
             </nav>
           </div>
-          <div class="menu_item">
-            <span>Sinh Viên</span>
+          <div class="menu_item menu_item_more">
+            <span>Sinh Viên <i class="fa-solid fa-chevron-down"></i></span>
             <nav class="lop_item">
-              <div class="menu_item">Danh sách sinh viên</div>
-              <div class="menu_item">Điểm rèn luyện</div>
+              <div class="menu_item lop_item_more"><a href="doan_khoa/danhsachsinhvien">Danh sách sinh viên</a></div>
+              <div class="menu_item lop_item_more"><a href="/doan_khoa/danhsachbangdiem">Điểm rèn luyện</a></div>
             </nav>
           </div>
-          <div class="menu_item">Hoạt Động</div>
-          <div class="menu_item">Thời Hạn</div>
+          <a href="doan_khoa/quan_li_hoat_dong_khoa" class="menu_item">Hoạt Động</a>
+          <a href="doan_khoa/thoihan" class="menu_item">Thời Hạn</a>
         </nav>
       </details>
+      <script src="/src/JS/doankhoa_menu.js"></script>
+
 </body>
 </html>

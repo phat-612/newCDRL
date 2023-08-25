@@ -29,7 +29,7 @@
               <tr>
                 <th>
                   <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row--all" class="inp-cbx all-cbx" value="2" />
+                    <input type="checkbox" id="row--all" class="inp-cbx all-cbx" value="teachers" />
                     <label for="row--all" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                     </label>
                   </div>
@@ -46,7 +46,7 @@
                 <tr>
                   <td>
                     <div class="checkbox-wrapper-4">
-                      <input type="checkbox" id="row--<%= i %>" class="inp-cbx" value="<%= teachers[i]._id %>" />
+                      <input type="checkbox" id="row--<%= i %>" class="inp-cbx normal-cbx" value="<%= teachers[i]._id %>" />
                       <label for="row--<%= i %>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                       </label>
                     </div>
@@ -85,7 +85,7 @@
   
               <div class="content content--account">
                 <label for="teacher--account" class="content__account account--label">Tên Đăng Nhập</label>
-                <input type="text" class="content__account account--input" id="teacher--account" placeholder="Nhập tên bộ môn">
+                <input type="text" class="content__account account--input" id="teacher--account" placeholder="Nhập tên bộ môn" disabled>
               </div>
   
               <div>
@@ -145,11 +145,9 @@
                 </div>
               </div>
   
-              <div>
-                <main id="button-main">
+              <div class="content content--button">
                   <div><button class="button-35 exist_btn">Hủy</button></div>
                   <div><button class="button-35 save_btn">Lưu</button></div>
-                </main>
               </div>
             </div>
           </div>
