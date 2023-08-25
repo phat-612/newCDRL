@@ -55,10 +55,26 @@ $(".exist_btn").click(function () {
 
 //save button
 $(".save_btn").click(async function () {
+  // check if user is fill all input or not
+  if (
+    $(this).parent().parent().parent().find('.name--input').val()
+    && $(this).parent().parent().parent().find('.account--input').val()
+  ) {
+    // new name, branch
+    const new_name = $(this).parent().parent().parent().find('.name--input').val();
+    const acc = $(this).parent().parent().parent().find('.account--input').val();
+    const curr_branchs = $(this).parent().parent().parent().find('#select-level :selected');
+    
+    // check does input id exist is not
+    $('.normal-cbx').each(function () {
+      if ($(this).val() == acc) { // check have same id with existed ids
+        notify('!', 'ID đã tồn tại!');
+        // end hàm và không gửi lên yêu cầu cho se
+      }
+    });
 
-  if ($('.modal .name--input').val() && $('.modal .account--input').val()) {
     // disable curr button
-    $(this).prop('disabled', 'true');
+    $(this).prop('disabled', true);
 
     // find input
     $('.modal').each(function () {
@@ -68,10 +84,8 @@ $(".save_btn").click(async function () {
       }
     })
 
-    // new name, branch
-    const new_name = $(this).parent().parent().find('#teacher--name').val();
-    const curr_branchs =  $(this).parent().parent().find('#select-level:selected').val();
 
+    notify('!', 'Đang cập nhật dữ liệu!');
 
     // request
     const requestOptions = {
@@ -83,7 +97,7 @@ $(".save_btn").click(async function () {
         old_id: old_id,
         new_id: new_id,
         new_name: new_name,
-        branch: curr_branchs
+        branch: curr_branchs.val()
       })
     };
 
@@ -93,21 +107,21 @@ $(".save_btn").click(async function () {
         // set current edit line to new version
         curr_edit.find('.inp-cbx').val(new_id)
         curr_edit.find('.t_name').text(new_name);
-        curr_edit.find('.b_name').text(curr_branchs);
+        curr_edit.find('.b_name').text(curr_branchs.text());
       } else {
         let length = $('table tbody tr').length;
         $('table tbody').append(`
           <tr>
           <td>
             <div class="checkbox-wrapper-4">
-              <input type="checkbox" id="row--${length-1}" class="inp-cbx" value="${new_id}" />
-              <label for="row--${length-1}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+              <input type="checkbox" id="row--${length}" class="inp-cbx" value="${new_id}" />
+              <label for="row--${length}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
               </label>
             </div>
           </td>
-          <td>${length}</td>
+          <td>${length + 1}</td>
           <td class="t_name">${new_name}</td>
-          <td class="b_name">${curr_branchs}</td>
+          <td class="b_name">${curr_branchs.text()}</td>
           <td></td>
           <td>
             <a id="edit__class" href="#">Sửa</a>
@@ -116,7 +130,7 @@ $(".save_btn").click(async function () {
         `)
       }
       // able curr button
-      $(this).prop('disabled', 'false');
+      $(this).prop('disabled', false);
       // disappear curr dialog 
       $(".modal.add").hide();
       $(".modal.edit").hide();
