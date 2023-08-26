@@ -71,7 +71,7 @@ $(".save_btn").click(async function () {
         notify('!', 'ID đã tồn tại!');
         // end function and not request
         return;
-      }
+      } 
     });
 
     // disable curr button

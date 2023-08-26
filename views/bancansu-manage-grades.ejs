@@ -13,6 +13,7 @@
   <div class="main ">
     <%- include(header) %>
     <%- include(thongbao) %>
+    
     <div class="content">
       <div class="main-content m-auto">
         <h1 class="tittle-table">PHIẾU ĐÁNH GIÁ ĐIỂM RÈN LUYỆN</h1>
@@ -267,12 +268,9 @@
 
               </td>
               <td id="score_05">0 điểm</td>
+              <td class="score_1"> <%=Score.first[4]%></td>
             </tr>
- 
-              <td class="score_1"> <%=Score.first[4]%>
-
-              </td>
-                         <tr>
+            <tr>
               <td>
                 <p class="first-column-value">
                   - Loại Trung bình: Điểm số từ 2.0 đến 2.49
@@ -1307,7 +1305,7 @@
     </td>
     <td>
     </td>
-    <td id="total_muc_5">
+    <td id="total_muc_5d">
       <%=Scorestd.fifth[0]+Scorestd.fifth[1]+Scorestd.fifth[2]+Scorestd.fifth[3]%> điểm
 
     </td>
@@ -1315,9 +1313,9 @@
       0 điểm
     </td>
     <%if (Score.first[0] == 'Chưa chấm') {%>
-    <td id="total_muc_5"> <%=  Score.first[0]%>
+    <td id="total_muc_5d"> <%=  Score.first[0]%>
       <%}else {%>
-    <td id="total_muc_5"> <%=Score.fifth[0]+Score.fifth[1]+Score.fifth[2]+Score.fifth[3]%> điểm
+    <td id="total_muc_5d"> <%=Score.fifth[0]+Score.fifth[1]+Score.fifth[2]+Score.fifth[3]%> điểm
       <%}%>
         </td>
         
@@ -1331,22 +1329,28 @@
     <td>
 
     </td>
-    <td id="total_all"><%=Scorestd.total%> điểm
+    <td id="total_all1"><%=Scorestd.total%> điểm
     </td>
     <td id="total_all">0 điểm</td>
     <%if (Score.first[0] == 'Chưa chấm') {%>
-    <td id="total_all"><%=Score.total%>
+    <td id="total_all1"><%=Score.total%>
       <%}else {%>
-    <td id="total_all"><%=Score.total%> điểm
+    <td id="total_all1"><%=Score.total%> điểm
       <%}%>
     </td>
     
   </tr>
   </tbody>
   </table>
-  <button class="button-35 up-btn save-btn">
-    Lưu
-  </button>
+  <h1><%=Score.img_ids%></h1>
+  <div class="complete_img">
+    <button class="button-35 up-btn post-btn">
+      Tải ảnh
+    </button>
+    <button class="button-35 up-btn save-btn">
+      Lưu
+    </button>
+  </div>
   </div>
   </div>
   </div>

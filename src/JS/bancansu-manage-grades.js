@@ -236,12 +236,7 @@ const showUploadImg = () => {
     !require_upload_img.every((element) => element === 0 || element === "0")
   ) {
     if (!$(".post-btn").is(":visible")) {
-      notify(
-        "!",
-        "Hãy upload ảnh chứng minh bạn tham gia sự kiện nhé!"
-      );
     }
-    $(".post-btn").show();
   } else {
     $(".post-btn").hide();
   }

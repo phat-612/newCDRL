@@ -1,4 +1,12 @@
-let curr_tb_year = "HK" + $(".hoc_ky select option:selected").text() + "_" + $(".nien_khoa select option:selected").text();
+let curr_tb_year = "HK" + $(".selectbox--hocky select option:selected").text() + "_" + $(".nien_khoa select option:selected").text()  + "_" + $(".--bomon select option:selected").text()  + "_" + $(".--class select option:selected").text();
+console.log(branch_list);
+console.log(class_list);
+
+$(document).on("change", ".--bomon select", async function (){
+ const bomon = $(".--bomon select option:selected").text() 
+ 
+
+})  
 
 $(document).on("click", ".export_btn", async function () {
   // disabled button until it done start down load
@@ -85,19 +93,22 @@ $(document).on("click", ".auto_mark_btn", async function () {
   }
 });
 
-$(document).on("click", ".load_list_btn", async function () {
+$(document).on("click", ".button-35-a", async function () {
   // disabled button until it done start down load
   $('.load_list_btn').prop('disabled', true);
   $('.load_list_btn').text('Loading...')
   notify('!', 'Đợi chút đang tải bảng điểm!');
+  console.log(curr_tb_year)
   try {
-    const year = "HK" + $(".hoc_ky select option:selected").text() + "_" + $(".nien_khoa select option:selected").text();
+    const year = "HK" + $(".hoc_ky select option:selected").text().trim() + "_" + $(".nien_khoa select option:selected").text().trim();
+    const bo_mon= $(".--bomon option:selected").text().trim()
+    const lop= $(".--class option:selected").text().trim()
 
     const requestOptions = {
       method: 'GET',
     };
 
-    const response = await fetch(`/api/loadScoresList?year=${year}`, requestOptions);
+    const response = await fetch(`/api/doan_khoa/loadScoresList?year=${year}&bo_mon=${bo_mon}&class=${lop}`, requestOptions);
     
     if (response.ok) {
       const data = await response.json();
@@ -109,7 +120,7 @@ $(document).on("click", ".load_list_btn", async function () {
       // load new table:
       for (let i = 0; i < data.student_list.length; i++) {
         $('table tbody').append(`
-        <tr>
+        <tr></tr>
           <td>
             <div class="checkbox-wrapper-4">
               <input type="checkbox" id="row${i+1}" class="inp-cbx" value="${data.student_list[i]._id}" />
@@ -181,14 +192,3 @@ $(document).on("change", ".inp-cbx", async function () {
     $('.all-cbx').prop('checked', false);
   }
 });
-// $('.chamdiem').click(function() {
-//   console.log('haha')
-//   if(year_available>=curr_tb_year){
-//     const studentId = $(this).closest('tr').find('td:nth-child(3)').text();
-//     console.log(studentId)
-//     // this.href = `/doankhoa/nhapdiemdanhgia?schoolYear=${curr_tb_year}&studentId=${studentId}`
-//   }
-//   else{
-//     notify('!', 'chưa mở chấm điểm vui lòng chọn năm khác.');
-//   }
-// });
