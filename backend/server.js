@@ -95,7 +95,10 @@ client.connect().then(() => {
   ).toString("hex");
   // ----------------------------------------------------------------
   const uploadDirectory = path.join('.upload_temp');
-
+  if (!fs.existsSync(uploadDirectory)) {
+    // Nếu thư mục không tồn tại, thực hiện việc tạo thư mục
+    fs.mkdirSync(uploadDirectory);
+  }
   const storage_file = multer.diskStorage({
     destination: function (req, file, cb) {
       // Trả về đường dẫn đến thư mục mới
@@ -2428,7 +2431,7 @@ client.connect().then(() => {
           { projection: { first_name: 1, last_name: 1 } })
           .toArray());
 
-          console.log(student_list)
+        console.log(student_list)
 
         // get all student total score from themself:
         let result = {
