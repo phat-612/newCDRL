@@ -84,89 +84,82 @@ $(document).on("click", ".auto_mark_btn", async function () {
   }
 });
 
-$(document).ready(async function () {
-  async function loadScoresList() {
-    $('.load_list_btn').prop('disabled', true);
-    $('.load_list_btn').text('Loading...')
-    notify('!', 'Đợi chút đang tải bảng điểm!');
-    try {
-      const year = "HK" + $(".hoc_ky select option:selected").text() + "_" + $(".nien_khoa select option:selected").text();
+$(document).on("click", ".load_list_btn", async function () {
+  // disabled button until it done start down load
+  $('.load_list_btn').prop('disabled', true);
+  $('.load_list_btn').text('Loading...')
+  notify('!', 'Đợi chút đang tải bảng điểm!');
+  try {
+    const year = "HK" + $(".hoc_ky select option:selected").text() + "_" + $(".nien_khoa select option:selected").text();
 
-      const requestOptions = {
-        method: 'GET',
-      };
+    const requestOptions = {
+      method: 'GET',
+    };
+    console.log(`/api/loadScoresList?year=${year}`);
+    const response = await fetch(`/api/loadScoresList?year=${year}`, requestOptions);
+    if (response.ok) {
+      const data = await response.json();
+      
+      const year_available=data.year_available.year
+    
 
-      const response = await fetch(`/api/loadScoresList?year=${year}`, requestOptions);
-
-      if (response.ok) {
-        const data = await response.json();
-        const year_available = data.year_available.year
-        console.log(data.year_available)
-
-        // empty old table:
-        $('table tbody').empty();
-        // load new table:
-        for (let i = 0; i < data.student_list.length; i++) {
-          $('table tbody').append(`
+      // empty old table:
+      $('table tbody').empty();
+      // load new table:
+      for (let i = 0; i < data.student_list.length; i++) {
+        console.log(data.student_scores[i]);
+        $('table tbody').append(`
         <tr>
           <td>
             <div class="checkbox-wrapper-4">
-              <input type="checkbox" id="row${i + 1}" class="inp-cbx" value="${data.student_list[i]._id}" />
-              <label for="row${i + 1}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+              <input type="checkbox" id="row${i+1}" class="inp-cbx" value="${data.student_list[i]._id}" />
+              <label for="row${i+1}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
               </label>
             </div>
           </td>
-          <td>${i + 1}</td>
+          <td>${i+1}</td>
           <td>${data.student_list[i]._id}</td>
-          <td class='std_name_row'>${data.student_list[i].last_name + " " + data.student_list[i].first_name}</td>
+          <td class='std_name_row'>${data.student_list[i].last_name + " " +  data.student_list[i].first_name}</td>
           <td class="new_update">${data.student_scores[i]}</td>
           <td class="first_score">${data.staff_scores[i]}</td>
           <td>${data.staff_name[i]}</td>
           <td>${data.department_scores[i]}</td>
-          <td><a class="chamdiem">Chấm điểm</a></td>
+          <td><a class="set_score_btn">Chấm điểm</a></td>
         </tr>
         `);
 
-          // add '*' to student have not mark yet
-          if (data.student_scores[i] == '-' || data.student_scores[i] == 0) {
-            $('table tbody').children().eq(i).find('.std_name_row').append(`<span class="dau_sao">*</span>`);
-          }
+        // add '*' to student have not mark yet
+        if(data.student_scores[i] == '-' ||  data.student_scores[i]== 0){
+          $('table tbody').children().eq(i).find('.std_name_row').append(`<span class="dau_sao">*</span>`);
         }
-        $('.chamdiem').click(function () {
-          if (year_available >= curr_tb_year) {
-            const studentId = $(this).closest('tr').find('td:nth-child(3)').text();
-            this.href = `/bancansu/nhapdiemdanhgia?schoolYear=${curr_tb_year}&studentId=${studentId}`
-          }
-          else {
-            notify('!', 'chưa mở chấm điểm vui lòng chọn năm khác.');
-          }
-        });
+        
+      } 
+      $('.set_score_btn').click(function() {
+        console.log(curr_tb_year,year_available)
+        if(year_available===curr_tb_year){
+          const studentId = $(this).closest('tr').find('td:nth-child(3)').text();
+          this.href = `/giaovien/nhapdiemdanhgia?schoolYear=${curr_tb_year}&studentId=${studentId}`
+        }
+        else{
+          notify('!', 'chưa mở chấm điểm vui lòng chọn năm khác.');
+        }
+      });
+      // update current table school year
+      curr_tb_year = year;
 
-        // update current table school year
-        curr_tb_year = year;
-
-        // reset export button to clickable
-        $('.load_list_btn').prop('disabled', false);
-        $('.load_list_btn').text('Chọn')
-        notify('n', 'Đã hoàn tất tải bảng điểm.');
-      }
-      else if (response.status == 500) {
-        // Error occurred during upload
-        notify('x', 'Có lỗi xảy ra!');
-      }
-    } catch (error) {
-      console.log(error);
+      // reset export button to clickable
+      $('.load_list_btn').prop('disabled', false);
+      $('.load_list_btn').text('Chọn')
+      notify('n', 'Đã hoàn tất tải bảng điểm.');
+    }
+    else if (response.status == 500) {
+      // Error occurred during upload
       notify('x', 'Có lỗi xảy ra!');
     }
-
+  } catch (error) {
+    console.log(error);
+    notify('x', 'Có lỗi xảy ra!');
   }
-
-
-  await loadScoresList();
-
-  $(".hoc_ky select, .nien_khoa select").change(async function() {
-    await loadScoresList();
-  });
 });
 // all checkbox set (if all-cbx tick all checkboxs will tick otherwise untick all)
 $(document).on("change", ".all-cbx", async function () {
@@ -196,7 +189,7 @@ $(document).on("change", ".inp-cbx", async function () {
 $('.set_score_btn').click(function() {
   if(year_available>=curr_tb_year){
     const studentId = $(this).closest('tr').find('td:nth-child(3)').text();
-    this.href = `/bancansu/nhapdiemdanhgia?schoolYear=${curr_tb_year}&studentId=${studentId}`
+    this.href = `/giaovien/nhapdiemdanhgia?schoolYear=${curr_tb_year}&studentId=${studentId}`
   }
   else{
     notify('!', 'chưa mở chấm điểm vui lòng chọn năm khác.');

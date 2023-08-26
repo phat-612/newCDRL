@@ -36,6 +36,9 @@ body {
     display: inline-block;
     font-size: 1.8rem;
 }
+a:any-link{
+    text-decoration: none;
+}
 
 .button {
     padding: 1rem;

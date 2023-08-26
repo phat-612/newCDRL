@@ -104,15 +104,15 @@ const getAccessTokenFromCode = (code) => {
 };
 
 // Upload the file to Google Drive
-exports.uploadFileToDrive = async (filePath, id_folder = '1CyiiQwVN1_99jYcbQvy4M3JeI1m4zyKR') => {
+exports.uploadFileToDrive = async (filePath, description, id_folder = '1CyiiQwVN1_99jYcbQvy4M3JeI1m4zyKR') => {
     await initStorage();
     await getAccessToken();
     const fileName = path.basename(filePath);
     const fileMetadata = {
         name: fileName,
-        parents: [id_folder]
+        parents: [id_folder],
+        description: description  // Bổ sung mô tả vào đây
     };
-    // console.log('SYSTEM | DRIVE | Cbi úp lên');
 
     const media = {
         mimeType: 'application/octet-stream',
@@ -127,8 +127,6 @@ exports.uploadFileToDrive = async (filePath, id_folder = '1CyiiQwVN1_99jYcbQvy4M
             fields: 'id',
         });
 
-
-        // console.log('SYSTEM | DRIVE | File uploaded successfully! File ID:', res.data.id);
         fs.unlink(filePath, (err) => {
             if (err) {
                 console.error('SYSTEM | DRIVE | ERR |', err);
@@ -136,11 +134,25 @@ exports.uploadFileToDrive = async (filePath, id_folder = '1CyiiQwVN1_99jYcbQvy4M
             }
             // console.log('SYSTEM | DRIVE | File local deleted successfully');
         });
+        const permission = {
+            role: 'reader', // Quyền truy cập đọc
+            type: 'anyone'  // Cho phép mọi người truy cập
+        };
+
+        await drive.permissions.create({
+            fileId: res.data.id,
+            resource: permission,
+            fields: 'id',
+            auth: auth
+        });
+
+
         return res.data.id;
     } catch (err) {
         console.error('SYSTEM | DRIVE | ERR | uploading file:', err);
     }
 };
+
 
 const getFileName = async (fileId) => {
     const drive = google.drive({ version: 'v3', auth });
@@ -224,6 +236,15 @@ exports.downloadFileFromDriveforUser = async (fileId, res) => {
     // console.log('SYSTEM | DRIVE | File reading successfully!');
 };
 
+
+exports.getDriveFileLinkAndDescription = async (fileId) => {
+    await initStorage();
+    await getAccessToken();
+    const fileMetadata = await drive.files.get({ fileId, fields: 'id,description', auth });
+    const directLink = `https://drive.google.com/uc?export=view&id=${fileMetadata.data.id}`;
+
+    return { fileDescription: fileMetadata.data.description, fileLink: directLink };
+};
 exports.deleteFileFromDrive = async (fileId) => {
     await initStorage();
     await getAccessToken();

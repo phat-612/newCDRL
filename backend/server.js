@@ -178,23 +178,13 @@ client.connect().then(() => {
     }
   }
 
-  async function get_full_id(directoryPath, listName) {
+  async function get_full_id(directoryPath, listName, listdep) {
     let list_id = [];
     try {
       // Đọc các file trong thư mục một cách đồng bộ
-      let txtFilePaths = []
-      for (const name of listName) {
-        txtFilePaths.push(path.join(directoryPath, name))
+      for (let i = 0; i < listName.length; i++) {
+        list_id.push(await server.uploadFileToDrive(path.join(directoryPath, listName[i]), listdep[i]));
       }
-      // console.log(txtFilePaths)
-      const processFiles = async () => {
-        for (const filePath of txtFilePaths) {
-          // console.log(filePath);
-          list_id.push(await server.uploadFileToDrive(filePath));
-        }
-      };
-      await processFiles();
-
       return list_id;
     } catch (err) {
       console.error('SYSTEM | GET_ID | ERR | ', err);
@@ -654,7 +644,7 @@ client.connect().then(() => {
             school_year: schoolYearParam
           },
           {
-            projection: { _id: 0, first: 1, second: 1, third: 1, fourth: 1, fifth: 1, total: 1 }
+            projection: { _id: 0, first: 1, second: 1, third: 1, fourth: 1, fifth: 1, total: 1, img_ids: 1 }
           }
         );
 
@@ -666,7 +656,7 @@ client.connect().then(() => {
             school_year: schoolYearParam
           },
           {
-            projection: { _id: 0, first: 1, second: 1, third: 1, fourth: 1, fifth: 1, total: 1 }
+            projection: { _id: 0, first: 1, second: 1, third: 1, fourth: 1, fifth: 1, total: 1, img_ids: 1 }
           }
         );
 
@@ -679,7 +669,7 @@ client.connect().then(() => {
             school_year: schoolYearParam
           },
           {
-            projection: { _id: 0, first: 1, second: 1, third: 1, fourth: 1, fifth: 1, total: 1 }
+            projection: { _id: 0, first: 1, second: 1, third: 1, fourth: 1, fifth: 1, total: 1, img_ids: 1 }
           }
         );
       nulltable = {
@@ -718,7 +708,10 @@ client.connect().then(() => {
       if (!depTotalScore) {
         depTotalScore = nulltable
       }
-
+      let link_img = [];
+      for (const i of studentTotalScore.img_ids) {
+        link_img.push(await server.getDriveFileLinkAndDescription(i));
+      }
       if (studentTotalScore) {
         res.render("sinhvien-view-grades", {
           header: "global-header",
@@ -726,7 +719,8 @@ client.connect().then(() => {
           footer: "global-footer",
           Scorestd: studentTotalScore,
           Score: stfTotalScore,
-          Scorek: depTotalScore
+          Scorek: depTotalScore,
+          img: link_img
         });
 
       }
@@ -754,6 +748,110 @@ client.connect().then(() => {
       thongbao: "global-notifications",
 
     });
+  });
+  app.get("/giaovien/nhapdiemdanhgia", checkIfUserLoginRoute, async (req, res) => {
+    res.render("teacher-manage-grades", {
+      header: "global-header",
+      thongbao: "global-notifications",
+      footer: "global-footer",
+
+
+    });
+    // try {
+    //   const user = req.session.user;
+    //   const mssv = req.query.studentId;
+    //   const schoolYearParam = req.query.schoolYear;
+    //   const studentTotalScore = await client.db(user.dep)
+    //     .collection(user.cls[0] + '_std_table')
+    //     .findOne(
+    //       {
+    //         mssv: mssv,
+    //         school_year: schoolYearParam
+    //       },
+    //       {
+    //         projection: { _id: 0, first: 1, second: 1, third: 1, fourth: 1, fifth: 1, total: 1 }
+    //       }
+    //     );
+
+    //   let stfTotalScore = await client.db(user.dep)
+    //     .collection(user.cls[0] + '_stf_table')
+    //     .findOne(
+    //       {
+    //         mssv: mssv,
+    //         school_year: schoolYearParam
+    //       },
+    //       {
+    //         projection: { _id: 0, first: 1, second: 1, third: 1, fourth: 1, fifth: 1, total: 1 }
+    //       }
+    //     );
+
+
+    //   let depTotalScore = await client.db(user.dep)
+    //     .collection(user.cls[0] + '_dep_table')
+    //     .findOne(
+    //       {
+    //         mssv: mssv,
+    //         school_year: schoolYearParam
+    //       },
+    //       {
+    //         projection: { _id: 0, first: 1, second: 1, third: 1, fourth: 1, fifth: 1, total: 1 }
+    //       }
+    //     );
+    //   nulltable = {
+    //     "fifth": [
+    //       'Chưa chấm',
+    //       'Chưa chấm',
+    //       'Chưa chấm',
+    //       'Chưa chấm'
+    //     ],
+    //     "first": [
+    //       'Chưa chấm',
+    //       'Chưa chấm',
+    //       'Chưa chấm',
+    //       'Chưa chấm',
+    //       'Chưa chấm'
+    //     ],
+    //     "fourth": [
+    //       'Chưa chấm',
+    //       'Chưa chấm',
+    //       'Chưa chấm'
+    //     ],
+    //     "second": [
+    //       'Chưa chấm',
+    //       'Chưa chấm'
+    //     ],
+    //     "third": [
+    //       'Chưa chấm',
+    //       'Chưa chấm',
+    //       'Chưa chấm'
+    //     ],
+    //     "total": 'Chưa chấm'
+    //   }
+    //   if (!stfTotalScore) {
+    //     stfTotalScore = nulltable
+    //   }
+    //   if (!depTotalScore) {
+    //     depTotalScore = nulltable
+    //   }
+
+    //   if (studentTotalScore) {
+    //     res.render("teacher-manage-grades", {
+    //       header: "global-header",
+    //       thongbao: "global-notifications",
+    //       footer: "global-footer",
+
+    //       Scorestd: studentTotalScore,
+    //       Score: stfTotalScore,
+    //       Scorek: depTotalScore
+    //     });
+
+    //   }
+    //   else { res.sendStatus(404); }
+    // } catch (err) {
+    //   console.log("SYSTEM | BAN_CAN_SU_NHAP_DIEM_ROUTE | ERROR | ", err)
+    //   res.status(500).json({ error: "Lỗi hệ thống" });
+    // }
+
   });
   // ban can su route
   app.get("/bancansu", checkIfUserLoginRoute, async (req, res) => {
@@ -879,210 +977,211 @@ client.connect().then(() => {
 
   // danh sach bang diem
   app.get("/bancansu/danhsachbangdiem", checkIfUserLoginRoute, async (req, res) => {
-    const user = req.session.user;
-    const school_year = await client.db(name_global_databases).collection('school_year').findOne(
-      {},
-      { projection: { _id: 0, year: 1 } }
-    );
-    // check user login:
-    if (user.pow[1]) {
-      const years = await client.db(name_global_databases).collection('classes').findOne(
-        { _id: user.cls[0] },
-        { projection: { _id: 0, years: 1 } }
+    try {
+      const user = req.session.user;
+      const school_year = await client.db(name_global_databases).collection('school_year').findOne(
+        {},
+        { projection: { _id: 0, year: 1 } }
       );
+      // check user login:
+      if (user.pow[1]) {
+        const years = await client.db(name_global_databases).collection('classes').findOne(
+          { _id: user.cls[0] },
+          { projection: { _id: 0, years: 1 } }
+        );
 
-      // get all student in staff member class:
-      let student_list = await client.db(name_global_databases).collection('user_info').find(
-        { class: user.cls[0] },
-        { projection: { first_name: 1, last_name: 1 } })
-        .toArray();
-      student_list = sortStudentName(student_list);
+        // get all student in staff member class:
+        let student_list = await client.db(name_global_databases).collection('user_info').find(
+          { class: user.cls[0] },
+          { projection: { first_name: 1, last_name: 1 } })
+          .toArray();
+        student_list = sortStudentName(student_list);
 
-      // get all student total score from themself:
-      let render = {
-        header: "global-header",
-        footer: "global-footer",
-        thongbao: "global-notifications",
-        staff_name: [],
-        student_list: student_list,
-        student_scores: [],
-        staff_scores: [],
-        department_scores: [],
-        cls: user.cls,
-        years: years.years,
-        curr_year: school_year.year
-      }
+        // get all student total score from themself:
+        let render = {
+          header: "global-header",
+          footer: "global-footer",
+          thongbao: "global-notifications",
+          staff_name: [],
+          student_list: student_list,
+          student_scores: [],
+          staff_scores: [],
+          department_scores: [],
+          cls: user.cls,
+          years: years.years,
+          curr_year: school_year.year
+        }
 
-      for (student of student_list) {
-        const curr_student_score = await client.db(user.dep)
-          .collection(user.cls[0] + '_std_table')
-          .findOne(
-            {
-              mssv: student._id,
-              school_year: school_year.year
-            },
-            {
-              projection: { total: 1 }
-            }
-          );
-        const curr_staff_score = await client.db(user.dep)
-          .collection(user.cls[0] + '_stf_table')
-          .findOne(
-            {
-              mssv: student._id,
-              school_year: school_year.year
-            },
-            {
-              projection: {
-                total: 1,
-                marker: 1
+        for (student of student_list) {
+          const curr_student_score = await client.db(user.dep)
+            .collection(user.cls[0] + '_std_table')
+            .findOne(
+              {
+                mssv: student._id,
+                school_year: school_year.year
+              },
+              {
+                projection: { total: 1 }
               }
-            }
-          );
-        const curr_department_score = await client.db(user.dep)
-          .collection(user.cls[0] + '_dep_table')
-          .findOne(
-            {
-              mssv: student._id,
-              school_year: school_year.year
-            },
-            {
-              projection: { total: 1 }
-            }
-          );
-        // student
-        if (curr_student_score) {
-          render.student_scores.push(curr_student_score.total);
-        } else {
-          render.student_scores.push('-');
+            );
+          const curr_staff_score = await client.db(user.dep)
+            .collection(user.cls[0] + '_stf_table')
+            .findOne(
+              {
+                mssv: student._id,
+                school_year: school_year.year
+              },
+              {
+                projection: {
+                  total: 1,
+                  marker: 1
+                }
+              }
+            );
+          const curr_department_score = await client.db(user.dep)
+            .collection(user.cls[0] + '_dep_table')
+            .findOne(
+              {
+                mssv: student._id,
+                school_year: school_year.year
+              },
+              {
+                projection: { total: 1 }
+              }
+            );
+          // student
+          if (curr_student_score) {
+            render.student_scores.push(curr_student_score.total);
+          } else {
+            render.student_scores.push('-');
+          }
+          // staff member
+          if (curr_staff_score) {
+            render.staff_scores.push(curr_staff_score.total);
+            render.staff_name.push(curr_staff_score.marker);
+          } else {
+            render.staff_scores.push('-');
+            render.staff_name.push('-');
+          }
+          // department
+          if (curr_department_score) {
+            render.department_scores.push(curr_department_score.total);
+          } else {
+            render.department_scores.push('-');
+          }
         }
-        // staff member
-        if (curr_staff_score) {
-          render.staff_scores.push(curr_staff_score.total);
-          render.staff_name.push(curr_staff_score.marker);
-        } else {
-          render.staff_scores.push('-');
-          render.staff_name.push('-');
-        }
-        // department
-        if (curr_department_score) {
-          render.department_scores.push(curr_department_score.total);
-        } else {
-          render.department_scores.push('-');
-        }
+
+        res.render("bancansu-grade-list", render);
       }
-
-      res.render("bancansu-grade-list", render);
-    }
-    else { // user not staff members 
-      // redirect to home
-      return res.redirect('/');
-    }
-
+      else { // user not staff members 
+        // redirect to home
+        return res.redirect('/');
+      }
+    } catch (e) { console.log("SYSTEM | BAN_CAN_SU_DANH_SACH_BANG_DIEM | ERROR | ", e); }
   });
-
-  // danh sach bang diem khoa
-  app.get("/doan_khoa/danhsachbangdiem", checkIfUserLoginRoute, async (req, res) => {
-    const user = req.session.user;
-    const school_year = await client.db(name_global_databases).collection('school_year').findOne(
-      {},
-      { projection: { _id: 0, year: 1 } }
-    );
-    // check user login:
-    if (user.pow[1]) {
-      const years = await client.db(name_global_databases).collection('classes').findOne(
-        { _id: user.cls[0] },
-        { projection: { _id: 0, years: 1 } }
+  // danh sach bang diem co van
+  app.get("/giaovien/danhsachbangdiem", checkIfUserLoginRoute, async (req, res) => {
+    try {
+      const user = req.session.user;
+      const school_year = await client.db(name_global_databases).collection('school_year').findOne(
+        {},
+        { projection: { _id: 0, year: 1 } }
       );
+      // check user login:
+      if (user.pow[1]) {
+        const years = await client.db(name_global_databases).collection('classes').findOne(
+          { _id: user.cls[0] },
+          { projection: { _id: 0, years: 1 } }
+        );
 
-      // get all student in staff member class:
-      let student_list = await client.db(name_global_databases).collection('user_info').find(
-        { class: user.cls[0] },
-        { projection: { first_name: 1, last_name: 1 } })
-        .toArray();
-      student_list = sortStudentName(student_list);
+        // get all student in staff member class:
+        let student_list = await client.db(name_global_databases).collection('user_info').find(
+          { class: user.cls[0] },
+          { projection: { first_name: 1, last_name: 1 } })
+          .toArray();
+        student_list = sortStudentName(student_list);
 
-      // get all student total score from themself:
-      let render = {
-        header: "global-header",
-        footer: "global-footer",
-        thongbao: "global-notifications",
-        staff_name: [],
-        student_list: student_list,
-        student_scores: [],
-        staff_scores: [],
-        department_scores: [],
-        cls: user.cls,
-        years: years.years,
-        curr_year: school_year.year
-      }
+        // get all student total score from themself:
+        let render = {
+          header: "global-header",
+          footer: "global-footer",
+          thongbao: "global-notifications",
+          staff_name: [],
+          student_list: student_list,
+          student_scores: [],
+          staff_scores: [],
+          department_scores: [],
+          cls: user.cls,
+          years: years.years,
+          curr_year: school_year.year
+        }
 
-      for (student of student_list) {
-        const curr_student_score = await client.db(user.dep)
-          .collection(user.cls[0] + '_std_table')
-          .findOne(
-            {
-              mssv: student._id,
-              school_year: school_year.year
-            },
-            {
-              projection: { total: 1 }
-            }
-          );
-        const curr_staff_score = await client.db(user.dep)
-          .collection(user.cls[0] + '_stf_table')
-          .findOne(
-            {
-              mssv: student._id,
-              school_year: school_year.year
-            },
-            {
-              projection: {
-                total: 1,
-                marker: 1
+        for (student of student_list) {
+          const curr_student_score = await client.db(user.dep)
+            .collection(user.cls[0] + '_std_table')
+            .findOne(
+              {
+                mssv: student._id,
+                school_year: school_year.year
+              },
+              {
+                projection: { total: 1 }
               }
-            }
-          );
-        const curr_department_score = await client.db(user.dep)
-          .collection(user.cls[0] + '_dep_table')
-          .findOne(
-            {
-              mssv: student._id,
-              school_year: school_year.year
-            },
-            {
-              projection: { total: 1 }
-            }
-          );
-        // student
-        if (curr_student_score) {
-          render.student_scores.push(curr_student_score.total);
-        } else {
-          render.student_scores.push('-');
+            );
+          const curr_staff_score = await client.db(user.dep)
+            .collection(user.cls[0] + '_stf_table')
+            .findOne(
+              {
+                mssv: student._id,
+                school_year: school_year.year
+              },
+              {
+                projection: {
+                  total: 1,
+                  marker: 1
+                }
+              }
+            );
+          const curr_department_score = await client.db(user.dep)
+            .collection(user.cls[0] + '_dep_table')
+            .findOne(
+              {
+                mssv: student._id,
+                school_year: school_year.year
+              },
+              {
+                projection: { total: 1 }
+              }
+            );
+          // student
+          if (curr_student_score) {
+            render.student_scores.push(curr_student_score.total);
+          } else {
+            render.student_scores.push('-');
+          }
+          // staff member
+          if (curr_staff_score) {
+            render.staff_scores.push(curr_staff_score.total);
+            render.staff_name.push(curr_staff_score.marker);
+          } else {
+            render.staff_scores.push('-');
+            render.staff_name.push('-');
+          }
+          // department
+          if (curr_department_score) {
+            render.department_scores.push(curr_department_score.total);
+          } else {
+            render.department_scores.push('-');
+          }
         }
-        // staff member
-        if (curr_staff_score) {
-          render.staff_scores.push(curr_staff_score.total);
-          render.staff_name.push(curr_staff_score.marker);
-        } else {
-          render.staff_scores.push('-');
-          render.staff_name.push('-');
-        }
-        // department
-        if (curr_department_score) {
-          render.department_scores.push(curr_department_score.total);
-        } else {
-          render.department_scores.push('-');
-        }
+
+        res.render("teacher-grade-list", render);
       }
-
-      res.render("doankhoa-grade-list", render);
-    }
-    else { // user not staff members 
-      // redirect to home
-      return res.redirect('/');
-    }
-
+      else { // user not staff members 
+        // redirect to home
+        return res.redirect('/');
+      }
+    } catch (e) { console.log("SYSTEM | BAN_CAN_SU_DANH_SACH_BANG_DIEM | ERROR | ", e); }
   });
 
   // doan khoa route
@@ -1128,122 +1227,140 @@ client.connect().then(() => {
     res.render("doankhoa-manage-departments", {
       header: "global-header",
       footer: "global-footer",
+      menu: "doankhoa_menu",
       thongbao: 'global-notifications',
       dep: dep_name.name, // every branch have same department
       branchs: branchs
     });
   });
 
-  //  khoa danh sach bang diem 
-  // app.get("/doan_khoa/khoadanhsachbangdiem", checkIfUserLoginRoute, async (req, res) => {
-  //   const user = req.session.user;
-  //   const school_year = await client.db(name_global_databases).collection('school_year').findOne(
-  //     {},
-  //     { projection: { _id: 0, year: 1 } }
-  //   );
-  //   // check user login:
-  //   if (user.pow[1]) {
-  //     const years = await client.db(name_global_databases).collection('classes').findOne(
-  //       { _id: user.cls[0] },
-  //       { projection: { _id: 0, years: 1 } }
-  //     );
-
-  //     // get all student in staff member class:
-  //     let student_list = await client.db(name_global_databases).collection('user_info').find(
-  //       { class: user.cls[0] },
-  //       { projection: { first_name: 1, last_name: 1 } })
-  //       .toArray();
-  //     student_list = sortStudentName(student_list);
-
-  //     // get all student total score from themself:
-  //     let render = {
-  //       header: "global-header",
-  //       footer: "global-footer",
-  //       thongbao: "global-notifications",
-  //       staff_name: [],
-  //       student_list: student_list,
-  //       student_scores: [],
-  //       staff_scores: [],
-  //       department_scores: [],
-  //       cls: user.cls,
-  //       years: years.years,
-  //       curr_year: school_year.year
-  //     }
-
-  //     for (student of student_list) {
-  //       const curr_student_score = await client.db(user.dep)
-  //         .collection(user.cls[0] + '_std_table')
-  //         .findOne(
-  //           {
-  //             mssv: student._id,
-  //             school_year: school_year.year
-  //           },
-  //           {
-  //             projection: { total: 1 }
-  //           }
-  //         );
-  //       const curr_staff_score = await client.db(user.dep)
-  //         .collection(user.cls[0] + '_stf_table')
-  //         .findOne(
-  //           {
-  //             mssv: student._id,
-  //             school_year: school_year.year
-  //           },
-  //           {
-  //             projection: {
-  //               total: 1,
-  //               marker: 1
-  //             }
-  //           }
-  //         );
-  //       const curr_department_score = await client.db(user.dep)
-  //         .collection(user.cls[0] + '_dep_table')
-  //         .findOne(
-  //           {
-  //             mssv: student._id,
-  //             school_year: school_year.year
-  //           },
-  //           {
-  //             projection: { total: 1 }
-  //           }
-  //         );
-  //       // student
-  //       if (curr_student_score) {
-  //         render.student_scores.push(curr_student_score.total);
-  //       } else {
-  //         render.student_scores.push('-');
-  //       }
-  //       // staff member
-  //       if (curr_staff_score) {
-  //         render.staff_scores.push(curr_staff_score.total);
-  //         render.staff_name.push(curr_staff_score.marker);
-  //       } else {
-  //         render.staff_scores.push('-');
-  //         render.staff_name.push('-');
-  //       }
-  //       // department
-  //       if (curr_department_score) {
-  //         render.department_scores.push(curr_department_score.total);
-  //       } else {
-  //         render.department_scores.push('-');
-  //       }
-  //     }
-
-  //     res.render("bancansu-grade-list", render);
-  //   }
-  //   else { // user not staff members 
-  //     // redirect to home
-  //     return res.redirect('/');
-  //   }
-
-  // });
-
   // quan li lop - doan khoa route
   app.get("/doan_khoa/quan_li_lop", checkIfUserLoginRoute, async (req, res) => {
     res.render("doankhoa-manage-classes", {
       header: "global-header",
       footer: "global-footer",
+      menu: "doankhoa_menu",
     });
+  });
+
+  // danh sach bang diem khoa
+  app.get("/doan_khoa/danhsachbangdiem", checkIfUserLoginRoute, async (req, res) => {
+    try {
+      const user = req.session.user;
+      const school_year = await client.db(name_global_databases).collection('school_year').findOne(
+        {},
+        { projection: { _id: 0, year: 1 } }
+      );
+      // check user login:
+      if (user.pow[2]) {
+
+        const depkhoa = await client.db(name_global_databases).collection('user_info').findOne(
+          { _id: user._id },
+          { projection: { _id: 0, dep: 1 } }
+        );
+        let branch_list = await client.db(name_global_databases).collection('branchs').find(
+          { dep: depkhoa.dep },
+          { projection: { _id: 1, name: 1 } })
+          .toArray();
+        const classlist = await client.db(name_global_databases).collection('classes').find(
+          { branch: { $in: branch_list.map(branch => branch._id) } },
+          { projection: { _id: 1, branch: 1 } }
+        ).toArray();
+        const years = await client.db(name_global_databases).collection('classes').findOne(
+          { _id: classlist[0]._id },
+          { projection: { _id: 0, years: 1 } }
+        );
+        // get all student in staff member class:
+        let student_list = await client.db(name_global_databases).collection('user_info').find(
+          { class: classlist[0]._id },
+          { projection: { first_name: 1, last_name: 1 } })
+          .toArray();
+        student_list = sortStudentName(student_list);
+
+        // get all student total score from themself:
+        let render = {
+          header: "global-header",
+          footer: "global-footer",
+          thongbao: "global-notifications",
+          menu: "doankhoa_menu",
+          staff_name: [],
+          student_list: student_list,
+          student_scores: [],
+          staff_scores: [],
+          department_scores: [],
+          cls: classlist,
+          years: years.years,
+          curr_year: school_year.year,
+          branch: branch_list,
+        }
+
+        for (student of student_list) {
+          const curr_student_score = await client.db(user.dep)
+            .collection(classlist[0]._id + '_std_table')
+            .findOne(
+              {
+                mssv: student._id,
+                school_year: school_year.year
+              },
+              {
+                projection: { total: 1 }
+              }
+            );
+          const curr_staff_score = await client.db(user.dep)
+            .collection(classlist[0]._id + '_stf_table')
+            .findOne(
+              {
+                mssv: student._id,
+                school_year: school_year.year
+              },
+              {
+                projection: {
+                  total: 1,
+                  marker: 1
+                }
+              }
+            );
+          const curr_department_score = await client.db(user.dep)
+            .collection(classlist[0]._id + '_dep_table')
+            .findOne(
+              {
+                mssv: student._id,
+                school_year: school_year.year
+              },
+              {
+                projection: { total: 1 }
+              }
+            );
+          // student
+          if (curr_student_score) {
+            render.student_scores.push(curr_student_score.total);
+          } else {
+            render.student_scores.push('-');
+          }
+          // staff member
+          if (curr_staff_score) {
+            render.staff_scores.push(curr_staff_score.total);
+            render.staff_name.push(curr_staff_score.marker);
+          } else {
+            render.staff_scores.push('-');
+            render.staff_name.push('-');
+          }
+          // department
+          if (curr_department_score) {
+            render.department_scores.push(curr_department_score.total);
+          } else {
+            render.department_scores.push('-');
+          }
+        }
+
+        res.render("doankhoa-grade-list", render);
+      }
+      else { // user not staff members 
+        // redirect to home
+        return res.redirect('/');
+      }
+    }
+    catch (e) { console.log("SYSTEM | DOAN_KHOA_DANH_SACH_BANG_DIEM | ERROR | ", e); }
   });
 
   //quan li co van - doan khoa route
@@ -1292,6 +1409,7 @@ client.connect().then(() => {
         header: "global-header",
         footer: "global-footer",
         thongbao: "global-notifications",
+        menu: "doankhoa_menu",
         teachers: teachers,
         branchs: branch_list,
         all_branchs: all_branchs
@@ -1308,6 +1426,9 @@ client.connect().then(() => {
     res.render("doankhoa-manage-activities", {
       header: "global-header",
       footer: "global-footer",
+      menu: "doankhoa_menu",
+
+
     });
   })
   // danh sach sinh vien // ông đổi lại vụ class nha liên hệ NBM để biết thêm chi tiết
@@ -1317,7 +1438,9 @@ client.connect().then(() => {
       res.render("doankhoa-student-list", {
         header: "global-header",
         footer: "global-footer",
-        thongbao: "global-notifications"
+        thongbao: "global-notifications",
+        menu: "doankhoa_menu",
+
       });
     } else {
       return res.redirect('/');
@@ -1407,6 +1530,8 @@ client.connect().then(() => {
           header: "global-header",
           thongbao: "global-notifications",
           footer: "global-footer",
+          menu: "doankhoa_menu",
+
           Scorestd: studentTotalScore,
           Score: stfTotalScore,
           Scorek: depTotalScore
@@ -1447,6 +1572,8 @@ client.connect().then(() => {
       header: "global-header",
       thongbao: "global-notifications",
       footer: "global-footer",
+      menu: "doankhoa_menu",
+
       school_year: school_year,
       cbx: cbx
     })
@@ -1488,20 +1615,22 @@ client.connect().then(() => {
             { _id: data.mssv },
             { projection: { _id: 0, class: 1, power: 1 } }
           );
-          const branch = await client.db(name_global_databases).collection('classes').findOne(
-            { _id: cls.class[0] },
-            { projection: { _id: 0, branch: 1 } }
-          );
-          if (branch) {
-            const dep = await client.db(name_global_databases).collection('branchs').findOne(
-              { _id: branch.branch },
-              { projection: { _id: 0, dep: 1 } }
+          if (!cls.power[2]) {
+            const branch = await client.db(name_global_databases).collection('classes').findOne(
+              { _id: cls.class[0] },
+              { projection: { _id: 0, branch: 1 } }
             );
+            if (branch) {
+              const dep = await client.db(name_global_databases).collection('branchs').findOne(
+                { _id: branch.branch },
+                { projection: { _id: 0, dep: 1 } }
+              );
 
-            user.dep = dep.dep;
+              user.dep = dep.dep;
 
+            }
+            user.cls = cls.class;
           }
-          user.cls = cls.class;
           user.pow = cls.power;
           // Đăng nhập thành công, lưu thông tin người dùng vào phiên
           req.session.user = user;
@@ -1825,10 +1954,12 @@ client.connect().then(() => {
       return res.status(400).send('No file uploaded.');
     }
     let list_name = [];
-
+    let list_dep = [];
     // Kiểm tra kiểu dữ liệu của các tệp
     for (let i = 0; i < req.files.length; i++) {
       const fileName = req.files[i].originalname;
+      const fileDescription = req.body.descripts[i]; // Trích xuất mô tả tương ứng từ danh sách descripts[]
+      list_dep.push(fileDescription);
       list_name.push(fileName);
 
     }
@@ -1836,7 +1967,7 @@ client.connect().then(() => {
     // Xử lý các tệp đã tải lên ở đây
     // console.log('SYSTEM | UPLOAD_FILE | Files uploaded:', req.files);
     res.writeHead(200, { 'Content-Type': 'applicaiton/json' });
-    res.end(JSON.stringify(await get_full_id(uploadDirectory, list_name)));
+    res.end(JSON.stringify(await get_full_id(uploadDirectory, list_name, list_dep)));
   });
 
   // Create new account -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2265,7 +2396,126 @@ client.connect().then(() => {
       res.sendStatus(500);
     }
   });
+  // doan khoa load scores
+  app.get("/api/doan_khoa/loadScoresList", checkIfUserLoginAPI, async (req, res) => {
+    try {
+      const user = req.session.user;
+      const data = req.query;
+      //data = {year: "HK1_2022-2023", cls: "1"}
+      const school_year = data.year;
+      const cls = data.class;
+      console.log(cls)
+      // const bo_mon = data.bo_mon;
+      // check for post data.cls if class define this mean they choose class so that must
+      if (!cls) {
+        cls = 0;
+      }
 
+      const year_available = await client.db(name_global_databases).collection('school_year').findOne(
+        {},
+        {
+          projection: {
+            _id: 0,
+            year: 1,
+            start_day: 1,
+            end_day: 1
+          }
+        });
+
+      if (user.pow[1]) {
+        const student_list = sortStudentName(await client.db(name_global_databases).collection('user_info').find(
+          { class: user.cls[cls], "power.0": { $exists: true } },
+          { projection: { first_name: 1, last_name: 1 } })
+          .toArray());
+
+          console.log(student_list)
+
+        // get all student total score from themself:
+        let result = {
+          staff_name: [],
+          student_list: student_list,
+          student_scores: [],
+          staff_scores: [],
+          department_scores: [],
+          year_available: year_available
+        }
+        for (student of student_list) {
+          const curr_student_score = await client.db(user.dep)
+            .collection(user.cls[parseInt(cls)] + '_std_table')
+            .findOne(
+              {
+                mssv: student._id,
+                school_year: school_year
+              },
+              {
+                projection: {
+                  _id: 0,
+                  total: 1
+                }
+              }
+            );
+          const curr_staff_score = await client.db(user.dep)
+            .collection(user.cls[parseInt(cls)] + '_stf_table')
+            .findOne(
+              {
+                mssv: student._id,
+                school_year: school_year
+              },
+              {
+                projection: {
+                  _id: 0,
+                  total: 1,
+                  marker: 1
+                }
+              }
+            );
+          const curr_departmentt_score = await client.db(user.dep)
+            .collection(user.cls[parseInt(cls)] + '_dep_table')
+            .findOne(
+              {
+                mssv: student._id,
+                school_year: school_year
+              },
+              {
+                projection: {
+                  _id: 0,
+                  total: 1
+                }
+              }
+            );
+          // student
+          if (curr_student_score) {
+            result.student_scores.push(curr_student_score.total);
+          } else {
+            result.student_scores.push('-');
+          }
+          // staff member
+          if (curr_staff_score) {
+            result.staff_scores.push(curr_staff_score.total);
+            result.staff_name.push(curr_staff_score.marker);
+          } else {
+            result.staff_scores.push('-');
+            result.staff_name.push('-');
+          }
+          // department
+          if (curr_departmentt_score) {
+            result.department_scores.push(curr_departmentt_score.total);
+          } else {
+            result.department_scores.push('-');
+          }
+        }
+
+        res.status(200).json(result);
+      }
+      else { // user not staff members 
+        // redirect to home
+        return res.redirect('/');
+      }
+    } catch (err) {
+      console.log("SYSTEM | LOAD_SCORE_LIST | ERROR | ", err);
+      res.sendStatus(500);
+    }
+  });
   // Auto mark (copy student mark to staff mark)
   app.post("/api/autoMark", checkIfUserLoginAPI, async (req, res) => {
     try {
@@ -2285,7 +2535,6 @@ client.connect().then(() => {
           }
         }
       );
-
       // check for post data.cls if class define this mean they choose class so that must
       if (!cls) {
         cls = 0;
@@ -2305,7 +2554,7 @@ client.connect().then(() => {
         // copy from student table and add marker name
         if (std_table) {
           std_table.marker = marker.last_name + " " + marker.first_name
-
+          delete std_table._id;
           await client.db(user.dep).collection(user.cls[parseInt(cls)] + '_stf_table').updateOne(
             {
               mssv: data.std_list[i],

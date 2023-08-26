@@ -25,18 +25,8 @@ const client = new MongoClient(uri, {
 // ).then((ok) => { console.log(ok); })
 
 client.db('global').collection('user_info').find(
-    { 
-      "power.4" : { $exists : true },
-      "power.1" : { $exists : true }
-    }, // user is teacher
-    {
-      projection: {
-        first_name: 1,
-        last_name: 1,
-        class: 1,
-        branch: 1
-      }
-    }
+  { dep: user.dep },
+  { projection: { _id: 1, name: 0, dep: 0 } }
   ).toArray().then((ok) => { console.log(ok); });
 // client.db('global').collection('user_info').updateOne(
 //     { _id: '2101111' },

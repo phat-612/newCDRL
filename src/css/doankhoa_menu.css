@@ -8,11 +8,12 @@
     font-size: 20px;
   }
   details {
-    margin: 40px;
+    margin-left: 40px;
     position: fixed;
 
   }
   summary {
+    position: relative;
     writing-mode: vertical-lr;
     text-align: center;
     padding: 12px 10px;
@@ -21,11 +22,17 @@
     background-color: var(--primColor);
     border: 2px solid var(--secoColor);
     border-radius: var(--cornerRad);
-    color: var(--secoColor);
+    color: var(--black-color);
     cursor: pointer;
     user-select: none;
     outline: none;
     transition: transform 200ms ease-in-out 0s;
+  }
+  summary i{
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    color: var(--black-color);
   }
   summary::before,
   summary::after {
@@ -36,10 +43,10 @@
   summary::before {
     content: "";
   }
-  summary::after {
+  /* summary::after {
     content: "III";
     letter-spacing: -1px;
-  }
+  } */
   summary:hover {
     transform: scale(1.1);
   }
@@ -52,12 +59,7 @@
   details[open] .menu {
     animation-name: menuAnim;
   }
-  details[open] summary::before {
-    content: "X";
-  }
-  details[open] summary::after {
-    content: "";
-  }
+  
   .menu {
     font-size: 1.8rem;
     height: 0;
@@ -75,7 +77,7 @@
   .menu .menu_item {
     padding: 10px 20px;
     /* margin: 0 16px; */
-    color: var(--secoColor);
+    color: var(--black-color);
     border-bottom: 2px solid rgba(0, 0, 0, 0.1);
     text-decoration: none;
     /* text-align: center; */
@@ -89,10 +91,10 @@
     border-bottom: none;
   } */
   .menu a:hover,.lop_item_more:hover,.menu_item span:hover {
-    color: aqua;
+    color: rgb(54, 11, 182);
   }
   .lop_item_more a{
-    color: var(--secoColor);
+    color: var(--black-color);
     text-decoration: none;
   }
   .menu_item_more span{

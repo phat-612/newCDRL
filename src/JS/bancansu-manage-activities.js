@@ -10,7 +10,7 @@ $(".modal_wrap.edit").click(function (e) {
   e.stopPropagation();
 });
 
-$("#add-activity").click(function () {
+$("#add__activity").click(function () {
   $(".modal.add").show();
 });
 

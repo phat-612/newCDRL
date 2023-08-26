@@ -389,6 +389,18 @@ td a:hover {
   font-weight: 600;
 }
 
+.content_top{
+  text-align: center;
+}
+.content_top h2{
+  border-bottom: 1px solid;
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    background: rgb(27 87 198);
+    border-radius: 0.8rem;
+    color: #ffffff;
+    padding: 1rem;
+}
 
 
 

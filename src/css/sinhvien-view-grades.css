@@ -304,6 +304,24 @@ html {
   .mdl-js {
     background-color: var(--html-color);
   }
+
+  .main_img{
+    margin-top: 5rem;
+    padding: 0 2rem;
+  }
+.main_img_list{
+  margin-top: 3rem;
+}
+  .main_img_item{
+    text-align: center;
+    font-size: 2rem;
+    padding-bottom: 2rem;
+  }
+  .main_img_item img{
+    border: 1px solid ;
+    margin-bottom: 1rem;
+    width: 300px;
+  }
   
   
 
