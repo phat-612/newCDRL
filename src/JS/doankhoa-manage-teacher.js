@@ -2,6 +2,7 @@ let curr_edit;
 let old_id;
 let new_id;
 
+
 $(document).on("click", "#edit__class", async function () {
   // get old name (here to change old name every time new edit row)
   old_id = $(this).parent().parent().find('.inp-cbx').val();
@@ -64,82 +65,85 @@ $(".save_btn").click(async function () {
     const new_name = $(this).parent().parent().parent().find('.name--input').val();
     const acc = $(this).parent().parent().parent().find('.account--input').val();
     const curr_branchs = $(this).parent().parent().parent().find('#select-level :selected');
-    
-    // check does input id exist is not
-    $('.normal-cbx').each(function () {
-      if ($(this).val() == acc) { // check have same id with existed ids
-        notify('!', 'ID đã tồn tại!');
-        // end function and not request
-        return;
-      }
-    });
-
-    // disable curr button
-    $(this).prop('disabled', true);
-
-    // find input
-    $('.modal').each(function () {
-      if ($(this).is(":visible")) {
-        // get new name
-        new_id = $(this).find('.account--input').val();
+    let found = false// check variable
+    // check does input id exist or not
+    $('.normal-cbx').each(async function (index) {
+      // check have same id with existed ids
+      if ($(this).val() == acc) {
+        found = true
       }
     })
 
-
-    notify('!', 'Đang cập nhật dữ liệu!');
-
-    // request
-    const requestOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        old_id: old_id,
-        new_id: new_id,
-        new_name: new_name,
-        branch: curr_branchs.val()
+    if (found) {
+      notify('!', 'Tên đăng nhập đã tồn tại!');
+    } else {
+      // disable curr button
+      $(this).prop('disabled', true);
+  
+      // find input
+      $('.modal').each(function () {
+        if ($(this).is(":visible")) {
+          // get new name
+          new_id = $(this).find('.account--input').val();
+        }
       })
-    };
-
-    const response = await fetch('/api/addOrEditTeachers', requestOptions);
-    if (response.ok) {
-      if (curr_edit) {
-        // set current edit line to new version
-        curr_edit.find('.inp-cbx').val(new_id)
-        curr_edit.find('.t_name').text(new_name);
-        curr_edit.find('.b_name').text(curr_branchs.text());
-      } else {
-        let length = $('table tbody tr').length;
-        $('table tbody').append(`
-          <tr>
-          <td>
-            <div class="checkbox-wrapper-4">
-              <input type="checkbox" id="row--${length}" class="inp-cbx" value="${new_id}" />
-              <label for="row--${length}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-              </label>
-            </div>
-          </td>
-          <td>${length + 1}</td>
-          <td class="t_name">${new_name}</td>
-          <td class="b_name">${curr_branchs.text()}</td>
-          <td></td>
-          <td>
-            <a id="edit__class" href="#">Sửa</a>
-          </td>
-        </tr>
-        `)
+  
+  
+      notify('!', 'Đang cập nhật dữ liệu!');
+  
+      request
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          old_id: old_id,
+          new_id: new_id,
+          new_name: new_name,
+          branch: curr_branchs.val()
+        })
+      };
+  
+      const response = await fetch('/api/addOrEditTeachers', requestOptions);
+      if (response.ok) {
+        if (curr_edit) {
+          // set current edit line to new version
+          curr_edit.find('.inp-cbx').val(new_id)
+          curr_edit.find('.t_name').text(new_name);
+          curr_edit.find('.b_name').text(curr_branchs.text());
+        } else {
+          let length = $('table tbody tr').length;
+          $('table tbody').append(`
+            <tr>
+            <td>
+              <div class="checkbox-wrapper-4">
+                <input type="checkbox" id="row--${length}" class="inp-cbx" value="${new_id}" />
+                <label for="row--${length}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                </label>
+              </div>
+            </td>
+            <td>${length + 1}</td>
+            <td class="t_name">${new_name}</td>
+            <td class="b_name">${curr_branchs.text()}</td>
+            <td></td>
+            <td>
+              <a id="edit__class" href="#">Sửa</a>
+            </td>
+          </tr>
+          `)
+        }
+        // able curr button
+        $(this).prop('disabled', false);
+        // disappear curr dialog 
+        $(".modal.add").hide();
+        $(".modal.edit").hide();
+        notify('n', 'Đã hoàn tất cập nhật giáo viên.')
       }
-      // able curr button
-      $(this).prop('disabled', false);
-      // disappear curr dialog 
-      $(".modal.add").hide();
-      $(".modal.edit").hide();
-      notify('n', 'Đã hoàn tất cập nhật giáo viên.')
-    }
-    else if (response.status == 500) {
-      // Error occurred during upload
-      notify('x', 'Có lỗi xảy ra!');
+      else if (response.status == 500) {
+        // Error occurred during upload
+        notify('x', 'Có lỗi xảy ra!');
+      }
     }
   } else {
     notify('!', 'Hãy nhập đầy đủ thông tin!');
