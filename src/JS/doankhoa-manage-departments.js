@@ -78,6 +78,8 @@ $("#delete__subject").click(async function () {
       notify('n', 'Đã xóa các bộ môn đc đánh dấu')
     }
     else if (response.status == 500) {
+      // able curr button
+      $(this).prop('disabled', false);
       // Error occurred during upload
       notify('x', 'Có lỗi xảy ra!');
     }
@@ -161,6 +163,11 @@ $(".save_btn").click(async function () {
       notify('n', 'Đã hoàn tất cập nhật bộ môn');
     }
     else if (response.status == 500) {
+      // able curr button
+      $(this).prop('disabled', false);
+      // disappear curr dialog 
+      $(".modal.add").hide();
+      $(".modal.edit").hide();
       // Error occurred during upload
       notify('x', 'Có lỗi xảy ra!');
     }
