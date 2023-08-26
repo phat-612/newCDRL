@@ -1,42 +1,42 @@
-let curr_tb_year = "HK" + $(".selectbox--hocky select option:selected").text().trim() + "_" + $(".nien_khoa select option:selected").text().trim()  + "_" + $(".--bomon select option:selected").text()  + "_" + $(".--class select option:selected").text();
+let curr_tb_year = "HK" + $(".selectbox--hocky select option:selected").text().trim() + "_" + $(".nien_khoa select option:selected").text().trim();
 console.log(branch_list);
 console.log(class_list);
 
-$(document).on("change", ".--bomon select", async function (){
- const selectedBranch = $(".--bomon select option:selected").text().trim()
-//  const selectedBranch = "Công Nghệ Thông Tin";
-let selectedBranchId;
-let selectedClassName
-let classList = []
-for (let i = 0; i < branch_list.length; i++) {
-  if (branch_list[i].name === selectedBranch) {
-    selectedBranchId = branch_list[i]._id;
-    break;
+$(document).on("change", ".--bomon select", async function () {
+  const selectedBranch = $(".--bomon select option:selected").text().trim()
+  //  const selectedBranch = "Công Nghệ Thông Tin";
+  let selectedBranchId;
+  let selectedClassName
+  let classList = []
+  for (let i = 0; i < branch_list.length; i++) {
+    if (branch_list[i].name === selectedBranch) {
+      selectedBranchId = branch_list[i]._id;
+      break;
+    }
   }
-}
-for (let i = 0; i < class_list.length; i++) {
-  if (class_list[i].branch === selectedBranchId) {
-    console.log('hahahaa')
-    selectedClassName = class_list[i]._id;
-    classList.push(selectedClassName)
+  for (let i = 0; i < class_list.length; i++) {
+    if (class_list[i].branch === selectedBranchId) {
+      console.log('hahahaa')
+      selectedClassName = class_list[i]._id;
+      classList.push(selectedClassName)
+    }
   }
-}
 
-const selectElement = $(".--class select"); // Lấy thẻ select bằng jQuery
-// Xóa các phần tử hiện có trong select
-selectElement.empty();
-// Tạo các phần tử option từ mảng branch_list và thêm vào select
-$.each(classList, function(index, branch) {
-  const option = $("<option></option>");
-  option.val(branch);
-  option.text(branch);
-  selectElement.append(option);
-});
-console.log(selectedBranchId);
-console.log(selectedBranch);
-console.log(classList);
+  const selectElement = $(".--class select"); // Lấy thẻ select bằng jQuery
+  // Xóa các phần tử hiện có trong select
+  selectElement.empty();
+  // Tạo các phần tử option từ mảng branch_list và thêm vào select
+  $.each(classList, function (index, branch) {
+    const option = $("<option></option>");
+    option.val(branch);
+    option.text(branch);
+    selectElement.append(option);
+  });
+  console.log(selectedBranchId);
+  console.log(selectedBranch);
+  console.log(classList);
 
-})  
+})
 
 $(document).on("click", ".export_btn", async function () {
   // disabled button until it done start down load
@@ -84,7 +84,7 @@ $(document).on("click", ".auto_mark_btn", async function () {
   try {
     // get all student was check
     let mssv_list = []
-    $('table tbody .inp-cbx').each(function(){
+    $('table tbody .inp-cbx').each(function () {
       let score = $(this).parent().parent().parent().find('.new_update').text().trim()
       if (score != '0' && score != '-' && score != '' && this.checked) {
         $(this).parent().parent().parent().find('.first_score').text(score)
@@ -131,19 +131,21 @@ $(document).on("click", ".button-35-a", async function () {
   console.log(curr_tb_year)
   try {
     const year = "HK" + $(".hoc_ky select option:selected").text().trim() + "_" + $(".nien_khoa select option:selected").text().trim();
-    const bo_mon= $(".--bomon option:selected").text().trim()
-    const lop= $(".--class option:selected").text().trim()
+    const bo_mon = $(".--bomon option:selected").text().trim()
+    const lop = $(".--class option:selected").text().trim()
 
     const requestOptions = {
       method: 'GET',
     };
 
     const response = await fetch(`/api/doan_khoa/loadScoresList?year=${year}&bo_mon=${bo_mon}&class=${lop}`, requestOptions);
-    
+
     if (response.ok) {
       const data = await response.json();
-      const year_available=data.year_available.year
+      const year_available = data.year_available.year
       console.log(data.year_available)
+      console.log(curr_tb_year)
+
 
       // empty old table:
       $('table tbody').empty();
@@ -153,14 +155,14 @@ $(document).on("click", ".button-35-a", async function () {
         <tr></tr>
           <td>
             <div class="checkbox-wrapper-4">
-              <input type="checkbox" id="row${i+1}" class="inp-cbx" value="${data.student_list[i]._id}" />
-              <label for="row${i+1}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+              <input type="checkbox" id="row${i + 1}" class="inp-cbx" value="${data.student_list[i]._id}" />
+              <label for="row${i + 1}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
               </label>
             </div>
           </td>
-          <td>${i+1}</td>
+          <td>${i + 1}</td>
           <td>${data.student_list[i]._id}</td>
-          <td class='std_name_row'>${data.student_list[i].last_name + " " +  data.student_list[i].first_name}</td>
+          <td class='std_name_row'>${data.student_list[i].last_name + " " + data.student_list[i].first_name}</td>
           <td class="new_update">${data.student_scores[i]}</td>
           <td class="first_score">${data.staff_scores[i]}</td>
           <td>${data.staff_name[i]}</td>
@@ -170,16 +172,24 @@ $(document).on("click", ".button-35-a", async function () {
         `);
 
         // add '*' to student have not mark yet
-        if(data.student_scores[i] == '-' ||  data.student_scores[i]== 0){
+        if (data.student_scores[i] == '-' || data.student_scores[i] == 0) {
           $('table tbody').children().eq(i).find('.std_name_row').append(`<span class="dau_sao">*</span>`);
         }
-      } 
-      $('.chamdiem').click(function() {
-        if(year_available>=curr_tb_year){
+      }
+      $('.chamdiem').click(function () {
+        console.log(year_available)
+        console.log(curr_tb_year)
+
+        console.log($(".selectbox--hocky select option:selected").text().trim())
+        const cur_tb_year = "HK" + $(".selectbox--hocky select option:selected").text().trim() + "_" + $(".nien_khoa select option:selected").text().trim();
+        if (year_available >= cur_tb_year) {
+
           const studentId = $(this).closest('tr').find('td:nth-child(3)').text();
-          this.href = `/bancansu/nhapdiemdanhgia?schoolYear=${curr_tb_year}&studentId=${studentId}`
+          const className = $(".--class option:selected").text().trim()
+
+          this.href = `/doankhoa/nhapdiemdanhgia?schoolYear=${cur_tb_year}&studentId=${studentId}&class=${className}`
         }
-        else{
+        else {
           notify('!', 'chưa mở chấm điểm vui lòng chọn năm khác.');
         }
       });
@@ -212,7 +222,7 @@ $(document).on("change", ".all-cbx", async function () {
 // if all checkboxs was check all-cbx will tick
 $(document).on("change", ".inp-cbx", async function () {
   let check = true
-  $('table tbody .inp-cbx').each(function(){
+  $('table tbody .inp-cbx').each(function () {
     if (!this.checked) check = false; return;
   })
 

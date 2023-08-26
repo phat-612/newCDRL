@@ -1454,13 +1454,14 @@ client.connect().then(() => {
     try {
       const user = req.session.user;
       const mssv = req.query.studentId;
+      const cls = req.query.class;
       const schoolYearParam = req.query.schoolYear;
       const studentTotalScore = await client.db(user.dep)
-        .collection(user.cls[0] + '_std_table')
+        .collection(cls + '_std_table')
         .findOne(
           {
             mssv: mssv,
-            school_year: schoolYearParam
+            school_year: schoolYearParam,
           },
           {
             projection: { _id: 0, first: 1, second: 1, third: 1, fourth: 1, fifth: 1, total: 1 }
@@ -1468,7 +1469,7 @@ client.connect().then(() => {
         );
 
       let stfTotalScore = await client.db(user.dep)
-        .collection(user.cls[0] + '_stf_table')
+        .collection(cls + '_stf_table')
         .findOne(
           {
             mssv: mssv,
@@ -1481,7 +1482,7 @@ client.connect().then(() => {
 
 
       let depTotalScore = await client.db(user.dep)
-        .collection(user.cls[0] + '_dep_table')
+        .collection(cls + '_dep_table')
         .findOne(
           {
             mssv: mssv,
@@ -1527,9 +1528,14 @@ client.connect().then(() => {
       if (!depTotalScore) {
         depTotalScore = nulltable
       }
+      console.log(depTotalScore);
+
+
+      console.log(nulltable)
+      console.log(stfTotalScore);
 
       if (studentTotalScore) {
-        res.render("bancansu-manage-grades", {
+        res.render("doankhoa-manage-grades", {
           header: "global-header",
           thongbao: "global-notifications",
           footer: "global-footer",
@@ -2407,7 +2413,6 @@ client.connect().then(() => {
       //data = {year: "HK1_2022-2023", cls: "1"}
       const school_year = data.year;
       const cls = data.class;
-      console.log(cls)
       // const bo_mon = data.bo_mon;
       // check for post data.cls if class define this mean they choose class so that must
       if (!cls) {
@@ -2431,7 +2436,6 @@ client.connect().then(() => {
           { projection: { first_name: 1, last_name: 1 } })
           .toArray());
 
-        console.log(student_list)
 
         // get all student total score from themself:
         let result = {
