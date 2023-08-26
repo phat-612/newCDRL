@@ -183,7 +183,7 @@ client.connect().then(() => {
     try {
       // Đọc các file trong thư mục một cách đồng bộ
       for (let i = 0; i < listName.length; i++) {
-        list_id.push(await server.uploadFileToDrive(path.join(directoryPath, listName[i]), listdep[i]));
+        // list_id.push(await server.uploadFileToDrive(path.join(directoryPath, listName[i]), listdep[i]));
       }
       return list_id;
     } catch (err) {
@@ -2424,7 +2424,7 @@ client.connect().then(() => {
 
       if (user.pow[1]) {
         const student_list = sortStudentName(await client.db(name_global_databases).collection('user_info').find(
-          { class: user.cls[cls], "power.0": { $exists: true } },
+          { class: cls, "power.0": { $exists: true } },
           { projection: { first_name: 1, last_name: 1 } })
           .toArray());
 
