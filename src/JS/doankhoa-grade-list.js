@@ -187,7 +187,7 @@ $(document).on("click", ".button-35-a", async function () {
           const studentId = $(this).closest('tr').find('td:nth-child(3)').text();
           const className = $(".--class option:selected").text().trim()
 
-          this.href = `/doankhoa/nhapdiemdanhgia?schoolYear=${cur_tb_year}&studentId=${studentId}&class=${className}`
+          this.href = `/doan_khoa/nhapdiemdanhgia?schoolYear=${cur_tb_year}&studentId=${studentId}&class=${className}`
         }
         else {
           notify('!', 'chưa mở chấm điểm vui lòng chọn năm khác.');
@@ -210,6 +210,11 @@ $(document).on("click", ".button-35-a", async function () {
     console.log(error);
     notify('x', 'Có lỗi xảy ra!');
   }
+});
+// auto click 
+$(document).ready(function() {
+  // Tự động kích hoạt sự kiện click khi trang đã tải xong
+  $('.button-35-a').click();
 });
 // all checkbox set (if all-cbx tick all checkboxs will tick otherwise untick all)
 $(document).on("change", ".all-cbx", async function () {

@@ -107,6 +107,7 @@ table tr td:nth-child(9){
 table tr td:nth-child(9) a{
   text-decoration: none;
   color: var(--login-a);
+  cursor: pointer;
 }
 .button-35-a{
   position: absolute!important;

@@ -942,7 +942,6 @@ client.connect().then(() => {
       if (!depTotalScore) {
         depTotalScore = nulltable
       }
-
       if (studentTotalScore) {
         res.render("bancansu-manage-grades", {
           header: "global-header",
@@ -1450,7 +1449,7 @@ client.connect().then(() => {
     }
   });
   // ban can su / giang vien nhap diem route
-  app.get("/doankhoa/nhapdiemdanhgia", checkIfUserLoginRoute, async (req, res) => {
+  app.get("/doan_khoa/nhapdiemdanhgia", checkIfUserLoginRoute, async (req, res) => {
     try {
       const user = req.session.user;
       const mssv = req.query.studentId;
@@ -1528,11 +1527,7 @@ client.connect().then(() => {
       if (!depTotalScore) {
         depTotalScore = nulltable
       }
-      console.log(depTotalScore);
-
-
-      console.log(nulltable)
-      console.log(stfTotalScore);
+      
 
       if (studentTotalScore) {
         res.render("doankhoa-manage-grades", {
@@ -1946,6 +1941,35 @@ client.connect().then(() => {
         );
 
         await mark("_stf_table", user, data, marker, user.cls[0]);
+
+        res.sendStatus(200);
+      } catch (err) {
+        console.log("SYSTEM | STF_MARK | ERROR | ", err);
+        res.sendStatus(500);
+      }
+    } else {
+      return res.redirect('/');
+    }
+  });
+
+   // Save table and update old table dep------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   app.post("/api/dep_mark", checkIfUserLoginAPI, async (req, res) => {
+    const user = req.session.user;
+    if (user.pow[1]) {
+      try {
+        const data = req.body;
+        const marker = await client.db(name_global_databases).collection('user_info').findOne(
+          { _id: user._id },
+          {
+            projection: {
+              _id: 0,
+              last_name: 1,
+              first_name: 1
+            }
+          }
+        );
+
+        await mark("_dep_table", user, data, marker, user.cls[0]);
 
         res.sendStatus(200);
       } catch (err) {

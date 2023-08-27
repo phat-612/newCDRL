@@ -74,7 +74,24 @@
                 <div class="score_1"><%=Score.first[0]%></div>
               </td>
               <td>
-                <div class="score_1"><%=Scorek.first[0]%></div>
+                <%if (Scorek.first[0] !== 'chưa chấm'){%>
+                  <div class="selectbox">
+                    <div class="select">
+                      <select id="mySelect1">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                      </select>
+                    </div>
+                  </div>
+                  <%} else {%>
+                    <div class="score_1"><%=Scorek.first[0]%></div>                    
+                  <%}%> 
 
               </td>
             </tr>
@@ -95,8 +112,19 @@
                 <div class="score_1"><%=Score.first[1]%></div>
               </td>
               <td>
-                <div class="score_1"><%=Scorek.first[1]%></div>
-
+                <%if (Scorek.first[1] !== 'chưa chấm'){%>
+                  <div class="selectbox">
+                    <div class="select">
+                      <select id="mySelect2">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                      </select>
+                    </div>
+                  </div>
+                  <%} else {%>
+                    <div class="score_1"><%=Scorek.first[1]%></div>                    
+                  <%}%> 
               </td>
             </tr>
             <tr>
@@ -116,8 +144,21 @@
                 <div class="score_1"><%=Score.first[2]%></div>
               </td>
               <td>
-                <div class="score_1"><%=Scorek.first[2]%></div>
-
+                <%if (Scorek.first[2] !== 'chưa chấm'){%>
+                  <div class="selectbox">
+                    <div class="select">
+                      <select id="mySelect3">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                      </select>
+                    </div>
+                  </div>
+                  <%} else {%>
+                    <div class="score_1"><%=Scorek.first[2]%></div>                    
+                  <%}%> 
               </td>
             </tr>
             <tr>
@@ -146,7 +187,13 @@
                 <%if (Scorek.first[2] == 2){%>
                 <div class="check_score"><i class="fa-solid fa-check"></i></div>
                 <%} else {%>
-                <div class="check_score"></div>
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="morning1" class="inp-cbx" value="2" />
+                    <label for="morning1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+  
+                  </div>
+                  <div id="hoverbox_01" class="pop-up-bc-tooltip"></div>
                 <%}%>  
               </td>
             </tr>
@@ -176,7 +223,13 @@
                 <%if (Scorek.first[2] == 0){%>
                 <div class="check_score"><i class="fa-solid fa-check"></i></div>
                 <%} else {%>
-                <div class="check_score"></div>
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="morning2" class="inp-cbx" value="0" />
+                    <label for="morning2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+  
+                  </div>
+                  <div id="hoverbox_01" class="pop-up-bc-tooltip"></div>
                 <%}%>
               </td>
             </tr>
@@ -197,7 +250,19 @@
                 <div class="score_1"><%=Score.first[3]%></div>
               </td>
               <td>
-                <div class="score_1"><%=Scorek.first[3]%></div>
+                <%if (Scorek.first[3] !== 'chưa chấm'){%>
+                  <div class="selectbox">
+                    <div class="select">
+                      <select id="mySelect4">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                      </select>
+                    </div>
+                  </div>
+                  <%} else {%>
+                    <div class="score_1"><%=Scorek.first[3]%></div>                    
+                  <%}%> 
 
               </td>
             </tr>
@@ -215,7 +280,7 @@
               <td class="score_1"> <%=Score.first[4]%>
 
               </td>
-              <td class="score_1"> <%=Scorek.first[4]%>
+              <td id="score_05"> 0 điểm
               </td>
             </tr>
             <tr>
@@ -244,7 +309,13 @@
                 <%if (Scorek.first[4] == 2){%>
                 <div class="check_score"><i class="fa-solid fa-check"></i></div>
                 <%} else {%>
-                <div class="check_score"></div>
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="morning3" class="inp-cbx" value="2" />
+                    <label for="morning3" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+
+                  </div>
+                  <div id="hoverbox_03" class="pop-up-bc-tooltip"></div>
                 <%}%>  
               </td>
             </tr>
@@ -274,7 +345,13 @@
                 <%if (Scorek.first[4] == 3){%>
                 <div class="check_score"><i class="fa-solid fa-check"></i></div>
                 <%} else {%>
-                <div class="check_score"></div>
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="morning4" class="inp-cbx" value="3" />
+                    <label for="morning4" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+
+                  </div>
+                  <div id="hoverbox_04" class="pop-up-bc-tooltip"></div>
                 <%}%>   
               </td>
             </tr>
@@ -304,7 +381,13 @@
                 <%if (Scorek.first[4] == 4){%>
                 <div class="check_score"><i class="fa-solid fa-check"></i></div>
                 <%} else {%>
-                <div class="check_score"></div>
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="morning5" class="inp-cbx" value="4" />
+                    <label for="morning5" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+
+                  </div>
+                  <div id="hoverbox_05" class="pop-up-bc-tooltip"></div>
                 <%}%>  
               </td>
             </tr>
@@ -334,7 +417,13 @@
                 <%if (Scorek.first[4] == 5){%>
                 <div class="check_score"><i class="fa-solid fa-check"></i></div>
                 <%} else {%>
-                <div class="check_score"></div>
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="morning6" class="inp-cbx" value="5" />
+                    <label for="morning6" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+
+                  </div>
+                  <div id="hoverbox_06" class="pop-up-bc-tooltip"></div>
                 <%}%> 
               </td>
             </tr>
@@ -355,9 +444,9 @@
                 <%}%>
                   </td>
               <%if (Scorek.first[0] == 'Chưa chấm') {%>
-              <td id="total_muc_1"> <%=  Scorek.first[0]%>
+              <td id="total_muc_1k"> 0 điểm
                 <%}else {%>
-              <td id="total_muc_1"> <%=  Scorek.first[0] + Scorek.first[1] + Scorek.first[2] + Scorek.first[3] + Scorek.first[4] %> điểm
+              <td id="total_muc_1k"> <%=  Scorek.first[0] + Scorek.first[1] + Scorek.first[2] + Scorek.first[3] + Scorek.first[4] %> điểm
                 <%}%>
               </td>
             </tr>
@@ -393,7 +482,32 @@
           <div class="score_2"><%=Score.second[0]%></div>
         </td>
         <td>
-          <div class="score_2"><%=Scorek.second[0]%></div>
+          <%if (Scorek.second[0] !== 'chưa chấm'){%>
+            <div class="selectbox">
+              <div class="select">
+                <select id="mySelect5">
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10">10</option>
+                  <option value="11">11</option>
+                  <option value="12">12</option>
+                  <option value="13">13</option>
+                  <option value="14">14</option>
+                  <option value="15">15</option>
+                </select>
+              </div>
+            </div>
+            <%} else {%>
+              <div class="score_1"><%=Scorek.second[0]%></div>                    
+            <%}%> 
 
         </td>
       </tr>
@@ -423,7 +537,13 @@
           <%if (Scorek.second[0] == 10){%>
         <div class="check_score"><i class="fa-solid fa-check"></i></div>
         <%} else {%>
-        <div class="check_score"></div>
+          <div class="checkbox-wrapper-4">
+            <input type="checkbox" id="morning7" class="inp-cbx" value="10" />
+            <label for="morning7" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+            </label>
+
+          </div>
+          <div id="hoverbox_07" class="pop-up-bc-tooltip"></div>
         <%}%>
         </td>
       </tr>
@@ -453,7 +573,13 @@
           <%if (Scorek.second[0] == 0){%>
         <div class="check_score"><i class="fa-solid fa-check"></i></div>
         <%} else {%>
-        <div class="check_score"></div>
+          <div class="checkbox-wrapper-4">
+            <input type="checkbox" id="morning8" class="inp-cbx" value="0" checked />
+            <label for="morning8" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+            </label>
+
+          </div>
+          <div id="hoverbox_08" class="pop-up-bc-tooltip"></div>
         <%}%> 
         </td>
       </tr>
@@ -473,7 +599,27 @@
           <div class="score_2"><%=Score.second[1]%></div>
         </td>
         <td>
-          <div class="score_2"><%=Scorek.second[1]%></div>
+          <%if (Scorek.second[1] !== 'chưa chấm'){%>
+            <div class="selectbox">
+              <div class="select">
+                <select id="mySelect6">
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10">10</option>
+                </select>
+              </div>
+            </div>
+            <%} else {%>
+              <div class="score_1"><%=Scorek.second[1]%></div>                    
+            <%}%> 
         </td>
       </tr>
       <tr>
@@ -502,7 +648,13 @@
           <%if (Scorek.second[1] == 5){%>
         <div class="check_score"><i class="fa-solid fa-check"></i></div>
         <%} else {%>
-        <div class="check_score"></div>
+          <div class="checkbox-wrapper-4">
+            <input type="checkbox" id="morning9" class="inp-cbx" value="5" />
+            <label for="morning9" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+            </label>
+
+          </div>
+          <div id="hoverbox_09" class="pop-up-bc-tooltip"></div>
         <%}%>  
         </td>
       </tr>
@@ -532,7 +684,13 @@
           <%if (Scorek.second[1] == 0){%>
         <div class="check_score"><i class="fa-solid fa-check"></i></div>
         <%} else {%>
-        <div class="check_score"></div>
+          <div class="checkbox-wrapper-4">
+            <input type="checkbox" id="morning10" class="inp-cbx" value="0" checked />
+            <label for="morning10" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+            </label>
+
+          </div>
+          <div id="hoverbox_10" class="pop-up-bc-tooltip"></div>
         <%}%>
         </td>
       </tr>
@@ -555,9 +713,9 @@
           </td>
     
         <%if (Scorek.first[0] == 'Chưa chấm') {%>
-      <td id="total_muc_2"> <%=  Scorek.first[0]%>
+      <td id="total_muc_2k"> 0 điểm
         <%}else {%>
-      <td id="total_muc_2"> <%=Scorek.second[0]+Scorek.second[1]%> điểm
+      <td id="total_muc_2k"> <%=Scorek.second[0]+Scorek.second[1]%> điểm
         <%}%>
 
       </td>
@@ -597,7 +755,25 @@
           <div class="score_3"><%=Score.third[0]%></div>
         </td>
         <td>
-          <div class="score_3"><%=Scorek.third[0]%></div>
+          <%if (Scorek.third[0] !== 'chưa chấm'){%>
+            <div class="selectbox">
+              <div class="select">
+                <select id="mySelect7">
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                </select>
+              </div>
+            </div>
+            <%} else {%>
+              <div class="score_1"><%=Scorek.third[0]%></div>                    
+            <%}%> 
 
         </td>
       </tr>
@@ -628,7 +804,13 @@
         <%if (Scorek.third[0] == 5){%>
       <div class="check_score"><i class="fa-solid fa-check"></i></div>
       <%} else {%>
-      <div class="check_score"></div>
+        <div class="checkbox-wrapper-4">
+          <input type="checkbox" id="morning11" class="inp-cbx" value="5" />
+          <label for="morning11" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+          </label>
+
+        </div>
+        <div id="hoverbox_11" class="pop-up-bc-tooltip"></div>
       <%}%> 
       </td>
       </tr>
@@ -660,7 +842,13 @@
         <%if (Scorek.third[0] == 8){%>
       <div class="check_score"><i class="fa-solid fa-check"></i></div>
       <%} else {%>
-      <div class="check_score"></div>
+        <div class="checkbox-wrapper-4">
+          <input type="checkbox" id="morning12" class="inp-cbx" value="8" />
+          <label for="morning12" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+          </label>
+
+        </div>
+        <div id="hoverbox_12" class="pop-up-bc-tooltip"></div>
       <%}%> 
       </td>
     </tr>
@@ -681,7 +869,23 @@
         <div class="score_3"><%=Score.third[1]%></div>
       </td>
       <td>
-        <div class="score_3"><%=Scorek.third[1]%></div>
+        <%if (Scorek.third[1] !== 'chưa chấm'){%>
+          <div class="selectbox">
+            <div class="select">
+              <select id="mySelect8">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+              </select>
+            </div>
+          </div>
+          <%} else {%>
+            <div class="score_1"><%=Scorek.third[1]%></div>                    
+          <%}%> 
 
       </td>
     </tr>
@@ -703,7 +907,23 @@
       <div class="score_3"><%=Score.third[2]%></div>
     </td>
     <td>
-      <div class="score_3"><%=Scorek.third[2]%></div>
+      <%if (Scorek.third[2] !== 'chưa chấm'){%>
+        <div class="selectbox">
+          <div class="select">
+            <select id="mySelect9">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+            </select>
+          </div>
+        </div>
+        <%} else {%>
+          <div class="score_1"><%=Scorek.third[2]%></div>                    
+        <%}%> 
 
     </td>
   </tr>
@@ -720,17 +940,17 @@
 
     </td>
     <%if (Score.first[0] == 'Chưa chấm') {%>
-    <td id="total_muc_1"> <%=  Score.first[0]%>
+    <td id="total_muc_3"> <%=  Score.first[0]%>
       <%}else {%>
-    <td id="total_muc_1"> <%=Score.third[0]+Score.third[1]+Score.third[2]%> điểm
+    <td id="total_muc_3"> <%=Score.third[0]+Score.third[1]+Score.third[2]%> điểm
       <%}%>
         </td>
   
   
       <%if (Scorek.first[0] == 'Chưa chấm') {%>
-    <td id="total_muc_3"> <%=  Scorek.first[0]%>
+    <td id="total_muc_3k"> 0 điểm
       <%}else {%>
-    <td id="total_muc_3"> <%=Scorek.third[0]+Scorek.third[1]+Scorek.third[2]%> điểm
+    <td id="total_muc_3k"> <%=Scorek.third[0]+Scorek.third[1]+Scorek.third[2]%> điểm
       <%}%>
     </td>
   </tr>
@@ -767,7 +987,27 @@
       <div class="score_4"><%=Score.fourth[0]%></div>
     </td>
     <td>
-      <div class="score_4"><%=Scorek.fourth[0]%></div>
+      <%if (Scorek.fourth[0] !== 'chưa chấm'){%>
+        <div class="selectbox">
+          <div class="select">
+            <select id="mySelect10">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>
+          </div>
+        </div>
+        <%} else {%>
+          <div class="score_1"><%=Scorek.fourth[0]%></div>                    
+        <%}%> 
 
     </td>
   </tr>
@@ -788,7 +1028,22 @@
       <div class="score_4"><%=Score.fourth[1]%></div>
     </td>
     <td>
-      <div class="score_4"><%=Scorek.fourth[1]%></div>
+      <%if (Scorek.fourth[1] !== 'chưa chấm'){%>
+        <div class="selectbox">
+          <div class="select">
+            <select id="mySelect11">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+        </div>
+        <%} else {%>
+          <div class="score_1"><%=Scorek.fourth[1]%></div>                    
+        <%}%> 
 
     </td>
   </tr>
@@ -809,7 +1064,27 @@
       <div class="score_4"><%=Score.fourth[2]%></div>
     </td>
     <td>
-      <div class="score_4"><%=Scorek.fourth[2]%></div>
+      <%if (Scorek.fourth[2] !== 'chưa chấm'){%>
+        <div class="selectbox">
+          <div class="select">
+            <select id="mySelect12">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>
+          </div>
+        </div>
+        <%} else {%>
+          <div class="score_1"><%=Scorek.fourth[2]%></div>                    
+        <%}%> 
 
     </td>
   </tr>
@@ -830,9 +1105,9 @@
       <%}%>
     </td>
       <%if (Scorek.first[0] == 'Chưa chấm') {%>
-    <td id="total_muc_4"> <%=  Scorek.first[0]%>
+    <td id="total_muc_4k"> 0 điểm
       <%}else {%>
-    <td id="total_muc_4"> <%=Scorek.fourth[0]+Scorek.fourth[1]+Scorek.fourth[2]%> điểm
+    <td id="total_muc_4k"> <%=Scorek.fourth[0]+Scorek.fourth[1]+Scorek.fourth[2]%> điểm
       <%}%>
     </td>
   </tr>
@@ -871,7 +1146,20 @@
       <div class="score_5"><%=Score.fifth[0]%></div>
     </td>
     <td>
-      <div class="score_5"><%=Scorek.fifth[0]%></div>
+      <%if (Scorek.fifth[0] !== 'chưa chấm'){%>
+        <div class="selectbox">
+          <div class="select">
+            <select id="mySelect13">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+          </div>
+        </div>
+        <%} else {%>
+          <div class="score_1"><%=Scorek.fifth[0]%></div>                    
+        <%}%> 
 
     </td>
   </tr>
@@ -892,7 +1180,20 @@
       <div class="score_5"><%=Score.fifth[1]%></div>
     </td>
     <td>
-      <div class="score_5"><%=Scorek.fifth[1]%></div>
+      <%if (Scorek.fifth[1] !== 'chưa chấm'){%>
+        <div class="selectbox">
+          <div class="select">
+            <select id="mySelect14">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+          </div>
+        </div>
+        <%} else {%>
+          <div class="score_1"><%=Scorek.fifth[1]%></div>                    
+        <%}%> 
 
     </td>
   </tr>
@@ -914,7 +1215,19 @@
       <div class="score_5"><%=Score.fifth[2]%></div>
     </td>
     <td>
-      <div class="score_5"><%=Scorek.fifth[2]%></div>
+      <%if (Scorek.fifth[2] !== 'chưa chấm'){%>
+        <div class="selectbox">
+          <div class="select">
+            <select id="mySelect15">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+          </div>
+        </div>
+        <%} else {%>
+          <div class="score_1"><%=Scorek.fifth[2]%></div>                    
+        <%}%> 
 
     </td>
   </tr>
@@ -935,7 +1248,19 @@
       <div class="score_5"><%=Score.fifth[3]%></div>
     </td>
     <td>
-      <div class="score_5"><%=Scorek.fifth[3]%></div>
+      <%if (Scorek.fifth[3] !== 'chưa chấm'){%>
+        <div class="selectbox">
+          <div class="select">
+            <select id="mySelect16">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+          </div>
+        </div>
+        <%} else {%>
+          <div class="score_1"><%=Scorek.fifth[3]%></div>                    
+        <%}%> 
 
     </td>
   </tr>
@@ -963,7 +1288,14 @@
       <%if (Scorek.fifth[3] == 1){%>
     <div class="check_score"><i class="fa-solid fa-check"></i></div>
     <%} else {%>
-    <div class="check_score"></div>
+      <div class="checkbox-wrapper-4">
+        <input type="checkbox" id="morning13" class="inp-cbx" value="1" />
+        <label for="morning13" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+        </label>
+
+      </div>
+      <div id="hoverbox_13" class="pop-up-bc-tooltip"></div>
+    </td>
     <%}%> 
     </td>
   </tr>
@@ -991,7 +1323,13 @@
       <%if (Scorek.fifth[3] == 2){%>
     <div class="check_score"><i class="fa-solid fa-check"></i></div>
     <%} else {%>
-    <div class="check_score"></div>
+      <div class="checkbox-wrapper-4">
+        <input type="checkbox" id="morning14" class="inp-cbx" value="2" />
+        <label for="morning14" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+        </label>
+
+      </div>
+      <div id="hoverbox_14" class="pop-up-bc-tooltip"></div>
     <%}%>  
     </td>
   </tr>
@@ -1014,9 +1352,9 @@
       <%}%>
         </td>
       <%if (Scorek.first[0] == 'Chưa chấm') {%>
-    <td id="total_muc_5"> <%=  Scorek.first[0]%>
+    <td id="total_muc_5k"> 0 điểm
       <%}else {%>
-    <td id="total_muc_5"><%=Scorek.fifth[0]+Scorek.fifth[1]+Scorek.fifth[2]+Scorek.fifth[3]%> điểm
+    <td id="total_muc_5k"><%=Scorek.fifth[0]+Scorek.fifth[1]+Scorek.fifth[2]+Scorek.fifth[3]%> điểm
       <%}%>
     </td>
   </tr>
@@ -1038,14 +1376,22 @@
       <%}%>
     </td>
     <%if (Scorek.first[0] == 'Chưa chấm') {%>
-    <td id="total_all"><%=Scorek.total%>
+    <td id="total_allk">0 điểm
       <%}else {%>
-    <td id="total_all"><%=Scorek.total%> điểm
+    <td id="total_allk"><%=Scorek.total%> điểm
       <%}%>
     </td>
   </tr>
   </tbody>
   </table>
+  <div class="complete_img">
+    <button class="button-35 up-btn post-btn">
+      Tải ảnh
+    </button>
+    <button class="button-35 up-btn save-btn">
+      Lưu
+    </button>
+  </div>
   </div>
   </div>
   </div>
