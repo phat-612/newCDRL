@@ -2963,8 +2963,14 @@ client.connect().then(() => {
 
       // must be department to use this api
       if (user.pow[8]) {
-        // remove all cheked branch in remove branchs líst
+        // remove all cheked branch in remove branchs líst in user_info and login_info
         await client.db(name_global_databases).collection('user_info').deleteMany(
+          {
+            _id: { $in: data.rm_ts },
+          }
+        );
+
+        await client.db(name_global_databases).collection('login_info').deleteMany(
           {
             _id: { $in: data.rm_ts },
           }
