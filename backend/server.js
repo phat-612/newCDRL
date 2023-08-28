@@ -739,6 +739,10 @@ client.connect().then(() => {
 
   });
 
+  // xem bang diem route
+  app.get("/403", checkIfUserLoginRoute, async (req, res) => {
+    res.render("index.ejs", {});
+  });
 
   // giao vien route
   app.get("/giaovien", checkIfUserLoginRoute, async (req, res) => {

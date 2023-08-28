@@ -1,10 +1,28 @@
 body {
+    background-color: #000000;
     margin: 0;
     padding: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-canvas {
+.gameContainer {
+    border: 2px solid white;
     background-color: #000000;
-    display: block;
-    margin: 0 auto;
+    width: 500px;
+    height: 500px;
+}
+
+.player {
+    color: white;
+    position: absolute;
+    padding: 10px;
+}
+
+.player_flipH {
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
 }
