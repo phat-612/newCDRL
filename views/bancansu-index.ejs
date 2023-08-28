@@ -12,6 +12,8 @@
 <body>
   <div class="main">
     <%- include(header) %>
+    <%- include(thongbao) %>
+
     <div class="container">
 
       <!-- Quản lí điểm -->
@@ -38,13 +40,18 @@
           <div class="nien-khoa">
             <p>Niên khóa</p>
             <div class="selectbox">
-              <div class="select">
+              <div class="select" style="margin: 0.9rem;">
                 <select id="mySelect2">
-                  <option value="">2022-2023</option>
+                  <% for (let i = 0; i < nienkhoa.length; i++) {%>
+                  <%if (bandiem[0].year.slice(4) == nienkhoa[i]){%>
+                  <option selected value="<%=nienkhoa[i]%>"><%=nienkhoa[i]%></option>
+                  <%} else {%>
+                  <option value="<%=nienkhoa[i]%>"><%=nienkhoa[i]%></option>
+                  <%}%>
+                  <%}%>
                 </select>
               </div>
             </div>
-            <button class="button-35">Chọn</button>
           </div>
           <div class="sub-container">
             <div class="mark-box">
@@ -54,20 +61,23 @@
                   <tr style="display: table-row;">
                     <th class="column1" style="width: 22%;">Học Kỳ I</th>
                     <th class="column2" style="width: 48%;">Tổng Điểm Rèn Luyện</th>
-                    <th class="column3" style="width: 14%;">Chi Tiết</th>
+                    <th class="column3" style="width: 25rem;">Chi Tiết</th>
                   </tr>
                 </thead>
                 <tbody>
+                  <% for (let i = 0; i < bandiem.length; i++) {%>
+
                   <tr>
-                    <td>1</td>
-                    <td>9x</td>
-                    <td><a href="xxxx">Xem Bảng Điểm</a></td>
+                    <td><%=i+1%></td>
+                    <td class="total-result" data-year="HK<%=i+1%>_total"><%=bandiem[i].total%></td>
+                    <%if (bandiem[i].total != 'Chưa có điểm'){%>
+                    <td><a href="/xembangdiem?schoolYear=<%=bandiem[i].year%>" id="HK<%=i+1%>">Xem Bảng Điểm</a></td>
+                    <%} else {%>
+                    <td><a id="HK<%=i+1%>" style="display: none;">Xem Bảng Điểm</a></td>
+                    <%}%>
                   </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>9x</td>
-                    <td><a href="xxxx">Xem Bảng Điểm</a></td>
-                  </tr>
+                  <%}%>
+
                 </tbody>
               </table>
             </div>
@@ -113,11 +123,14 @@
               </table>
             </div>
           </div>
+          
         </div>
       </div>
     </div>
     <%- include(footer) %>
+
   </div>
+  <script src="/src/JS/sinhvien-index.js"></script>
 </body>
 
 </html>
