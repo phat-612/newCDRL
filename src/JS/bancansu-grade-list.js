@@ -133,7 +133,8 @@ $(document).ready(async function () {
           }
         }
         $('.chamdiem').click(function () {
-          if (year_available >= curr_tb_year) {
+          console.log(year_available,curr_tb_year)
+          if (year_available == curr_tb_year) {
             const studentId = $(this).closest('tr').find('td:nth-child(3)').text();
             this.href = `/bancansu/nhapdiemdanhgia?schoolYear=${curr_tb_year}&studentId=${studentId}`
           }

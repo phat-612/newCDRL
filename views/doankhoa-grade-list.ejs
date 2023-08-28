@@ -13,184 +13,184 @@
   <div class="main">
 
     <%- include(header) %>
-      <%- include(thongbao) %>
-        <% let cy=curr_year.split('_'); %>
-          <div class="container">
-            <%- include(menu) %>
-            <div class="content">
+    <%- include(thongbao) %>
+    <% let cy=curr_year.split('_'); %>
+    <div class="container">
+      <%- include(menu) %>
+      <div class="content">
 
-              <div class="hk_nk">
-                <div class="year_full">
-                  <div class="hk">
-                    <span>Học kỳ</span>
-                    <div class="selectbox selectbox--hocky">
-                      <div class="select">
-                        <select>
-                          <% for (let i=1; i <=years[cy[1]].length; i++) {%>
-                            <% if (i==parseInt(cy[0].slice(2))) {%>
-                              <option value="<%= i %>" selected="selected">
-                                <%= i %>
-                              </option>
-                              <% } else { %>
-                                <option value="<%= i %>">
-                                  <%= i %>
-                                </option>
-                                <% } %>
-                                  <% } %>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="hk">
-                    <span>Niên khóa</span>
-                    <div class="selectbox nien_khoa">
-                      <div class="select">
-                        <select>
-                          <% for (const key of Object.keys(years)) {%>
-                            <% if (key==cy[1]) {%>
-                              <option selected="selected">
-                                <%= key %>
-                              </option>
-                              <% } else { %>
-                                <option>
-                                  <%= key %>
-                                </option>
-                                <% } %>
-                                  <% } %>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
+        <div class="hk_nk">
+          <div class="year_full">
+            <div class="hk">
+              <span>Học kỳ</span>
+              <div class="selectbox selectbox--hocky">
+                <div class="select">
+                  <select>
+                    <% for (let i=1; i <=years[cy[1]].length; i++) {%>
+                    <% if (i==parseInt(cy[0].slice(2))) {%>
+                    <option value="<%= i %>" selected="selected">
+                      <%= i %>
+                    </option>
+                    <% } else { %>
+                    <option value="<%= i %>">
+                      <%= i %>
+                    </option>
+                    <% } %>
+                    <% } %>
+                  </select>
                 </div>
-                <div class="year_full">
-                  <div class="hk">
-                    <span>Bộ môn</span>
-                    <div class="selectbox --bomon">
-                      <div class="select">
-                        <select>
-                          <% for (let i=0; i < branch.length; i++) {%>
-                            <% if (branch[i]._id==cls[i].branch) {%>
-                              <option value="<%= i %>" selected="selected">
-                                <%= branch[i].name %>
-                              </option>
-                              <% } else { %>
-                                <option value="<%= i %>">
-                                  <%= branch[i].name %>
-                                </option>
-                                <% } %>
-                                  <% } %>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="hk">
-                    <span>Lớp</span>
-                    <div class="selectbox --class">
-                      <div class="select">
-                        <select>
-                          <% for (let i=0; i < cls.length; i++) {%>
-                            <% if (branch[i]._id==cls[i].branch) {%>
-                              <% if (i==0) {%>
-                                <option value="<%= i %>" selected="selected">
-                                  <%= cls[i]._id %>
-                                </option>
-                                <% } else { %>
-                                  <option value="<%= i %>">
-                                    <%= cls[i]._id %>
-                                  </option>
-                                  <% } %>
-                                    <% } %>
-                                      <% } %>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <button class="button-35 button-35-a">Chọn</button>
-      
               </div>
-      
-              <div class="danh_sach_bang_diem">
-                <div class="control">
-                  <button class="button-35 export_btn">Xuất báo cáo</button>
-                  <button class="button-35 auto_mark_btn">Chấm bảng điểm đã chọn</button>
+            </div>
+            <div class="hk">
+              <span>Niên khóa</span>
+              <div class="selectbox nien_khoa">
+                <div class="select">
+                  <select>
+                    <% for (const key of Object.keys(years)) {%>
+                    <% if (key==cy[1]) {%>
+                    <option selected="selected">
+                      <%= key %>
+                    </option>
+                    <% } else { %>
+                    <option>
+                      <%= key %>
+                    </option>
+                    <% } %>
+                    <% } %>
+                  </select>
                 </div>
-                <div class="chu_thich">
-                  <p><span class="dau_sao">*</span> Không nộp bảng điểm tự chấm</p>
-                  <p><span class="mau_vang"></span> Có cập nhật mới</p>
+              </div>
+            </div>
+          </div>
+          <div class="year_full">
+            <div class="hk">
+              <span>Bộ môn</span>
+              <div class="selectbox --bomon">
+                <div class="select">
+                  <select>
+                    <%let curr_index = 0%>
+                    <% for (let i=0; i < branch.length; i++) {%>
+                    <% if (branch[i]._id==cls[0].branch) {%>
+                      <%curr_index = i%>
+                    <option value="<%= branch[i]._id %>" selected="selected">
+                      <%= branch[i].name %>
+                    </option>
+                    <% } else { %>
+                    <option value="<%= branch[i]._id %>">
+                      <%= branch[i].name %>
+                    </option>
+                    <% } %>
+                    <% } %>
+                  </select>
                 </div>
-                <table>
-                  <thead>
-                    <tr>
-                      <th style="width: 4%">
-                        <!-- set id của input == for của label -->
-                        <!-- thêm class "new_update" cho td có cập nhật điểm mới chưa được chấm -->
-                        <!-- <span class="dau_sao">*</span> đứng phía sau tên (ai không tự đánh giá) -->
-                        <div class="checkbox-wrapper-4">
-                          <input type="checkbox" id="row0" class="inp-cbx all-cbx" value="2" />
-                          <label for="row0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                          </label>
-                      </th>
-                      <th style="width: 3%">STT</th>
-                      <th style="width: 11%">MSSV</th>
-                      <th style="width: 23%">Họ Tên</th>
-                      <th style="width: 6%">Điểm Tự Chấm</th>
-                      <th style="width: 6%">Tổng điểm Lần 1</th>
-                      <th style="width: 10%">Chấm Lần 1</th>
-                      <th style="width: 6%">Tổng Điểm Chính Thức</th>
-                      <th style="width: 10%"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <% for (let i=0; i < student_list.length; i++) {%>
-                      <tr>
-                        <td>
-                          <div class="checkbox-wrapper-4">
-                            <input type="checkbox" id="row<%=i+1%>" class="inp-cbx"
-                              value="<%= student_list[i]._id %>" />
-                            <label for="row<%=i+1%>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                            </label>
-                          </div>
-                        </td>
-                        <td>
-                          <%= i + 1 %>
-                        </td>
-                        <td>
-                          <%= student_list[i]._id %>
-                        </td>
-                        <td>
-                          <%= student_list[i].last_name + " " + student_list[i].first_name%>
-                            <%if(student_scores[i]=='-' || student_scores[i]==0){%>
-                              <span class="dau_sao">*</span>
-                              <%}%>
+              </div>
+            </div>
+            <div class="hk">
+              <span>Lớp</span>
+              <div class="selectbox --class">
+                <div class="select">
+                  <select>
+                    <% for (let i=0; i < cls.length; i++) {%>
+                    <% if (cls[i].branch == branch[curr_index]._id) {%>
+                    <option value="<%= i %>" selected="selected">
+                      <%= cls[i]._id %>
+                    </option>
+                    <% } else { %>
+                    <option value="<%= i %>">
+                      <%= cls[i]._id %>
+                    </option>
+                    <% } %>
+                    <% } %>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="button-35 button-35-a">Chọn</button>
+
+        </div>
+
+        <div class="danh_sach_bang_diem">
+          <div class="control">
+            <button class="button-35 export_btn">Xuất báo cáo</button>
+            <button class="button-35 auto_mark_btn">Chấm bảng điểm đã chọn</button>
+          </div>
+          <div class="chu_thich">
+            <p><span class="dau_sao">*</span> Không nộp bảng điểm tự chấm</p>
+            <p><span class="mau_vang"></span> Có cập nhật mới</p>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 4%">
+                  <!-- set id của input == for của label -->
+                  <!-- thêm class "new_update" cho td có cập nhật điểm mới chưa được chấm -->
+                  <!-- <span class="dau_sao">*</span> đứng phía sau tên (ai không tự đánh giá) -->
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="row0" class="inp-cbx all-cbx" value="2" />
+                    <label for="row0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+                </th>
+                <th style="width: 3%">STT</th>
+                <th style="width: 11%">MSSV</th>
+                <th style="width: 23%">Họ Tên</th>
+                <th style="width: 6%">Điểm Tự Chấm</th>
+                <th style="width: 6%">Tổng điểm Lần 1</th>
+                <th style="width: 10%">Chấm Lần 1</th>
+                <th style="width: 6%">Tổng Điểm Chính Thức</th>
+                <th style="width: 10%"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for (let i=0; i < student_list.length; i++) {%>
+              <tr>
+                <td>
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="row<%=i+1%>" class="inp-cbx" value="<%= student_list[i]._id %>" />
+                    <label for="row<%=i+1%>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+                  </div>
+                </td>
+                <td>
+                  <%= i + 1 %>
+                </td>
+                <td>
+                  <%= student_list[i]._id %>
+                </td>
+                <td>
+                  <%= student_list[i].last_name + " " + student_list[i].first_name%>
+                  <%if(student_scores[i]=='-' || student_scores[i]==0){%>
+                  <span class="dau_sao">*</span>
+                  <%}%>
                         </td>
                         <td class="new_update">
                           <%= student_scores[i] %>
-                        </td>
-                        <td class="first_score">
-                          <%= staff_scores[i] %>
-                        </td>
-                        <td>
-                          <%= staff_name[i] %>
-                        </td>
-                        <td>
-                          <%= department_scores[i] %>
-                        </td>
-                        <td><a class="chamdiem">Chấm điểm</a></td>
+                </td>
+                <td class="first_score">
+                  <%= staff_scores[i] %>
+                </td>
+                <td>
+                  <%= staff_name[i] %>
+                </td>
+                <td>
+                  <%= department_scores[i] %>
+                </td>
+                <td><a class="chamdiem">Chấm điểm</a></td>
 
-                      </tr>
-                      <% } %>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            
-          </div>
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
   </div>
 </body>
 <script>
   const branch_list = <%-JSON.stringify(branch) %>;
   const class_list = <%-JSON.stringify(cls) %>;
+  const year_cur = <%-JSON.stringify(curr_year) %>;
 </script>
 <script src="/src/JS/doankhoa-grade-list.js"></script>
 

@@ -1437,11 +1437,24 @@
                 Lưu
               </button>
             </div>
+
+            <div class="main_img content_top">
+              <h2>HÌNH ẢNH LIÊN QUAN</h2>
+              <div class="main_img_list">
+                <%for (img_info of img){%>
+                <div class="main_img_item">
+                  <img src="<%=img_info.fileLink%>" alt="<%=img_info.fileDescription%>">
+                  <div class="main_img_item_title"><%=img_info.fileDescription%></div>
+                </div>
+              <%}%>
+              </div>
+            </div>
           </div>
         </div>
   </div>
   <%- include(footer) %>
     <script src="/src/JS/bancansu-manage-grades.js"></script>
+    <h1><%=img%></h1>
 </body>
 
 </html>

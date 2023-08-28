@@ -1,6 +1,7 @@
 let curr_tb_year = "HK" + $(".selectbox--hocky select option:selected").text().trim() + "_" + $(".nien_khoa select option:selected").text().trim();
 console.log(branch_list);
 console.log(class_list);
+console.log(year_cur)
 
 $(document).on("change", ".--bomon select", async function () {
   const selectedBranch = $(".--bomon select option:selected").text().trim()
@@ -130,8 +131,8 @@ $(document).on("click", ".button-35-a", async function () {
   notify('!', 'Đợi chút đang tải bảng điểm!');
   console.log(curr_tb_year)
   try {
-    const year = "HK" + $(".hoc_ky select option:selected").text().trim() + "_" + $(".nien_khoa select option:selected").text().trim();
-    const bo_mon = $(".--bomon option:selected").text().trim()
+    const year = "HK" + $(".selectbox--hocky select option:selected").text().trim() + "_" + $(".nien_khoa select option:selected").text().trim();
+    const bo_mon = $(".--bomon option:selected").val()
     const lop = $(".--class option:selected").text().trim()
 
     const requestOptions = {
@@ -144,7 +145,7 @@ $(document).on("click", ".button-35-a", async function () {
       const data = await response.json();
       const year_available = data.year_available.year
       console.log(data.year_available)
-      console.log(curr_tb_year)
+      console.log(year)
 
 
       // empty old table:
@@ -182,6 +183,7 @@ $(document).on("click", ".button-35-a", async function () {
 
         console.log($(".selectbox--hocky select option:selected").text().trim())
         const cur_tb_year = "HK" + $(".selectbox--hocky select option:selected").text().trim() + "_" + $(".nien_khoa select option:selected").text().trim();
+        
         if (year_available >= cur_tb_year) {
 
           const studentId = $(this).closest('tr').find('td:nth-child(3)').text();
@@ -211,11 +213,28 @@ $(document).on("click", ".button-35-a", async function () {
     notify('x', 'Có lỗi xảy ra!');
   }
 });
-// auto click 
-$(document).ready(function() {
-  // Tự động kích hoạt sự kiện click khi trang đã tải xong
-  $('.button-35-a').click();
+$('.chamdiem').click(function () {
+
+
+  console.log($(".selectbox--hocky select option:selected").text().trim())
+  const cur_tb_year = "HK" + $(".selectbox--hocky select option:selected").text().trim() + "_" + $(".nien_khoa select option:selected").text().trim();
+  
+  if (year_cur >= cur_tb_year) {
+
+    const studentId = $(this).closest('tr').find('td:nth-child(3)').text().trim();
+    const className = $(".--class option:selected").text().trim()
+
+    this.href = `/doan_khoa/nhapdiemdanhgia?schoolYear=${cur_tb_year}&studentId=${studentId}&class=${className}`
+  }
+  else {
+    notify('!', 'chưa mở chấm điểm vui lòng chọn năm khác.');
+  }
 });
+// auto click 
+// $(document).ready(function() {
+//   // Tự động kích hoạt sự kiện click khi trang đã tải xong
+//   $('.button-35-a').click();
+// });
 // all checkbox set (if all-cbx tick all checkboxs will tick otherwise untick all)
 $(document).on("change", ".all-cbx", async function () {
   if ($('.all-cbx')[0].checked) {

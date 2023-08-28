@@ -63,7 +63,7 @@
   .menu {
     font-size: 1.8rem;
     height: 0;
-    width: 21rem;
+    width: 22rem;
     border-radius: var(--cornerRad);
     background-color: var(--primColor);
     box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.2);
@@ -92,6 +92,8 @@
   } */
   .menu a:hover,.lop_item_more:hover,.menu_item span:hover {
     color: rgb(54, 11, 182);
+    text-decoration: underline;
+    font-weight: bold;
   }
   .lop_item_more a{
     color: var(--black-color);
