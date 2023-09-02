@@ -2631,6 +2631,7 @@ client.connect().then(() => {
       const user = req.session.user;
       const data = req.body;
       let cls = data.cls;
+      console.log(cls)
       //data = {year: "HK1_2022-2023", cls: "1", std_list = []}
 
       // get staff member info :
@@ -2665,6 +2666,65 @@ client.connect().then(() => {
           std_table.marker = marker.last_name + " " + marker.first_name
           delete std_table._id;
           await client.db(user.dep).collection(user.cls[parseInt(cls)] + '_stf_table').updateOne(
+            {
+              mssv: data.std_list[i],
+              school_year: data.year
+            },
+            {
+              $set: std_table
+            },
+            { upsert: true }
+          );
+        }
+      }
+
+      res.sendStatus(200);
+    } catch (err) {
+      console.log("SYSTEM | AUTO_MARK | ERROR | ", err);
+      res.sendStatus(500);
+    }
+
+  });
+  app.post("/api/doan_khoa/autoMark", checkIfUserLoginAPI, async (req, res) => {
+    try {
+      const user = req.session.user;
+      const data = req.body;
+      let cls = data.cls;
+      console.log(cls)
+      //data = {year: "HK1_2022-2023", cls: "1", std_list = []}
+
+      // get staff member info :
+      const marker = await client.db(name_global_databases).collection('user_info').findOne(
+        { _id: user._id },
+        {
+          projection: {
+            _id: 0,
+            last_name: 1,
+            first_name: 1
+          }
+        }
+      );
+      // check for post data.cls if class define this mean they choose class so that must
+      if (!cls) {
+        cls = 0;
+      }
+
+      // check if table is exist or not
+      // update or add new table copy from std_table to staff_table
+      for (let i = 0; i < data.std_list.length; i++) {
+        const std_table = await client.db(user.dep).collection(cls + '_std_table').findOne(
+          {
+            mssv: data.std_list[i],
+            school_year: data.year
+          }
+        );
+
+        // update old table if exist else insert new one
+        // copy from student table and add marker name
+        if (std_table) {
+          std_table.marker = marker.last_name + " " + marker.first_name
+          delete std_table._id;
+          await client.db(user.dep).collection(cls + '_dep_table').updateOne(
             {
               mssv: data.std_list[i],
               school_year: data.year

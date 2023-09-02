@@ -100,11 +100,13 @@ $(document).on("click", ".auto_mark_btn", async function () {
       },
       body: JSON.stringify({
         year: curr_tb_year,
-        std_list: mssv_list
+        std_list: mssv_list,
+
+        cls: $(".--class option:selected").text().trim()
       })
     };
     if (mssv_list.length > 0) {
-      const response = await fetch('/api/autoMark', requestOptions);
+      const response = await fetch('/api/doan_khoa/autoMark', requestOptions);
       if (response.ok) {
         $('.auto_mark_btn').prop('disabled', false);
         $('.auto_mark_btn').text('Chấm bảng điểm đã chọn');
@@ -183,7 +185,7 @@ $(document).on("click", ".button-35-a", async function () {
 
         console.log($(".selectbox--hocky select option:selected").text().trim())
         const cur_tb_year = "HK" + $(".selectbox--hocky select option:selected").text().trim() + "_" + $(".nien_khoa select option:selected").text().trim();
-        
+
         if (year_available >= cur_tb_year) {
 
           const studentId = $(this).closest('tr').find('td:nth-child(3)').text();
@@ -218,7 +220,7 @@ $('.chamdiem').click(function () {
 
   console.log($(".selectbox--hocky select option:selected").text().trim())
   const cur_tb_year = "HK" + $(".selectbox--hocky select option:selected").text().trim() + "_" + $(".nien_khoa select option:selected").text().trim();
-  
+
   if (year_cur >= cur_tb_year) {
 
     const studentId = $(this).closest('tr').find('td:nth-child(3)').text().trim();
