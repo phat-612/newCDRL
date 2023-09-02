@@ -12,125 +12,132 @@
 <body>
   <div class="main">
     <%- include(header) %>
-    <%- include(thongbao) %>
+      <%- include(thongbao) %>
+        <div class="container">
 
-    <div class="container">
+          <!-- Quản lí điểm -->
+          <div class="manager">
+            <div class="content content_top">
+              <h2>QUẢN LÍ LỚP HỌC</h2>
+              <a href="/bancansu/danhsachbangdiem"><button class="button-35">Quản lí điểm rèn luyện</button></a>
+              <a href="/bancansu/quanlihoatdong"><button class="button-35">Quản lí hoạt động</button></a>
+            </div>
+          </div>
 
-      <!-- Quản lí điểm -->
-      <div class="manager">
-        <div class="content content_top">
-          <h2>QUẢN LÍ LỚP HỌC</h2>
-          <a href="/bancansu/danhsachbangdiem"><button class="button-35">Quản lí điểm rèn luyện</button></a>
-          <a href="/bancansu/quanlihoatdong"><button class="button-35">Quản lí hoạt động</button></a>
-        </div>
-      </div>
+          <!-- Nộp bảng chấm điểm -->
+          <div class="submit-mark">
+            <div class="content content_top">
+              <h2>ĐÁNH GIÁ ĐIỂM CÁ NHÂN</h2>
+              <a href="/nhapdiemdanhgia"><button class="button-35">Nộp bảng điểm</button></a>
+            </div>
+          </div>
 
-      <!-- Nộp bảng chấm điểm -->
-      <div class="submit-mark">
-        <div class="content content_top">
-          <h2>ĐÁNH GIÁ ĐIỂM CÁ NHÂN</h2>
-          <a href="/nhapdiemdanhgia"><button class="button-35">Nộp bảng điểm</button></a>
-        </div>
-      </div>
+          <!-- Tra cứu -->
+          <div class="tra_cuu">
+            <div class="content content_top">
+              <h2>TRA CỨU THÔNG TIN</h2>
+              <div class="nien-khoa">
+                <p>Niên khóa</p>
+                <div class="selectbox">
+                  <div class="select" style="margin: 0.9rem;">
+                    <select id="mySelect2">
+                      <% for (let i=0; i < nienkhoa.length; i++) {%>
+                        <%if (bandiem[0].year.slice(4)==nienkhoa[i]){%>
+                          <option selected value="<%=nienkhoa[i]%>">
+                            <%=nienkhoa[i]%>
+                          </option>
+                          <%} else {%>
+                            <option value="<%=nienkhoa[i]%>">
+                              <%=nienkhoa[i]%>
+                            </option>
+                            <%}%>
+                              <%}%>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="sub-container">
+              <div class="mark-box">
+                <!-- <h3 class="title-box">Điểm Rèn Luyện</h3> -->
+                <table>
+                  <thead>
+                    <tr style="display: table-row;">
+                      <th class="column1" style="width: 22%;">Học Kỳ I</th>
+                      <th class="column2" style="width: 48%;">Tổng Điểm Rèn Luyện</th>
+                      <th class="column3" style="width: 25rem;">Chi Tiết</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% for (let i=0; i < bandiem.length; i++) {%>
 
-      <!-- Tra cứu -->
-      <div class="tra_cuu">
-        <div class="content content_top">
-          <h2>TRA CỨU THÔNG TIN</h2>
-          <div class="nien-khoa">
-            <p>Niên khóa</p>
-            <div class="selectbox">
-              <div class="select" style="margin: 0.9rem;">
-                <select id="mySelect2">
-                  <% for (let i = 0; i < nienkhoa.length; i++) {%>
-                  <%if (bandiem[0].year.slice(4) == nienkhoa[i]){%>
-                  <option selected value="<%=nienkhoa[i]%>"><%=nienkhoa[i]%></option>
-                  <%} else {%>
-                  <option value="<%=nienkhoa[i]%>"><%=nienkhoa[i]%></option>
-                  <%}%>
-                  <%}%>
-                </select>
+                      <tr>
+                        <td>
+                          <%=i+1%>
+                        </td>
+                        <td class="total-result" data-year="HK<%=i+1%>_total">
+                          <%=bandiem[i].total%>
+                        </td>
+                        <%if (bandiem[i].total !='Chưa có điểm' ){%>
+                          <td><a href="/xembangdiem?schoolYear=<%=bandiem[i].year%>" id="HK<%=i+1%>">Xem Bảng Điểm</a>
+                          </td>
+                          <%} else {%>
+                            <td><a id="HK<%=i+1%>" style="display: none;">Xem Bảng Điểm</a></td>
+                            <%}%>
+                      </tr>
+                      <%}%>
+
+                  </tbody>
+                </table>
+              </div>
+              <div class="activity-box">
+                <!-- <h3 class="title-box">Hoạt Động Rèn Luyện</h3> -->
+                <table>
+                  <thead>
+                    <tr>
+                      <th style="width: 3%;">STT</th>
+                      <th style="width: 5%;">Học Kỳ</th>
+                      <th style="width: 30%;">Tên Hoạt Động</th>
+                      <th style="width: 10%;">Cấp Độ</th>
+                      <th style="width: 5%;">Tham Gia</th>
+                      <th style="width: 5%;">Khen Thưởng</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>I</td>
+                      <td>Hoạt Động xxx</td>
+                      <td>Cấp xxx</td>
+                      <td>x</td>
+                      <td>x</td>
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                      <td>I</td>
+                      <td>Hoạt Động xxx</td>
+                      <td>Cấp xxx</td>
+                      <td>x</td>
+                      <td>x</td>
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                      <td>I</td>
+                      <td>Hoạt Động xxx</td>
+                      <td>Cấp xxx</td>
+                      <td>x</td>
+                      <td>x</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
-          <div class="sub-container">
-            <div class="mark-box">
-              <!-- <h3 class="title-box">Điểm Rèn Luyện</h3> -->
-              <table>
-                <thead>
-                  <tr style="display: table-row;">
-                    <th class="column1" style="width: 22%;">Học Kỳ I</th>
-                    <th class="column2" style="width: 48%;">Tổng Điểm Rèn Luyện</th>
-                    <th class="column3" style="width: 25rem;">Chi Tiết</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% for (let i = 0; i < bandiem.length; i++) {%>
-
-                  <tr>
-                    <td><%=i+1%></td>
-                    <td class="total-result" data-year="HK<%=i+1%>_total"><%=bandiem[i].total%></td>
-                    <%if (bandiem[i].total != 'Chưa có điểm'){%>
-                    <td><a href="/xembangdiem?schoolYear=<%=bandiem[i].year%>" id="HK<%=i+1%>">Xem Bảng Điểm</a></td>
-                    <%} else {%>
-                    <td><a id="HK<%=i+1%>" style="display: none;">Xem Bảng Điểm</a></td>
-                    <%}%>
-                  </tr>
-                  <%}%>
-
-                </tbody>
-              </table>
-            </div>
-            <div class="activity-box">
-              <!-- <h3 class="title-box">Hoạt Động Rèn Luyện</h3> -->
-              <table>
-                <thead>
-                  <tr>
-                    <th style="width: 3%;">STT</th>
-                    <th style="width: 5%;">Học Kỳ</th>
-                    <th style="width: 30%;">Tên Hoạt Động</th>
-                    <th style="width: 10%;">Cấp Độ</th>
-                    <th style="width: 5%;">Tham Gia</th>
-                    <th style="width: 5%;">Khen Thưởng</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>I</td>
-                    <td>Hoạt Động xxx</td>
-                    <td>Cấp xxx</td>
-                    <td>x</td>
-                    <td>x</td>
-                  </tr>
-                  <tr>
-                    <td>1</td>
-                    <td>I</td>
-                    <td>Hoạt Động xxx</td>
-                    <td>Cấp xxx</td>
-                    <td>x</td>
-                    <td>x</td>
-                  </tr>
-                  <tr>
-                    <td>1</td>
-                    <td>I</td>
-                    <td>Hoạt Động xxx</td>
-                    <td>Cấp xxx</td>
-                    <td>x</td>
-                    <td>x</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          
         </div>
-      </div>
-    </div>
-    <%- include(footer) %>
-
   </div>
-  <script src="/src/JS/sinhvien-index.js"></script>
+  <%- include(footer) %>
+    <script src="/src/JS/sinhvien-index.js"></script>
+    </div>
 </body>
 
 </html>

@@ -1,3 +1,11 @@
+const url = window.location.href
+console.log(url)
+const lastIndex = url.lastIndexOf('=');
+const mssv = url.slice(lastIndex + 1);
+console.log(mssv);
+
+
+
 // identify file
 function validateFile(file) {
   let allowedFormats = ['jpg', 'jpeg', 'png']; // Allowed file formats
@@ -381,7 +389,7 @@ async function uploadImage() {
 async function mark(img_ids) {
   try {
     let postData = JSON.stringify({
-      school_year:"HK1_2022-2023",
+      school_year: "HK1_2022-2023",
       first: [
         getSelectValue("mySelect1"),
         getSelectValue("mySelect2"),
@@ -404,6 +412,7 @@ async function mark(img_ids) {
         getSelectValue("mySelect12"),
       ],
       img_ids: img_ids,
+      mssv: mssv,
       fifth: [
         getSelectValue("mySelect13"),
         getSelectValue("mySelect14"),

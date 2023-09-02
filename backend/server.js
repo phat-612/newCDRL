@@ -213,7 +213,7 @@ client.connect().then(() => {
     next();
   }
 
-  async function mark(table, user, data, marker, cls) {
+  async function mark(table, user, mssv, data, marker, cls) {
     // data = {
     //   first: [],
     //   second: [],
@@ -243,7 +243,7 @@ client.connect().then(() => {
     if (start_day <= today && (today < end_day || end_day == forever_day)) {
       // update old table if exist or insert new table
       let update = {
-        mssv: user._id,
+        mssv: mssv,
         school_year: school_year.year,
         first: data.first,
         second: data.second,
@@ -942,7 +942,7 @@ client.connect().then(() => {
             school_year: schoolYearParam
           },
           {
-            projection: { _id: 0, first: 1, second: 1, third: 1, fourth: 1, fifth: 1, total: 1,img_ids: 1}
+            projection: { _id: 0, first: 1, second: 1, third: 1, fourth: 1, fifth: 1, total: 1, img_ids: 1 }
           }
         );
 
@@ -954,7 +954,7 @@ client.connect().then(() => {
             school_year: schoolYearParam
           },
           {
-            projection: { _id: 0, first: 1, second: 1, third: 1, fourth: 1, fifth: 1, total: 1, img_ids: 1}
+            projection: { _id: 0, first: 1, second: 1, third: 1, fourth: 1, fifth: 1, total: 1, img_ids: 1 }
           }
         );
 
@@ -967,7 +967,7 @@ client.connect().then(() => {
             school_year: schoolYearParam
           },
           {
-            projection: { _id: 0, first: 1, second: 1, third: 1, fourth: 1, fifth: 1, total: 1 ,limg_ids: 1}
+            projection: { _id: 0, first: 1, second: 1, third: 1, fourth: 1, fifth: 1, total: 1, limg_ids: 1 }
           }
         );
       nulltable = {
@@ -1318,17 +1318,22 @@ client.connect().then(() => {
   app.get("/doan_khoa/danhsachbangdiem", checkIfUserLoginRoute, async (req, res) => {
     try {
       const user = req.session.user;
+
       const school_year = await client.db(name_global_databases).collection('school_year').findOne(
         {},
         { projection: { _id: 0, year: 1 } }
       );
       // check user login:
       if (user.pow[2]) {
-
+        const depkhoa = await client.db(name_global_databases).collection('user_info').findOne(
+          { _id: user._id },
+          { projection: { _id: 0, dep: 1 } }
+        );
         let branch_list = await client.db(name_global_databases).collection('branchs').find(
-          { dep: user.dep },
+          { dep: depkhoa.dep },
           { projection: { _id: 1, name: 1 } })
           .toArray();
+
         const classlist = await client.db(name_global_databases).collection('classes').find(
           { branch: { $in: branch_list.map(branch => branch._id) } },
           { projection: { _id: 1, branch: 1 } }
@@ -1337,9 +1342,10 @@ client.connect().then(() => {
           { _id: classlist[0]._id },
           { projection: { _id: 0, years: 1 } }
         );
+
         // get all student in staff member class:
         let student_list = await client.db(name_global_databases).collection('user_info').find(
-          { class: classlist[0]._id,"power.0": { $exists: true }},
+          { class: classlist[0]._id, "power.0": { $exists: true } },
           { projection: { first_name: 1, last_name: 1 } })
           .toArray();
         student_list = sortStudentName(student_list);
@@ -1418,7 +1424,7 @@ client.connect().then(() => {
             render.department_scores.push('-');
           }
         }
-
+        console.log(render.curr_department_score)
         res.render("doankhoa-grade-list", render);
       }
       else { // user not staff members 
@@ -1516,6 +1522,7 @@ client.connect().then(() => {
   app.get("/doan_khoa/nhapdiemdanhgia", checkIfUserLoginRoute, async (req, res) => {
     try {
       const user = req.session.user;
+      console.log(user);
       const mssv = req.query.studentId;
       const cls = req.query.class;
       const schoolYearParam = req.query.schoolYear;
@@ -1527,7 +1534,7 @@ client.connect().then(() => {
             school_year: schoolYearParam,
           },
           {
-            projection: { _id: 0, first: 1, second: 1, third: 1, fourth: 1, fifth: 1, total: 1 , img_ids: 1}
+            projection: { _id: 0, first: 1, second: 1, third: 1, fourth: 1, fifth: 1, total: 1, img_ids: 1 }
           }
         );
 
@@ -1613,7 +1620,10 @@ client.connect().then(() => {
         });
 
       }
-      else { res.sendStatus(404); }
+      else {
+        res.sendStatus(404);
+        console.log("No student")
+      }
     } catch (err) {
       console.log("SYSTEM | BAN_CAN_SU_NHAP_DIEM_ROUTE | ERROR | ", err)
       res.status(500).json({ error: "Lỗi hệ thống" });
@@ -1988,7 +1998,7 @@ client.connect().then(() => {
         }
       );
 
-      await mark("_std_table", user, data, marker, user.cls[0]);
+      await mark("_std_table", user, user._id, data, marker, user.cls[0]);
 
       res.sendStatus(200);
     } catch (err) {
@@ -2014,7 +2024,7 @@ client.connect().then(() => {
           }
         );
 
-        await mark("_stf_table", user, data, marker, user.cls[0]);
+        await mark("_stf_table", user, data.mssv, data, marker, user.cls[0]);
 
         res.sendStatus(200);
       } catch (err) {
@@ -2029,7 +2039,7 @@ client.connect().then(() => {
   // Save table and update old table dep------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   app.post("/api/dep_mark", checkIfUserLoginAPI, async (req, res) => {
     const user = req.session.user;
-    if (user.pow[1]) {
+    if (user.pow[2]) {
       try {
         const data = req.body;
         const marker = await client.db(name_global_databases).collection('user_info').findOne(
@@ -2043,7 +2053,7 @@ client.connect().then(() => {
           }
         );
 
-        await mark("_dep_table", user, data, marker, user.cls[0]);
+        await mark("_dep_table", user, data.mssv, data, marker, data.class);
 
         res.sendStatus(200);
       } catch (err) {
@@ -2560,7 +2570,7 @@ client.connect().then(() => {
               }
             );
           const curr_staff_score = await client.db(user.dep)
-            .collection(cls+ '_stf_table')
+            .collection(cls + '_stf_table')
             .findOne(
               {
                 mssv: student._id,
