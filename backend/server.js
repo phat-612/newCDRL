@@ -1325,12 +1325,9 @@ client.connect().then(() => {
       );
       // check user login:
       if (user.pow[2]) {
-        const depkhoa = await client.db(name_global_databases).collection('user_info').findOne(
-          { _id: user._id },
-          { projection: { _id: 0, dep: 1 } }
-        );
+
         let branch_list = await client.db(name_global_databases).collection('branchs').find(
-          { dep: depkhoa.dep },
+          { dep: user.dep },
           { projection: { _id: 1, name: 1 } })
           .toArray();
 
@@ -1424,7 +1421,6 @@ client.connect().then(() => {
             render.department_scores.push('-');
           }
         }
-        console.log(render.curr_department_score)
         res.render("doankhoa-grade-list", render);
       }
       else { // user not staff members 
@@ -1522,7 +1518,6 @@ client.connect().then(() => {
   app.get("/doan_khoa/nhapdiemdanhgia", checkIfUserLoginRoute, async (req, res) => {
     try {
       const user = req.session.user;
-      console.log(user);
       const mssv = req.query.studentId;
       const cls = req.query.class;
       const schoolYearParam = req.query.schoolYear;
@@ -1602,7 +1597,6 @@ client.connect().then(() => {
       for (const i of studentTotalScore.img_ids) {
         link_img.push(await server.getDriveFileLinkAndDescription(i));
       }
-      console.log(link_img)
 
 
       if (studentTotalScore) {
