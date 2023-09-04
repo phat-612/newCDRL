@@ -136,11 +136,9 @@ if (themes) {
 
 theme_btn.addEventListener("change", () => {
   if (theme_btn.checked) {
-    console.log("themes");
     localStorage.setItem("theme", "dark");
     setDark();
   } else {
-    console.log("themesô");
     localStorage.setItem("theme", "light");
     setLight();
   }

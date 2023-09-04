@@ -23,6 +23,12 @@ html {
   padding: 1rem;
 }
 
+.container__button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .content h2,
 .content h2 {
   font-size: 2rem;
@@ -173,10 +179,10 @@ textarea::placeholder {
   display: flex;
 }
 
-label {
+label { 
   display: flex;
   align-items: center;
-  margin-right: 10px;
+  /* margin-right: 10px; */
   /* Để tạo khoảng cách giữa label và select */
   font-size: 1.8rem;
 }
@@ -190,6 +196,10 @@ label {
   display: flex;
   margin: 3rem 0rem 0rem 20rem;
   justify-content: flex-end;
+}
+
+.middle {
+  flex: 1;
 }
 
 /* 

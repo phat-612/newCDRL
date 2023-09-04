@@ -11,6 +11,8 @@
 <body>
   <div class="main">
     <%- include(header) %>
+    <%- include(thongbao) %>
+
       <div class="container">
         <%- include(menu) %>
 
@@ -19,7 +21,9 @@
             <!-- Button -->
             <div class="content container__button">
               <button class="button-35" id="add__class">Thêm Lớp</button>
-              <button class="button-35">Xoá Lớp</button>
+              <button class="button-35" id="delete__class">Xoá Lớp</button>
+              <div class="middle"></div> 
+              <button class="button-35" id="save__class">Lưu</button>
             </div>
 
             <!-- Table -->
@@ -27,126 +31,54 @@
               <table>
                 <thead>
                   <tr>
-                    <th>
+                    <th style="width: 5%;">
                       <div class="checkbox-wrapper-4">
-                        <input type="checkbox" id="all__row" class="inp-cbx" value="2" />
+                        <input type="checkbox" id="all__row" class="inp-cbx all-cbx" value="2" />
                         <label for="all__row" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                         </label>
                       </div>
                     </th>
-                    <th>STT</th>
+                    <th style="width: 5%;">STT</th>
                     <th style="width: 15%;">Tên Lớp</th>
-                    <th style="width: 15%;">Bộ Môn</th>
+                    <th>Bộ Môn</th>
                     <th style="width: 10%;">Khoa</th>
-                    <th style="width: 20%;">Phân Công</th>
-                    <th>Cập Nhập</th>
+                    <th style="width: 25%;">Phân Công</th>
+                    <th style="width: 13%;">Cập Nhập</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>
-                      <div class="checkbox-wrapper-4">
-                        <input type="checkbox" id="row__0" class="inp-cbx" value="2" />
-                        <label for="row__0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                        </label>
-                      </div>
-                    </td>
-                    <td style="width: 3%;">1</td>
-                    <td style="">KTPM0121</td>
-                    <td style="width: 20%;">Kỹ Thuật Phần Mềm</td>
-                    <td style="width: 10%;">CNTT</td>
-                    <td>
-                      <div class="selectbox co__van">
-                        <div class="select">
-                          <select>
-                            <option value="1">Nguyễn Xuân Hà Giang</option>
-                            <option value="2">Lâm Thanh Toản</option>
-                          </select>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <a id="edit__class" href="#">Sửa</a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="checkbox-wrapper-4">
-                        <input type="checkbox" id="row__1" class="inp-cbx" value="2" />
-                        <label for="row__1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                        </label>
-                      </div>
-                    </td>
-                    <td>1</td>
-                    <td>KTPM0121</td>
-                    <td>Kỹ Thuật Phần Mềm</td>
-                    <td>CNTT</td>
-                    <td>
-                      <div class="selectbox co__van">
-                        <div class="select">
-                          <select>
-                            <option value="1">Nguyễn Xuân Hà Giang</option>
-                            <option value="2">Lâm Thanh Toản</option>
-                          </select>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <a id="edit__class" >Sửa</a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="checkbox-wrapper-4">
-                        <input type="checkbox" id="row__2" class="inp-cbx" value="2" />
-                        <label for="row__2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                        </label>
-                      </div>
-                    </td>
-                    <td>1</td>
-                    <td>KTPM0121</td>
-                    <td>Kỹ Thuật Phần Mềm</td>
-                    <td>CNTT</td>
-                    <td>
-                      <div class="selectbox co__van">
-                        <div class="select">
-                          <select>
-                            <option value="1">Nguyễn Xuân Hà Giang</option>
-                            <option value="2">Lâm Thanh Toản</option>
-                          </select>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <a id="edit__class">Sửa</a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="checkbox-wrapper-4">
-                        <input type="checkbox" id="row__3" class="inp-cbx" value="2" />
-                        <label for="row__3" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                        </label>
-                      </div>
-                    </td>
-                    <td>1</td>
-                    <td>KTPM0121</td>
-                    <td>Kỹ Thuật Phần Mềm</td>
-                    <td>CNTT</td>
-                    <td>
-                      <div class="selectbox co__van">
-                        <div class="select">
-                          <select>
-                            <option value="1">Nguyễn Xuân Hà Giang</option>
-                            <option value="2">Lâm Thanh Toản</option>
-                          </select>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <a id="edit__class">Sửa</a>
-                    </td>
-                  </tr>
+                  <% let numbers = 0; %>
+                  <% for (let i = 0; i < branchs.length; i++) {%>
+                    <% for (let j = 0; j < classes[branchs[i]._id].length; j++) {%>
+                      <tr>
+                        <td>
+                          <div class="checkbox-wrapper-4">
+                            <input type="checkbox" id="row__<%= numbers %>" class="inp-cbx" value="<%= classes[branchs[i]._id][j] %>" />
+                            <label for="row__<%= numbers %>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                            </label>
+                          </div>
+                        </td>
+                        <td style="width: 3%;">1</td>
+                        <td style=""><%= classes[branchs[i]._id][j] %></td>
+                        <td style="width: 20%;"><%= branchs[i].name %></td>
+                        <td style="width: 10%;"><%= dep_name %></td>
+                        <td>
+                          <div class="selectbox co__van">
+                            <div class="select">
+                              <select>
+                                <% for (let k = 0; k < teachers.length; k++) {%>
+                                <option value="<%= k %>"><%= teachers[k] %></option>
+                                <% } %>
+                              </select>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <a id="edit__class" href="#">Sửa</a>
+                        </td>
+                      </tr>
+                    <% } %>
+                  <% } %>
                 </tbody>
               </table>
             </div>
