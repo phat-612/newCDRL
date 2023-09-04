@@ -183,46 +183,46 @@ client
 
     async function checkIfUserLoginRoute(req, res, next) {
       const user = req.session.user;
-      const hslink = ["/nhapdiemdanhgia","/xembangdiem"];
-      const gvlink = ["/giaovien/quanlyquyen", "/giaovien/nhapdiemdanhgia", "/giaovien/danhsachbangdiem"];
-      const stf = ["/bancansu/nhapdiemdanhgia","/bancansu/quanlihoatdong","/bancansu/quanlihoatdong/danhgiahoatdong", "/bancansu/danhsachbangdiem"];
-      const dep = ["/doankhoa/quanlibomon","/doankhoa/quanlilop", "/doankhoa/danhsachbangdiem", "/doankhoa/quanlicv", "/doankhoa/quanlihoatdongkhoa", "/doankhoa/danhsachsinhvien", "/doankhoa/nhapdiemdanhgia", "/doankhoa/thoihan"];
-      if (hslink.includes(req.path))
-      {
-        if (!user.pow[0])
-        {
-          return res.redirect("/");
-        }
-      };
-      if (gvlink.includes(req.path))
-      {
-        if (!user.pow[1] && !user.pow[4])
-        {
-          return res.redirect("/");
-        }
-      };
-      if (stf.includes(req.path))
-      {
-        if (!user.pow[0] && (!user.pow[1]||!user.pow[3]))
-        {
-          return res.redirect("/");
-        }
-      }
-      if (dep.includes(req.path))
-      {
-        if (!user.pow[8])
-        {
-          return res.redirect("/");
-        }
-      }
-      if ((user.pow[1] && user.pow[4])||user.pow[8])
-      {
-        res.locals.isnotST=true;
-      }
       if (!user) {
         // Cookie không tồn tại, chặn truy cập
         return res.redirect("/login");
       } else {
+        const hslink = ["/nhapdiemdanhgia","/xembangdiem"];
+        const gvlink = ["/giaovien/quanlyquyen", "/giaovien/nhapdiemdanhgia", "/giaovien/danhsachbangdiem"];
+        const stf = ["/bancansu/nhapdiemdanhgia","/bancansu/quanlihoatdong","/bancansu/quanlihoatdong/danhgiahoatdong", "/bancansu/danhsachbangdiem"];
+        const dep = ["/doankhoa/quanlibomon","/doankhoa/quanlilop", "/doankhoa/danhsachbangdiem", "/doankhoa/quanlicv", "/doankhoa/quanlihoatdongkhoa", "/doankhoa/danhsachsinhvien", "/doankhoa/nhapdiemdanhgia", "/doankhoa/thoihan"];
+        if (hslink.includes(req.path))
+        {
+          if (!user.pow[0])
+          {
+            return res.redirect("/");
+          }
+        };
+        if (gvlink.includes(req.path))
+        {
+          if (!user.pow[1] && !user.pow[4])
+          {
+            return res.redirect("/");
+          }
+        };
+        if (stf.includes(req.path))
+        {
+          if (!user.pow[0] && (!user.pow[1]||!user.pow[3]))
+          {
+            return res.redirect("/");
+          }
+        }
+        if (dep.includes(req.path))
+        {
+          if (!user.pow[8])
+          {
+            return res.redirect("/");
+          }
+        }
+        if ((user.pow[1] && user.pow[4])||user.pow[8])
+        {
+          res.locals.isnotST=true;
+        }
         if (user.first == "new_user") {
           return res.redirect("/login/firstlogin");
         } else if (user.first == "otp") {
