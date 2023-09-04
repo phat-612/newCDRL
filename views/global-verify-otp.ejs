@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html>
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Xác nhận mã OTP</title>
-  <!-- <link rel="stylesheet" href="/src/css/table.css" /> -->
   <link rel="stylesheet" href="/src/css/global-verify-otp.css" />
   <link rel="stylesheet" href="/src/css/global-verify-otp-responsive.css" />
 </head>
@@ -13,43 +6,42 @@
 <body>
   <div class="main bg-[#e7ecf0]">
     <%- include(header) %>
-    <%- include(thongbao) %>
+      <%- include(thongbao) %>
 
-    <div class="content">
-      <form action="javascript: void(0)" class="otp-form" name="otp-form">
+        <div class="content">
+          <form action="javascript: void(0)" class="otp-form" name="otp-form">
 
-        <%if (email){%>
-        <div class="title">
-          <h3>Xác minh OTP</h3>
-          <p class="info">Mã OTP đã được gửi tới <%= email%></p>
-          <p class="msg">Vui lòng nhập OTP để xác minh</p>
+            <%if (email){%>
+              <div class="title">
+                <h3>Xác minh OTP</h3>
+                <p class="info">Mã OTP đã được gửi tới <%= email%>
+                </p>
+                <p class="msg">Vui lòng nhập OTP để xác minh</p>
+              </div>
+              <div class="otp-input-fields">
+                <input type="text" class="otp__digit otp__field__1" maxlength="1">
+                <input type="text" class="otp__digit otp__field__2" maxlength="1">
+                <input type="text" class="otp__digit otp__field__3" maxlength="1">
+                <input type="text" class="otp__digit otp__field__4" maxlength="1">
+                <input type="text" class="otp__digit otp__field__5" maxlength="1">
+                <input type="text" class="otp__digit otp__field__6" maxlength="1">
+              </div>
+
+              <div class="result">
+                <div class="result_top">
+                  <span class="times">Vui lòng chờ 60 giây </span>
+                  <a class="otp_again">Gửi lại OTP</a>
+                </div>
+
+                <button id="page-button">Xác nhận</button>
+              </div>
+              <%} else{%>
+                <div class="no_sv">Không tìm thấy sinh viên này!
+
+                </div>
+                <%}%>
+          </form>
         </div>
-        <div class="otp-input-fields">
-          <input type="text" class="otp__digit otp__field__1" maxlength="1">
-          <input type="text" class="otp__digit otp__field__2" maxlength="1">
-          <input type="text" class="otp__digit otp__field__3" maxlength="1">
-          <input type="text" class="otp__digit otp__field__4" maxlength="1">
-          <input type="text" class="otp__digit otp__field__5" maxlength="1">
-          <input type="text" class="otp__digit otp__field__6" maxlength="1">
-        </div>
-
-        <div class="result">
-          <div class="result_top">
-            <span class="times">Vui lòng chờ 60 giây </span>
-            <a class="otp_again">Gửi lại OTP</a>
-          </div>
-
-          <button id="page-button">Xác nhận</button>
-        </div>
-        <%} else{%>
-        <div class="no_sv">Không tìm thấy sinh viên này!
-
-        </div>
-        <%}%>
-      </form>
-    </div>
   </div>
 </body>
 <script src="/src/JS/global-verify-otp.js"></script>
-
-</html>

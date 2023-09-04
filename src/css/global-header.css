@@ -2,53 +2,58 @@ html {
   font-size: 62.5%;
   font-family: Arial, Helvetica, sans-serif;
 }
-:root{
+
+:root {
   --html-color: #e7ecf0;
-  --header-text:#667580;
-  --black-color:black;
-  --white-color:#fff;
-  --checkbox-active:rgb(143, 213, 229);
-  --tr-hover:rgb(247 234 255);
-  --table-header:rgb(206, 206, 206);
-  --td-a:rgb(117, 117, 255);
-  --td-ahover:rgb(79 79 235);
-  --header-boxshadow:#70707042;
-  --button-color:#d3d3d3;
-  --checkbox-boxshadow:rgba(0, 16, 75, 0.05);
-  --checkbox-border:#9b9ea7;
-  --checkbox-border-hover:#c2c2c2;
-  --tb-white:rgb(241, 241, 241);
+  --header-text: #667580;
+  --black-color: black;
+  --white-color: #fff;
+  --checkbox-active: rgb(143, 213, 229);
+  --tr-hover: rgb(247 234 255);
+  --table-header: rgb(206, 206, 206);
+  --td-a: rgb(117, 117, 255);
+  --td-ahover: rgb(79 79 235);
+  --header-boxshadow: #70707042;
+  --button-color: #d3d3d3;
+  --checkbox-boxshadow: rgba(0, 16, 75, 0.05);
+  --checkbox-border: #9b9ea7;
+  --checkbox-border-hover: #c2c2c2;
+  --tb-white: rgb(241, 241, 241);
 
   /* login */
-  --login-a:rgb(98, 98, 232);
-  --login-boxshadow:rgba(0, 0, 0, 0.6);
-  --lonin-input-focus:#bdb8b8;
+  --login-a: rgb(98, 98, 232);
+  --login-boxshadow: rgba(0, 0, 0, 0.6);
+  --lonin-input-focus: #bdb8b8;
 
   /* bancansu-grade */
-  --mauvang-ne:rgb(251, 251, 138);
+  --mauvang-ne: rgb(251, 251, 138);
   /* modal */
-  --modal-color:rgba(233, 233, 233,.6);
+  --modal-color: rgba(233, 233, 233, .6);
   /* input */
-  --input-hover:#d9d9d982;
-  --input-placeholder:#767676;
+  --input-hover: #d9d9d982;
+  --input-placeholder: #767676;
   /* table border */
-  --table-border:#aeaeae;
-  --select-bg:#ffffff00;
-  --red-color:red;
+  --table-border: #aeaeae;
+  --select-bg: #ffffff00;
+  --red-color: red;
 
   /* OTP */
-  --otp-input:#ededea;
-  
+  --otp-input: #ededea;
+
 }
+
 body {
   background-color: var(--html-color);
+  color: var(--black-color);
 }
 
 * {
   margin: 0;
   padding: 0;
 }
-
+input{
+  color: var(--black-color);
+}
 /* :root{
   var
 } */
@@ -102,6 +107,7 @@ body {
 }
 
 .setting {
+  z-index: 100000;
   width: 100%;
   min-width: 16rem;
   position: absolute;
@@ -303,10 +309,13 @@ body {
 .selectbox button:hover {
   background-color: rgb(43, 255, 0);
 }
+
 td .select select {
   box-shadow: none !important;
 }
+
 .select select {
+  color: var(--black-color);
   font-size: 1.6rem;
   padding: 1rem 1.6rem 1rem 0.7rem;
   text-align: center;
@@ -336,6 +345,7 @@ td .select select {
 
 .select::after {
   font-size: 1.2rem;
+  /* color: #000; */
   content: "\25BC";
   position: absolute;
   top: 33%;
@@ -350,6 +360,20 @@ td .select select {
 }
 
 /* table chung */
+.tittle-table {
+  color: var(--black-color);
+}
+td a{
+  cursor: pointer;
+}
+.bang_cham_diem {
+  color: var(--black-color);
+}
+
+.bang_cham_diem select {
+  color: var(--black-color);
+}
+
 table,
 th,
 td {
@@ -362,7 +386,7 @@ tr {
 }
 
 tr:nth-child(even) {
-  background-color:var(--tb-white);
+  background-color: var(--tb-white);
 }
 
 tr:nth-child(odd) {
@@ -389,17 +413,18 @@ td a:hover {
   font-weight: 600;
 }
 
-.content_top{
+.content_top {
   text-align: center;
 }
-.content_top h2{
+
+.content_top h2 {
   border-bottom: 1px solid;
-    margin-bottom: 1rem;
-    font-size: 2rem;
-    background: rgb(27 87 198);
-    border-radius: 0.8rem;
-    color: #ffffff;
-    padding: 1rem;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  background: rgb(27 87 198);
+  border-radius: 0.8rem;
+  color: #ffffff;
+  padding: 1rem;
 }
 
 
@@ -408,16 +433,22 @@ td a:hover {
 .content.title {
   font-size: 2rem;
   margin-bottom: 2rem;
-  background-color:var(--td-a);
+  background-color: var(--td-a);
   display: inline-block;
   padding: 1.6rem 2.7rem 1.6rem 6rem;
   border-radius: 0.8rem;
   left: -4rem;
-  top:2rem;
+  top: 2rem;
   position: absolute;
 }
-.content_main{
+
+.content_main {
   margin-top: 10rem;
+}
+.modal_wrap{
+  box-shadow:  0 0 10px var(--black-color);
+  -webkit-box-shadow:  0 0 10px var(--black-color);
+  -moz-box-shadow:  0 0 10px var(--black-color);
 }
 
 
@@ -445,5 +476,62 @@ td a:hover {
 
   .avatar:hover .setting {
     display: none;
+  }
+}
+
+/*------ Settings ------*/
+.theme_btn {
+  transform: translateX(-20px);
+  --color: #38329b;
+  --size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  font-size: var(--size);
+  user-select: none;
+  fill: var(--color);
+  width: auto;
+}
+
+.theme_btn .moon {
+  position: absolute;
+  animation: keyframes-fill .5s;
+}
+
+.theme_btn .sun {
+  position: absolute;
+  display: none;
+  animation: keyframes-fill .5s;
+}
+
+/* ------ On check event ------ */
+.theme_btn input:checked~.moon {
+  display: none;
+}
+
+.theme_btn input:checked~.sun {
+  display: block;
+}
+
+/* ------ Hide the default checkbox ------ */
+.theme_btn input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* ------ Animation ------ */
+@keyframes keyframes-fill {
+  0% {
+    transform: rotate(-360deg) scale(0);
+    opacity: 0;
+  }
+
+  75% {
+    transform: rotate(25deg);
   }
 }

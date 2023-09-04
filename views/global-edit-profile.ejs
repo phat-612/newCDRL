@@ -14,57 +14,58 @@
 <body>
   <div class="main">
     <%- include(header) %>
-    <%- include(thongbao) %>
+      <%- include(thongbao) %>
 
-      <div class="container">
-        <div class="profile_title">
-          <h1>Thông Tin Sinh Viên </h1>  
-        </div>
-        <form method="post" action="javascript:void(0)" class="porfile_container">
-          <div class="porfile_container_item porfile_avatar">
-            <label class="info_lable" for="">Ảnh đại diện</label>
-            <div class="bt_av">
-              <div class="modal_wrap_img_item">
-                <p>Kéo thả hình ảnh vào đây hoặc nhấn vào để tải lên.</p>
-  
-                <input type="file" class="upload-input" style="display: none" />
-                <img class="up-img" src="<%=avt%>"/>
-                <button class="up-img-btn">
-                  <i class="fa-solid fa-plus"></i>
-                </button>
+        <div class="container">
+          <div class="profile_title">
+            <h1>Thông Tin Sinh Viên </h1>
+
+          </div>
+          <form method="post" action="javascript:void(0)" class="porfile_container">
+            <div class="porfile_container_item porfile_avatar">
+              <label class="info_lable" for="">Ảnh đại diện</label>
+              <div class="bt_av">
+                <div class="modal_wrap_img_item">
+                  <p>Kéo thả hình ảnh vào đây hoặc nhấn vào để tải lên.</p>
+
+                  <input type="file" class="upload-input" style="display: none" />
+                  <img class="up-img" src="<%=avt%>" />
+                  <button class="up-img-btn">
+                    <i class="fa-solid fa-plus"></i>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="right_container">
-            <div class="porfile_container_item">
-              <label class="info_lable" for="">Mã Số Sinh Viên </label><input type="text" disabled value = "<%=mssv%>"
-                class="mssv info_input" />
+            <div class="right_container">
+              <div class="porfile_container_item">
+                <label class="info_lable" for="">Mã Số Sinh Viên </label><input type="text" disabled value="<%=mssv%>"
+                  class="mssv info_input" />
+              </div>
+              <div class="porfile_container_item">
+                <label class="info_lable" for="">Họ Và Tên</label><input type="text" disabled value="<%=name%>"
+                  class="full_name info_input" />
+              </div>
+              <div class="porfile_container_item">
+                <label class="info_lable" for="">Email</label>
+                <input type="email" disabled value="<%=email%>" class="email info_input" />
+              </div>
+              <div class="porfile_container_item">
+                <label class="info_lable" for="">Tên Hiển Thị</label>
+                <input type="text" required value="<%=displayName%>" class="display_name info_input" />
+              </div>
             </div>
-            <div class="porfile_container_item">
-              <label class="info_lable" for="">Họ Và Tên</label><input type="text" disabled value = "<%=name%>"
-                class="full_name info_input" />
+          </form>
+          <div class="profile_btn_gr_parent">
+            <button class="button-35 profile_btn_logoutall" role="button"> Đăng xuất khỏi các thiết bị khác </button>
+            <div class="profile_btn_gr">
+              <button class="button-35 profile_btn_cancel" role="button">Hủy </button>
+              <button class="button-35 profile_btn_save" role="button">Lưu </button>
             </div>
-            <div class="porfile_container_item">
-              <label class="info_lable" for="">Email</label>
-              <input type="email" disabled value = "<%=email%>" class="email info_input" /> 
-            </div>
-            <div class="porfile_container_item">
-              <label class="info_lable" for="">Tên Hiển Thị</label>
-              <input type="text" required value = "<%=displayName%>" class="display_name info_input" />
-            </div>
-          </div>
-        </form>
-        <div class="profile_btn_gr_parent">
-          <button class="button-35 profile_btn_logoutall" role="button"> Đăng xuất khỏi các thiết bị khác </button>
-          <div class="profile_btn_gr">
-            <button class="button-35 profile_btn_cancel" role="button">Hủy </button>
-            <button class="button-35 profile_btn_save" role="button">Lưu </button>
           </div>
         </div>
-      </div>
   </div>
   <%- include(footer) %>
-  <script src="/src/JS/global-edit-profile.js"></script>
+    <script src="/src/JS/global-edit-profile.js"></script>
 </body>
 
 </html>

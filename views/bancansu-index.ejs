@@ -19,8 +19,14 @@
           <div class="manager">
             <div class="content content_top">
               <h2>QUẢN LÍ LỚP HỌC</h2>
+              <%if (pow == 0){%>
               <a href="/bancansu/danhsachbangdiem"><button class="button-35">Quản lí điểm rèn luyện</button></a>
               <a href="/bancansu/quanlihoatdong"><button class="button-35">Quản lí hoạt động</button></a>
+              <%} else if  (pow == 1){%>
+                <a href="/bancansu/danhsachbangdiem"><button class="button-35">Quản lí điểm rèn luyện</button></a>
+                <%} else if  (pow == 2){%>
+                  <a href="/bancansu/quanlihoatdong"><button class="button-35">Quản lí hoạt động</button></a>
+                  <%}%>
             </div>
           </div>
 

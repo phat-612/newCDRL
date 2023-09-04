@@ -13,203 +13,203 @@
   <div class="main">
     <%- include(header) %>
 
-    <div class="container">
-    <%- include(menu) %>
+      <div class="container">
+        <%- include(menu) %>
 
-      <div class="content">
+          <div class="content">
 
-        <div class="hk_nk">
-          <div class="year_full">
-            <div class="hk">
-              <span>Học kỳ</span>
-              <div class="selectbox selectbox--hocky">
-                <div class="select">
-                  <select>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="2">Tất cả</option>
-                  </select>
+            <div class="hk_nk">
+              <div class="year_full">
+                <div class="hk">
+                  <span>Học kỳ</span>
+                  <div class="selectbox selectbox--hocky">
+                    <div class="select">
+                      <select>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="2">Tất cả</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="hk">
+                  <span>Niên khóa</span>
+                  <div class="selectbox nien_khoa">
+                    <div class="select">
+                      <select>
+                        <option>2021-2022</option>
+                        <option>2022-2023</option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
               </div>
+              <div class="year_full">
+                <div class="hk">
+                  <span>Bộ môn</span>
+                  <div class="selectbox --bomon">
+                    <div class="select">
+                      <select>
+                        <option value="1">Công Nghệ Thông Tin</option>
+                        <option value="2">Kỹ Thuật Phần Mềm</option>
+                        <option value="2">Hệ Thống Thông Tin</option>
+                        <option value="2">Khoa Học Dữ Liệu</option>
+                        <option value="2">Tất cả</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="hk">
+                  <span>Lớp</span>
+                  <div class="selectbox --class">
+                    <div class="select">
+                      <select>
+                        <option value="1">KTPM0121</option>
+                        <option value="2">CNTT0121</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button class="button-35 button-35-a">Chọn</button>
+
             </div>
-            <div class="hk">
-              <span>Niên khóa</span>
-              <div class="selectbox nien_khoa">
-                <div class="select">
-                  <select>
-                    <option>2021-2022</option>
-                    <option>2022-2023</option>
-                  </select>
-                </div>
+
+            <div class="activity-board">
+              <div class="control">
+                <button class="button-35 " id="add__activity">Thêm hoạt động</button>
+                <button class="button-35 " id="edit__activity">Xoá hoạt động</button>
               </div>
+              <!-- table -->
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 4%">
+                      <!-- set id của input == for của label -->
+                      <!-- thêm class "new_update" cho td có cập nhật điểm mới chưa được chấm -->
+                      <!-- <span class="dau_sao">*</span> đứng phía sau tên (ai không tự đánh giá) -->
+                      <div class="checkbox-wrapper-4">
+                        <input type="checkbox" id="row__all" class="inp-cbx" value="2" />
+                        <label for="row__all" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                        </label>
+                    </th>
+                    <th style="width: 5%;">STT</th>
+                    <th style="width: 40%;">Hoạt động</th>
+                    <th style="width: 15%;">Cấp</th>
+                    <th style="width: 20%;">Đánh giá</th>
+                    <th style="width: 15%;">Cập nhật</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="checkbox-wrapper-4">
+                        <input type="checkbox" id="row__all__1" class="inp-cbx" value="2" />
+                        <label for="row__all__1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                        </label>
+                    </td>
+                    <td>1</td>
+                    <td>Hoạt động 1</td>
+                    <td>Cấp khoa</td>
+                    <td><a href="/doankhoa/quanlihoatdong/danhgiahoatdong">Chi tiết</a></td>
+                    <td><a class="more_list" href="#">Chỉnh sửa</a></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="checkbox-wrapper-4">
+                        <input type="checkbox" id="row__0__1" class="inp-cbx" value="2" />
+                        <label for="row__0__1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                        </label>
+                    </td>
+                    <td>1</td>
+                    <td>Hoạt động 2</td>
+                    <td>Cấp khoa</td>
+                    <td><a href="/doankhoa/quanlihoatdong/danhgiahoatdong">Chi tiết</a></td>
+                    <td><a class="more_list" href="#">Chỉnh sửa</a></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="checkbox-wrapper-4">
+                        <input type="checkbox" id="row__1__1" class="inp-cbx" value="2" />
+                        <label for="row__1__1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                        </label>
+                    </td>
+                    <td>1</td>
+                    <td>Hoạt động 3</td>
+                    <td>Cấp khoa</td>
+                    <td><a href="/doankhoa/quanlihoatdong/danhgiahoatdong">Chi tiết</a></td>
+                    <td><a class="more_list" href="#">Chỉnh sửa</a></td>
+                  </tr>
+                </tbody>
+              </table>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 4%">
+                      <!-- set id của input == for của label -->
+                      <!-- thêm class "new_update" cho td có cập nhật điểm mới chưa được chấm -->
+                      <!-- <span class="dau_sao">*</span> đứng phía sau tên (ai không tự đánh giá) -->
+                      <div class="checkbox-wrapper-4">
+                        <input type="checkbox" id="row__all__2" class="inp-cbx" value="2" />
+                        <label for="row__all__2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                        </label>
+                    </th>
+                    <th style="width: 3%;">STT</th>
+                    <th style="width: 30%;">Hoạt động</th>
+                    <th style="width: 10%;">Cấp</th>
+                    <th style="width: 20%;">Lớp</th>
+                    <th style="width: 15%;">Đánh giá</th>
+                    <th style="width: 15%;">Cập nhật</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="checkbox-wrapper-4">
+                        <input type="checkbox" id="row__0__2" class="inp-cbx" value="2" />
+                        <label for="row__0__2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                        </label>
+                    </td>
+                    <td>1</td>
+                    <td>Hoạt động 1</td>
+                    <td>Cấp lớp</td>
+                    <td>KTPM0121</td>
+                    <td><a href="/doankhoa/quanlihoatdong/danhgiahoatdong">Chi tiết</a></td>
+                    <td><a class="more_list" href="#">Chỉnh sửa</a></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="checkbox-wrapper-4">
+                        <input type="checkbox" id="row__1__2" class="inp-cbx" value="2" />
+                        <label for="row__1__2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                        </label>
+                    </td>
+                    <td>1</td>
+                    <td>Hoạt động 2</td>
+                    <td>Cấp lớp</td>
+                    <td>KTPM0121</td>
+                    <td><a href="/doankhoa/quanlihoatdong/danhgiahoatdong">Chi tiết</a></td>
+                    <td><a class="more_list" href="#">Chỉnh sửa</a></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="checkbox-wrapper-4">
+                        <input type="checkbox" id="row__2__2" class="inp-cbx" value="2" />
+                        <label for="row__2__2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                        </label>
+                    </td>
+                    <td>1</td>
+                    <td>Hoạt động 3</td>
+                    <td>Cấp lớp</td>
+                    <td>CNTT0121</td>
+                    <td><a href="/doankhoa/quanlihoatdong/danhgiahoatdong">Chi tiết</a></td>
+                    <td><a class="more_list" href="#">Chỉnh sửa</a></td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
-          <div class="year_full">
-            <div class="hk">
-              <span>Bộ môn</span>
-              <div class="selectbox --bomon">
-                <div class="select">
-                  <select>
-                    <option value="1">Công Nghệ Thông Tin</option>
-                    <option value="2">Kỹ Thuật Phần Mềm</option>
-                    <option value="2">Hệ Thống Thông Tin</option>
-                    <option value="2">Khoa Học Dữ Liệu</option>
-                    <option value="2">Tất cả</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="hk">
-              <span>Lớp</span>
-              <div class="selectbox --class">
-                <div class="select">
-                  <select>
-                    <option value="1">KTPM0121</option>
-                    <option value="2">CNTT0121</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-          <button class="button-35 button-35-a">Chọn</button>
-
-        </div>
-
-        <div class="activity-board">
-          <div class="control">
-            <button class="button-35 " id="add__activity">Thêm hoạt động</button>
-            <button class="button-35 " id="edit__activity">Xoá hoạt động</button>
-          </div>
-          <!-- table -->
-          <table class="table">
-            <thead>
-              <tr>
-                <th style="width: 4%">
-                  <!-- set id của input == for của label -->
-                  <!-- thêm class "new_update" cho td có cập nhật điểm mới chưa được chấm -->
-                  <!-- <span class="dau_sao">*</span> đứng phía sau tên (ai không tự đánh giá) -->
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__all" class="inp-cbx" value="2" />
-                    <label for="row__all" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                </th>
-                <th style="width: 5%;">STT</th>
-                <th style="width: 40%;">Hoạt động</th>
-                <th style="width: 15%;">Cấp</th>
-                <th style="width: 20%;">Đánh giá</th>
-                <th style="width: 15%;">Cập nhật</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__all__1" class="inp-cbx" value="2" />
-                    <label for="row__all__1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                </td>
-                <td>1</td>
-                <td>Hoạt động 1</td>
-                <td>Cấp khoa</td>
-                <td><a href="/bancansu/quanlihoatdong/danh_gia_hoat_dong">Chi tiết</a></td>
-                <td><a class="more_list" href="#">Chỉnh sửa</a></td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__0__1" class="inp-cbx" value="2" />
-                    <label for="row__0__1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                </td>
-                <td>1</td>
-                <td>Hoạt động 2</td>
-                <td>Cấp khoa</td>
-                <td><a href="/bancansu/quanlihoatdong/danh_gia_hoat_dong">Chi tiết</a></td>
-                <td><a class="more_list" href="#">Chỉnh sửa</a></td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__1__1" class="inp-cbx" value="2" />
-                    <label for="row__1__1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                </td>
-                <td>1</td>
-                <td>Hoạt động 3</td>
-                <td>Cấp khoa</td>
-                <td><a href="/bancansu/quanlihoatdong/danh_gia_hoat_dong">Chi tiết</a></td>
-                <td><a class="more_list" href="#">Chỉnh sửa</a></td>
-              </tr>
-            </tbody>
-          </table>
-          <table class="table">
-            <thead>
-              <tr>
-                <th style="width: 4%">
-                  <!-- set id của input == for của label -->
-                  <!-- thêm class "new_update" cho td có cập nhật điểm mới chưa được chấm -->
-                  <!-- <span class="dau_sao">*</span> đứng phía sau tên (ai không tự đánh giá) -->
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__all__2" class="inp-cbx" value="2" />
-                    <label for="row__all__2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                </th>
-                <th style="width: 3%;">STT</th>
-                <th style="width: 30%;">Hoạt động</th>
-                <th style="width: 10%;">Cấp</th>
-                <th style="width: 20%;">Lớp</th>
-                <th style="width: 15%;">Đánh giá</th>
-                <th style="width: 15%;">Cập nhật</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__0__2" class="inp-cbx" value="2" />
-                    <label for="row__0__2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                </td>
-                <td>1</td>
-                <td>Hoạt động 1</td>
-                <td>Cấp lớp</td>
-                <td>KTPM0121</td>
-                <td><a href="/bancansu/quanlihoatdong/danh_gia_hoat_dong">Chi tiết</a></td>
-                <td><a class="more_list" href="#">Chỉnh sửa</a></td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__1__2" class="inp-cbx" value="2" />
-                    <label for="row__1__2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                </td>
-                <td>1</td>
-                <td>Hoạt động 2</td>
-                <td>Cấp lớp</td>
-                <td>KTPM0121</td>
-                <td><a href="/bancansu/quanlihoatdong/danh_gia_hoat_dong">Chi tiết</a></td>
-                <td><a class="more_list" href="#">Chỉnh sửa</a></td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__2__2" class="inp-cbx" value="2" />
-                    <label for="row__2__2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                </td>
-                <td>1</td>
-                <td>Hoạt động 3</td>
-                <td>Cấp lớp</td>
-                <td>CNTT0121</td>
-                <td><a href="/bancansu/quanlihoatdong/danh_gia_hoat_dong">Chi tiết</a></td>
-                <td><a class="more_list" href="#">Chỉnh sửa</a></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </div>
-    </div>
   </div>
 
 </body>
@@ -226,21 +226,22 @@
         </div>
         <div class="content">
           <h3 class="sub-title descrip">Nội Dung Hoạt Động</h3>
-          <textarea name="" id="" cols="30" rows="10" placeholder="Nhập nội dung hoạt động"></textarea>
+          <textarea name="" id="activities_content" cols="30" rows="10"
+            placeholder="Nhập nội dung hoạt động"></textarea>
         </div>
         <div class="select_year">
           <div class="selectbox nien_khoa">
             <main id="select-main">
               <div class="select">
                 <label for="select-level">Cấp Độ</label>
-                <select id="select-level">
+                <select id="select-level select_level">
                   <option>Cấp Lớp</option>
                   <option>Cấp Khoa</option>
                 </select>
               </div>
               <div class="select">
                 <label for="select-level">Lớp</label>
-                <select id="select-level">
+                <select id="select-level select_class">
                   <option>KTPM-0121</option>
                 </select>
               </div>
@@ -250,7 +251,7 @@
         <div>
           <main id="button-main">
             <div><button class="button-35">Hoàn Tác</button></div>
-            <div><button class="button-35">Xong</button></div>
+            <div><button class="button-35 add_activities_btn">Xong</button></div>
           </main>
         </div>
       </div>
@@ -271,26 +272,26 @@
       <div class="content_main">
         <div class="content subtitle">
           <h3 class="sub-title name">Tên Hoạt Động</h3>
-          <input class="subject--input " type="text" placeholder="Nhập tên hoạt động">
+          <input class="subject--input" id="activities_title" type="text" placeholder="Nhập tên hoạt động">
         </div>
         <div class="content">
           <h3 class="sub-title descrip">Nội Dung Hoạt Động</h3>
-          <textarea name="" id="" cols="30" rows="10" placeholder="Nhập nội dung hoạt động"></textarea>
+          <textarea name="" class="activities_content" cols="30" rows="10" placeholder="Nhập nội dung hoạt động"></textarea>
         </div>
         <div class="select_year">
           <div class="selectbox nien_khoa">
             <main id="select-main">
               <div class="select">
                 <label for="select-level">Cấp Độ</label>
-                <select id="select-level">
-                  <option>Cấp Lớp</option>
-                  <option>Cấp Khoa</option>
+                <select id="select-level" class="select_level">
+                  <option value="lop">Cấp Lớp</option>
+                  <option value="khoa">Cấp Khoa</option>
                 </select>
               </div>
               <div class="select">
                 <label for="select-level">Lớp</label>
-                <select id="select-level">
-                  <option>KTPM-0121</option>
+                <select id="select-level" class="select_class">
+                  <option value="KTPM-0121">KTPM-0121</option>
                 </select>
               </div>
             </main>
@@ -299,7 +300,7 @@
         <div>
           <main id="button-main">
             <div><button class="button-35">Hoàn Tác</button></div>
-            <div><button class="button-35">Xong</button></div>
+            <div><button id="add_activities_btn" class="button-35 ">Xong</button></div>
           </main>
         </div>
       </div>
@@ -312,5 +313,6 @@
 </div>
 
 <script src="/src/JS/bancansu-manage-activities.js"></script>
+<script src="/src/JS/doankhoa-manage-activities.js"></script>
 
 </html>

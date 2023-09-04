@@ -3,7 +3,7 @@ $('.login_btn').on('click', function () {
     if (mssv == "") {
         notify("!", "Vui lòng nhập mssv!");
     } else {
-        window.location.href = "/xacthucOTP?mssv=" + mssv;
+        window.location.href = "/verifyOTP?mssv=" + mssv;
     }
 
 })

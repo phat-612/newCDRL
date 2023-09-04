@@ -11,230 +11,232 @@
 <body>
   <div class="main">
     <%- include(header) %>
-    <div class="container">
-    <%- include(menu) %>
+      <div class="container">
+        <%- include(menu) %>
 
-      <div class="box-table">
+          <div class="box-table">
 
-        <!-- Button -->
-        <div class="content container__button">
-          <button class="button-35" id="add__class">Thêm Lớp</button>
-          <button class="button-35">Xoá Lớp</button>
-        </div>
-
-        <!-- Table -->
-        <div class="content container__table">
-          <table>
-            <thead>
-              <tr>
-                <th>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="all__row" class="inp-cbx" value="2" />
-                    <label for="all__row" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                  </div>
-                </th>
-                <th>STT</th>
-                <th style="width: 15%;">Tên Lớp</th>
-                <th style="width: 15%;">Bộ Môn</th>
-                <th style="width: 10%;">Khoa</th>
-                <th style="width: 20%;">Phân Công</th>
-                <th>Cập Nhập</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__0" class="inp-cbx" value="2" />
-                    <label for="row__0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                  </div>
-                </td>
-                <td style="width: 3%;">1</td>
-                <td style="">KTPM0121</td>
-                <td style="width: 20%;">Kỹ Thuật Phần Mềm</td>
-                <td style="width: 10%;">CNTT</td>
-                <td>
-                  <div class="selectbox co__van">
-                    <div class="select">
-                      <select>
-                        <option value="1">Nguyễn Xuân Hà Giang</option>
-                        <option value="2">Lâm Thanh Toản</option>
-                      </select>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <a id="edit__class" href="#">Sửa</a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__1" class="inp-cbx" value="2" />
-                    <label for="row__1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                  </div>
-                </td>
-                <td>1</td>
-                <td>KTPM0121</td>
-                <td>Kỹ Thuật Phần Mềm</td>
-                <td>CNTT</td>
-                <td>
-                  <div class="selectbox co__van">
-                    <div class="select">
-                      <select>
-                        <option value="1">Nguyễn Xuân Hà Giang</option>
-                        <option value="2">Lâm Thanh Toản</option>
-                      </select>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <a id="edit__class" href="#">Sửa</a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__2" class="inp-cbx" value="2" />
-                    <label for="row__2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                  </div>
-                </td>
-                <td>1</td>
-                <td>KTPM0121</td>
-                <td>Kỹ Thuật Phần Mềm</td>
-                <td>CNTT</td>
-                <td>
-                  <div class="selectbox co__van">
-                    <div class="select">
-                      <select>
-                        <option value="1">Nguyễn Xuân Hà Giang</option>
-                        <option value="2">Lâm Thanh Toản</option>
-                      </select>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <a id="edit__class" href="#">Sửa</a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__3" class="inp-cbx" value="2" />
-                    <label for="row__3" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                  </div>
-                </td>
-                <td>1</td>
-                <td>KTPM0121</td>
-                <td>Kỹ Thuật Phần Mềm</td>
-                <td>CNTT</td>
-                <td>
-                  <div class="selectbox co__van">
-                    <div class="select">
-                      <select>
-                        <option value="1">Nguyễn Xuân Hà Giang</option>
-                        <option value="2">Lâm Thanh Toản</option>
-                      </select>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <a id="edit__class" href="#">Sửa</a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="modal edit">
-        <div class="modal_wrap edit">
-          <div class="modal_main">
-
-            <div class="content title">
-              <h2 class="title-box">SỬA THÔNG TIN LỚP</h2>
+            <!-- Button -->
+            <div class="content container__button">
+              <button class="button-35" id="add__class">Thêm Lớp</button>
+              <button class="button-35">Xoá Lớp</button>
             </div>
 
-            <div class="content_main">
-              <div class="content subtitle">
-                <label for="subject--name" class="content__subject input--label">Tên Lớp</label>
-                <input type="text" class="content__subject subject--input" id="subject--name" placeholder="Nhập Tên Lớp Mới Cần Thêm (Bắt buộc)">
-              </div>
+            <!-- Table -->
+            <div class="content container__table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>
+                      <div class="checkbox-wrapper-4">
+                        <input type="checkbox" id="all__row" class="inp-cbx" value="2" />
+                        <label for="all__row" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                        </label>
+                      </div>
+                    </th>
+                    <th>STT</th>
+                    <th style="width: 15%;">Tên Lớp</th>
+                    <th style="width: 15%;">Bộ Môn</th>
+                    <th style="width: 10%;">Khoa</th>
+                    <th style="width: 20%;">Phân Công</th>
+                    <th>Cập Nhập</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="checkbox-wrapper-4">
+                        <input type="checkbox" id="row__0" class="inp-cbx" value="2" />
+                        <label for="row__0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                        </label>
+                      </div>
+                    </td>
+                    <td style="width: 3%;">1</td>
+                    <td style="">KTPM0121</td>
+                    <td style="width: 20%;">Kỹ Thuật Phần Mềm</td>
+                    <td style="width: 10%;">CNTT</td>
+                    <td>
+                      <div class="selectbox co__van">
+                        <div class="select">
+                          <select>
+                            <option value="1">Nguyễn Xuân Hà Giang</option>
+                            <option value="2">Lâm Thanh Toản</option>
+                          </select>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <a id="edit__class" href="#">Sửa</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="checkbox-wrapper-4">
+                        <input type="checkbox" id="row__1" class="inp-cbx" value="2" />
+                        <label for="row__1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                        </label>
+                      </div>
+                    </td>
+                    <td>1</td>
+                    <td>KTPM0121</td>
+                    <td>Kỹ Thuật Phần Mềm</td>
+                    <td>CNTT</td>
+                    <td>
+                      <div class="selectbox co__van">
+                        <div class="select">
+                          <select>
+                            <option value="1">Nguyễn Xuân Hà Giang</option>
+                            <option value="2">Lâm Thanh Toản</option>
+                          </select>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <a id="edit__class" >Sửa</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="checkbox-wrapper-4">
+                        <input type="checkbox" id="row__2" class="inp-cbx" value="2" />
+                        <label for="row__2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                        </label>
+                      </div>
+                    </td>
+                    <td>1</td>
+                    <td>KTPM0121</td>
+                    <td>Kỹ Thuật Phần Mềm</td>
+                    <td>CNTT</td>
+                    <td>
+                      <div class="selectbox co__van">
+                        <div class="select">
+                          <select>
+                            <option value="1">Nguyễn Xuân Hà Giang</option>
+                            <option value="2">Lâm Thanh Toản</option>
+                          </select>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <a id="edit__class">Sửa</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="checkbox-wrapper-4">
+                        <input type="checkbox" id="row__3" class="inp-cbx" value="2" />
+                        <label for="row__3" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                        </label>
+                      </div>
+                    </td>
+                    <td>1</td>
+                    <td>KTPM0121</td>
+                    <td>Kỹ Thuật Phần Mềm</td>
+                    <td>CNTT</td>
+                    <td>
+                      <div class="selectbox co__van">
+                        <div class="select">
+                          <select>
+                            <option value="1">Nguyễn Xuân Hà Giang</option>
+                            <option value="2">Lâm Thanh Toản</option>
+                          </select>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <a id="edit__class">Sửa</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
 
-              <div class="">
-                <div class="selectbox nien_khoa">
-                  <main id="select-main">
-                    <div class="select">
-                      <label for="select-level" class="input--label">Bộ Môn</label>
-                      <select id="select-level">
-                        <option value="KTPM-0121">Kỹ Thuật Phần Mềm</option>
-                        <option value="KHDL">Khoa Học Dữ Liệu</option>
-                        <option value="HTTT">Hệ Thống Thông Tin</option>
-                        <option value="CNTT">Công Nghệ Thông Tin</option>
-                      </select>
-                    </div>
-                  </main>
+          <div class="modal edit">
+            <div class="modal_wrap edit">
+              <div class="modal_main">
+
+                <div class="content title">
+                  <h2 class="title-box">SỬA THÔNG TIN LỚP</h2>
                 </div>
-              </div>
-              <div>
-                <main id="button-main">
-                  <div><button class="button-35">Huỷ</button></div>
-                  <div><button class="button-35">Xong</button></div>
-                </main>
+
+                <div class="content_main">
+                  <div class="content subtitle">
+                    <label for="subject--name" class="content__subject input--label">Tên Lớp</label>
+                    <input type="text" class="content__subject subject--input" id="subject--name"
+                      placeholder="Nhập Tên Lớp Mới Cần Thêm (Bắt buộc)">
+                  </div>
+
+                  <div class="">
+                    <div class="selectbox nien_khoa">
+                      <main id="select-main">
+                        <div class="select">
+                          <label for="select-level" class="input--label">Bộ Môn</label>
+                          <select id="select-level">
+                            <option value="KTPM-0121">Kỹ Thuật Phần Mềm</option>
+                            <option value="KHDL">Khoa Học Dữ Liệu</option>
+                            <option value="HTTT">Hệ Thống Thông Tin</option>
+                            <option value="CNTT">Công Nghệ Thông Tin</option>
+                          </select>
+                        </div>
+                      </main>
+                    </div>
+                  </div>
+                  <div>
+                    <main id="button-main">
+                      <div><button class="button-35 exist_btn">Huỷ</button></div>
+                      <div><button class="button-35 save_btn">Xong</button></div>
+                    </main>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div class="modal add">
-        <div class="modal_wrap add">
-          <div class="modal_main">
-            <div class="content title">
-              <h2 class="title-box">THÊM LỚP</h2>
-            </div>
-
-
-            <div class="content_main">
-              <div class="content subtitle">
-                <label for="subject--name" class="content__subject input--label">Tên Lớp</label>
-                <input type="text" class="content__subject subject--input" id="subject--name" placeholder="Nhập Tên Lớp Mới Cần Thêm (Bắt buộc)">
-              </div>
-              <div>
-                <div class="selectbox nien_khoa">
-                  <main id="select-main">
-
-                    <div class="select">
-                      <label for="select-level" class="input--label">Bộ Môn</label>
-                      <select id="select-level">
-                        <option value="KTPM-0121">Kỹ Thuật Phần Mềm</option>
-                        <option value="KHDL">Khoa Học Dữ Liệu</option>
-                        <option value="HTTT">Hệ Thống Thông Tin</option>
-                        <option value="CNTT">Công Nghệ Thông Tin</option>
-                      </select>
-                    </div>
-
-                  </main>
+          <div class="modal add">
+            <div class="modal_wrap add">
+              <div class="modal_main">
+                <div class="content title">
+                  <h2 class="title-box">THÊM LỚP</h2>
                 </div>
-              </div>
 
-              <div>
-                <main id="button-main">
-                  <div><button class="button-35">Hoàn Tác</button></div>
-                  <div><button class="button-35">Xong</button></div>
-                </main>
+
+                <div class="content_main">
+                  <div class="content subtitle">
+                    <label for="subject--name" class="content__subject input--label">Tên Lớp</label>
+                    <input type="text" class="content__subject subject--input" id="subject--name"
+                      placeholder="Nhập Tên Lớp Mới Cần Thêm (Bắt buộc)">
+                  </div>
+                  <div>
+                    <div class="selectbox nien_khoa">
+                      <main id="select-main">
+
+                        <div class="select">
+                          <label for="select-level" class="input--label">Bộ Môn</label>
+                          <select id="select-level">
+                            <option value="KTPM-0121">Kỹ Thuật Phần Mềm</option>
+                            <option value="KHDL">Khoa Học Dữ Liệu</option>
+                            <option value="HTTT">Hệ Thống Thông Tin</option>
+                            <option value="CNTT">Công Nghệ Thông Tin</option>
+                          </select>
+                        </div>
+
+                      </main>
+                    </div>
+                  </div>
+
+                  <div>ss
+                    <main id="button-main">
+                      <div><button class="button-35 exist_btn">Hủy</button></div>
+                      <div><button class="button-35 save_btn">Xong</button></div>
+                    </main>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-    </div>
+      </div>
   </div>
   <%- include(footer) %>
 </body>

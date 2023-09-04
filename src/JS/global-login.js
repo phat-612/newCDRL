@@ -24,7 +24,7 @@ $('.login_btn').on('click', async function (e) {
             if (response.ok) {
                 const datareturn = await response.json();
                 if (datareturn.check) {
-                    window.location.href = currentURLbase + "/login/updateyourpasswords";
+                    window.location.href = currentURLbase + "/login/firstlogin";
                 } else {
                     window.location.href = "/";
                 }

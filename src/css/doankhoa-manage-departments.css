@@ -131,6 +131,9 @@ table{
   align-items: center;
   margin: 0rem 2rem 2rem 2rem;
 }
+td a{
+  cursor: pointer;
+}
 .content--department{
   justify-content: flex-end;
 }

@@ -1,5 +1,5 @@
 let curr_tb_year = "HK" + $(".selectbox--hocky select option:selected").text().trim() + "_" + $(".nien_khoa select option:selected").text().trim();
-console.log(branch_list);
+// console.log(branch_list);
 console.log(class_list);
 console.log(year_cur)
 
@@ -191,7 +191,7 @@ $(document).on("click", ".button-35-a", async function () {
           const studentId = $(this).closest('tr').find('td:nth-child(3)').text();
           const className = $(".--class option:selected").text().trim()
 
-          this.href = `/doan_khoa/nhapdiemdanhgia?schoolYear=${cur_tb_year}&studentId=${studentId}&class=${className}`
+          this.href = `/doankhoa/nhapdiemdanhgia?schoolYear=${cur_tb_year}&studentId=${studentId}&class=${className}`
         }
         else {
           notify('!', 'chưa mở chấm điểm vui lòng chọn năm khác.');
@@ -226,7 +226,7 @@ $('.chamdiem').click(function () {
     const studentId = $(this).closest('tr').find('td:nth-child(3)').text().trim();
     const className = $(".--class option:selected").text().trim()
 
-    this.href = `/doan_khoa/nhapdiemdanhgia?schoolYear=${cur_tb_year}&studentId=${studentId}&class=${className}`
+    this.href = `/doankhoa/nhapdiemdanhgia?schoolYear=${cur_tb_year}&studentId=${studentId}&class=${className}`
   }
   else {
     notify('!', 'chưa mở chấm điểm vui lòng chọn năm khác.');

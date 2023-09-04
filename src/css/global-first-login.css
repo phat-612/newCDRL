@@ -24,7 +24,7 @@
   width: 100%;
   padding: 1rem 0;
   font-size: 1.6rem;
-  /* color: var(--white-color); */
+  color: var(--black-color);
   margin-bottom: 3rem;
   border: none;
   border-bottom: 0.1rem solid var(--black-color);
@@ -38,7 +38,7 @@
   left: 0;
   padding: 1rem 0;
   font-size: 1.6rem;
-  /* color: var(--white-color); */
+  color: var(--black-color);
   pointer-events: none;
   transition: 0.5s;
 }
@@ -76,6 +76,7 @@
   display: block;
 }
 .eye{
+  color: var(--black-color);
   position: absolute;
   right: 1rem;
   top: 20%;
