@@ -163,7 +163,7 @@
     left: 50%;
     max-width: 800px;
     width: 95%;
-    background: #fff;
+    background: var(--white-color);
     border-radius: 0.8rem;
     transform: translate(-50%, -50%);
   
