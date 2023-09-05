@@ -1496,7 +1496,8 @@ client
           .toArray();
 
         // get all classes of branchs:
-        const classes = {}; // classes = {KTPM: [KTPM0121, KTPM0108, ...], CNTT: {CNTT0109, CNTT0209, ...}, ...}
+        let classes = {}; // classes = {KTPM: [KTPM0121, KTPM0108, ...], CNTT: {CNTT0109, CNTT0209, ...}, ...}
+        let class_teachers = [] // class_teachers = [18102003, 19112003, ...]
         for (let i = 0; i < branchs.length; i++) {
           let dummy = await client.db(name_global_databases).collection("classes").find(
             {
@@ -1504,16 +1505,17 @@ client
             }, // find all data
             {
               projection: {
-                _id: 1
+                cvht: 1,
               },
             }
           )
             .toArray();
 
           classes[branchs[i]._id] = dummy.map((cls) => cls._id);
+          class_teachers.push(...dummy.map((cls) => cls.cvht));
         }
 
-        // get all teacher's name in this dep
+        // get all teacher's name in current dep
         const teachers = await client
           .db(name_global_databases)
           .collection("user_info")
@@ -1525,12 +1527,39 @@ client
             }, // user is teacher
             {
               projection: {
+                _id: 0,
                 first_name: 1,
                 last_name: 1,
               },
             }
           )
           .toArray();
+
+        
+        // get all teacher's name of classes
+        for (let i = 0; i < class_teachers.length; i++ ) {
+          // replace current teacher's _id with teacher's name
+          class_teachers[i] = await client
+            .db(name_global_databases)
+            .collection("user_info")
+            .findOne(
+              {
+                _id: class_teachers[i],
+                "power.1": { $exists: true },
+                "power.4": { $exists: true },
+              }, // user is teacher
+              {
+                projection: {
+                  _id: 0,
+                  first_name: 1,
+                  last_name: 1,
+                },
+              }
+            );
+        }
+
+        
+        console.log(class_teachers);
 
         return res.render("doankhoa-manage-classes", {
           header: "global-header",
@@ -1540,7 +1569,8 @@ client
           dep_name: user.dep,
           branchs: branchs,
           classes: classes,
-          teachers: teachers.map((teacher) => teacher.last_name + ' ' + teacher.first_name)
+          teachers: teachers.map((teacher) => teacher.last_name + ' ' + teacher.first_name),
+          class_teachers: class_teachers
         });
       }
     );

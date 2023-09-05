@@ -13,162 +13,173 @@
     <%- include(header) %>
     <%- include(thongbao) %>
 
-      <div class="container">
-        <%- include(menu) %>
+    <div class="container">
+      <%- include(menu) %>
 
-          <div class="box-table">
+      <div class="box-table">
 
-            <!-- Button -->
-            <div class="content container__button">
-              <button class="button-35" id="add__class">Thêm Lớp</button>
-              <button class="button-35" id="delete__class">Xoá Lớp</button>
-              <div class="middle"></div> 
-              <button class="button-35" id="save__class">Lưu</button>
-            </div>
+        <!-- Button -->
+        <div class="content container__button">
+          <button class="button-35" id="add__class">Thêm Lớp</button>
+          <button class="button-35" id="delete__class">Xoá Lớp</button>
+        </div>
 
-            <!-- Table -->
-            <div class="content container__table">
-              <table>
-                <thead>
+        <!-- Table -->
+        <div class="content container__table">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 5%;">
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="all__row" class="inp-cbx all-cbx" value="2" />
+                    <label for="all__row" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+                  </div>
+                </th>
+                <th style="width: 5%;">STT</th>
+                <th style="width: 15%;">Tên Lớp</th>
+                <th>Bộ Môn</th>
+                <th style="width: 10%;">Khoa</th>
+                <th style="width: 25%;">Phân Công</th>
+                <th style="width: 13%;">Cập Nhập</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% let numbers = 0; %>
+              <% for (let i = 0; i < branchs.length; i++) {%>
+                <% for (let j = 0; j < classes[branchs[i]._id].length; j++) {%>
                   <tr>
-                    <th style="width: 5%;">
+                    <td>
                       <div class="checkbox-wrapper-4">
-                        <input type="checkbox" id="all__row" class="inp-cbx all-cbx" value="2" />
-                        <label for="all__row" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                        <input type="checkbox" id="row__<%= numbers %>" class="inp-cbx" value="<%= classes[branchs[i]._id][j] %>" />
+                        <label for="row__<%= numbers %>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                         </label>
                       </div>
-                    </th>
-                    <th style="width: 5%;">STT</th>
-                    <th style="width: 15%;">Tên Lớp</th>
-                    <th>Bộ Môn</th>
-                    <th style="width: 10%;">Khoa</th>
-                    <th style="width: 25%;">Phân Công</th>
-                    <th style="width: 13%;">Cập Nhập</th>
+                    </td>
+                    <td style="width: 3%;">1</td>
+                    <td><%= classes[branchs[i]._id][j] %></td>
+                    <td style="width: 20%;"><%= branchs[i].name %></td>
+                    <td style="width: 10%;"><%= dep_name %></td>
+                    <td><%= class_teachers[numbers].last_name + ' ' + class_teachers[numbers].first_name %></td>
+                    <td>
+                      <a id="edit__class" href="#">Sửa</a>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  <% let numbers = 0; %>
-                  <% for (let i = 0; i < branchs.length; i++) {%>
-                    <% for (let j = 0; j < classes[branchs[i]._id].length; j++) {%>
-                      <tr>
-                        <td>
-                          <div class="checkbox-wrapper-4">
-                            <input type="checkbox" id="row__<%= numbers %>" class="inp-cbx" value="<%= classes[branchs[i]._id][j] %>" />
-                            <label for="row__<%= numbers %>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                            </label>
-                          </div>
-                        </td>
-                        <td style="width: 3%;">1</td>
-                        <td style=""><%= classes[branchs[i]._id][j] %></td>
-                        <td style="width: 20%;"><%= branchs[i].name %></td>
-                        <td style="width: 10%;"><%= dep_name %></td>
-                        <td>
-                          <div class="selectbox co__van">
-                            <div class="select">
-                              <select>
-                                <% for (let k = 0; k < teachers.length; k++) {%>
-                                <option value="<%= k %>"><%= teachers[k] %></option>
-                                <% } %>
-                              </select>
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <a id="edit__class" href="#">Sửa</a>
-                        </td>
-                      </tr>
-                    <% } %>
-                  <% } %>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div class="modal edit">
-            <div class="modal_wrap edit">
-              <div class="modal_main">
-
-                <div class="content title">
-                  <h2 class="title-box">SỬA THÔNG TIN LỚP</h2>
-                </div>
-
-                <div class="content_main">
-                  <div class="content subtitle">
-                    <label for="subject--name" class="content__subject input--label">Tên Lớp</label>
-                    <input type="text" class="content__subject subject--input" id="subject--name"
-                      placeholder="Nhập Tên Lớp Mới Cần Thêm (Bắt buộc)">
-                  </div>
-
-                  <div class="">
-                    <div class="selectbox nien_khoa">
-                      <main id="select-main">
-                        <div class="select">
-                          <label for="select-level" class="input--label">Bộ Môn</label>
-                          <select id="select-level">
-                            <option value="KTPM-0121">Kỹ Thuật Phần Mềm</option>
-                            <option value="KHDL">Khoa Học Dữ Liệu</option>
-                            <option value="HTTT">Hệ Thống Thông Tin</option>
-                            <option value="CNTT">Công Nghệ Thông Tin</option>
-                          </select>
-                        </div>
-                      </main>
-                    </div>
-                  </div>
-                  <div>
-                    <main id="button-main">
-                      <div><button class="button-35 exist_btn">Huỷ</button></div>
-                      <div><button class="button-35 save_btn">Xong</button></div>
-                    </main>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="modal add">
-            <div class="modal_wrap add">
-              <div class="modal_main">
-                <div class="content title">
-                  <h2 class="title-box">THÊM LỚP</h2>
-                </div>
-
-
-                <div class="content_main">
-                  <div class="content subtitle">
-                    <label for="subject--name" class="content__subject input--label">Tên Lớp</label>
-                    <input type="text" class="content__subject subject--input" id="subject--name"
-                      placeholder="Nhập Tên Lớp Mới Cần Thêm (Bắt buộc)">
-                  </div>
-                  <div>
-                    <div class="selectbox nien_khoa">
-                      <main id="select-main">
-
-                        <div class="select">
-                          <label for="select-level" class="input--label">Bộ Môn</label>
-                          <select id="select-level">
-                            <option value="KTPM-0121">Kỹ Thuật Phần Mềm</option>
-                            <option value="KHDL">Khoa Học Dữ Liệu</option>
-                            <option value="HTTT">Hệ Thống Thông Tin</option>
-                            <option value="CNTT">Công Nghệ Thông Tin</option>
-                          </select>
-                        </div>
-
-                      </main>
-                    </div>
-                  </div>
-
-                  <div>ss
-                    <main id="button-main">
-                      <div><button class="button-35 exist_btn">Hủy</button></div>
-                      <div><button class="button-35 save_btn">Xong</button></div>
-                    </main>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
+                  <% numbers += 1; %>
+                <% } %>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
       </div>
+
+      <div class="modal edit">
+        <div class="modal_wrap edit">
+          <div class="modal_main">
+
+            <div class="content title">
+              <h2 class="title-box">SỬA THÔNG TIN LỚP</h2>
+            </div>
+
+            <div class="content_main">
+              <div class="content subtitle">
+                <label for="subject--name" class="content__subject input--label">Tên Lớp</label>
+                <input type="text" class="content__subject subject--input" id="subject--name" placeholder="Nhập Tên Lớp Mới Cần Thêm (Bắt buộc)">
+              </div>
+
+              <div class="select_main">
+                <div class="selectbox nien_khoa">
+                  <main id="select-main">
+                    <div class="select">
+                      <label for="select-level" class="input--label">Bộ Môn</label>
+                      <select id="select-level">
+                        <% for (let i = 0; i < branchs.length; i++) {%>
+                        <option value="<%= branchs[i]._id %>"><%= branchs[i].name %></option>
+                        <% } %>
+                      </select>
+                    </div>
+                  </main>
+                </div>
+
+                <div class="selectbox co__van">
+                  <main id="select-main">
+                    <div class="select">
+                      <label for="select-level" class="input--label">Cố vấn</label>
+                      <select>
+                        <% for (let k = 0; k < teachers.length; k++) {%>
+                        <option value="<%= k %>"><%= teachers[k] %></option>
+                        <% } %>
+                      </select>
+                    </div>
+                  </main>
+                </div>
+              </div>
+
+              <div>
+                <main id="button-main">
+                  <div><button class="button-35 exist_btn">Huỷ</button></div>
+                  <div><button class="button-35 save_btn">Xong</button></div>
+                </main>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal add">
+        <div class="modal_wrap add">
+          <div class="modal_main">
+            <div class="content title">
+              <h2 class="title-box">THÊM LỚP</h2>
+            </div>
+
+
+            <div class="content_main">
+              <div class="content subtitle">
+                <label for="subject--name" class="content__subject input--label">Tên Lớp</label>
+                <input type="text" class="content__subject subject--input" id="subject--name" placeholder="Nhập Tên Lớp Mới Cần Thêm (Bắt buộc)">
+              </div>
+
+              <div class="select_main">
+                <div class="selectbox nien_khoa">
+                  <main id="select-main">
+                    <div class="select">
+                      <label for="select-level" class="input--label">Bộ Môn</label>
+                      <select id="select-level">
+                        <% for (let i = 0; i < branchs.length; i++) {%>
+                        <option value="<%= branchs[i]._id %>"><%= branchs[i].name %></option>
+                        <% } %>
+                      </select>
+                    </div>
+                  </main>
+                </div>
+
+                <div class="selectbox co__van">
+                  <main id="select-main">
+                    <div class="select">
+                      <label for="select-level" class="input--label">Cố vấn</label>
+                      <select>
+                        <% for (let k = 0; k < teachers.length; k++) {%>
+                        <option value="<%= k %>"><%= teachers[k] %></option>
+                        <% } %>
+                      </select>
+                    </div>
+                  </main>
+                </div>
+              </div>
+
+              <div>
+                <main id="button-main">
+                  <div><button class="button-35 exist_btn">Hủy</button></div>
+                  <div><button class="button-35 save_btn">Xong</button></div>
+                </main>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
   <%- include(footer) %>
 </body>
