@@ -111,6 +111,14 @@ $(document).on("click", ".auto_mark_btn", async function () {
         $('.auto_mark_btn').prop('disabled', false);
         $('.auto_mark_btn').text('Chấm bảng điểm đã chọn');
         notify('n', 'Đã hoàn tất chấm điểm tự động những sinh viên được đánh dấu!')
+        let  = []
+        $('table tbody .inp-cbx').each(function () {
+          let score = $(this).parent().parent().parent().find('.new_update').text().trim()
+          if (score != '0' && score != '-' && score != '' && this.checked) {
+            $(this).parent().parent().parent().find('.first_score').text(score)
+            mssv_list.push(this.value);
+          }
+        })
       }
       else if (response.status == 500) {
         // Error occurred during upload
@@ -154,7 +162,8 @@ $(document).on("click", ".button-35-a", async function () {
       $('table tbody').empty();
       // load new table:
       for (let i = 0; i < data.student_list.length; i++) {
-        $('table tbody').append(`
+        if (data.staff_scores[i]!='-' &&  data.staff_scores[i]!= 0) {
+          $('table tbody').append(`
         <tr></tr>
           <td>
             <div class="checkbox-wrapper-4">
@@ -172,7 +181,29 @@ $(document).on("click", ".button-35-a", async function () {
           <td>${data.department_scores[i]}</td>
           <td><a class="chamdiem">Chấm điểm</a></td>
         </tr>
-        `);
+        `)
+        }
+        else {
+          $('table tbody').append(`
+        <tr></tr>
+          <td>
+            <div class="checkbox-wrapper-4">
+              <input type="checkbox" id="row${i + 1}" class="inp-cbx" value="${data.student_list[i]._id}" />
+              <label for="row${i + 1}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+              </label>
+            </div>
+          </td>
+          <td>${i + 1}</td>
+          <td>${data.student_list[i]._id}</td>
+          <td class='std_name_row'>${data.student_list[i].last_name + " " + data.student_list[i].first_name}</td>
+          <td class="new_update">${data.student_scores[i]}</td>
+          <td class="first_score">${data.staff_scores[i]}</td>
+          <td>${data.staff_name[i]}</td>
+          <td>${data.department_scores[i]}</td>
+          <td>-</td>
+        </tr>
+        `)
+        }
 
         // add '*' to student have not mark yet
         if (data.student_scores[i] == '-' || data.student_scores[i] == 0) {

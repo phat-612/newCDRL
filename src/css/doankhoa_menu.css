@@ -92,7 +92,7 @@
   } */
   .menu a:hover,.lop_item_more:hover,.menu_item span:hover {
     color: rgb(54, 11, 182);
-    text-decoration: underline;
+    /* text-decoration: underline; */
     font-weight: bold;
   }
   .lop_item_more a{

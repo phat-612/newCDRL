@@ -204,7 +204,6 @@ $(document).ready(async function () {
     }
   }
 
-  await loadScoresList();
 
   $(".hoc_ky select, .nien_khoa select").change(async function () {
     await loadScoresList();

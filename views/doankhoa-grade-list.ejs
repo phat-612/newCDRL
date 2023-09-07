@@ -176,7 +176,13 @@
                           <td class="khoa_score">
                             <%= department_scores[i] %>
                           </td>
-                          <td><a class="chamdiem">Chấm điểm</a></td>
+                          <%if(student_scores[i] != '-' &&  student_scores[i]!= 0){%>
+                            <td><a  class="chamdiem">Chấm điểm</a></td>
+          
+                            <%}else {%>
+                              <td>-</td>
+            
+                              <%}%>
 
                         </tr>
                         <% } %>

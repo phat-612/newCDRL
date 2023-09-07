@@ -437,6 +437,7 @@ async function mark(img_ids) {
 
     const response = await fetch('/api/stf_mark', requestOptions);
     if (response.ok) {
+      console.log(postData)
       notify('n', 'Đã lưu phiếu đánh giá điểm rèn luyện thành công!')
     }
     else if (response.status == 500) {

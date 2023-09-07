@@ -1,8 +1,8 @@
 // gia tri mac dinh
-const displayName_d = $('.display_name').val();
-const avt_d = $('.up-img').attr('src');
+const displayName_d = $(".display_name").val();
+const avt_d = $(".up-img").attr("src");
 if (!(avt_d == "")) {
-  $('.modal_wrap_img_item').find(".up-img-btn i").hide();
+  $(".modal_wrap_img_item").find(".up-img-btn i").hide();
 }
 // -------------
 
@@ -17,18 +17,18 @@ $(document).on("click", ".profile_btn_save", handleSaveButtonClick);
 
 // -----------------------------------------------------------------------------
 function validateFile(file) {
-  let allowedFormats = ['jpg', 'jpeg', 'png']; // Allowed file formats
+  let allowedFormats = ["jpg", "jpeg", "png"]; // Allowed file formats
   let maxSize = 5485760; // MBit in bytes
   // Check file format
   const fileName = file.name;
-  const fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
+  const fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
   if (!allowedFormats.includes(fileExtension)) {
     // Invalid file format
-    notify('x', 'Sai định dạng file!');
+    notify("x", "Sai định dạng file!");
     return false;
   }
   if (file.size > maxSize) {
-    notify('!', 'Up ảnh dưới 5mb!');
+    notify("!", "Up ảnh dưới 5mb!");
     return false;
   }
   // File is valid
@@ -75,10 +75,10 @@ function displayImage(file) {
 }
 
 function handleCancelButtonClick(event) {
-  const displayName = $('.display_name').val();
-  const avt = $('.up-img').attr('src');
+  const displayName = $(".display_name").val();
+  const avt = $(".up-img").attr("src");
   if (displayName != displayName_d || avt != avt_d) {
-    if (confirm('Thay đổi của bạn sẽ không được lưu, tiếp tục?')) {
+    if (confirm("Thay đổi của bạn sẽ không được lưu, tiếp tục?")) {
       window.location.href = "/";
     }
   } else {
@@ -89,52 +89,51 @@ function handleCancelButtonClick(event) {
 async function handleLogOutAllButtonClick(event) {
   try {
     const requestOptions = {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
     };
-    const response = await fetch('/api/logoutAlldevice', requestOptions);
+    const response = await fetch("/api/logoutAlldevice", requestOptions);
     if (response.ok) {
-      notify('n', 'Đăng xuất khỏi tất cả thiết bị thành công!');
+      notify("n", "Đăng xuất khỏi tất cả thiết bị thành công!");
     } else if (response.status == 500) {
       // Error occurred during upload
-      notify('x', 'Có lỗi xảy ra!');
+      notify("x", "Có lỗi xảy ra!");
     }
   } catch (error) {
     console.log(error);
-    notify('x', 'Có lỗi xảy ra!');
+    notify("x", "Có lỗi xảy ra!");
   }
 }
 
 async function handleSaveButtonClick(event) {
   try {
-    const displayName = $('.display_name').val();
-    const avt = $('.up-img').attr('src');
+    const displayName = $(".display_name").val();
+    const avt = $(".up-img").attr("src");
 
     let postData = JSON.stringify({
       displayName: displayName,
-      avt: avt
+      avt: avt,
     });
     const requestOptions = {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: postData
+      body: postData,
     };
-    const response = await fetch('/api/updateInfo', requestOptions);
+    const response = await fetch("/api/updateInfo", requestOptions);
     if (response.ok) {
-      notify('n', 'Đổi thông tin thành công!');
-      setTimeout(() => { window.location.reload(); },
-        2000)
+      notify("n", "Đổi thông tin thành công!");
+      $(".avatar_wrap img").attr("src", avt);
+      $(".avatar_wrap p").text(displayName);
     } else if (response.status == 500) {
       // Error occurred during upload
-      notify('x', 'Có lỗi xảy ra!');
+      notify("x", "Có lỗi xảy ra!");
     }
-
   } catch (error) {
     console.log(error);
-    notify('x', 'Có lỗi xảy ra!');
+    notify("x", "Có lỗi xảy ra!");
   }
 }

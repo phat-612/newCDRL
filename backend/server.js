@@ -15,6 +15,7 @@ API NẾU KHÔNG CÓ QUYỀN THÌ GỬI STATUS 403 res.sendStatus(403);
     6: thiết lập thời hạn chấm điểm (khoa)
     7: quản lý lớp (khoa)
     8: quản lý cố vấn (khoa)
+    9: quản lý lớp (khoa)
     ...
     
     role sv [0]
@@ -43,16 +44,6 @@ API NẾU KHÔNG CÓ QUYỀN THÌ GỬI STATUS 403 res.sendStatus(403);
       "2022-2023": [1, 2, 3]
     }
   }
-  khoa -> nganh -> lop -> sinh vien + giao vien
-  sinh vien -> lop -> nganh -> khoa
-
-
-
-  tài khoản mặt định:
-    {_id: "19112003",
-    password: "18102003",
-    first: "true"}
-  taskDoing:
 -------------------------------------------------------------------------------------------------------------------------- */
 
 const express = require("express");
@@ -89,23 +80,14 @@ client
   .then(() => {
     // ----------------------------------------------------------------
     const app = express();
-    const privateKey = fs.readFileSync(
-      path.join(".certificate", "localhost.key"),
-      "utf8"
-    );
-    const certificate = fs.readFileSync(
-      path.join(".certificate", "localhost.crt"),
-      "utf8"
-    );
+    const privateKey = fs.readFileSync(path.join(".certificate", "localhost.key"), "utf8");
+    const certificate = fs.readFileSync(path.join(".certificate", "localhost.crt"), "utf8");
     const credentials = { key: privateKey, cert: certificate };
 
     // ----------------------------------------------------------------
     const port = 8181;
     const secretKey = "5gB#2L1!8*1!0)$7vF@9";
-    const authenticationKey = Buffer.from(
-      secretKey.padEnd(32, "0"),
-      "utf8"
-    ).toString("hex");
+    const authenticationKey = Buffer.from(secretKey.padEnd(32, "0"), "utf8").toString("hex");
     // ----------------------------------------------------------------
     const uploadDirectory = path.join(".upload_temp");
     if (!fs.existsSync(uploadDirectory)) {
@@ -139,14 +121,8 @@ client
           },
         });
 
-        const emailTXT = fs.readFileSync(
-          path.join("src", "emailTemplate", "email.txt"),
-          "utf8"
-        );
-        const emailHTML = fs.readFileSync(
-          path.join("src", "emailTemplate", "email.ejs"),
-          "utf8"
-        );
+        const emailTXT = fs.readFileSync(path.join("src", "emailTemplate", "email.txt"), "utf8");
+        const emailHTML = fs.readFileSync(path.join("src", "emailTemplate", "email.ejs"), "utf8");
 
         const mailOptions = {
           from: '"Quản lý điểm rèn luyện" <nguytuan04@gmail.com>',
@@ -188,19 +164,37 @@ client
         return res.redirect("/login");
       } else {
         const hslink = ["/nhapdiemdanhgia", "/xembangdiem"];
-        const gvlink = ["/giaovien/quanlyquyen", "/giaovien/nhapdiemdanhgia", "/giaovien/danhsachbangdiem"];
-        const stf = ["/bancansu/nhapdiemdanhgia", "/bancansu/quanlihoatdong", "/bancansu/quanlihoatdong/danhgiahoatdong", "/bancansu/danhsachbangdiem"];
-        const dep = ["/doankhoa/quanlibomon", "/doankhoa/quanlilop", "/doankhoa/danhsachbangdiem", "/doankhoa/quanlicv", "/doankhoa/quanlihoatdongkhoa", "/doankhoa/danhsachsinhvien", "/doankhoa/nhapdiemdanhgia", "/doankhoa/thoihan"];
+        const gvlink = [
+          "/giaovien/quanlyquyen",
+          "/giaovien/nhapdiemdanhgia",
+          "/giaovien/danhsachbangdiem",
+        ];
+        const stf = [
+          "/bancansu/nhapdiemdanhgia",
+          "/bancansu/quanlihoatdong",
+          "/bancansu/quanlihoatdong/danhgiahoatdong",
+          "/bancansu/danhsachbangdiem",
+        ];
+        const dep = [
+          "/doankhoa/quanlibomon",
+          "/doankhoa/quanlilop",
+          "/doankhoa/danhsachbangdiem",
+          "/doankhoa/quanlicv",
+          "/doankhoa/quanlihoatdongkhoa",
+          "/doankhoa/danhsachsinhvien",
+          "/doankhoa/nhapdiemdanhgia",
+          "/doankhoa/thoihan",
+        ];
         if (hslink.includes(req.path)) {
           if (!user.pow[0]) {
             return res.redirect("/");
           }
-        };
+        }
         if (gvlink.includes(req.path)) {
           if (!user.pow[1] && !user.pow[4]) {
             return res.redirect("/");
           }
-        };
+        }
         if (stf.includes(req.path)) {
           if (!user.pow[0] && (!user.pow[1] || !user.pow[3])) {
             return res.redirect("/");
@@ -222,10 +216,7 @@ client
           const user_info = await client
             .db(name_global_databases)
             .collection("user_info")
-            .findOne(
-              { _id: user._id },
-              { projection: { _id: 0, avt: 1, displayName: 1 } }
-            );
+            .findOne({ _id: user._id }, { projection: { _id: 0, avt: 1, displayName: 1 } });
           res.locals.avt = user_info.avt;
           res.locals.displayName = user_info.displayName;
         }
@@ -384,11 +375,9 @@ client
         const lastFirstNameWordA = a.first_name.split(" ").pop();
         const lastFirstNameWordB = b.first_name.split(" ").pop();
 
-        const firstNameComparison = lastFirstNameWordA.localeCompare(
-          lastFirstNameWordB,
-          "vi",
-          { sensitivity: "base" }
-        );
+        const firstNameComparison = lastFirstNameWordA.localeCompare(lastFirstNameWordB, "vi", {
+          sensitivity: "base",
+        });
         if (firstNameComparison !== 0) {
           return firstNameComparison;
         }
@@ -462,29 +451,18 @@ client
           const schoolYear_all = await client
             .db(name_global_databases)
             .collection("classes")
-            .findOne(
-              { _id: user.cls[0] },
-              { projection: { _id: 0, years: 1 } }
-            );
+            .findOne({ _id: user.cls[0] }, { projection: { _id: 0, years: 1 } });
           let schoolYearsToSearch = [];
           if (schoolYear_all.years[schoolYear.year.slice(4)]) {
-            for (
-              let i = 0;
-              i < schoolYear_all.years[schoolYear.year.slice(4)].length;
-              i++
-            ) {
-              schoolYearsToSearch.push(
-                `HK${i + 1}_` + schoolYear.year.slice(4)
-              );
+            for (let i = 0; i < schoolYear_all.years[schoolYear.year.slice(4)].length; i++) {
+              schoolYearsToSearch.push(`HK${i + 1}_` + schoolYear.year.slice(4));
             }
             const studentTotalScores = await Promise.all(
               schoolYearsToSearch.map(async (year) => {
                 let studentTotalScore = null;
 
                 // Tìm trong bảng '_dep_table' trước
-                const depCollection = client
-                  .db(user.dep)
-                  .collection("_dep_table");
+                const depCollection = client.db(user.dep).collection("_dep_table");
                 const depDocument = await depCollection.findOne(
                   { mssv: user._id, school_year: year },
                   { projection: { _id: 0, total: 1 } }
@@ -494,9 +472,7 @@ client
                   studentTotalScore = depDocument.total;
                 } else {
                   // Nếu không tìm thấy, tìm trong bảng '_std_table'
-                  const stdCollection = client
-                    .db(user.dep)
-                    .collection(user.cls[0] + "_std_table");
+                  const stdCollection = client.db(user.dep).collection(user.cls[0] + "_std_table");
                   const stdDocument = await stdCollection.findOne(
                     { mssv: user._id, school_year: year },
                     { projection: { _id: 0, total: 1 } }
@@ -506,9 +482,7 @@ client
                     studentTotalScore = stdDocument.total;
                   } else {
                     // Nếu không tìm thấy, tìm trong bảng '_stf_table'
-                    const stfCollection = client
-                      .db(user.dep)
-                      .collection("_stf_table");
+                    const stfCollection = client.db(user.dep).collection("_stf_table");
                     const stfDocument = await stfCollection.findOne(
                       { mssv: user._id, school_year: year },
                       { projection: { _id: 0, total: 1 } }
@@ -866,13 +840,7 @@ client
           );
         nulltable = {
           fifth: ["Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm"],
-          first: [
-            "Chưa chấm",
-            "Chưa chấm",
-            "Chưa chấm",
-            "Chưa chấm",
-            "Chưa chấm",
-          ],
+          first: ["Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm"],
           fourth: ["Chưa chấm", "Chưa chấm", "Chưa chấm"],
           second: ["Chưa chấm", "Chưa chấm"],
           third: ["Chưa chấm", "Chưa chấm", "Chưa chấm"],
@@ -913,593 +881,553 @@ client
     });
 
     // giao vien route
-    app.get(
-      "/giaovien/quanlyquyen",
-      checkIfUserLoginRoute,
-      async (req, res) => {
-        return res.render("teacher_QL_sv", {
-          header: "global-header",
-          footer: "global-footer",
-          thongbao: "global-notifications",
-        });
-      }
-    );
-    app.get(
-      "/giaovien/nhapdiemdanhgia",
-      checkIfUserLoginRoute,
-      async (req, res) => {
-        try {
-          const user = req.session.user;
-          const mssv = req.query.studentId;
-          const schoolYearParam = req.query.schoolYear;
-          const studentTotalScore = await client
-            .db(user.dep)
-            .collection(user.cls[0] + "_std_table")
-            .findOne(
-              {
-                mssv: mssv,
-                school_year: schoolYearParam,
-              },
-              {
-                projection: {
-                  _id: 0,
-                  first: 1,
-                  second: 1,
-                  third: 1,
-                  fourth: 1,
-                  fifth: 1,
-                  total: 1,
-                },
-              }
-            );
-
-          let stfTotalScore = await client
-            .db(user.dep)
-            .collection(user.cls[0] + "_stf_table")
-            .findOne(
-              {
-                mssv: mssv,
-                school_year: schoolYearParam,
-              },
-              {
-                projection: {
-                  _id: 0,
-                  first: 1,
-                  second: 1,
-                  third: 1,
-                  fourth: 1,
-                  fifth: 1,
-                  total: 1,
-                },
-              }
-            );
-
-          let depTotalScore = await client
-            .db(user.dep)
-            .collection(user.cls[0] + "_dep_table")
-            .findOne(
-              {
-                mssv: mssv,
-                school_year: schoolYearParam,
-              },
-              {
-                projection: {
-                  _id: 0,
-                  first: 1,
-                  second: 1,
-                  third: 1,
-                  fourth: 1,
-                  fifth: 1,
-                  total: 1,
-                },
-              }
-            );
-          nulltable = {
-            fifth: ["Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm"],
-            first: [
-              "Chưa chấm",
-              "Chưa chấm",
-              "Chưa chấm",
-              "Chưa chấm",
-              "Chưa chấm",
-            ],
-            fourth: ["Chưa chấm", "Chưa chấm", "Chưa chấm"],
-            second: ["Chưa chấm", "Chưa chấm"],
-            third: ["Chưa chấm", "Chưa chấm", "Chưa chấm"],
-            total: "Chưa chấm",
-          };
-          if (!stfTotalScore) {
-            stfTotalScore = nulltable;
-          }
-          if (!depTotalScore) {
-            depTotalScore = nulltable;
-          }
-
-          if (studentTotalScore) {
-            return res.render("teacher-manage-grades", {
-              header: "global-header",
-              thongbao: "global-notifications",
-              footer: "global-footer",
-
-              Scorestd: studentTotalScore,
-              Score: stfTotalScore,
-              Scorek: depTotalScore,
-            });
-          } else {
-            return res.sendStatus(404);
-          }
-        } catch (err) {
-          console.log("SYSTEM | BAN_CAN_SU_NHAP_DIEM_ROUTE | ERROR | ", err);
-          return res.status(500).json({ error: "Lỗi hệ thống" });
-        }
-      }
-    );
-    // danh sach bang diem co van
-    app.get(
-      "/giaovien/danhsachbangdiem",
-      checkIfUserLoginRoute,
-      async (req, res) => {
-        try {
-          const user = req.session.user;
-          const school_year = await client
-            .db(name_global_databases)
-            .collection("school_year")
-            .findOne({}, { projection: { _id: 0, year: 1 } });
-          // check user login:
-          if (user.pow[1]) {
-            const years = await client
-              .db(name_global_databases)
-              .collection("classes")
-              .findOne(
-                { _id: user.cls[0] },
-                { projection: { _id: 0, years: 1 } }
-              );
-
-            // get all student in staff member class:
-            let student_list = await client
-              .db(name_global_databases)
-              .collection("user_info")
-              .find(
-                { class: user.cls[0] },
-                { projection: { first_name: 1, last_name: 1 } }
-              )
-              .toArray();
-            student_list = sortStudentName(student_list);
-
-            // get all student total score from themself:
-            let render = {
-              header: "global-header",
-              footer: "global-footer",
-              thongbao: "global-notifications",
-              staff_name: [],
-              student_list: student_list,
-              student_scores: [],
-              staff_scores: [],
-              department_scores: [],
-              cls: user.cls,
-              years: years.years,
-              curr_year: school_year.year,
-            };
-
-            for (student of student_list) {
-              const curr_student_score = await client
-                .db(user.dep)
-                .collection(user.cls[0] + "_std_table")
-                .findOne(
-                  {
-                    mssv: student._id,
-                    school_year: school_year.year,
-                  },
-                  {
-                    projection: { total: 1 },
-                  }
-                );
-              const curr_staff_score = await client
-                .db(user.dep)
-                .collection(user.cls[0] + "_stf_table")
-                .findOne(
-                  {
-                    mssv: student._id,
-                    school_year: school_year.year,
-                  },
-                  {
-                    projection: {
-                      total: 1,
-                      marker: 1,
-                    },
-                  }
-                );
-              const curr_department_score = await client
-                .db(user.dep)
-                .collection(user.cls[0] + "_dep_table")
-                .findOne(
-                  {
-                    mssv: student._id,
-                    school_year: school_year.year,
-                  },
-                  {
-                    projection: { total: 1 },
-                  }
-                );
-              // student
-              if (curr_student_score) {
-                render.student_scores.push(curr_student_score.total);
-              } else {
-                render.student_scores.push("-");
-              }
-              // staff member
-              if (curr_staff_score) {
-                render.staff_scores.push(curr_staff_score.total);
-                render.staff_name.push(curr_staff_score.marker);
-              } else {
-                render.staff_scores.push("-");
-                render.staff_name.push("-");
-              }
-              // department
-              if (curr_department_score) {
-                render.department_scores.push(curr_department_score.total);
-              } else {
-                render.department_scores.push("-");
-              }
-            }
-
-            return res.render("teacher-grade-list", render);
-          } else {
-            // user not staff members
-            // redirect to home
-            return res.redirect("/");
-          }
-        } catch (e) {
-          console.log("SYSTEM | BAN_CAN_SU_DANH_SACH_BANG_DIEM | ERROR | ", e);
-        }
-      }
-    );
-    // ban can su route
-
-    // ban can su / giang vien nhap diem route
-    app.get(
-      "/bancansu/nhapdiemdanhgia",
-      checkIfUserLoginRoute,
-      async (req, res) => {
-        try {
-          const user = req.session.user;
-          const mssv = req.query.studentId;
-          const schoolYearParam = req.query.schoolYear;
-          const studentTotalScore = await client
-            .db(user.dep)
-            .collection(user.cls[0] + "_std_table")
-            .findOne(
-              {
-                mssv: mssv,
-                school_year: schoolYearParam,
-              },
-              {
-                projection: {
-                  _id: 0,
-                  first: 1,
-                  second: 1,
-                  third: 1,
-                  fourth: 1,
-                  fifth: 1,
-                  total: 1,
-                  img_ids: 1,
-                },
-              }
-            );
-
-          let stfTotalScore = await client
-            .db(user.dep)
-            .collection(user.cls[0] + "_stf_table")
-            .findOne(
-              {
-                mssv: mssv,
-                school_year: schoolYearParam,
-              },
-              {
-                projection: {
-                  _id: 0,
-                  first: 1,
-                  second: 1,
-                  third: 1,
-                  fourth: 1,
-                  fifth: 1,
-                  total: 1,
-                  img_ids: 1,
-                },
-              }
-            );
-
-          let depTotalScore = await client
-            .db(user.dep)
-            .collection(user.cls[0] + "_dep_table")
-            .findOne(
-              {
-                mssv: mssv,
-                school_year: schoolYearParam,
-              },
-              {
-                projection: {
-                  _id: 0,
-                  first: 1,
-                  second: 1,
-                  third: 1,
-                  fourth: 1,
-                  fifth: 1,
-                  total: 1,
-                  limg_ids: 1,
-                },
-              }
-            );
-          nulltable = {
-            fifth: ["Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm"],
-            first: [
-              "Chưa chấm",
-              "Chưa chấm",
-              "Chưa chấm",
-              "Chưa chấm",
-              "Chưa chấm",
-            ],
-            fourth: ["Chưa chấm", "Chưa chấm", "Chưa chấm"],
-            second: ["Chưa chấm", "Chưa chấm"],
-            third: ["Chưa chấm", "Chưa chấm", "Chưa chấm"],
-            total: "Chưa chấm",
-          };
-          if (!stfTotalScore) {
-            stfTotalScore = nulltable;
-          }
-          if (!depTotalScore) {
-            depTotalScore = nulltable;
-          }
-          let link_img = [];
-          for (const i of studentTotalScore.img_ids) {
-            link_img.push(await server.getDriveFileLinkAndDescription(i));
-          }
-          if (studentTotalScore) {
-            return res.render("bancansu-manage-grades", {
-              header: "global-header",
-              thongbao: "global-notifications",
-              footer: "global-footer",
-              Scorestd: studentTotalScore,
-              Score: stfTotalScore,
-              Scorek: depTotalScore,
-              img: link_img,
-            });
-          } else {
-            return res.sendStatus(404);
-          }
-        } catch (err) {
-          console.log("SYSTEM | BAN_CAN_SU_NHAP_DIEM_ROUTE | ERROR | ", err);
-          return res.status(500).json({ error: "Lỗi hệ thống" });
-        }
-      }
-    );
-
-    // ban can su quan ly hoat dong
-    app.get(
-      "/bancansu/quanlihoatdong",
-      checkIfUserLoginRoute,
-      async (req, res) => {
-        return res.render("bancansu-manage-activities", {
-          header: "global-header",
-          footer: "global-footer",
-        });
-      }
-    );
-
-    // danh gia hoat dong
-    app.get(
-      "/bancansu/quanlihoatdong/danhgiahoatdong",
-      checkIfUserLoginRoute,
-      async (req, res) => {
-        return res.render("bancansu-activity-assessment", {
-          header: "global-header",
-          footer: "global-footer",
-        });
-      }
-    );
-
-    // danh sach bang diem
-    app.get(
-      "/bancansu/danhsachbangdiem",
-      checkIfUserLoginRoute,
-      async (req, res) => {
-        try {
-          const user = req.session.user;
-          const school_year = await client
-            .db(name_global_databases)
-            .collection("school_year")
-            .findOne({}, { projection: { _id: 0, year: 1 } });
-          // check user login:
-          if (user.pow[1]) {
-            const years = await client
-              .db(name_global_databases)
-              .collection("classes")
-              .findOne(
-                { _id: user.cls[0] },
-                { projection: { _id: 0, years: 1 } }
-              );
-
-            // get all student in staff member class:
-            let student_list = await client
-              .db(name_global_databases)
-              .collection("user_info")
-              .find(
-                { class: user.cls[0] },
-                { projection: { first_name: 1, last_name: 1 } }
-              )
-              .toArray();
-            student_list = sortStudentName(student_list);
-
-            // get all student total score from themself:
-            let render = {
-              header: "global-header",
-              footer: "global-footer",
-              thongbao: "global-notifications",
-              staff_name: [],
-              student_list: student_list,
-              student_scores: [],
-              staff_scores: [],
-              department_scores: [],
-              cls: user.cls,
-              years: years.years,
-              curr_year: school_year.year,
-            };
-
-            for (student of student_list) {
-              const curr_student_score = await client
-                .db(user.dep)
-                .collection(user.cls[0] + "_std_table")
-                .findOne(
-                  {
-                    mssv: student._id,
-                    school_year: school_year.year,
-                  },
-                  {
-                    projection: { total: 1 },
-                  }
-                );
-              const curr_staff_score = await client
-                .db(user.dep)
-                .collection(user.cls[0] + "_stf_table")
-                .findOne(
-                  {
-                    mssv: student._id,
-                    school_year: school_year.year,
-                  },
-                  {
-                    projection: {
-                      total: 1,
-                      marker: 1,
-                    },
-                  }
-                );
-              const curr_department_score = await client
-                .db(user.dep)
-                .collection(user.cls[0] + "_dep_table")
-                .findOne(
-                  {
-                    mssv: student._id,
-                    school_year: school_year.year,
-                  },
-                  {
-                    projection: { total: 1 },
-                  }
-                );
-              // student
-              if (curr_student_score) {
-                render.student_scores.push(curr_student_score.total);
-              } else {
-                render.student_scores.push("-");
-              }
-              // staff member
-              if (curr_staff_score) {
-                render.staff_scores.push(curr_staff_score.total);
-                render.staff_name.push(curr_staff_score.marker);
-              } else {
-                render.staff_scores.push("-");
-                render.staff_name.push("-");
-              }
-              // department
-              if (curr_department_score) {
-                render.department_scores.push(curr_department_score.total);
-              } else {
-                render.department_scores.push("-");
-              }
-            }
-
-            return res.render("bancansu-grade-list", render);
-          } else {
-            // user not staff members
-            // redirect to home
-            return res.redirect("/");
-          }
-        } catch (e) {
-          console.log("SYSTEM | BAN_CAN_SU_DANH_SACH_BANG_DIEM | ERROR | ", e);
-        }
-      }
-    );
-
-
-    // doan khoa route
-    // quan li bo mon - doan khoa route
-    app.get(
-      "/doankhoa/quanlibomon",
-      checkIfUserLoginRoute,
-      async (req, res) => {
+    app.get("/giaovien/quanlyquyen", checkIfUserLoginRoute, async (req, res) => {
+      return res.render("teacher_QL_sv", {
+        header: "global-header",
+        footer: "global-footer",
+        thongbao: "global-notifications",
+      });
+    });
+    app.get("/giaovien/nhapdiemdanhgia", checkIfUserLoginRoute, async (req, res) => {
+      try {
         const user = req.session.user;
-
-        // get all branch of department:
-        const branchs = await client
-          .db(name_global_databases)
-          .collection("branchs")
-          .find(
-            {
-              dep: user.dep,
-            }, // find all data
-            {
-              projection: {
-                _id: 0,
-                name: 1,
-              },
-            }
-          )
-          .toArray();
-
-        // get department name:
-        const dep_name = await client
-          .db(name_global_databases)
-          .collection("deps")
+        const mssv = req.query.studentId;
+        const cls_st = req.query.classSt;
+        const schoolYearParam = req.query.schoolYear;
+        const studentTotalScore = await client
+          .db(user.dep)
+          .collection(cls_st + "_std_table")
           .findOne(
             {
-              _id: user.dep,
-            }, // find all data
+              mssv: mssv,
+              school_year: schoolYearParam,
+            },
             {
               projection: {
                 _id: 0,
-                name: 1,
+                first: 1,
+                second: 1,
+                third: 1,
+                fourth: 1,
+                fifth: 1,
+                total: 1,
+                img_ids: 1,
               },
             }
           );
 
-        return res.render("doankhoa-manage-departments", {
-          header: "global-header",
-          footer: "global-footer",
-          menu: "doankhoa-menu",
-          thongbao: "global-notifications",
-          dep: dep_name.name, // every branch have same department
-          branchs: branchs,
-        });
-      }
-    );
-
-    // quan li lop - doan khoa route
-    app.get(
-      "/doankhoa/quanlilop",
-      checkIfUserLoginRoute,
-      async (req, res) => {
-        const user = req.session.user;
-
-        // get all branch of department:
-        const branchs = await client
-          .db(name_global_databases)
-          .collection("branchs")
-          .find(
+        let stfTotalScore = await client
+          .db(user.dep)
+          .collection(cls_st + "_stf_table")
+          .findOne(
             {
-              dep: user.dep,
-            }, // find all data
+              mssv: mssv,
+              school_year: schoolYearParam,
+            },
             {
               projection: {
-                name: 1,
+                _id: 0,
+                first: 1,
+                second: 1,
+                third: 1,
+                fourth: 1,
+                fifth: 1,
+                total: 1,
+                img_ids: 1,
               },
             }
-          )
-          .toArray();
+          );
 
-        // get all classes of branchs:
-        let classes = {}; // classes = {KTPM: [KTPM0121, KTPM0108, ...], CNTT: {CNTT0109, CNTT0209, ...}, ...}
-        let class_teachers = [] // class_teachers = [18102003, 19112003, ...]
-        for (let i = 0; i < branchs.length; i++) {
-          let dummy = await client.db(name_global_databases).collection("classes").find(
+        let depTotalScore = await client
+          .db(user.dep)
+          .collection(cls_st + "_dep_table")
+          .findOne(
+            {
+              mssv: mssv,
+              school_year: schoolYearParam,
+            },
+            {
+              projection: {
+                _id: 0,
+                first: 1,
+                second: 1,
+                third: 1,
+                fourth: 1,
+                fifth: 1,
+                total: 1,
+                limg_ids: 1,
+              },
+            }
+          );
+        nulltable = {
+          fifth: ["Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm"],
+          first: ["Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm"],
+          fourth: ["Chưa chấm", "Chưa chấm", "Chưa chấm"],
+          second: ["Chưa chấm", "Chưa chấm"],
+          third: ["Chưa chấm", "Chưa chấm", "Chưa chấm"],
+          total: "Chưa chấm",
+        };
+        if (!stfTotalScore) {
+          stfTotalScore = nulltable;
+        }
+        if (!depTotalScore) {
+          depTotalScore = nulltable;
+        }
+        let link_img = [];
+
+        if (studentTotalScore) {
+          for (const i of studentTotalScore.img_ids) {
+            link_img.push(await server.getDriveFileLinkAndDescription(i));
+          }
+          return res.render("bancansu-manage-grades", {
+            header: "global-header",
+            thongbao: "global-notifications",
+            footer: "global-footer",
+            Scorestd: studentTotalScore,
+            Score: stfTotalScore,
+            Scorek: depTotalScore,
+            img: link_img,
+          });
+        } else {
+          return res.sendStatus(404);
+        }
+      } catch (err) {
+        console.log("SYSTEM | BAN_CAN_SU_NHAP_DIEM_ROUTE | ERROR | ", err);
+        return res.status(500).json({ error: "Lỗi hệ thống" });
+      }
+    });
+    // danh sach bang diem co van
+    app.get("/giaovien/danhsachbangdiem", checkIfUserLoginRoute, async (req, res) => {
+      try {
+        const user = req.session.user;
+        
+
+        const school_year = await client
+          .db(name_global_databases)
+          .collection("school_year")
+          .findOne({}, { projection: { _id: 0, year: 1 } });
+        // check user login:
+        if (user.pow[1]) {
+          const years = await client
+            .db(name_global_databases)
+            .collection("classes")
+            .findOne({ _id: user.cls[0] }, { projection: { _id: 0, years: 1 } });
+
+          // get all student in staff member class:
+          const student_list = sortStudentName(
+            await client
+              .db(name_global_databases)
+              .collection("user_info")
+              .find(
+                { class: user.cls[0], "power.0": { $exists: true } },
+                { projection: { first_name: 1, last_name: 1 } }
+              )
+              .toArray()
+          );
+          // get all student total score from themself:
+          let render = {
+            header: "global-header",
+            footer: "global-footer",
+            thongbao: "global-notifications",
+            staff_name: [],
+            student_list: student_list,
+            student_scores: [],
+            staff_scores: [],
+            department_scores: [],
+            cls: user.cls,
+            years: years.years,
+            curr_year: school_year.year,
+          };
+          for (student of student_list) {
+            const curr_student_score = await client
+              .db(user.dep)
+              .collection(user.cls[0] + "_std_table")
+              .findOne(
+                {
+                  mssv: student._id,
+                  school_year: school_year.year,
+                },
+                {
+                  projection: { total: 1 },
+                }
+              );
+            const curr_staff_score = await client
+              .db(user.dep)
+              .collection(user.cls[0] + "_stf_table")
+              .findOne(
+                {
+                  mssv: student._id,
+                  school_year: school_year.year,
+                },
+                {
+                  projection: {
+                    total: 1,
+                    marker: 1,
+                  },
+                }
+              );
+            const curr_department_score = await client
+              .db(user.dep)
+              .collection(user.cls[0] + "_dep_table")
+              .findOne(
+                {
+                  mssv: student._id,
+                  school_year: school_year.year,
+                },
+                {
+                  projection: { total: 1 },
+                }
+              );
+            // student
+            if (curr_student_score) {
+              render.student_scores.push(curr_student_score.total);
+            } else {
+              render.student_scores.push("-");
+            }
+            // staff member
+            if (curr_staff_score) {
+              render.staff_scores.push(curr_staff_score.total);
+              render.staff_name.push(curr_staff_score.marker);
+            } else {
+              render.staff_scores.push("-");
+              render.staff_name.push("-");
+            }
+            // department
+            if (curr_department_score) {
+              render.department_scores.push(curr_department_score.total);
+            } else {
+              render.department_scores.push("-");
+            }
+          }
+
+          return res.render("teacher-grade-list", render);
+        } else {
+          // user not staff members
+          // redirect to home
+          return res.redirect("/");
+        }
+      } catch (e) {
+        console.log("SYSTEM | BAN_CAN_SU_DANH_SACH_BANG_DIEM | ERROR | ", e);
+      }
+    });
+    // ban can su route
+
+    // ban can su / giang vien nhap diem route
+    app.get("/bancansu/nhapdiemdanhgia", checkIfUserLoginRoute, async (req, res) => {
+      try {
+        const user = req.session.user;
+        const mssv = req.query.studentId;
+        const schoolYearParam = req.query.schoolYear;
+        const studentTotalScore = await client
+          .db(user.dep)
+          .collection(user.cls[0] + "_std_table")
+          .findOne(
+            {
+              mssv: mssv,
+              school_year: schoolYearParam,
+            },
+            {
+              projection: {
+                _id: 0,
+                first: 1,
+                second: 1,
+                third: 1,
+                fourth: 1,
+                fifth: 1,
+                total: 1,
+                img_ids: 1,
+              },
+            }
+          );
+
+        let stfTotalScore = await client
+          .db(user.dep)
+          .collection(user.cls[0] + "_stf_table")
+          .findOne(
+            {
+              mssv: mssv,
+              school_year: schoolYearParam,
+            },
+            {
+              projection: {
+                _id: 0,
+                first: 1,
+                second: 1,
+                third: 1,
+                fourth: 1,
+                fifth: 1,
+                total: 1,
+                img_ids: 1,
+              },
+            }
+          );
+
+        let depTotalScore = await client
+          .db(user.dep)
+          .collection(user.cls[0] + "_dep_table")
+          .findOne(
+            {
+              mssv: mssv,
+              school_year: schoolYearParam,
+            },
+            {
+              projection: {
+                _id: 0,
+                first: 1,
+                second: 1,
+                third: 1,
+                fourth: 1,
+                fifth: 1,
+                total: 1,
+                limg_ids: 1,
+              },
+            }
+          );
+        nulltable = {
+          fifth: ["Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm"],
+          first: ["Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm"],
+          fourth: ["Chưa chấm", "Chưa chấm", "Chưa chấm"],
+          second: ["Chưa chấm", "Chưa chấm"],
+          third: ["Chưa chấm", "Chưa chấm", "Chưa chấm"],
+          total: "Chưa chấm",
+        };
+        if (!stfTotalScore) {
+          stfTotalScore = nulltable;
+        }
+        if (!depTotalScore) {
+          depTotalScore = nulltable;
+        }
+        let link_img = [];
+        console.log("diem cua bancansu"+stfTotalScore.total)
+        if (studentTotalScore) {
+          for (const i of studentTotalScore.img_ids) {
+            link_img.push(await server.getDriveFileLinkAndDescription(i));
+          }
+          
+          return res.render("bancansu-manage-grades", {
+            header: "global-header",
+            thongbao: "global-notifications",
+            footer: "global-footer",
+            Scorestd: studentTotalScore,
+            Score: stfTotalScore,
+            Scorek: depTotalScore,
+            img: link_img,
+          });
+        } else {
+          return res.sendStatus(404);
+        }
+      } catch (err) {
+        console.log("SYSTEM | BAN_CAN_SU_NHAP_DIEM_ROUTE | ERROR | ", err);
+        return res.status(500).json({ error: "Lỗi hệ thống" });
+      }
+    });
+
+    // ban can su quan ly hoat dong
+    app.get("/bancansu/quanlihoatdong", checkIfUserLoginRoute, async (req, res) => {
+      return res.render("bancansu-manage-activities", {
+        header: "global-header",
+        footer: "global-footer",
+      });
+    });
+
+    // danh gia hoat dong
+    app.get("/bancansu/quanlihoatdong/danhgiahoatdong", checkIfUserLoginRoute, async (req, res) => {
+      return res.render("bancansu-activity-assessment", {
+        header: "global-header",
+        footer: "global-footer",
+      });
+    });
+
+    // danh sach bang diem
+    app.get("/bancansu/danhsachbangdiem", checkIfUserLoginRoute, async (req, res) => {
+      try {
+        const user = req.session.user;
+        const school_year = await client
+          .db(name_global_databases)
+          .collection("school_year")
+          .findOne({}, { projection: { _id: 0, year: 1 } });
+        // check user login:
+        if (user.pow[1]) {
+          const years = await client
+            .db(name_global_databases)
+            .collection("classes")
+            .findOne({ _id: user.cls[0] }, { projection: { _id: 0, years: 1 } });
+
+          // get all student in staff member class:
+          const student_list = sortStudentName(
+            await client
+              .db(name_global_databases)
+              .collection("user_info")
+              .find(
+                { class: user.cls[0], "power.0": { $exists: true } },
+                { projection: { first_name: 1, last_name: 1 } }
+              )
+              .toArray()
+          );
+          // get all student total score from themself:
+          let render = {
+            header: "global-header",
+            footer: "global-footer",
+            thongbao: "global-notifications",
+            staff_name: [],
+            student_list: student_list,
+            student_scores: [],
+            staff_scores: [],
+            department_scores: [],
+            cls: user.cls,
+            years: years.years,
+            curr_year: school_year.year,
+          };
+
+          for (student of student_list) {
+            const curr_student_score = await client
+              .db(user.dep)
+              .collection(user.cls[0] + "_std_table")
+              .findOne(
+                {
+                  mssv: student._id,
+                  school_year: school_year.year,
+                },
+                {
+                  projection: { total: 1 },
+                }
+              );
+            const curr_staff_score = await client
+              .db(user.dep)
+              .collection(user.cls[0] + "_stf_table")
+              .findOne(
+                {
+                  mssv: student._id,
+                  school_year: school_year.year,
+                },
+                {
+                  projection: {
+                    total: 1,
+                    marker: 1,
+                  },
+                }
+              );
+            const curr_department_score = await client
+              .db(user.dep)
+              .collection(user.cls[0] + "_dep_table")
+              .findOne(
+                {
+                  mssv: student._id,
+                  school_year: school_year.year,
+                },
+                {
+                  projection: { total: 1 },
+                }
+              );
+            // student
+            if (curr_student_score) {
+              render.student_scores.push(curr_student_score.total);
+            } else {
+              render.student_scores.push("-");
+            }
+            // staff member
+            if (curr_staff_score) {
+              render.staff_scores.push(curr_staff_score.total);
+              render.staff_name.push(curr_staff_score.marker);
+            } else {
+              render.staff_scores.push("-");
+              render.staff_name.push("-");
+            }
+            // department
+            if (curr_department_score) {
+              render.department_scores.push(curr_department_score.total);
+            } else {
+              render.department_scores.push("-");
+            }
+          }
+
+          return res.render("bancansu-grade-list", render);
+        } else {
+          // user not staff members
+          // redirect to home
+          return res.redirect("/");
+        }
+      } catch (e) {
+        console.log("SYSTEM | BAN_CAN_SU_DANH_SACH_BANG_DIEM | ERROR | ", e);
+      }
+    });
+
+    // doan khoa route
+    // quan li bo mon - doan khoa route
+    app.get("/doankhoa/quanlibomon", checkIfUserLoginRoute, async (req, res) => {
+      const user = req.session.user;
+
+      // get all branch of department:
+      const branchs = await client
+        .db(name_global_databases)
+        .collection("branchs")
+        .find(
+          {
+            dep: user.dep,
+          }, // find all data
+          {
+            projection: {
+              _id: 0,
+              name: 1,
+            },
+          }
+        )
+        .toArray();
+
+      // get department name:
+      const dep_name = await client
+        .db(name_global_databases)
+        .collection("deps")
+        .findOne(
+          {
+            _id: user.dep,
+          }, // find all data
+          {
+            projection: {
+              _id: 0,
+              name: 1,
+            },
+          }
+        );
+
+      return res.render("doankhoa-manage-departments", {
+        header: "global-header",
+        footer: "global-footer",
+        menu: "doankhoa-menu",
+        thongbao: "global-notifications",
+        dep: dep_name.name, // every branch have same department
+        branchs: branchs,
+      });
+    });
+
+    // quan li lop - doan khoa route
+    app.get("/doankhoa/quanlilop", checkIfUserLoginRoute, async (req, res) => {
+      const user = req.session.user;
+
+      // get all branch of department:
+      const branchs = await client
+        .db(name_global_databases)
+        .collection("branchs")
+        .find(
+          {
+            dep: user.dep,
+          }, // find all data
+          {
+            projection: {
+              name: 1,
+            },
+          }
+        )
+        .toArray();
+
+      // get all classes of branchs:
+      let classes = {}; // classes = {KTPM: [KTPM0121, KTPM0108, ...], CNTT: {CNTT0109, CNTT0209, ...}, ...}
+      let class_teachers = []; // class_teachers = [18102003, 19112003, ...]
+      for (let i = 0; i < branchs.length; i++) {
+        let dummy = await client
+          .db(name_global_databases)
+          .collection("classes")
+          .find(
             {
               branch: branchs[i]._id,
             }, // find all data
@@ -1509,21 +1437,43 @@ client
               },
             }
           )
-            .toArray();
+          .toArray();
 
-          classes[branchs[i]._id] = dummy.map((cls) => cls._id);
-          class_teachers.push(...dummy.map((cls) => cls.cvht));
-        }
+        classes[branchs[i]._id] = dummy.map((cls) => cls._id);
+        class_teachers.push(...dummy.map((cls) => cls.cvht));
+      }
 
-        // get all teacher's name in current dep
-        const teachers = await client
+      // get all teacher's name in current dep
+      const teachers = await client
+        .db(name_global_databases)
+        .collection("user_info")
+        .find(
+          {
+            "power.1": { $exists: true },
+            "power.4": { $exists: true },
+            branch: { $in: branchs.map((branch) => branch._id) },
+          }, // user is teacher
+          {
+            projection: {
+              _id: 0,
+              first_name: 1,
+              last_name: 1,
+            },
+          }
+        )
+        .toArray();
+
+      // get all teacher's name of classes
+      for (let i = 0; i < class_teachers.length; i++) {
+        // replace current teacher's _id with teacher's name
+        class_teachers[i] = await client
           .db(name_global_databases)
           .collection("user_info")
-          .find(
+          .findOne(
             {
+              _id: class_teachers[i],
               "power.1": { $exists: true },
               "power.4": { $exists: true },
-              branch: { $in: branchs.map((branch) => branch._id) }
             }, // user is teacher
             {
               projection: {
@@ -1532,417 +1482,359 @@ client
                 last_name: 1,
               },
             }
-          )
-          .toArray();
-
-        
-        // get all teacher's name of classes
-        for (let i = 0; i < class_teachers.length; i++ ) {
-          // replace current teacher's _id with teacher's name
-          class_teachers[i] = await client
-            .db(name_global_databases)
-            .collection("user_info")
-            .findOne(
-              {
-                _id: class_teachers[i],
-                "power.1": { $exists: true },
-                "power.4": { $exists: true },
-              }, // user is teacher
-              {
-                projection: {
-                  _id: 0,
-                  first_name: 1,
-                  last_name: 1,
-                },
-              }
-            );
-        }
-
-        
-        console.log(class_teachers);
-
-        return res.render("doankhoa-manage-classes", {
-          header: "global-header",
-          footer: "global-footer",
-          menu: "doankhoa-menu",
-          thongbao: "global-notifications",
-          dep_name: user.dep,
-          branchs: branchs,
-          classes: classes,
-          teachers: teachers.map((teacher) => teacher.last_name + ' ' + teacher.first_name),
-          class_teachers: class_teachers
-        });
+          );
       }
-    );
+
+      console.log(class_teachers);
+
+      return res.render("doankhoa-manage-classes", {
+        header: "global-header",
+        footer: "global-footer",
+        menu: "doankhoa-menu",
+        thongbao: "global-notifications",
+        dep_name: user.dep,
+        branchs: branchs,
+        classes: classes,
+        teachers: teachers.map((teacher) => teacher.last_name + " " + teacher.first_name),
+        class_teachers: class_teachers,
+      });
+    });
 
     // danh sach bang diem khoa
-    app.get(
-      "/doankhoa/danhsachbangdiem",
-      checkIfUserLoginRoute,
-      async (req, res) => {
-        try {
-          const user = req.session.user;
+    app.get("/doankhoa/danhsachbangdiem", checkIfUserLoginRoute, async (req, res) => {
+      try {
+        const user = req.session.user;
 
-          const school_year = await client
-            .db(name_global_databases)
-            .collection("school_year")
-            .findOne({}, { projection: { _id: 0, year: 1 } });
-          // check user login:
-          if (user.pow[2]) {
-            let branch_list = await client
-              .db(name_global_databases)
-              .collection("branchs")
-              .find({ dep: user.dep }, { projection: { _id: 1, name: 1 } })
-              .toArray();
-
-            const classlist = await client
-              .db(name_global_databases)
-              .collection("classes")
-              .find(
-                { branch: { $in: branch_list.map((branch) => branch._id) } },
-                { projection: { _id: 1, branch: 1 } }
-              )
-              .toArray();
-            const years = await client
-              .db(name_global_databases)
-              .collection("classes")
-              .findOne(
-                { _id: classlist[0]._id },
-                { projection: { _id: 0, years: 1 } }
-              );
-
-
-            // get all student in staff member class:
-            let student_list = await client
-              .db(name_global_databases)
-              .collection("user_info")
-              .find(
-                { class: classlist[0]._id, "power.0": { $exists: true } },
-                { projection: { first_name: 1, last_name: 1 } }
-              )
-              .toArray();
-            student_list = sortStudentName(student_list);
-            // get all branch of department:
-
-            // get all student total score from themself:
-            let render = {
-              header: "global-header",
-              footer: "global-footer",
-              thongbao: "global-notifications",
-              menu: "doankhoa-menu",
-              staff_name: [],
-              student_list: student_list,
-              student_scores: [],
-              staff_scores: [],
-              department_scores: [],
-              cls: classlist,
-              years: years.years,
-              curr_year: school_year.year,
-              branch: branch_list,
-            };
-            for (student of student_list) {
-              const curr_student_score = await client
-                .db(user.dep)
-                .collection(classlist[0]._id + "_std_table")
-                .findOne(
-                  {
-                    mssv: student._id,
-                    school_year: school_year.year,
-                  },
-                  {
-                    projection: { total: 1 },
-                  }
-                );
-              const curr_staff_score = await client
-                .db(user.dep)
-                .collection(classlist[0]._id + "_stf_table")
-                .findOne(
-                  {
-                    mssv: student._id,
-                    school_year: school_year.year,
-                  },
-                  {
-                    projection: {
-                      total: 1,
-                      marker: 1,
-                    },
-                  }
-                );
-              const curr_department_score = await client
-                .db(user.dep)
-                .collection(classlist[0]._id + "_dep_table")
-                .findOne(
-                  {
-                    mssv: student._id,
-                    school_year: school_year.year,
-                  },
-                  {
-                    projection: { total: 1 },
-                  }
-                );
-              // student
-              if (curr_student_score) {
-                render.student_scores.push(curr_student_score.total);
-              } else {
-                render.student_scores.push("-");
-              }
-              // staff member
-              if (curr_staff_score) {
-                render.staff_scores.push(curr_staff_score.total);
-                render.staff_name.push(curr_staff_score.marker);
-              } else {
-                render.staff_scores.push("-");
-                render.staff_name.push("-");
-              }
-              // department
-              if (curr_department_score) {
-                render.department_scores.push(curr_department_score.total);
-              } else {
-                render.department_scores.push("-");
-              }
-            }
-            return res.render("doankhoa-grade-list", render);
-          } else {
-            // user not staff members
-            // redirect to home
-            return res.redirect("/");
-          }
-        } catch (e) {
-          console.log("SYSTEM | DOAN_KHOA_DANH_SACH_BANG_DIEM | ERROR | ", e);
-        }
-      }
-    );
-
-    //quan li co van - doan khoa route
-    app.get(
-      "/doankhoa/quanlicv",
-      checkIfUserLoginRoute,
-      async (req, res) => {
-        try {
-          const user = req.session.user;
-
-          // get all branch of department
-          const all_branchs = await client
+        const school_year = await client
+          .db(name_global_databases)
+          .collection("school_year")
+          .findOne({}, { projection: { _id: 0, year: 1 } });
+        // check user login:
+        if (user.pow[2]) {
+          let branch_list = await client
             .db(name_global_databases)
             .collection("branchs")
-            .find(
-              {
-                dep: user.dep,
-              },
-              {
-                projection: {
-                  name: 1,
-                },
-              }
-            )
+            .find({ dep: user.dep }, { projection: { _id: 1, name: 1 } })
             .toArray();
 
-          // get user name and class in dep
-          const teachers = await client
+          const classlist = await client
+            .db(name_global_databases)
+            .collection("classes")
+            .find(
+              { branch: { $in: branch_list.map((branch) => branch._id) } },
+              { projection: { _id: 1, branch: 1 } }
+            )
+            .toArray();
+          const years = await client
+            .db(name_global_databases)
+            .collection("classes")
+            .findOne({ _id: classlist[0]._id }, { projection: { _id: 0, years: 1 } });
+
+          // get all student in staff member class:
+          let student_list = await client
             .db(name_global_databases)
             .collection("user_info")
             .find(
-              {
-                "power.1": { $exists: true },
-                "power.4": { $exists: true },
-                branch: { $in: all_branchs.map((branch) => branch._id) }
-              }, // user is teacher
-              {
-                projection: {
-                  first_name: 1,
-                  last_name: 1,
-                  class: 1,
-                  branch: 1,
-                },
-              }
+              { class: classlist[0]._id, "power.0": { $exists: true } },
+              { projection: { first_name: 1, last_name: 1 } }
             )
             .toArray();
-          let branch_list = [];
-          for (let i = 0; i < teachers.length; i++) {
-            const branch = await client
-              .db(name_global_databases)
-              .collection("branchs")
+          student_list = sortStudentName(student_list);
+          // get all branch of department:
+
+          // get all student total score from themself:
+          let render = {
+            header: "global-header",
+            footer: "global-footer",
+            thongbao: "global-notifications",
+            menu: "doankhoa-menu",
+            staff_name: [],
+            student_list: student_list,
+            student_scores: [],
+            staff_scores: [],
+            department_scores: [],
+            cls: classlist,
+            years: years.years,
+            curr_year: school_year.year,
+            branch: branch_list,
+          };
+          for (student of student_list) {
+            const curr_student_score = await client
+              .db(user.dep)
+              .collection(classlist[0]._id + "_std_table")
               .findOne(
-                { _id: teachers[i].branch },
+                {
+                  mssv: student._id,
+                  school_year: school_year.year,
+                },
+                {
+                  projection: { total: 1 },
+                }
+              );
+            const curr_staff_score = await client
+              .db(user.dep)
+              .collection(classlist[0]._id + "_stf_table")
+              .findOne(
+                {
+                  mssv: student._id,
+                  school_year: school_year.year,
+                },
                 {
                   projection: {
-                    _id: 0,
-                    name: 1,
+                    total: 1,
+                    marker: 1,
                   },
                 }
               );
-            branch_list.push(branch.name);
+            const curr_department_score = await client
+              .db(user.dep)
+              .collection(classlist[0]._id + "_dep_table")
+              .findOne(
+                {
+                  mssv: student._id,
+                  school_year: school_year.year,
+                },
+                {
+                  projection: { total: 1 },
+                }
+              );
+            // student
+            if (curr_student_score) {
+              render.student_scores.push(curr_student_score.total);
+            } else {
+              render.student_scores.push("-");
+            }
+            // staff member
+            if (curr_staff_score) {
+              render.staff_scores.push(curr_staff_score.total);
+              render.staff_name.push(curr_staff_score.marker);
+            } else {
+              render.staff_scores.push("-");
+              render.staff_name.push("-");
+            }
+            // department
+            if (curr_department_score) {
+              render.department_scores.push(curr_department_score.total);
+            } else {
+              render.department_scores.push("-");
+            }
           }
-
-          return res.render("doankhoa-manage-teacher", {
-            header: "global-header",
-            footer: "global-footer",
-            thongbao: "global-notifications",
-            menu: "doankhoa-menu",
-            teachers: teachers,
-            branchs: branch_list,
-            all_branchs: all_branchs,
-          });
-        } catch (err) {
-          console.log(
-            "SYSTEM | DOAN_KHOA_QUAN_LY_CO_VAN_ROUTE | ERROR | ",
-            err
-          );
-          return res.sendStatus(500);
-        }
-      }
-    );
-
-    // Quan li hoat dong khoa route
-    app.get(
-      "/doankhoa/quanlihoatdongkhoa",
-      checkIfUserLoginRoute,
-      async (req, res) => {
-        return res.render("doankhoa-manage-activities", {
-          header: "global-header",
-          footer: "global-footer",
-          menu: "doankhoa-menu",
-        });
-      }
-    );
-    // danh sach sinh vien
-    app.get(
-      "/doankhoa/danhsachsinhvien",
-      checkIfUserLoginRoute,
-      async (req, res) => {
-        const user = req.session.user;
-        if (user.pow[4] || user.pow[7]) {
-          return res.render("doankhoa-student-list", {
-            header: "global-header",
-            footer: "global-footer",
-            thongbao: "global-notifications",
-            menu: "doankhoa-menu",
-          });
+          return res.render("doankhoa-grade-list", render);
         } else {
+          // user not staff members
+          // redirect to home
           return res.redirect("/");
         }
+      } catch (e) {
+        console.log("SYSTEM | DOAN_KHOA_DANH_SACH_BANG_DIEM | ERROR | ", e);
       }
-    );
+    });
+
+    //quan li co van - doan khoa route
+    app.get("/doankhoa/quanlicv", checkIfUserLoginRoute, async (req, res) => {
+      try {
+        const user = req.session.user;
+
+        // get all branch of department
+        const all_branchs = await client
+          .db(name_global_databases)
+          .collection("branchs")
+          .find(
+            {
+              dep: user.dep,
+            },
+            {
+              projection: {
+                name: 1,
+              },
+            }
+          )
+          .toArray();
+
+        // get user name and class in dep
+        const teachers = await client
+          .db(name_global_databases)
+          .collection("user_info")
+          .find(
+            {
+              "power.1": { $exists: true },
+              "power.4": { $exists: true },
+              branch: { $in: all_branchs.map((branch) => branch._id) },
+            }, // user is teacher
+            {
+              projection: {
+                first_name: 1,
+                last_name: 1,
+                class: 1,
+                branch: 1,
+              },
+            }
+          )
+          .toArray();
+        let branch_list = [];
+        for (let i = 0; i < teachers.length; i++) {
+          const branch = await client
+            .db(name_global_databases)
+            .collection("branchs")
+            .findOne(
+              { _id: teachers[i].branch },
+              {
+                projection: {
+                  _id: 0,
+                  name: 1,
+                },
+              }
+            );
+          branch_list.push(branch.name);
+        }
+
+        return res.render("doankhoa-manage-teacher", {
+          header: "global-header",
+          footer: "global-footer",
+          thongbao: "global-notifications",
+          menu: "doankhoa-menu",
+          teachers: teachers,
+          branchs: branch_list,
+          all_branchs: all_branchs,
+        });
+      } catch (err) {
+        console.log("SYSTEM | DOAN_KHOA_QUAN_LY_CO_VAN_ROUTE | ERROR | ", err);
+        return res.sendStatus(500);
+      }
+    });
+
+    // Quan li hoat dong khoa route
+    app.get("/doankhoa/quanlihoatdongkhoa", checkIfUserLoginRoute, async (req, res) => {
+      return res.render("doankhoa-manage-activities", {
+        header: "global-header",
+        footer: "global-footer",
+        menu: "doankhoa-menu",
+      });
+    });
+    // danh sach sinh vien
+    app.get("/doankhoa/danhsachsinhvien", checkIfUserLoginRoute, async (req, res) => {
+      const user = req.session.user;
+      if (user.pow[4] || user.pow[7]) {
+        return res.render("doankhoa-student-list", {
+          header: "global-header",
+          footer: "global-footer",
+          thongbao: "global-notifications",
+          menu: "doankhoa-menu",
+        });
+      } else {
+        return res.redirect("/");
+      }
+    });
     // ban can su / giang vien nhap diem route
-    app.get(
-      "/doankhoa/nhapdiemdanhgia",
-      checkIfUserLoginRoute,
-      async (req, res) => {
-        try {
-          const user = req.session.user;
-          const mssv = req.query.studentId;
-          const cls = req.query.class;
-          const schoolYearParam = req.query.schoolYear;
-          const studentTotalScore = await client
-            .db(user.dep)
-            .collection(cls + "_std_table")
-            .findOne(
-              {
-                mssv: mssv,
-                school_year: schoolYearParam,
+    app.get("/doankhoa/nhapdiemdanhgia", checkIfUserLoginRoute, async (req, res) => {
+      try {
+        const user = req.session.user;
+        const mssv = req.query.studentId;
+        const cls = req.query.class;
+        const schoolYearParam = req.query.schoolYear;
+        const studentTotalScore = await client
+          .db(user.dep)
+          .collection(cls + "_std_table")
+          .findOne(
+            {
+              mssv: mssv,
+              school_year: schoolYearParam,
+            },
+            {
+              projection: {
+                _id: 0,
+                first: 1,
+                second: 1,
+                third: 1,
+                fourth: 1,
+                fifth: 1,
+                total: 1,
+                img_ids: 1,
               },
-              {
-                projection: {
-                  _id: 0,
-                  first: 1,
-                  second: 1,
-                  third: 1,
-                  fourth: 1,
-                  fifth: 1,
-                  total: 1,
-                  img_ids: 1,
-                },
-              }
-            );
+            }
+          );
 
-          let stfTotalScore = await client
-            .db(user.dep)
-            .collection(cls + "_stf_table")
-            .findOne(
-              {
-                mssv: mssv,
-                school_year: schoolYearParam,
+        let stfTotalScore = await client
+          .db(user.dep)
+          .collection(cls + "_stf_table")
+          .findOne(
+            {
+              mssv: mssv,
+              school_year: schoolYearParam,
+            },
+            {
+              projection: {
+                _id: 0,
+                first: 1,
+                second: 1,
+                third: 1,
+                fourth: 1,
+                fifth: 1,
+                total: 1,
               },
-              {
-                projection: {
-                  _id: 0,
-                  first: 1,
-                  second: 1,
-                  third: 1,
-                  fourth: 1,
-                  fifth: 1,
-                  total: 1,
-                },
-              }
-            );
+            }
+          );
 
-          let depTotalScore = await client
-            .db(user.dep)
-            .collection(cls + "_dep_table")
-            .findOne(
-              {
-                mssv: mssv,
-                school_year: schoolYearParam,
+        let depTotalScore = await client
+          .db(user.dep)
+          .collection(cls + "_dep_table")
+          .findOne(
+            {
+              mssv: mssv,
+              school_year: schoolYearParam,
+            },
+            {
+              projection: {
+                _id: 0,
+                first: 1,
+                second: 1,
+                third: 1,
+                fourth: 1,
+                fifth: 1,
+                total: 1,
               },
-              {
-                projection: {
-                  _id: 0,
-                  first: 1,
-                  second: 1,
-                  third: 1,
-                  fourth: 1,
-                  fifth: 1,
-                  total: 1,
-                },
-              }
-            );
-          nulltable = {
-            fifth: ["Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm"],
-            first: [
-              "Chưa chấm",
-              "Chưa chấm",
-              "Chưa chấm",
-              "Chưa chấm",
-              "Chưa chấm",
-            ],
-            fourth: ["Chưa chấm", "Chưa chấm", "Chưa chấm"],
-            second: ["Chưa chấm", "Chưa chấm"],
-            third: ["Chưa chấm", "Chưa chấm", "Chưa chấm"],
-            total: "Chưa chấm",
-          };
-          if (!stfTotalScore) {
-            stfTotalScore = nulltable;
-          }
-          if (!depTotalScore) {
-            depTotalScore = nulltable;
-          }
-          let link_img = [];
+            }
+          );
+        nulltable = {
+          fifth: ["Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm"],
+          first: ["Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm"],
+          fourth: ["Chưa chấm", "Chưa chấm", "Chưa chấm"],
+          second: ["Chưa chấm", "Chưa chấm"],
+          third: ["Chưa chấm", "Chưa chấm", "Chưa chấm"],
+          total: "Chưa chấm",
+        };
+        if (!stfTotalScore) {
+          stfTotalScore = nulltable;
+        }
+        if (!depTotalScore) {
+          depTotalScore = nulltable;
+        }
+        console.log(depTotalScore);
+        let link_img = [];
+
+        if (studentTotalScore) {
           for (const i of studentTotalScore.img_ids) {
             link_img.push(await server.getDriveFileLinkAndDescription(i));
           }
+          return res.render("doankhoa-manage-grades", {
+            header: "global-header",
+            thongbao: "global-notifications",
+            footer: "global-footer",
+            menu: "doankhoa-menu",
+            img: link_img,
 
-          if (studentTotalScore) {
-            return res.render("doankhoa-manage-grades", {
-              header: "global-header",
-              thongbao: "global-notifications",
-              footer: "global-footer",
-              menu: "doankhoa-menu",
-              img: link_img,
-
-              Scorestd: studentTotalScore,
-              Score: stfTotalScore,
-              Scorek: depTotalScore,
-            });
-          } else {
-            console.log("No student");
-            return res.sendStatus(404);
-          }
-        } catch (err) {
-          console.log("SYSTEM | BAN_CAN_SU_NHAP_DIEM_ROUTE | ERROR | ", err);
-          return res.status(500).json({ error: "Lỗi hệ thống" });
+            Scorestd: studentTotalScore,
+            Score: stfTotalScore,
+            Scorek: depTotalScore,
+          });
+        } else {
+          return res.sendStatus(404);
         }
+      } catch (err) {
+        console.log("SYSTEM | DOAN_KHOA_NHAP_DIEM_ROUTE | ERROR | ", err);
+        return res.status(500).json({ error: "Lỗi hệ thống" });
       }
-    );
+    });
     app.get("/doankhoa/thoihan", checkIfUserLoginRoute, async (req, res) => {
       const curr_date = new Date();
       const school_year = await client
@@ -1985,18 +1877,13 @@ client
       });
     });
 
-
     //doan khoa danh gia hoat dong
-    app.get(
-      "/doankhoa/quanlihoatdong/danhgiahoatdong",
-      checkIfUserLoginRoute,
-      async (req, res) => {
-        return res.render("doankhoa-activity-assessment", {
-          header: "global-header",
-          footer: "global-footer",
-        });
-      }
-    );
+    app.get("/doankhoa/quanlihoatdong/danhgiahoatdong", checkIfUserLoginRoute, async (req, res) => {
+      return res.render("doankhoa-activity-assessment", {
+        header: "global-header",
+        footer: "global-footer",
+      });
+    });
 
     // API SPACE ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -2017,10 +1904,7 @@ client
           if (user === null) {
             // Đăng nhập không thành công
             return res.sendStatus(403);
-          } else if (
-            user._id === data.mssv &&
-            user.password === data.password
-          ) {
+          } else if (user._id === data.mssv && user.password === data.password) {
             let seasionIDs = await client
               .db(name_global_databases)
               .collection("sessions_manager")
@@ -2033,17 +1917,12 @@ client
                 .find({ _id: { $in: seasionIDs } })
                 .toArray();
               const existingIDs = existingDocs.map((doc) => doc._id);
-              const idsToDelete = seasionIDs.filter(
-                (id) => !existingIDs.includes(id)
-              );
+              const idsToDelete = seasionIDs.filter((id) => !existingIDs.includes(id));
               if (idsToDelete.length > 0) {
                 await client
                   .db(name_global_databases)
                   .collection("sessions_manager")
-                  .updateOne(
-                    { _id: data.mssv },
-                    { $pull: { sessionId: { $in: idsToDelete } } }
-                  );
+                  .updateOne({ _id: data.mssv }, { $pull: { sessionId: { $in: idsToDelete } } });
               }
             }
 
@@ -2051,26 +1930,17 @@ client
             const cls = await client
               .db(name_global_databases)
               .collection("user_info")
-              .findOne(
-                { _id: data.mssv },
-                { projection: { _id: 0, class: 1, power: 1, dep: 1 } }
-              );
+              .findOne({ _id: data.mssv }, { projection: { _id: 0, class: 1, power: 1, dep: 1 } });
             if (!cls.power[2]) {
               const branch = await client
                 .db(name_global_databases)
                 .collection("classes")
-                .findOne(
-                  { _id: cls.class[0] },
-                  { projection: { _id: 0, branch: 1 } }
-                );
+                .findOne({ _id: cls.class[0] }, { projection: { _id: 0, branch: 1 } });
               if (branch) {
                 const dep = await client
                   .db(name_global_databases)
                   .collection("branchs")
-                  .findOne(
-                    { _id: branch.branch },
-                    { projection: { _id: 0, dep: 1 } }
-                  );
+                  .findOne({ _id: branch.branch }, { projection: { _id: 0, dep: 1 } });
 
                 user.dep = dep.dep;
               }
@@ -2093,11 +1963,7 @@ client
             await client
               .db(name_global_databases)
               .collection("sessions_manager")
-              .updateOne(
-                { _id: user._id },
-                { $push: { sessionId: sessionId } },
-                { upsert: true }
-              );
+              .updateOne({ _id: user._id }, { $push: { sessionId: sessionId } }, { upsert: true });
 
             if (user.first == "new_user") {
               return res.status(200).json({ check: true });
@@ -2141,27 +2007,19 @@ client
                   .find({ _id: { $in: seasionIDs } })
                   .toArray();
                 const existingIDs = existingDocs.map((doc) => doc._id);
-                const idsToDelete = seasionIDs.filter(
-                  (id) => !existingIDs.includes(id)
-                );
+                const idsToDelete = seasionIDs.filter((id) => !existingIDs.includes(id));
 
                 if (idsToDelete.length > 0) {
                   await client
                     .db(name_global_databases)
                     .collection("sessions_manager")
-                    .updateOne(
-                      { _id: mssv },
-                      { $pull: { sessionId: { $in: idsToDelete } } }
-                    );
+                    .updateOne({ _id: mssv }, { $pull: { sessionId: { $in: idsToDelete } } });
                 }
               }
 
               return res.redirect("/login"); // Chạy hàm dưới sau khi đã xử lý xong
             } catch (error) {
-              console.error(
-                "SYSTEM | LOG_OUT | Failed to clean up sessions:",
-                error
-              );
+              console.error("SYSTEM | LOG_OUT | Failed to clean up sessions:", error);
               return res.sendStatus(500);
             }
           }
@@ -2235,10 +2093,7 @@ client
           .collection("OTP")
           .findOne({ _id: data.mssv }, { projection: { _id: 0 } });
         if (OTP && OTP.otpcode === data.otp) {
-          await client
-            .db(name_global_databases)
-            .collection("OTP")
-            .deleteOne({ _id: data.mssv });
+          await client.db(name_global_databases).collection("OTP").deleteOne({ _id: data.mssv });
           const user = await client
             .db(name_global_databases)
             .collection("login_info")
@@ -2260,43 +2115,29 @@ client
               .find({ _id: { $in: seasionIDs } })
               .toArray();
             const existingIDs = existingDocs.map((doc) => doc._id);
-            const idsToDelete = seasionIDs.filter(
-              (id) => !existingIDs.includes(id)
-            );
+            const idsToDelete = seasionIDs.filter((id) => !existingIDs.includes(id));
             if (idsToDelete.length > 0) {
               await client
                 .db(name_global_databases)
                 .collection("sessions_manager")
-                .updateOne(
-                  { _id: data.mssv },
-                  { $pull: { sessionId: { $in: idsToDelete } } }
-                );
+                .updateOne({ _id: data.mssv }, { $pull: { sessionId: { $in: idsToDelete } } });
             }
           }
           // get user class(cls), power and department(dep)
           const cls = await client
             .db(name_global_databases)
             .collection("user_info")
-            .findOne(
-              { _id: data.mssv },
-              { projection: { _id: 0, class: 1, power: 1, dep: 1 } }
-            );
+            .findOne({ _id: data.mssv }, { projection: { _id: 0, class: 1, power: 1, dep: 1 } });
           if (!cls.power[2]) {
             const branch = await client
               .db(name_global_databases)
               .collection("classes")
-              .findOne(
-                { _id: cls.class[0] },
-                { projection: { _id: 0, branch: 1 } }
-              );
+              .findOne({ _id: cls.class[0] }, { projection: { _id: 0, branch: 1 } });
             if (branch) {
               const dep = await client
                 .db(name_global_databases)
                 .collection("branchs")
-                .findOne(
-                  { _id: branch.branch },
-                  { projection: { _id: 0, dep: 1 } }
-                );
+                .findOne({ _id: branch.branch }, { projection: { _id: 0, dep: 1 } });
               user.dep = dep.dep;
             }
             user.cls = cls.class;
@@ -2315,11 +2156,7 @@ client
           await client
             .db(name_global_databases)
             .collection("sessions_manager")
-            .updateOne(
-              { _id: user._id },
-              { $push: { sessionId: sessionId } },
-              { upsert: true }
-            );
+            .updateOne({ _id: user._id }, { $push: { sessionId: sessionId } }, { upsert: true });
           return res.sendStatus(200);
         } else {
           res.sendStatus(403);
@@ -2372,19 +2209,13 @@ client
         const old_pass = await client
           .db(name_global_databases)
           .collection("login_info")
-          .findOne(
-            { _id: req.session.user._id },
-            { projection: { _id: 0, password: 1 } }
-          );
+          .findOne({ _id: req.session.user._id }, { projection: { _id: 0, password: 1 } });
         if (old_pass.password == data.old_password) {
           if (old_pass.password !== data.new_password) {
             await client
               .db(name_global_databases)
               .collection("login_info")
-              .updateOne(
-                { _id: req.session.user._id },
-                { $set: { password: data.new_password } }
-              );
+              .updateOne({ _id: req.session.user._id }, { $set: { password: data.new_password } });
             return res.sendStatus(200);
           } else {
             return res.sendStatus(403);
@@ -2406,10 +2237,7 @@ client
         const old_pass = await client
           .db(name_global_databases)
           .collection("login_info")
-          .findOne(
-            { _id: req.session.user._id },
-            { projection: { _id: 0, password: 1 } }
-          );
+          .findOne({ _id: req.session.user._id }, { projection: { _id: 0, password: 1 } });
 
         if (old_pass.password == data.new_password) {
           return res.sendStatus(403);
@@ -2418,17 +2246,11 @@ client
           await client
             .db(name_global_databases)
             .collection("login_info")
-            .updateOne(
-              { _id: req.session.user._id },
-              { $unset: { first: "" } }
-            );
+            .updateOne({ _id: req.session.user._id }, { $unset: { first: "" } });
           await client
             .db(name_global_databases)
             .collection("login_info")
-            .updateOne(
-              { _id: req.session.user._id },
-              { $set: { password: data.new_password } }
-            );
+            .updateOne({ _id: req.session.user._id }, { $set: { password: data.new_password } });
           return res.sendStatus(200);
         }
       } catch (err) {
@@ -2555,219 +2377,200 @@ client
         // Xử lý các tệp đã tải lên ở đây
         // console.log('SYSTEM | UPLOAD_FILE | Files uploaded:', req.files);
         res.writeHead(200, { "Content-Type": "applicaiton/json" });
-        return res.end(
-          JSON.stringify(
-            await get_full_id(uploadDirectory, list_name, list_dep)
-          )
-        );
+        return res.end(JSON.stringify(await get_full_id(uploadDirectory, list_name, list_dep)));
       }
     );
 
     // Create new account -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    app.post(
-      "/api/createAccount",
-      upload.single("file"),
-      checkIfUserLoginAPI,
-      async (req, res) => {
-        const user = req.session.user;
-        if (user.pow[4] || user.pow[7]) {
-          const fileStudents = req.file;
-          async function generateEmail(str) {
-            let s1 =
-              "ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠạẢảẤấẦầẨẩẪẫẬậẮắẰằẲẳẴẵẶặẸẹẺẻẼẽẾếỀềỂểỄễỆệỈỉỊịỌọỎỏỐốỒồỔổỖỗỘộỚớỜờỞởỠỡỢợỤụỦủỨứỪừỬửỮữỰựỲỳỴỵỶỷỸỹ";
-            let s0 =
-              "AAAAEEEIIOOOOUUYaaaaeeeiioooouuyAaDdIiUuOoUuAaAaAaAaAaAaAaAaAaAaAaAaEeEeEeEeEeEeEeEeEeIiIiOoOoOoOoOoOoOoOoOoOoOoUuUuUuUuUuUuUuYyYyYyYy";
-            let newStr = "";
-            let listSpace = [];
-            for (let i = 0; i < str.length; i++) {
-              if (s1.indexOf(str[i]) != -1) {
-                newStr += s0[s1.indexOf(str[i])];
-              } else {
-                newStr += str[i];
-              }
-              if (str[i] == " ") {
-                listSpace.push(i);
-              }
+    app.post("/api/createAccount", upload.single("file"), checkIfUserLoginAPI, async (req, res) => {
+      const user = req.session.user;
+      if (user.pow[4] || user.pow[7]) {
+        const fileStudents = req.file;
+        async function generateEmail(str) {
+          let s1 =
+            "ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠạẢảẤấẦầẨẩẪẫẬậẮắẰằẲẳẴẵẶặẸẹẺẻẼẽẾếỀềỂểỄễỆệỈỉỊịỌọỎỏỐốỒồỔổỖỗỘộỚớỜờỞởỠỡỢợỤụỦủỨứỪừỬửỮữỰựỲỳỴỵỶỷỸỹ";
+          let s0 =
+            "AAAAEEEIIOOOOUUYaaaaeeeiioooouuyAaDdIiUuOoUuAaAaAaAaAaAaAaAaAaAaAaAaEeEeEeEeEeEeEeEeEeIiIiOoOoOoOoOoOoOoOoOoOoOoUuUuUuUuUuUuUuYyYyYyYy";
+          let newStr = "";
+          let listSpace = [];
+          for (let i = 0; i < str.length; i++) {
+            if (s1.indexOf(str[i]) != -1) {
+              newStr += s0[s1.indexOf(str[i])];
+            } else {
+              newStr += str[i];
             }
-            let output = newStr[0];
-            for (let i = 0; i < listSpace.length - 2; i++) {
-              output += newStr.charAt(listSpace[i] + 1);
+            if (str[i] == " ") {
+              listSpace.push(i);
             }
-            output += newStr
-              .slice(listSpace[listSpace.length - 2] + 1)
-              .replace(/\s/g, "");
-            return output.toLowerCase() + "@student.ctuet.edu.vn";
           }
+          let output = newStr[0];
+          for (let i = 0; i < listSpace.length - 2; i++) {
+            output += newStr.charAt(listSpace[i] + 1);
+          }
+          output += newStr.slice(listSpace[listSpace.length - 2] + 1).replace(/\s/g, "");
+          return output.toLowerCase() + "@student.ctuet.edu.vn";
+        }
 
-          if (fileStudents) {
-            try {
-              // read excel file:
-              // create all account
-              const workbook = await XlsxPopulate.fromFileAsync(
-                fileStudents.path
+        if (fileStudents) {
+          try {
+            // read excel file:
+            // create all account
+            const workbook = await XlsxPopulate.fromFileAsync(fileStudents.path);
+            const sheet = workbook.sheet(0);
+            const values = sheet.usedRange().value();
+            let maxWidthEmail = 0;
+            //[['MSSV', 'Họ', 'Tên' ]]
+            sheet.cell("D1").value("Email");
+            sheet.cell("E1").value("Password");
+            for (let i = 1; i < values.length; i++) {
+              let pw = await randomPassword();
+              let email = await generateEmail(
+                `${values[i][1]} ${values[i][2]} ${values[i][0].toString()}`
               );
-              const sheet = workbook.sheet(0);
-              const values = sheet.usedRange().value();
-              let maxWidthEmail = 0;
-              //[['MSSV', 'Họ', 'Tên' ]]
-              sheet.cell("D1").value("Email");
-              sheet.cell("E1").value("Password");
-              for (let i = 1; i < values.length; i++) {
-                let pw = await randomPassword();
-                let email = await generateEmail(
-                  `${values[i][1]} ${values[i][2]} ${values[i][0].toString()}`
-                );
-                let dataInsertUser = {
-                  _id: values[i][0].toString(),
-                  first_name: values[i][2],
-                  last_name: values[i][1],
-                  avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
-                  power: { 0: true },
-                  class: [req.body.cls],
-                  displayName: `${values[i][1]} ${values[i][2]}`,
-                  email: email,
-                };
-                let dataInsertLogin = {
-                  _id: values[i][0].toString(),
-                  password: pw,
-                  first: "new_user",
-                };
-                client.db("global").collection("user_info").updateOne(
-                  {
-                    _id: dataInsertUser._id,
-                  },
-                  {
-                    $set: dataInsertUser,
-                  },
-                  {
-                    upsert: true,
-                  }
-                );
-                client.db("global").collection("login_info").updateOne(
-                  {
-                    _id: dataInsertLogin._id,
-                  },
-                  {
-                    $set: dataInsertLogin,
-                  },
-                  {
-                    upsert: true,
-                  }
-                );
-                await sheet.cell(`D${i + 1}`).value(email);
-                await sheet.cell(`E${i + 1}`).value(pw);
-                const range = sheet.range(`D${i + 1}:E${i + 1}`);
-                range.style({ border: true });
-                if (email.length > maxWidthEmail) {
-                  maxWidthEmail = email.length;
+              let dataInsertUser = {
+                _id: values[i][0].toString(),
+                first_name: values[i][2],
+                last_name: values[i][1],
+                avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
+                power: { 0: true },
+                class: [req.body.cls],
+                displayName: `${values[i][1]} ${values[i][2]}`,
+                email: email,
+              };
+              let dataInsertLogin = {
+                _id: values[i][0].toString(),
+                password: pw,
+                first: "new_user",
+              };
+              client.db("global").collection("user_info").updateOne(
+                {
+                  _id: dataInsertUser._id,
+                },
+                {
+                  $set: dataInsertUser,
+                },
+                {
+                  upsert: true,
                 }
-              }
-              // Write to file.
-              sheet.column("D").width(maxWidthEmail);
-              const uuid = uuidv4();
-              await workbook.toFileAsync(
-                path.join(".downloads", uuid + ".xlsx")
               );
-              res.download(path.join(".downloads", uuid + ".xlsx"));
-              // xoa file sau khi xu ly
-              scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
-            } catch (err) {
-              console.log("SYSTEM | CREATE_ACCOUNT | ERROR | ", err);
-              return res.sendStatus(500);
-            }
-          } else {
-            // console.log('them 1 sinh vien');
-            const dataStudent = req.body;
-            // console.log(dataStudent);
-            let pw = await randomPassword();
-            let email = await generateEmail(
-              `${dataStudent["ho"]} ${dataStudent["ten"]} ${dataStudent[
-                "mssv"
-              ].toString()}`
-            );
-            let power;
-            if (dataStudent["vaitro"] == "1") {
-              power = {
-                0: true,
-                1: true,
-                3: true,
-              };
-            } else {
-              power = {
-                0: true,
-                1: dataStudent["chamdiem"],
-                3: dataStudent["lbhd"],
-              };
-            }
-            let dataInsertUser = {
-              _id: dataStudent["mssv"].toString(),
-              first_name: dataStudent["ten"],
-              last_name: dataStudent["ho"],
-              avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
-              power: power,
-              class: [dataStudent["cls"]],
-              displayName: `${dataStudent["ho"]} ${dataStudent["ten"]}`,
-              email: email,
-            };
-            let dataInsertLogin = {
-              _id: dataStudent["mssv"].toString(),
-              password: pw,
-              first: "new_user",
-            };
-            client.db("global").collection("user_info").updateOne(
-              {
-                _id: dataInsertUser._id,
-              },
-              {
-                $set: dataInsertUser,
-              },
-              {
-                upsert: true,
-              }
-            );
-            client.db("global").collection("login_info").updateOne(
-              {
-                _id: dataInsertLogin._id,
-              },
-              {
-                $set: dataInsertLogin,
-              },
-              {
-                upsert: true,
-              }
-            );
-            // xu ly sau khi them sinh vien
-            if (!dataStudent["updateStudent"]) {
-              const uuid = uuidv4();
-              const workbook = await XlsxPopulate.fromFileAsync(
-                "./src/excelTemplate/Tao_danh_sach_lop_moi.xlsx"
+              client.db("global").collection("login_info").updateOne(
+                {
+                  _id: dataInsertLogin._id,
+                },
+                {
+                  $set: dataInsertLogin,
+                },
+                {
+                  upsert: true,
+                }
               );
-              const sheet = workbook.sheet(0);
-              await sheet.cell(`A2`).value(dataStudent["mssv"].toString());
-              await sheet.cell(`B2`).value(dataStudent["ho"]);
-              await sheet.cell(`C2`).value(dataStudent["ten"]);
-              await sheet.cell(`D1`).value("Email");
-              await sheet.cell(`E1`).value("Password");
-              await sheet.cell(`D2`).value(email);
-              await sheet.cell(`E2`).value(pw);
-              let range = sheet.range(`D2:E2`);
+              await sheet.cell(`D${i + 1}`).value(email);
+              await sheet.cell(`E${i + 1}`).value(pw);
+              const range = sheet.range(`D${i + 1}:E${i + 1}`);
               range.style({ border: true });
-              sheet.column("D").width(email.length);
-              await workbook.toFileAsync(
-                path.join(".downloads", uuid + ".xlsx")
-              );
-              res.download(path.join(".downloads", uuid + ".xlsx"));
-              // xoa file sau khi xu ly
-              scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
-            } else {
-              return res.sendStatus(200);
+              if (email.length > maxWidthEmail) {
+                maxWidthEmail = email.length;
+              }
             }
+            // Write to file.
+            sheet.column("D").width(maxWidthEmail);
+            const uuid = uuidv4();
+            await workbook.toFileAsync(path.join(".downloads", uuid + ".xlsx"));
+            res.download(path.join(".downloads", uuid + ".xlsx"));
+            // xoa file sau khi xu ly
+            scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
+          } catch (err) {
+            console.log("SYSTEM | CREATE_ACCOUNT | ERROR | ", err);
+            return res.sendStatus(500);
           }
         } else {
-          return res.sendStatus(403);
+          // console.log('them 1 sinh vien');
+          const dataStudent = req.body;
+          // console.log(dataStudent);
+          let pw = await randomPassword();
+          let email = await generateEmail(
+            `${dataStudent["ho"]} ${dataStudent["ten"]} ${dataStudent["mssv"].toString()}`
+          );
+          let power;
+          if (dataStudent["vaitro"] == "1") {
+            power = {
+              0: true,
+              1: true,
+              3: true,
+            };
+          } else {
+            power = {
+              0: true,
+              1: dataStudent["chamdiem"],
+              3: dataStudent["lbhd"],
+            };
+          }
+          let dataInsertUser = {
+            _id: dataStudent["mssv"].toString(),
+            first_name: dataStudent["ten"],
+            last_name: dataStudent["ho"],
+            avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
+            power: power,
+            class: [dataStudent["cls"]],
+            displayName: `${dataStudent["ho"]} ${dataStudent["ten"]}`,
+            email: email,
+          };
+          let dataInsertLogin = {
+            _id: dataStudent["mssv"].toString(),
+            password: pw,
+            first: "new_user",
+          };
+          client.db("global").collection("user_info").updateOne(
+            {
+              _id: dataInsertUser._id,
+            },
+            {
+              $set: dataInsertUser,
+            },
+            {
+              upsert: true,
+            }
+          );
+          client.db("global").collection("login_info").updateOne(
+            {
+              _id: dataInsertLogin._id,
+            },
+            {
+              $set: dataInsertLogin,
+            },
+            {
+              upsert: true,
+            }
+          );
+          // xu ly sau khi them sinh vien
+          if (!dataStudent["updateStudent"]) {
+            const uuid = uuidv4();
+            const workbook = await XlsxPopulate.fromFileAsync(
+              "./src/excelTemplate/Tao_danh_sach_lop_moi.xlsx"
+            );
+            const sheet = workbook.sheet(0);
+            await sheet.cell(`A2`).value(dataStudent["mssv"].toString());
+            await sheet.cell(`B2`).value(dataStudent["ho"]);
+            await sheet.cell(`C2`).value(dataStudent["ten"]);
+            await sheet.cell(`D1`).value("Email");
+            await sheet.cell(`E1`).value("Password");
+            await sheet.cell(`D2`).value(email);
+            await sheet.cell(`E2`).value(pw);
+            let range = sheet.range(`D2:E2`);
+            range.style({ border: true });
+            sheet.column("D").width(email.length);
+            await workbook.toFileAsync(path.join(".downloads", uuid + ".xlsx"));
+            res.download(path.join(".downloads", uuid + ".xlsx"));
+            // xoa file sau khi xu ly
+            scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
+          } else {
+            return res.sendStatus(200);
+          }
         }
+      } else {
+        return res.sendStatus(403);
       }
-    );
+    });
     app.get(
       "/api/getTemplateAddStudent",
       upload.single("file"),
@@ -2787,14 +2590,8 @@ client
         try {
           const listDelete = req.body.dataDelete;
           for (let i = 0; i < listDelete.length; i++) {
-            client
-              .db("global")
-              .collection("user_info")
-              .deleteOne({ _id: listDelete[i] });
-            client
-              .db("global")
-              .collection("login_info")
-              .deleteOne({ _id: listDelete[i] });
+            client.db("global").collection("user_info").deleteOne({ _id: listDelete[i] });
+            client.db("global").collection("login_info").deleteOne({ _id: listDelete[i] });
           }
           return res.sendStatus(200);
         } catch (err) {
@@ -2982,7 +2779,7 @@ client
           };
           for (student of student_list) {
             const curr_student_score = await client
-              .db(user.dep)
+              .db(cls)
               .collection(user.cls[parseInt(cls)] + "_std_table")
               .findOne(
                 {
@@ -2997,7 +2794,7 @@ client
                 }
               );
             const curr_staff_score = await client
-              .db(user.dep)
+              .db(cls)
               .collection(user.cls[parseInt(cls)] + "_stf_table")
               .findOne(
                 {
@@ -3013,7 +2810,7 @@ client
                 }
               );
             const curr_departmentt_score = await client
-              .db(user.dep)
+              .db(cls)
               .collection(user.cls[parseInt(cls)] + "_dep_table")
               .findOne(
                 {
@@ -3061,139 +2858,135 @@ client
       }
     });
     // doan khoa load scores
-    app.get(
-      "/api/doan_khoa/loadScoresList",
-      checkIfUserLoginAPI,
-      async (req, res) => {
-        try {
-          const user = req.session.user;
-          if (user.pow[2]) {
-            const data = req.query;
-            //data = {year: "HK1_2022-2023", cls: "1"}
-            const school_year = data.year;
-            const cls = data.class;
-            // const bo_mon = data.bo_mon;
-            // check for post data.cls if class define this mean they choose class so that must
-            if (!cls) {
-              cls = 0;
-            }
+    app.get("/api/doan_khoa/loadScoresList", checkIfUserLoginAPI, async (req, res) => {
+      try {
+        const user = req.session.user;
+        if (user.pow[2]) {
+          const data = req.query;
+          //data = {year: "HK1_2022-2023", cls: "1"}
+          const school_year = data.year;
+          const cls = data.class;
+          // const bo_mon = data.bo_mon;
+          // check for post data.cls if class define this mean they choose class so that must
+          if (!cls) {
+            cls = 0;
+          }
 
-            const year_available = await client
+          const year_available = await client
+            .db(name_global_databases)
+            .collection("school_year")
+            .findOne(
+              {},
+              {
+                projection: {
+                  _id: 0,
+                  year: 1,
+                  start_day: 1,
+                  end_day: 1,
+                },
+              }
+            );
+
+          const student_list = sortStudentName(
+            await client
               .db(name_global_databases)
-              .collection("school_year")
+              .collection("user_info")
+              .find(
+                { class: cls, "power.0": { $exists: true } },
+                { projection: { first_name: 1, last_name: 1 } }
+              )
+              .toArray()
+          );
+
+          // get all student total score from themself:
+          let result = {
+            staff_name: [],
+            student_list: student_list,
+            student_scores: [],
+            staff_scores: [],
+            department_scores: [],
+            year_available: year_available,
+          };
+          for (student of student_list) {
+            const curr_student_score = await client
+              .db(user.dep)
+              .collection(cls + "_std_table")
               .findOne(
-                {},
+                {
+                  mssv: student._id,
+                  school_year: school_year,
+                },
                 {
                   projection: {
                     _id: 0,
-                    year: 1,
-                    start_day: 1,
-                    end_day: 1,
+                    total: 1,
                   },
                 }
               );
-
-            const student_list = sortStudentName(
-              await client
-                .db(name_global_databases)
-                .collection("user_info")
-                .find(
-                  { class: cls, "power.0": { $exists: true } },
-                  { projection: { first_name: 1, last_name: 1 } }
-                )
-                .toArray()
-            );
-
-            // get all student total score from themself:
-            let result = {
-              staff_name: [],
-              student_list: student_list,
-              student_scores: [],
-              staff_scores: [],
-              department_scores: [],
-              year_available: year_available,
-            };
-            for (student of student_list) {
-              const curr_student_score = await client
-                .db(user.dep)
-                .collection(cls + "_std_table")
-                .findOne(
-                  {
-                    mssv: student._id,
-                    school_year: school_year,
+            const curr_staff_score = await client
+              .db(user.dep)
+              .collection(cls + "_stf_table")
+              .findOne(
+                {
+                  mssv: student._id,
+                  school_year: school_year,
+                },
+                {
+                  projection: {
+                    _id: 0,
+                    total: 1,
+                    marker: 1,
                   },
-                  {
-                    projection: {
-                      _id: 0,
-                      total: 1,
-                    },
-                  }
-                );
-              const curr_staff_score = await client
-                .db(user.dep)
-                .collection(cls + "_stf_table")
-                .findOne(
-                  {
-                    mssv: student._id,
-                    school_year: school_year,
+                }
+              );
+            const curr_departmentt_score = await client
+              .db(user.dep)
+              .collection(cls + "_dep_table")
+              .findOne(
+                {
+                  mssv: student._id,
+                  school_year: school_year,
+                },
+                {
+                  projection: {
+                    _id: 0,
+                    total: 1,
                   },
-                  {
-                    projection: {
-                      _id: 0,
-                      total: 1,
-                      marker: 1,
-                    },
-                  }
-                );
-              const curr_departmentt_score = await client
-                .db(user.dep)
-                .collection(cls + "_dep_table")
-                .findOne(
-                  {
-                    mssv: student._id,
-                    school_year: school_year,
-                  },
-                  {
-                    projection: {
-                      _id: 0,
-                      total: 1,
-                    },
-                  }
-                );
-              // student
-              if (curr_student_score) {
-                result.student_scores.push(curr_student_score.total);
-              } else {
-                result.student_scores.push("-");
-              }
-              // staff member
-              if (curr_staff_score) {
-                result.staff_scores.push(curr_staff_score.total);
-                result.staff_name.push(curr_staff_score.marker);
-              } else {
-                result.staff_scores.push("-");
-                result.staff_name.push("-");
-              }
-              // department
-              if (curr_departmentt_score) {
-                result.department_scores.push(curr_departmentt_score.total);
-              } else {
-                result.department_scores.push("-");
-              }
+                }
+              );
+            // student
+            if (curr_student_score) {
+              result.student_scores.push(curr_student_score.total);
+            } else {
+              result.student_scores.push("-");
             }
-
-            return res.status(200).json(result);
-          } else {
-            // user not staff members
-            // redirect to home
-            return res.statusCode(403);
+            // staff member
+            if (curr_staff_score) {
+              result.staff_scores.push(curr_staff_score.total);
+              result.staff_name.push(curr_staff_score.marker);
+            } else {
+              result.staff_scores.push("-");
+              result.staff_name.push("-");
+            }
+            // department
+            if (curr_departmentt_score) {
+              result.department_scores.push(curr_departmentt_score.total);
+            } else {
+              result.department_scores.push("-");
+            }
           }
-        } catch (err) {
-          console.log("SYSTEM | DOAN_KHOA_LOAD_SCORE_LIST | ERROR | ", err);
-          return res.sendStatus(500);
+
+          return res.status(200).json(result);
+        } else {
+          // user not staff members
+          // redirect to home
+          return res.statusCode(403);
         }
+      } catch (err) {
+        console.log("SYSTEM | DOAN_KHOA_LOAD_SCORE_LIST | ERROR | ", err);
+        return res.sendStatus(500);
       }
-    );
+    });
     // Auto mark (copy student mark to staff mark)
     app.post("/api/autoMark", checkIfUserLoginAPI, async (req, res) => {
       try {
@@ -3263,79 +3056,75 @@ client
         return res.sendStatus(500);
       }
     });
-    app.post(
-      "/api/doan_khoa/autoMark",
-      checkIfUserLoginAPI,
-      async (req, res) => {
-        try {
-          const user = req.session.user;
-          if (user.pow[2]) {
-            const data = req.body;
-            let cls = data.cls;
-            console.log(cls);
-            //data = {year: "HK1_2022-2023", cls: "1", std_list = []}
+    app.post("/api/doan_khoa/autoMark", checkIfUserLoginAPI, async (req, res) => {
+      try {
+        const user = req.session.user;
+        if (user.pow[2]) {
+          const data = req.body;
+          let cls = data.cls;
+          console.log(cls);
+          //data = {year: "HK1_2022-2023", cls: "1", std_list = []}
 
-            // get staff member info :
-            const marker = await client
-              .db(name_global_databases)
-              .collection("user_info")
-              .findOne(
-                { _id: user._id },
-                {
-                  projection: {
-                    _id: 0,
-                    last_name: 1,
-                    first_name: 1,
-                  },
-                }
-              );
-            // check for post data.cls if class define this mean they choose class so that must
-            if (!cls) {
-              cls = 0;
-            }
-
-            // check if table is exist or not
-            // update or add new table copy from std_table to staff_table
-            for (let i = 0; i < data.std_list.length; i++) {
-              const std_table = await client
-                .db(user.dep)
-                .collection(cls + "_std_table")
-                .findOne({
-                  mssv: data.std_list[i],
-                  school_year: data.year,
-                });
-
-              // update old table if exist else insert new one
-              // copy from student table and add marker name
-              if (std_table) {
-                std_table.marker = marker.last_name + " " + marker.first_name;
-                delete std_table._id;
-                await client
-                  .db(user.dep)
-                  .collection(cls + "_dep_table")
-                  .updateOne(
-                    {
-                      mssv: data.std_list[i],
-                      school_year: data.year,
-                    },
-                    {
-                      $set: std_table,
-                    },
-                    { upsert: true }
-                  );
+          // get staff member info :
+          const marker = await client
+            .db(name_global_databases)
+            .collection("user_info")
+            .findOne(
+              { _id: user._id },
+              {
+                projection: {
+                  _id: 0,
+                  last_name: 1,
+                  first_name: 1,
+                },
               }
-            }
-
-            return res.sendStatus(200);
-          } else {
-            return res.sendStatus(403)
+            );
+          // check for post data.cls if class define this mean they choose class so that must
+          if (!cls) {
+            cls = 0;
           }
-        } catch (err) {
-          console.log("SYSTEM | AUTO_MARK | ERROR | ", err);
-          return res.sendStatus(500);
+
+          // check if table is exist or not
+          // update or add new table copy from std_table to staff_table
+          for (let i = 0; i < data.std_list.length; i++) {
+            const std_table = await client
+              .db(user.dep)
+              .collection(cls + "_std_table")
+              .findOne({
+                mssv: data.std_list[i],
+                school_year: data.year,
+              });
+
+            // update old table if exist else insert new one
+            // copy from student table and add marker name
+            if (std_table) {
+              std_table.marker = marker.last_name + " " + marker.first_name;
+              delete std_table._id;
+              await client
+                .db(user.dep)
+                .collection(cls + "_dep_table")
+                .updateOne(
+                  {
+                    mssv: data.std_list[i],
+                    school_year: data.year,
+                  },
+                  {
+                    $set: std_table,
+                  },
+                  { upsert: true }
+                );
+            }
+          }
+
+          return res.sendStatus(200);
+        } else {
+          return res.sendStatus(403);
         }
+      } catch (err) {
+        console.log("SYSTEM | AUTO_MARK | ERROR | ", err);
+        return res.sendStatus(500);
       }
-    );
+    });
 
     // api danh sach sinh vien // có j sữa tên tiêng anh lại cho nó dồng bộ code nha Phát
     app.post("/api/getStudentList", checkIfUserLoginAPI, async (req, res) => {
@@ -3396,10 +3185,7 @@ client
         if (user.pow[0]) {
           const schoolYearParam = req.query.schoolYear;
 
-          const schoolYearsToSearch = [
-            "HK1_" + schoolYearParam,
-            "HK2_" + schoolYearParam,
-          ];
+          const schoolYearsToSearch = ["HK1_" + schoolYearParam, "HK2_" + schoolYearParam];
           const studentTotalScores = await Promise.all(
             schoolYearsToSearch.map(async (year) => {
               const studentTotalScore = await client
@@ -3416,15 +3202,13 @@ client
                 );
               return {
                 year: year.slice(0, 3),
-                total: studentTotalScore
-                  ? studentTotalScore.total
-                  : "Chưa có điểm",
+                total: studentTotalScore ? studentTotalScore.total : "Chưa có điểm",
               };
             })
           );
           return res.status(200).json(studentTotalScores);
         } else {
-          return res.sendStatus(403)
+          return res.sendStatus(403);
         }
       } catch (err) {
         console.log("SYSTEM | GET_USER_SCORE | ERROR | ", err);
@@ -3488,8 +3272,6 @@ client
         } else {
           return res.sendStatus(403); // back to home
         }
-
-
       } catch (err) {
         console.log("SYSTEM | DELETE_BRANCHS | ERROR | ", err);
         return res.sendStatus(500);
@@ -3523,11 +3305,9 @@ client
               }
             );
           return res.sendStatus(200);
-
         } else {
           return res.sendStatus(403); // back to home
         }
-
       } catch (err) {
         console.log("SYSTEM | CHANGE_DEADLINE | ERROR | ", err);
         return res.sendStatus(500);
@@ -3535,132 +3315,117 @@ client
     });
 
     // api add or edit teacher of department base on it exist or not
-    app.post(
-      "/api/addOrEditTeachers",
-      checkIfUserLoginAPI,
-      async (req, res) => {
-        try {
-          const user = req.session.user;
-          const data = req.body; // data = {old_id: "19112003", new_id: "18102003", new_name: "Nguyễn Văn A", branch: "KTPM"}
+    app.post("/api/addOrEditTeachers", checkIfUserLoginAPI, async (req, res) => {
+      try {
+        const user = req.session.user;
+        const data = req.body; // data = {old_id: "19112003", new_id: "18102003", new_name: "Nguyễn Văn A", branch: "KTPM"}
 
-          // must be department to use this api
-          if (user.pow[8]) {
-            // find to get old pass of teacher before remove it
-            const teacher_pass = await client
-              .db(name_global_databases)
-              .collection("login_info")
-              .findOne(
-                {
-                  _id: data.old_id,
+        // must be department to use this api
+        if (user.pow[8]) {
+          // find to get old pass of teacher before remove it
+          const teacher_pass = await client
+            .db(name_global_databases)
+            .collection("login_info")
+            .findOne(
+              {
+                _id: data.old_id,
+              },
+              {
+                projection: {
+                  password: 1,
                 },
-                {
-                  projection: {
-                    password: 1,
-                  },
-                }
-              );
-            // find to get curr classes
-            const curr_classes = await client
-              .db(name_global_databases)
-              .collection("user_info")
-              .findOne(
-                {
-                  _id: data.old_id,
+              }
+            );
+          // find to get curr classes
+          const curr_classes = await client
+            .db(name_global_databases)
+            .collection("user_info")
+            .findOne(
+              {
+                _id: data.old_id,
+              },
+              {
+                projection: {
+                  class: 1,
+                  avt: 1,
+                  email: 1,
                 },
-                {
-                  projection: {
-                    class: 1,
-                    avt: 1,
-                    email: 1,
-                  },
-                }
-              );
-            // remove old teachers
+              }
+            );
+
+          if (curr_classes) {
+			// remove old teachers
+			await client.db(name_global_databases).collection("user_info").deleteOne({
+			_id: data.old_id,
+			});
+
+            // edit old one
             await client
               .db(name_global_databases)
               .collection("user_info")
-              .deleteOne({
-                _id: data.old_id,
+              .insertOne({
+                _id: data.new_id,
+                first_name: data.new_name.split(" ").slice(-1).join(" "),
+                last_name: data.new_name.split(" ").slice(0, -1).join(" "),
+                avt: curr_classes.avt,
+                power: {
+                  1: true,
+                  3: true,
+                  4: true,
+                },
+                class: curr_classes.class,
+                displayName: data.new_name, // here before pop
+                branch: data.branch,
+                email: curr_classes.email,
               });
-            await client
-              .db(name_global_databases)
-              .collection("login_info")
-              .deleteOne({
-                _id: data.old_id,
-              });
-
-            if (curr_classes) {
-              // edit old one
-              await client
-                .db(name_global_databases)
-                .collection("user_info")
-                .insertOne({
-                  _id: data.new_id,
-                  first_name: data.new_name.split(" ").slice(-1).join(" "),
-                  last_name: data.new_name.split(" ").slice(0, -1).join(" "),
-                  avt: curr_classes.avt,
-                  power: {
-                    1: true,
-                    3: true,
-                    4: true,
-                  },
-                  class: curr_classes.class,
-                  displayName: data.new_name, // here before pop
-                  branch: data.branch,
-                  email: curr_classes.email,
-                });
-            } else {
-              // add new one
-              await client
-                .db(name_global_databases)
-                .collection("user_info")
-                .insertOne({
-                  _id: data.new_id,
-                  first_name: data.new_name.split(" ").slice(-1).join(" "),
-                  last_name: data.new_name.split(" ").slice(0, -1).join(" "),
-                  avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
-                  power: {
-                    1: true,
-                    3: true,
-                    4: true,
-                  },
-                  class: [],
-                  displayName: data.new_name, // here before pop
-                  branch: data.branch,
-                  email: "",
-                });
-            }
-
-            if (teacher_pass) {
-              // edit old one
-              await client
-                .db(name_global_databases)
-                .collection("login_info")
-                .insertOne({
-                  _id: data.new_id,
-                  password: teacher_pass.password,
-                });
-            } else {
-              // add new one
-              await client
-                .db(name_global_databases)
-                .collection("login_info")
-                .insertOne({
-                  _id: data.new_id,
-                  password: data.new_id,
-                });
-            }
           } else {
-            return res.sendStatus(403); // back to home
+            // add new one
+            await client
+              .db(name_global_databases)
+              .collection("user_info")
+              .insertOne({
+                _id: data.new_id,
+                first_name: data.new_name.split(" ").slice(-1).join(" "),
+                last_name: data.new_name.split(" ").slice(0, -1).join(" "),
+                avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
+                power: {
+                  1: true,
+                  3: true,
+                  4: true,
+                },
+                class: [],
+                displayName: data.new_name, // here before pop
+                branch: data.branch,
+                email: "",
+              });
           }
 
-          return res.sendStatus(200);
-        } catch (err) {
-          console.log("SYSTEM | ADD_OR_EDIT_BRANCHS | ERROR | ", err);
-          return res.sendStatus(500);
+          if (teacher_pass) {
+			await client.db(name_global_databases).collection("login_info").deleteOne({
+				_id: data.old_id,
+			  });
+            // edit old one
+            await client.db(name_global_databases).collection("login_info").insertOne({
+              _id: data.new_id,
+              password: teacher_pass.password,
+            });
+          } else {
+            // add new one
+            await client.db(name_global_databases).collection("login_info").insertOne({
+              _id: data.new_id,
+              password: data.new_id,
+            });
+          }
+        } else {
+          return res.sendStatus(403); // back to home
         }
+
+        return res.sendStatus(200);
+      } catch (err) {
+        console.log("SYSTEM | ADD_OR_EDIT_BRANCHS | ERROR | ", err);
+        return res.sendStatus(500);
       }
-    );
+    });
 
     // api delete teachers checked
     app.post("/api/deleteTeachers", checkIfUserLoginAPI, async (req, res) => {
@@ -3695,27 +3460,222 @@ client
       }
     });
 
-    app.post("/api/deleteTeachers", checkIfUserLoginAPI, async (req, res) => {
+    // api set activities -------------------------------------------------------------------------------------------------------------------------------
+    app.post("/api/add_activities", checkIfUserLoginAPI, async (req, res) => {
       try {
         const user = req.session.user;
-        const data = req.body; // data = {rm_ts: ["19112003" (teacher_id), ...]}
+        if (user.pow[3]) {
+          const data = req.body;
+          if (data.cap === "khoa") {
+            await client.db(user.dep).collection("activities").insertOne({
+              activities_name: data.activities_name,
+              activities_content: data.activities_content,
+            });
+          } else if (data.cap == "lop") {
+            await client.db(user.dep).collection("activities_class").insertOne({
+              activities_name: data.activities_name,
+              activities_content: data.activities_content,
+              class: data.class,
+            });
+          }
+        } else {
+          return res.sendStatus(403);
+        }
+      } catch (err) {
+        console.log("SYSTEM | ADD_ACTIVITIES | ERROR | ", err);
+        return res.sendStatus(500);
+      }
+    });
+
+    // load bang diem cua giao vien------------------------------------------------------------------------------------------------------------------
+    app.get("/api/teacher/loadScoresList", checkIfUserLoginAPI, async (req, res) => {
+      try {
+        const user = req.session.user;
+        if (user.pow[1]) {
+          const data = req.query;
+          //data = {year: "HK1_2022-2023", cls: "1"}
+          const school_year = data.year;
+          const year_available = await client
+            .db(name_global_databases)
+            .collection("school_year")
+            .findOne(
+              {},
+              {
+                projection: {
+                  _id: 0,
+                  year: 1,
+                  start_day: 1,
+                  end_day: 1,
+                },
+              }
+            );
+          
+          const student_list = sortStudentName(
+            await client
+              .db(name_global_databases)
+              .collection("user_info")
+              .find(
+                { class: data.cls, "power.0": { $exists: true } },
+                { projection: { first_name: 1, last_name: 1 } }
+              )
+              .toArray()
+          );
+
+          // get all student total score from themself:
+          let result = {
+            staff_name: [],
+            student_list: student_list,
+            student_scores: [],
+            staff_scores: [],
+            department_scores: [],
+            year_available: year_available,
+          };
+          for (student of student_list) {
+            const curr_student_score = await client
+              .db(user.dep)
+              .collection(data.cls + "_std_table")
+              .findOne(
+                {
+                  mssv: student._id,
+                  school_year: school_year,
+                },
+                {
+                  projection: {
+                    _id: 0,
+                    total: 1,
+                  },
+                }
+              );
+            const curr_staff_score = await client
+              .db(user.dep)
+              .collection(data.cls + "_stf_table")
+              .findOne(
+                {
+                  mssv: student._id,
+                  school_year: school_year,
+                },
+                {
+                  projection: {
+                    _id: 0,
+                    total: 1,
+                    marker: 1,
+                  },
+                }
+              );
+            const curr_departmentt_score = await client
+              .db(user.dep)
+              .collection(data.cls + "_dep_table")
+              .findOne(
+                {
+                  mssv: student._id,
+                  school_year: school_year,
+                },
+                {
+                  projection: {
+                    _id: 0,
+                    total: 1,
+                  },
+                }
+              );
+            // student
+            if (curr_student_score) {
+              result.student_scores.push(curr_student_score.total);
+            } else {
+              result.student_scores.push("-");
+            }
+            // staff member
+            if (curr_staff_score) {
+              result.staff_scores.push(curr_staff_score.total);
+              result.staff_name.push(curr_staff_score.marker);
+            } else {
+              result.staff_scores.push("-");
+              result.staff_name.push("-");
+            }
+            // department
+            if (curr_departmentt_score) {
+              result.department_scores.push(curr_departmentt_score.total);
+            } else {
+              result.department_scores.push("-");
+            }
+          }
+
+          return res.status(200).json(result);
+        } else {
+          // user not staff members
+          // redirect to home (return 403, api khong the chuyenh huong ve trang chu duoc)
+          return res.sendStatus(403);
+        }
+      } catch (err) {
+        console.log("SYSTEM | GIAO_VIEN_LOAD_SCORE_LIST | ERROR | ", err);
+        return res.sendStatus(500);
+      }
+    });
+
+    // api add and edit new class
+	app.post("/api/addOrEditClass", checkIfUserLoginAPI, async (req, res) => {
+      try {
+        const user = req.session.user;
+        const data = req.body; // data = {new_id: KTPM0121, old_id: CNTT0221, branch: KTPM, cvht: 18101911}
 
         // must be department to use this api
-        if (user.pow[8]) {
-          // remove all cheked branch in remove branchs líst in user_info and login_info
-          await client
+        if (user.pow[9]) {
+          const school_year = await client
             .db(name_global_databases)
-            .collection("user_info")
-            .deleteMany({
-              _id: { $in: data.rm_ts },
-            });
+            .collection("school_year")
+            .findOne(
+              {},
+              {
+                projection: {
+                  _id: 0,
+                  year: 1,
+                },
+              }
+            );
 
-          await client
+          const curr_year = school_year.year.split("_")[1];
+          console.log(curr_year);
+
+          // find year of old_id class before remove it
+          const old_year = await client
             .db(name_global_databases)
-            .collection("login_info")
-            .deleteMany({
-              _id: { $in: data.rm_ts },
-            });
+            .collection("classes")
+            .findOne(
+              {
+                _id: data.old_id,
+              },
+              {
+                projection: {
+                  _id: 0,
+                  years: 1,
+                },
+              }
+            );
+			
+			if (old_year) {
+				// remove old_id class
+				await client.db(name_global_databases).collection('classes').deleteOne({_id: data.old_id});
+
+				// add (edit old_id class)
+				await client.db(name_global_databases).collection('classes').insertOne(
+					{
+						_id: data.new_id,
+						years: old_year.years, // years of old_id class
+						branch: data.branch,
+						cvht: data.cvht,
+					}
+				)
+			} else {
+				// add new_id class
+				await client.db(name_global_databases).collection('classes').insertOne(
+					{
+						_id: data.new_id,
+						years: {curr_year: [1, 2, 3]},
+						branch: data.branch,
+						cvht: data.cvht,
+					}
+				)
+			}
+
         } else {
           return res.sendStatus(403); // back to home
         }
@@ -3727,41 +3687,33 @@ client
       }
     });
 
-    // CHỈNH SỬA HOẠT ĐỘNG -------------------------------------------------------------------------------------------------------------------------------
-    app.post("/api/add_activities", checkIfUserLoginAPI, async (req, res) => {
-      try {
-        const user = req.session.user;
-        if (user.pow[3]) {
-          const data = req.body;
-          if (data.cap === "khoa") {
-            await client
-              .db(user.dep)
-              .collection("activities")
-              .insertOne({
-                activities_name: data.activities_name,
-                activities_content: data.activities_content,
-              });
-          }
-          else if (data.cap == "lop") {
-            await client
-              .db(user.dep)
-              .collection("activities_class")
-              .insertOne({
-                activities_name: data.activities_name,
-                activities_content: data.activities_content,
-                class: data.class
-              });
-          }
-        }
-        else {
-          return res.sendStatus(403);
-        }
-      } catch (err) {
-        console.log("SYSTEM | ADD_ACTIVITIES | ERROR | ", err);
-        return res.sendStatus(500);
-      }
-    });
-    // Xử lý đường link không có -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	// api delete classes checked
+    app.post("/api/deleteClasses", checkIfUserLoginAPI, async (req, res) => {
+		try {
+		  const user = req.session.user;
+		  const data = req.body; // data = {rm_cls: ["18102003" (class_id), ...]}
+  
+		  // must be department to use this api
+		  if (user.pow[9]) {
+			// remove all checked classes in remove branchs líst in user_info and login_info
+			await client
+			  .db(name_global_databases)
+			  .collection("classes")
+			  .deleteMany({
+				_id: { $in: data.rm_cls },
+			  })
+		  } else {
+			return res.sendStatus(403); // back to home
+		  }
+  
+		  return res.sendStatus(200);
+		} catch (err) {
+		  console.log("SYSTEM | DELETE_TEACHER | ERROR | ", err);
+		  return res.sendStatus(500);
+		}
+	});
+	
+	// Xử lý đường link không có -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     app.get("*", async function (req, res) {
       return res.sendStatus(404);
     });
@@ -3775,10 +3727,7 @@ client
         if (req.headers.cookie) {
           const cookie_seasion = cookie.parse(req.headers.cookie);
           if ("howtosavealife?" in cookie_seasion) {
-            ws.id = cookieParser.signedCookie(
-              cookie_seasion["howtosavealife?"],
-              authenticationKey
-            );
+            ws.id = cookieParser.signedCookie(cookie_seasion["howtosavealife?"], authenticationKey);
             // Xử lý khi client gửi dữ liệu
             ws.on("message", (message) => {
               // console.log('SYSTEM | WEBSOCKET | Received message: ', message.toString('utf-8'));
@@ -3802,10 +3751,7 @@ client
           ws.close();
         }
       } else {
-        console.log(
-          "SYSTEM | WEBSOCKET | Rejected WebSocket connection from:",
-          ws.id
-        );
+        console.log("SYSTEM | WEBSOCKET | Rejected WebSocket connection from:", ws.id);
         ws.close();
       }
     });

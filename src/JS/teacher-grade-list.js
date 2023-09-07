@@ -46,9 +46,8 @@ $(document).on("click", ".auto_mark_btn", async function () {
     // get all student was check
     let mssv_list = []
     $('table tbody .inp-cbx').each(function(){
-      let score = $(this).parent().parent().parent().find('.new_update').text().trim()
-      if (score != '0' && score != '-' && score != '' && this.checked) {
-        $(this).parent().parent().parent().find('.first_score').text(score)
+      let score = $(this).parent().parent().parent().find('.set_score_btn').text().trim()
+      if (score && this.checked) {
         mssv_list.push(this.value);
       }
     })
@@ -68,6 +67,14 @@ $(document).on("click", ".auto_mark_btn", async function () {
       if (response.ok) {
         $('.auto_mark_btn').prop('disabled', false);
         $('.auto_mark_btn').text('Chấm bảng điểm đã chọn');
+        
+        $('table tbody .inp-cbx').each(function(){
+          let score = $(this).parent().parent().parent().find('.set_score_btn').text().trim()
+          if (score && this.checked) {
+            mssv_list.push(this.value);
+          }
+        })
+
         notify('n', 'Đã hoàn tất chấm điểm tự động những sinh viên được đánh dấu!')
       }
       else if (response.status == 500) {
@@ -80,6 +87,7 @@ $(document).on("click", ".auto_mark_btn", async function () {
       notify('!', 'Không có sinh viên được đánh dấu');
     }
   } catch (error) {
+    console.log(error);
     notify('x', 'Có lỗi xảy ra!');
   }
 });
@@ -91,12 +99,12 @@ $(document).on("click", ".load_list_btn", async function () {
   notify('!', 'Đợi chút đang tải bảng điểm!');
   try {
     const year = "HK" + $(".hoc_ky select option:selected").text() + "_" + $(".nien_khoa select option:selected").text();
-
+    const current_class = $(".lop select option:selected").text()
     const requestOptions = {
       method: 'GET',
     };
-    console.log(`/api/loadScoresList?year=${year}`);
-    const response = await fetch(`/api/loadScoresList?year=${year}`, requestOptions);
+    console.log(`/api/teacher/loadScoresList?year=${year}&cls=${current_class}`);
+    const response = await fetch(`/api/teacher/loadScoresList?year=${year}&cls=${current_class}`, requestOptions);
     if (response.ok) {
       const data = await response.json();
       
@@ -120,10 +128,10 @@ $(document).on("click", ".load_list_btn", async function () {
           <td>${i+1}</td>
           <td>${data.student_list[i]._id}</td>
           <td class='std_name_row'>${data.student_list[i].last_name + " " +  data.student_list[i].first_name}</td>
-          <td class="new_update">${data.student_scores[i]}</td>
+          <td class="new_update zero_score">${data.student_scores[i]}</td>
           <td class="first_score">${data.staff_scores[i]}</td>
           <td>${data.staff_name[i]}</td>
-          <td>${data.department_scores[i]}</td>
+          <td class="last_score">${data.department_scores[i]}</td>
           <td><a class="set_score_btn">Chấm điểm</a></td>
         </tr>
         `);
@@ -141,7 +149,7 @@ $(document).on("click", ".load_list_btn", async function () {
           this.href = `/giaovien/nhapdiemdanhgia?schoolYear=${curr_tb_year}&studentId=${studentId}`
         }
         else{
-          notify('!', 'chưa mở chấm điểm vui lòng chọn năm khác.');
+          notify('!', 'Chưa mở chấm điểm vui lòng chọn năm khác.');
         }
       });
       // update current table school year
@@ -161,6 +169,8 @@ $(document).on("click", ".load_list_btn", async function () {
     notify('x', 'Có lỗi xảy ra!');
   }
 });
+
+
 // all checkbox set (if all-cbx tick all checkboxs will tick otherwise untick all)
 $(document).on("change", ".all-cbx", async function () {
   if ($('.all-cbx')[0].checked) {
@@ -192,6 +202,6 @@ $('.set_score_btn').click(function() {
     this.href = `/giaovien/nhapdiemdanhgia?schoolYear=${curr_tb_year}&studentId=${studentId}`
   }
   else{
-    notify('!', 'chưa mở chấm điểm vui lòng chọn năm khác.');
+    notify('!', 'Chưa mở chấm điểm vui lòng chọn năm khác.');
   }
 });

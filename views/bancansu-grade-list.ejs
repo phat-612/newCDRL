@@ -13,6 +13,7 @@
   <div class="main">
     <%- include(header) %>
     <%- include(thongbao) %>
+    <%let global_year = ""%>
     <% let cy = curr_year.split('_'); %>
     <div class="container">
       <div class="content">
@@ -24,6 +25,7 @@
                 <% for (let i = 1; i <= years[cy[1]].length; i++) {%>
                   <% if (i == parseInt(cy[0].slice(2))) {%>
                     <option value="<%= i %>" selected="selected"><%= i %></option>
+                    <%global_year = `HK${i}_`%>
                   <% } else { %>
                     <option value="<%= i %>"><%= i %></option>
                   <% } %>
@@ -38,6 +40,7 @@
                 <% for (const key of Object.keys(years)) {%>
                   <% if (key == cy[1]) {%>
                     <option selected="selected"><%= key %></option>
+                    <%global_year += key%>
                   <% } else { %>
                     <option><%= key %></option>
                   <% } %>
@@ -98,8 +101,13 @@
                 <td class="first_score"><%= staff_scores[i] %></td>
                 <td><%= staff_name[i] %></td>
                 <td><%= department_scores[i] %></td>
-                <td><a class="set_score_btn">Chấm điểm</a></td>
+                <%if(student_scores[i] != '-' &&  student_scores[i]!= 0){%>
+                  <td><a href="/bancansu/nhapdiemdanhgia?schoolYear=<%=global_year%>&studentId=<%=student_list[i]._id%>" class="set_score_btn">Chấm điểm</a></td>
 
+                  <%}else {%>
+                    <td>-</td>
+  
+                    <%}%>
               </tr>
               <% } %>
             </tbody>

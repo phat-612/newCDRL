@@ -3,10 +3,10 @@ let curr_edit;
 let new_name;
 
 $(document).on("click", "#edit__subject", async function () { // this way get all in group(id/name/class)
-  // get old name (here to change old name every time new edit row)
-  old_name = $(this).parent().parent().find('.b_name').text();
   // check current line for future use
   curr_edit = $(this).parent().parent();
+  // get old name (here to change old name every time new edit row)
+  old_name = curr_edit.find('.b_name').text();
   // change text area value ò edit to old name whenever it open edit window
 
   $('.edit .bname_input').val(old_name);

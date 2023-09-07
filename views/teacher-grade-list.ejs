@@ -13,10 +13,30 @@
   <div class="main">
     <%- include(header) %>
     <%- include(thongbao) %>
+    <%let global_year = ""%>
+
     <% let cy = curr_year.split('_'); %>
     <div class="container">
       <div class="content">
         <div class="hk_nk">
+
+          <span>Lớp</span>
+          <div class="selectbox lop">
+            <div class="select">
+              <select>
+                <% for (let i = 0; i < cls.length; i++) {%>
+
+                  <% if (i == 0) {%>
+                    <option value="<%= cls[i] %>" selected="selected"><%= cls[i] %> </option>
+                    <%} else{%>
+                    <option value="<%= cls[i] %>"><%= cls[i] %></option>
+                    <% } %>
+
+                  <% } %>
+              </select>
+            </div>
+          </div>
+
           <span>Học kỳ</span>
           <div class="selectbox hoc_ky">
             <div class="select">
@@ -24,6 +44,7 @@
                 <% for (let i = 1; i <= years[cy[1]].length; i++) {%>
                   <% if (i == parseInt(cy[0].slice(2))) {%>
                     <option value="<%= i %>" selected="selected"><%= i %></option>
+                    <%global_year = `HK${i}_`%>
                   <% } else { %>
                     <option value="<%= i %>"><%= i %></option>
                   <% } %>
@@ -38,6 +59,8 @@
                 <% for (const key of Object.keys(years)) {%>
                   <% if (key == cy[1]) {%>
                     <option selected="selected"><%= key %></option>
+                    <%global_year += key%>
+
                   <% } else { %>
                     <option><%= key %></option>
                   <% } %>
@@ -95,12 +118,17 @@
                   <span class="dau_sao">*</span>
                   <%}%>
                 </td>
-                <td class="new_update"><%= student_scores[i] %></td>
+                <td class="new_update zero_score"><%= student_scores[i] %></td>
                 <td class="first_score"><%= staff_scores[i] %></td>
                 <td><%= staff_name[i] %></td>
-                <td><%= department_scores[i] %></td>
-                <td><a class="set_score_btn">Chấm điểm</a></td>
+                <td class="last_score"><%= department_scores[i] %></td>
+                <%if(student_scores[i] != '-' &&  student_scores[i]!= 0){%>
+                  <td><a href="/bancansu/nhapdiemdanhgia?schoolYear=<%=global_year%>&studentId=<%=student_list[i]._id%>" class="set_score_btn">Chấm điểm</a></td>
 
+                  <%}else {%>
+                    <td>-</td>
+  
+                    <%}%>
               </tr>
               <% } %>
             </tbody>
