@@ -96,7 +96,7 @@ $(document).on("click", ".auto_mark_btn", async function () {
   } catch (error) {
     notify("x", "Có lỗi xảy ra!");
   }
-});
+ });
 
 $(document).ready(async function () {
   async function loadScoresList() {

@@ -12,14 +12,1503 @@
 <body>
   <div class="main ">
     <%- include(header) %>
-      <%- include(thongbao) %>
+    <%- include(thongbao) %>
 
-        <div class="content">
-          <div class="main-content m-auto">
-            <h1 class="tittle-table">PHIẾU ĐÁNH GIÁ ĐIỂM RÈN LUYỆN</h1>
-            <!-- <hr /> -->
-            <!-- Table 1-->
+    <div class="content">
+      <div class="main-content m-auto">
+        <h1 class="tittle-table">PHIẾU ĐÁNH GIÁ ĐIỂM RÈN LUYỆN</h1>
+        <!-- <hr /> -->
+        <!-- Table 1-->
 
+        
+        <% if (Score.first[0] == 'chưa chấm') {%>
+          <table class="bang_cham_diem">
+            <thead>
+              <tr>
+                <th>
+                  <p>Nội Dung Đánh Giá</p>
+                </th>
+                <th style="width: 12%">
+                  <p>Điểm Tối Đa</p>
+                </th>
+                <th style="width: 10%">
+                  <p>Điểm SV Tự Đánh Giá</p>
+                </th>
+                <th style="width: 10%">
+                  <p>Tập Thể Lớp</p>
+                </th>
+                <th style="width: 12%">
+                  <p>Khoa Đánh Giá</p>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tr-title">
+                <td>
+  
+                  <p class="title">1. Đánh giá về ý thức học tập</p>
+  
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <p class="first-column-value">
+                    a. Ý thức, thái độ trong học tập.
+                  <p>(Nghỉ học 1 buổi không phép trừ 1 điểm; đi muộn hoặc bỏ
+                    tiết mỗi 3 lần trừ 1 điểm)</p>
+                  </p>
+                </td>
+                <td>7 điểm
+                </td>
+                <td>
+                  <div class="score_1"><%=Scorestd.first[0]%></div>
+                </td>
+                
+                <td>
+                  <%if (Score.first[0] == 'chưa chấm'){%>
+                  <div class="selectbox">
+                    <div class="select">
+                      <select id="mySelect1">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                      </select>
+                    </div>
+                  </div>
+                  <%} else {%>
+                  <div class="score_1"><%=Score.first[0]%></div>
+                  <div class="selectbox">
+                    <div class="select">
+                      <select id="mySelect1">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option selected value="7">7</option>
+                      </select>
+                    </div>
+                  </div>
+                  <%}%> 
+  
+                </td>
+
+                <td>
+                  <div class="score_1"><%=Scorek.first[0]%></div>
+                </td>
+
+              </tr>
+              <tr>
+                <td>
+                  <p class="first-column-value">
+                    b. Tham gia các câu lạc bộ học thuật; các hoạt động học
+                    thuật; hoạt động ngoại khóa; hoạt động nghiên cứu khoa học
+                  </p>
+                </td>
+                <td>2 điểm
+                </td>
+                <td>
+                  <div class="score_1"><%=Scorestd.first[1]%>
+        </div>
+  
+        </td>
+        
+        <td>
+          <%if (Score.first[1] !== 'chưa chấm'){%>
+          <div class="selectbox">
+            <div class="select">
+              <select id="mySelect2">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+              </select>
+            </div>
+          </div>
+          <%} else {%>
+          <div class="score_1"><%=Score.first[1]%></div>
+          <%}%> 
+                </td>
+
+                <td>
+                  <div class="score_1"><%=Scorek.first[1]%></div>
+                </td>
+
+              </tr>
+
+
+
+
+              <tr>
+                <td>
+                  <p class="first-column-value">
+                    c. Ý thức thực hiện tốt quy chế khi tham gia các kỳ thi.
+                    cuộc thi
+                  </p>
+                </td>
+                <td>4 điểm
+                </td>
+                <td>
+                  <div class="score_1"><%=Scorestd.first[2]%>
+      </div>
+  
+      </td>
+      
+      <td>
+        <%if (Score.first[2] !== 'chưa chấm'){%>
+        <div class="selectbox">
+          <div class="select">
+            <select id="mySelect3">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+          </div>
+        </div>
+        <%} else {%>
+        <div class="score_1"><%=Score.first[2]%></div>
+        <%}%> 
+                </td>
+                <td>
+                  <div class="score_1"><%=Scorek.first[2]%></div>
+                </td>
+              </tr>
+
+
+
+
+              <tr>
+                <td>
+                  <p class="first-column-value">
+                    - Bị nhắc nhở khi thi, kiểm tra
+                  </p>
+                </td>
+                <td>2 điểm
+                </td>
+                <td>
+                  <%if (Scorestd.first[2] == 2){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%> 
+                </td>
+                
+                <td>
+                  <%if (Score.first[2] == 2){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="checkbox-wrapper-4">
+          <input type="checkbox" id="morning1" class="inp-cbx" value="2" />
+          <label for="morning1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+          </label>
+  
+        </div>
+        <div id="hoverbox_01" class="pop-up-bc-tooltip"></div>
+        <%}%>  
+                </td>
+                <td>
+                  <%if (Scorek.first[2] == 2){%>
+                  <div class="check_score"><i class="fa-solid fa-check"></i></div>
+                  <%} else {%>
+                  <div class="check_score"></div>
+                  <%}%>  
+                </td>
+
+              </tr>
+
+
+
+
+              <tr>
+                <td>
+                  <p class="first-column-value">
+                    - Bị lập biên bản xử lý khi thi và kiểm tra
+                  </p>
+                </td>
+                <td>0 điểm
+                </td>
+                <td>
+                  <%if (Scorestd.first[2] == 0){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%>  
+                </td>
+                
+                <td>
+                  <%if (Score.first[2] == 0){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="checkbox-wrapper-4">
+          <input type="checkbox" id="morning2" class="inp-cbx" value="0" />
+          <label for="morning2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+          </label>
+  
+        </div>
+        <div id="hoverbox_01" class="pop-up-bc-tooltip"></div>
+        <%}%>
+                </td>
+
+                <td>
+                  <%if (Scorek.first[2] == 0){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%>  
+                </td>
+
+              </tr>
+              <tr>
+                <td>
+                  <p class="first-column-value">
+                    d. Có tinh thần vượt khó, phấn đấu vươn lên trong học tập
+                  </p>
+                </td>
+                <td>2 điểm
+                </td>
+                <td>
+                  <div class="score_1"><%=Scorestd.first[3]%>
+    </div>
+  
+    </td>
+    
+    <td>
+      <%if (Score.first[3] !== 'chưa chấm'){%>
+      <div class="selectbox">
+        <div class="select">
+          <select id="mySelect4">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+          </select>
+        </div>
+      </div>
+      <%} else {%>
+      <div class="score_1"><%=Score.first[3]%></div>
+      <%}%> 
+  
+                </td>
+                <td>
+                  <div class="score_1"><%=Scorek.first[3]%></div>
+                </td>
+
+              </tr>
+              <tr>
+                <td>
+                  <p class="first-column-value">
+                    đ. Đạt kết quả cao trong học tập
+                  </p>
+                </td>
+                <td>5 điểm
+                </td>
+                <td class="score_1"> <%=Scorestd.first[4]%>
+  
+    </td>
+    <td class="score_1"> <%=Score.first[4]%>
+  
+    </td>
+    <td id="score_05"> 0 điểm
+    </td>
+    </tr>
+
+
+
+    <tr>
+      <td>
+        <p class="first-column-value">
+          - Loại Trung bình: Điểm số từ 2.0 đến 2.49
+        </p>
+      </td>
+      <td>2 điểm
+      </td>
+      <td>
+        <%if (Scorestd.first[4] == 2){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%>   
+                </td>
+                
+                <td>
+                  <%if (Score.first[4] == 2){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="checkbox-wrapper-4">
+          <input type="checkbox" id="morning3" class="inp-cbx" value="2" />
+          <label for="morning3" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+          </label>
+  
+        </div>
+        <div id="hoverbox_03" class="pop-up-bc-tooltip"></div>
+        <%}%>  
+                </td>
+
+                <td>
+                  <%if (Scorek.first[4] == 2){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%>          
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <p class="first-column-value">
+                    - Loại Khá: Điểm số từ 2.5 đến 3.19
+                  </p>
+                </td>
+                <td>3 điểm
+                </td>
+                <td>
+                  <%if (Scorestd.first[4] == 3){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%>    
+                </td>
+               
+                <td>
+                  <%if (Score.first[4] == 3){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="checkbox-wrapper-4">
+          <input type="checkbox" id="morning4" class="inp-cbx" value="3" />
+          <label for="morning4" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+          </label>
+  
+        </div>
+        <div id="hoverbox_04" class="pop-up-bc-tooltip"></div>
+        <%}%>   
+                </td>
+
+                <td>
+                  <%if (Scorek.first[4] == 3){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%>             
+                </td>
+
+
+              </tr>
+
+
+
+              <tr>
+                <td>
+                  <p class="first-column-value">
+                    - Loại Giỏi: Điểm số từ 3.2 đến 3.59
+                  </p>
+                </td>
+                <td>4 điểm
+                </td>
+                <td>
+                  <%if (Scorestd.first[4] == 4){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%>  
+                </td>
+                
+                <td>
+                  <%if (Score.first[4] == 4){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="checkbox-wrapper-4">
+          <input type="checkbox" id="morning5" class="inp-cbx" value="4" />
+          <label for="morning5" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+          </label>
+  
+        </div>
+        <div id="hoverbox_05" class="pop-up-bc-tooltip"></div>
+        <%}%>  
+                </td>
+
+                <td>
+                  <%if (Scorek.first[4] == 4){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%>     
+                  </td>
+              </tr>
+
+
+              <tr>
+                <td>
+                  <p class="first-column-value">
+                    - Loại Xuất sắc: Điểm số từ 3.6 đến 4.0
+                  </p>
+                </td>
+                <td>5 điểm
+                </td>
+                <td>
+                  <%if (Scorestd.first[4] == 5){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%> 
+                </td>
+                
+                <td>
+                  <%if (Score.first[4] == 5){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="checkbox-wrapper-4">
+          <input type="checkbox" id="morning6" class="inp-cbx" value="5" />
+          <label for="morning6" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+          </label>
+  
+        </div>
+        <div id="hoverbox_06" class="pop-up-bc-tooltip"></div>
+        <%}%> 
+                </td>
+                <td>
+                  <%if (Scorek.first[4] == 5){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%> 
+                </td>
+              </tr>
+
+
+              <tr>
+                <td>
+                  <p class="first-column-value">
+                    Điểm tối đa nội dung 1 là 20 điểm
+                  </p>
+                </td>
+                <td>
+                </td>
+                <td id="total_muc_1"> <%=  Scorestd.first[0] + Scorestd.first[1] + Scorestd.first[2] + Scorestd.first[3] + Scorestd.first[4] %> điểm
+      </td>
+                <%if (Score.first[0] == 'Chưa chấm') {%>
+      <td id="total_muc_1k"> 0 điểm
+        <%}else {%>
+      <td id="total_muc_1k"> <%=  Score.first[0] + Score.first[1] + Score.first[2] + Score.first[3] + Score.first[4] %> điểm
+        <%}%>
+                </td>
+
+
+                <%if (Scorek.first[0] == 'Chưa chấm') {%>
+                  <td id="total_muc_1"> <%=  Scorek.first[0]%>
+                    <%}else {%>
+                  <td id="total_muc_1"> <%=  Scorek.first[0] + Scorek.first[1] + Scorek.first[2] + Scorek.first[3] + Scorek.first[4] %> điểm
+                    <%}%>
+                                </td>
+              </tr>
+
+        <tr class="tr-title">
+          <td >
+  
+            <p class="title">2. Đánh giá về ý thức và kết quả chấp hành nội quy, quy
+              chế, quy định trong nhà trường</p>
+  
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+        </tr>
+
+
+        <tr>
+          <td>
+            <p class="first-column-value">
+              a. Ý thức chấp hành các văn bản chỉ đạo của ngành, của cơ
+              quan chỉ đạo cấp trên được thực hiện trong nhà trường.
+            </p>
+          </td>
+          <td>15 điểm
+          </td>
+          <td>
+              <div class="score_2"><%=Scorestd.second[0]%></div>
+      </td>
+      <td>
+        <%if (Score.second[0] !== 'chưa chấm'){%>
+        <div class="selectbox">
+          <div class="select">
+            <select id="mySelect5">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+              <option value="13">13</option>
+              <option value="14">14</option>
+              <option value="15">15</option>
+            </select>
+          </div>
+        </div>
+        <%} else {%>
+        <div class="score_1"><%=Score.second[0]%></div>
+        <%}%> 
+  
+      </td>
+      <td>
+        <div class="score_2"><%=Scorek.second[0]%></div>
+      </td>
+      
+        </tr>
+
+
+        <tr>
+        <td>
+          <p class="first-column-value">
+            - Bị nhắc nhở trong việc thực hiện
+          </p>
+        </td>
+        <td>10 điểm
+        </td>
+        <td>
+          <%if (Scorestd.second[0] == 10){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%>
+          </td>
+          
+          <td>
+            <%if (Scorek.second[0] == 10){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="checkbox-wrapper-4">
+          <input type="checkbox" id="morning7" class="inp-cbx" value="10" />
+          <label for="morning7" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+          </label>
+  
+        </div>
+        <div id="hoverbox_07" class="pop-up-bc-tooltip"></div>
+        <%}%>
+          </td>
+          <td>
+            <%if (Scorek.second[0] == 10){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p class="first-column-value">
+              - Bị xử lý kỷ luật từ mức khiển trách trở lên
+            </p>
+          </td>
+          <td>0 điểm
+          </td>
+          <td>
+            <%if (Scorestd.second[0] == 0){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%> 
+          </td>
+          
+          <td>
+            <%if (Score.second[0] == 0){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="checkbox-wrapper-4">
+          <input type="checkbox" id="morning8" class="inp-cbx" value="0" checked />
+          <label for="morning8" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+          </label>
+  
+        </div>
+        <div id="hoverbox_08" class="pop-up-bc-tooltip"></div>
+        <%}%> 
+          </td>
+
+          <td>
+            <%if (Scorek.second[0] == 0){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%>     
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p class="first-column-value">
+              b. Ý thức chấp hành tốt, đầy đủ các nội quy, quy chế và
+              các quy định khác của nhà trường
+            </p>
+          </td>
+          <td>10 điểm
+          </td>
+          <td>
+            <div class="score_2"><%=Scorestd.second[1]%></div>
+      </td>
+     
+      <td>
+        <%if (Score.second[1] !== 'chưa chấm'){%>
+        <div class="selectbox">
+          <div class="select">
+            <select id="mySelect6">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>
+          </div>
+        </div>
+        <%} else {%>
+        <div class="score_1"><%=Score.second[1]%></div>
+        <%}%> 
+          </td>
+
+          <td>
+            <div class="score_2"><%=Scorek.second[1]%></div>
+          </td>
+        </tr>
+
+
+        <tr>
+          <td>
+            <p class="first-column-value">
+              - Bị nhắc nhở trong việc thực hiện
+            </p>
+          </td>
+          <td>5 điểm
+          </td>
+          <td>
+          <%if (Scorestd.second[1] == 5){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%> 
+          </td>
+         
+          <td>
+            <%if (Score.second[1] == 5){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="checkbox-wrapper-4">
+          <input type="checkbox" id="morning9" class="inp-cbx" value="5" />
+          <label for="morning9" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+          </label>
+  
+        </div>
+        <div id="hoverbox_09" class="pop-up-bc-tooltip"></div>
+        <%}%>  
+          </td>
+
+          <td>
+            <%if (Scorek.second[1] == 5){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%>      
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <p class="first-column-value">
+              - Bị xử lý kỷ luật từ mức khiển trách trở lên
+            </p>
+          </td>
+          <td>0 điểm
+          </td>
+          <td>
+            <%if (Scorestd.second[1] == 0){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%> 
+          </td>
+         
+          <td>
+            <%if (Score.second[1] == 0){%>
+        <div class="checkbox-wrapper-4">
+          <input type="checkbox" id="morning10" class="inp-cbx" value="0" checked />
+          <label for="morning10" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+          </label>
+  
+        </div>
+        <div id="hoverbox_10" class="pop-up-bc-tooltip"></div>
+        <%} else {%>
+        <div class="checkbox-wrapper-4">
+          <input type="checkbox" id="morning10" class="inp-cbx" value="0" checked />
+          <label for="morning10" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+          </label>
+  
+        </div>
+        <div id="hoverbox_10" class="pop-up-bc-tooltip"></div>
+        <%}%>
+          </td>
+
+          <td>
+            <%if (Scorek.second[1] == 0){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%>         
+          </td>
+
+        </tr>
+
+        <tr>
+          <td>
+            <p class="first-column-value">
+              Điểm tối đa nội dung 2 là 25 điểm
+            </p>
+          </td>
+          <td>
+          </td>
+          <td>
+            <%=Scorestd.second[0]+Scorestd.second[1]%> điểm
+  
+       
+      
+          <%if (Score.first[0] == 'Chưa chấm') {%>
+      <td id="total_muc_2k"> 0 điểm
+        <%}else {%>
+      <td id="total_muc_2k"> <%=Score.second[0]+Score.second[1]%> điểm
+        <%}%>
+  
+        </td>
+
+        <%if (Scorek.first[0] == 'Chưa chấm') {%>
+          <td id="total_muc_1"> <%=  Scorek.first[0]%>
+            <%}else {%>
+          <td id="total_muc_2"> <%=Scorek.second[0]+Scorek.second[1]%> điểm
+            <%}%>
+                </td>
+        </tr>
+        <tr class="tr-title">
+          <td>
+  
+            <p class="title">3. Đánh giá về ý thức và kết quả tham gia các hoạt động
+              chính trị, xã hội, văn hoá, văn nghệ, thể thao, phòng
+              chống tội phạm và các tệ nạn xã hội</p>
+  
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p class="first-column-value">
+              a. Tham gia tích cực các hoạt động chính trị, xã hội, văn
+              hoá, văn nghệ, thể thao và có sự trưởng thành của bản thân
+              qua các hoạt động rèn luyện:
+            </p>
+          </td>
+          <td>8 điểm
+          </td>
+          <td>
+            <div class="score_3"><%=Scorestd.third[0]%></div>
+  
+      </td>
+      
+      <td>
+        <%if (Score.third[0] !== 'chưa chấm'){%>
+        <div class="selectbox">
+          <div class="select">
+            <select id="mySelect7">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+            </select>
+          </div>
+        </div>
+        <%} else {%>
+        <div class="score_1"><%=Score.third[0]%></div>
+        <%}%> 
+  
+          </td>
+          <td>
+            <div class="score_3"><%=Scorek.third[0]%></div>
+          </td>
+        </tr>
+        <tr>
+      <td>
+        <p class="first-column-value">
+          - Tích cực tham gia các hoạt động chính trị, xã hội, văn
+          hoá, văn nghệ, thể thao
+        </p>
+      </td>
+      <td>5 điểm
+      </td>
+      <td>
+        <%if (Scorestd.third[0] == 5){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%>   
+        </td>
+        
+        <td>
+          <%if (Score.third[0] == 5){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="checkbox-wrapper-4">
+          <input type="checkbox" id="morning11" class="inp-cbx" value="5" />
+          <label for="morning11" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+          </label>
+  
+        </div>
+        <div id="hoverbox_11" class="pop-up-bc-tooltip"></div>
+        <%}%> 
+        </td>
+
+        <td>
+          <%if (Scorek.third[0] == 5){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%>           
+        </td>
+        </tr>
+      <tr>
+        <td>
+          <p class="first-column-value">
+            - Được kết nạp Đảng hoặc đạt danh hiệu Đoàn viên ưu tú
+            hoặc đạt giải Nhất, Nhì, Ba trong các hoạt động chính trị,
+            văn hóa, thể thao từ cấp trường trở lên
+          </p>
+        </td>
+        <td>8 điểm
+        </td>
+        <td>
+          <%if (Scorestd.third[0] == 8){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%>  
+        </td>
+        
+        <td>
+          <%if (Score.third[0] == 8){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="checkbox-wrapper-4">
+          <input type="checkbox" id="morning12" class="inp-cbx" value="8" />
+          <label for="morning12" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+          </label>
+  
+        </div>
+        <div id="hoverbox_12" class="pop-up-bc-tooltip"></div>
+        <%}%> 
+        </td>
+        <td>
+          <%if (Scorek.third[0] == 8){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%>  
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p class="first-column-value">
+            b. Tích cực tham gia các hoạt động công ích, tình nguyện,
+            công tác xã hội
+          </p>
+        </td>
+        <td>6 điểm
+        </td>
+        <td>
+          <div class="score_3"><%=Scorestd.third[1]%></div>
+  
+      </td>
+      
+      <td>
+        <%if (Score.third[1] !== 'chưa chấm'){%>
+        <div class="selectbox">
+          <div class="select">
+            <select id="mySelect8">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+            </select>
+          </div>
+        </div>
+        <%} else {%>
+        <div class="score_1"><%=Score.third[1]%></div>
+        <%}%> 
+  
+        </td>
+
+        <td>
+          <div class="score_3"><%=Scorek.third[1]%></div>
+        </td>
+      </tr>
+    <tr>
+      <td>
+        <p class="first-column-value">
+          c. Tham gia tuyên truyền, phòng chống tội phạm, các tệ nạn
+          xã hội và các hoạt động khác do lớp, khoa, trường, các
+          đoàn thể, địa phương tổ chức
+        </p>
+      </td>
+      <td>6 điểm
+      </td>
+      <td>
+        <div class="score_3"><%=Scorestd.third[2]%></div>
+  
+      </td>
+      
+      <td>
+        <%if (Scorek.third[2] !== 'chưa chấm'){%>
+        <div class="selectbox">
+          <div class="select">
+            <select id="mySelect9">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+            </select>
+          </div>
+        </div>
+        <%} else {%>
+        <div class="score_1"><%=Scorek.third[2]%></div>
+        <%}%> 
+  
+      </td>
+
+      <td>
+        <div class="score_3"><%=Score.third[2]%></div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p>
+          Điểm tối đa nội dung 3 là 20 điểm
+        </p>
+      </td>
+      <td>
+      </td>
+      <td>
+        <%=Scorestd.third[0]+Scorestd.third[1]+Scorestd.third[2]%> điểm
+  
+      </td>
+      
+    
+    
+        <%if (Score.first[0] == 'Chưa chấm') {%>
+      <td id="total_muc_3k"> 0 điểm
+        <%}else {%>
+      <td id="total_muc_3k"> <%=Score.third[0]+Score.third[1]+Score.third[2]%> điểm
+        <%}%>
+      </td>
+
+      <%if (Scorek.first[0] == 'Chưa chấm') {%>
+        <td id="total_muc_3"> <%=  Scorek.first[0]%>
+          <%}else {%>
+        <td id="total_muc_3"> <%=Scorek.third[0]+Scorek.third[1]+Scorek.third[2]%> điểm
+          <%}%>
+        </td>
+    </tr>
+    <tr class="tr-title">
+      <td>
+  
+        <p class="title">4. Đánh giá về ý thức công dân trong quan hệ cộng
+          đồng</p>
+  
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p class="first-column-value">
+          a. Chấp hành và tham gia tuyên truyền các chủ trương của
+          Đảng, chính sách, pháp luật của Nhà nước tại nơi cư trú
+        </p>
+      </td>
+      <td>10 điểm
+      </td>
+      <td>
+        <div class="score_4"><%=Scorestd.fourth[0]%></div>
+  
+      </td>
+      
+      <td>
+        <%if (Score.fourth[0] !== 'chưa chấm'){%>
+        <div class="selectbox">
+          <div class="select">
+            <select id="mySelect10">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>
+          </div>
+        </div>
+        <%} else {%>
+        <div class="score_1"><%=Score.fourth[0]%></div>
+        <%}%> 
+  
+      </td>
+
+      <td>
+        <div class="score_4"><%=Scorek.fourth[0]%></div>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <p class="first-column-value">
+          b. Được ghi nhận, biểu dương, khen thưởng về tham gia các
+          hoạt động xã hội
+        </p>
+      </td>
+      <td>5 điểm
+      </td>
+      <td>
+        <div class="score_4"><%=Scorestd.fourth[1]%></div>
+  
+      </td>
+      
+      <td>
+        <%if (Score.fourth[1] !== 'chưa chấm'){%>
+        <div class="selectbox">
+          <div class="select">
+            <select id="mySelect11">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+        </div>
+        <%} else {%>
+        <div class="score_1"><%=Score.fourth[1]%></div>
+        <%}%> 
+  
+      </td>
+
+      <td>
+        <div class="score_4"><%=Scorek.fourth[1]%></div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p class="first-column-value">
+          c. Có tinh thần chia sẻ, giúp đỡ bạn bè, người thân, người
+          có hoàn cảnh khó khăn, hoạn nạn.
+        </p>
+      </td>
+      <td>10 điểm
+      </td>
+      <td>
+        <div class="score_4"><%=Scorestd.fourth[2]%></div>
+  
+      </td>
+      
+      <td>
+        <%if (Score.fourth[2] !== 'chưa chấm'){%>
+        <div class="selectbox">
+          <div class="select">
+            <select id="mySelect12">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>
+          </div>
+        </div>
+        <%} else {%>
+        <div class="score_1"><%=Score.fourth[2]%></div>
+        <%}%> 
+  
+      </td>
+
+      <td>
+        <div class="score_4"><%=Scorek.fourth[2]%></div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p>
+          Điểm tối đa nội dung 4 là 25 điểm</p>
+      </td>
+      <td>
+      </td>
+      <td id="total_muc_4">
+        <%=Scorestd.fourth[0]+Scorestd.fourth[1]+Scorestd.fourth[2]%> điểm
+      </td>
+        <%if (Score.first[0] == 'Chưa chấm') {%>
+      <td id="total_muc_4k"> 0 điểm
+        <%}else {%>
+      <td id="total_muc_4k"> <%=Score.fourth[0]+Score.fourth[1]+Score.fourth[2]%> điểm
+        <%}%>
+      </td>
+
+      <%if (Scorek.first[0] == 'Chưa chấm') {%>
+        <td id="total_muc_4"> <%=  Scorek.first[0]%>
+          <%}else {%>
+        <td id="total_muc_4"> <%=Scorek.fourth[0]+Scorek.fourth[1]+Scorek.fourth[2]%> điểm
+          <%}%>
+        </td>
+
+    </tr>
+    <tr class="tr-title">
+      <td colspan="2">
+  
+        <p class="title" style="font-size: 1.5rem;">5. Đánh giá về ý thức và kết quả tham gia công tác phụ
+          trách lớp, các đoàn thể, tổ chức trong nhà trường hoặc
+          đạt được thành tích đặc biệt trong học tập, rèn luyện
+          của học sinh, sinh viên</p>
+  
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p class="first-column-value">
+          a. Tham gia tích cực vào phong trào của Lớp, Đoàn, Hội
+          sinh viên và các công tác đoàn thể xã hội khác
+        </p>
+      </td>
+      <td>3 điểm
+      </td>
+      <td>
+        <div class="score_5"><%=Scorestd.fifth[0]%></div>
+  
+      </td>
+      
+      <td>
+        <%if (Score.fifth[0] !== 'chưa chấm'){%>
+        <div class="selectbox">
+          <div class="select">
+            <select id="mySelect13">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+          </div>
+        </div>
+        <%} else {%>
+        <div class="score_1"><%=Score.fifth[0]%></div>
+        <%}%> 
+  
+      </td>
+
+      <td>
+        <div class="score_5"><%=Scorek.fifth[0]%></div>
+      </td>
+    </tr>
+
+
+    <tr>
+      <td>
+        <p class="first-column-value">
+          b. Phát huy vai trò và hoàn thành tốt nhiệm vụ người cán
+          bộ Chi đoàn, Lớp, Câu lạc bộ, Đội tự quản
+        </p>
+      </td>
+      <td>3 điểm
+      </td>
+      <td>
+        <div class="score_5"><%=Scorestd.fifth[1]%></div>
+  
+      </td>
+      
+      <td>
+        <%if (Score.fifth[1] !== 'chưa chấm'){%>
+        <div class="selectbox">
+          <div class="select">
+            <select id="mySelect14">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+          </div>
+        </div>
+        <%} else {%>
+        <div class="score_1"><%=Score.fifth[1]%></div>
+        <%}%> 
+  
+      </td>
+
+      <td>
+        <div class="score_5"><%=Scorek.fifth[1]%></div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p class="first-column-value">
+          c. Đảm nhiệm, đóng góp có hiệu quả cho công tác Đoàn
+          trường, Hội sinh viên, Liên chi đoàn, Đội tự quản, Câu lạc
+          bộ
+        </p>
+      </td>
+      <td>2 điểm
+      </td>
+      <td>
+        <div class="score_5"><%=Scorestd.fifth[2]%></div>
+  
+      </td>
+      
+      <td>
+        <%if (Score.fifth[2] !== 'chưa chấm'){%>
+        <div class="selectbox">
+          <div class="select">
+            <select id="mySelect15">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+          </div>
+        </div>
+        <%} else {%>
+        <div class="score_1"><%=Score.fifth[2]%></div>
+        <%}%> 
+  
+      </td>
+
+      <td>
+        <div class="score_5"><%=Scorek.fifth[2]%></div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p class="first-column-value">
+          d. Được biểu dương, khen thưởng vì có thành tích đặc biệt
+          trong học tập, rèn luyện và các hoạt động khác
+        </p>
+      </td>
+      <td>2 điểm
+      </td>
+      <td>
+        <div class="score_5"><%=Scorestd.fifth[3]%></div>
+  
+      </td>
+      
+      <td>
+        <%if (Score.fifth[3] !== 'chưa chấm'){%>
+        <div class="selectbox">
+          <div class="select">
+            <select id="mySelect16">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+          </div>
+        </div>
+        <%} else {%>
+        <div class="score_1"><%=Score.fifth[3]%></div>
+        <%}%> 
+  
+      </td>
+      <td>
+        <div class="score_5"><%=Scorek.fifth[3]%></div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p class="first-column-value">- Cấp khoa</p>
+      </td>
+      <td>1 điểm
+      </td>
+      <td>
+      <%if (Scorestd.fifth[3] == 1){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%>  
+      </td>
+      
+      <td>
+        <%if (Score.fifth[3] == 1){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="checkbox-wrapper-4">
+          <input type="checkbox" id="morning13" class="inp-cbx" value="1" />
+          <label for="morning13" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+          </label>
+  
+        </div>
+        <div id="hoverbox_13" class="pop-up-bc-tooltip"></div>
+      </td>
+      <%}%> 
+      </td>
+      <td>
+        <%if (Score.fifth[3] == 1){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%>  
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p class="first-column-value">- Cấp trường trở lên</p>
+      </td>
+      <td>2 điểm
+      </td>
+      <td>
+        <%if (Scorestd.fifth[3] == 2){%>
+      <div class="check_score"><i class="fa-solid fa-check"></i></div>
+      <%} else {%>
+      <div class="check_score"></div>
+      <%}%>    
+      </td>
+     
+      <td>
+        <%if (Score.fifth[3] == 2){%>
+      <div class="check_score"><i class="fa-solid fa-check"></i></div>
+      <%} else {%>
+      <div class="checkbox-wrapper-4">
+        <input type="checkbox" id="morning14" class="inp-cbx" value="2" />
+        <label for="morning14" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+        </label>
+  
+      </div>
+      <div id="hoverbox_14" class="pop-up-bc-tooltip"></div>
+      <%}%>  
+      </td>
+      <td>
+        <%if (Scorek.fifth[3] == 2){%>
+      <div class="check_score"><i class="fa-solid fa-check"></i></div>
+      <%} else {%>
+      <div class="check_score"></div>
+      <%}%>      
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p>
+          Điểm tối đa nội dung 5 là 10 điểm
+          </>
+      </td>
+      <td>
+      </td>
+      <td id="total_muc_5">
+        <%=Scorestd.fifth[0]+Scorestd.fifth[1]+Scorestd.fifth[2]+Scorestd.fifth[3]%> điểm
+  
+      </td>
+      
+        <%if (Score.first[0] == 'Chưa chấm') {%>
+      <td id="total_muc_5k"> 0 điểm
+        <%}else {%>
+      <td id="total_muc_5k"><%=Scorek.fifth[0]+Scorek.fifth[1]+Scorek.fifth[2]+Scorek.fifth[3]%> điểm
+        <%}%>
+      </td>
+      <%if (Scorek.first[0] == 'Chưa chấm') {%>
+        <td id="total_muc_5"> <%=  Score.first[0]%>
+          <%}else {%>
+        <td id="total_muc_5"> <%=Score.fifth[0]+Score.fifth[1]+Score.fifth[2]+Score.fifth[3]%> điểm
+          <%}%>
+        </td>
+    </tr>
+    <tr>
+      <td>
+        <p>
+          Tổng điểm tối đa: 100 điểm
+        </p>
+      </td>
+      <td>
+  
+      </td>
+      <td id="total_all"><%=Scorestd.total%> điểm
+      </td>
+      
+      <%if (Score.first[0] == 'Chưa chấm') {%>
+      <td id="total_allk">0 điểm
+        <%}else {%>
+      <td id="total_allk"><%=Score.total%> điểm
+        <%}%>
+      </td>
+      <%if (Scorek.first[0] == 'Chưa chấm') {%>
+        <td id="total_all"><%=Scorek.total%>
+          <%}else {%>
+        <td id="total_all"><%=Scorek.total%> điểm
+          <%}%>
+        </td>
+    </tr>
+    </tbody>
+          </table>
+          <% } else { %>
             <table class="bang_cham_diem">
               <thead>
                 <tr>
@@ -43,7 +1532,9 @@
               <tbody>
                 <tr class="tr-title">
                   <td>
+    
                     <p class="title">1. Đánh giá về ý thức học tập</p>
+    
                   </td>
                   <td>
                   </td>
@@ -65,33 +1556,37 @@
                   <td>7 điểm
                   </td>
                   <td>
-                    <div class="score_1">
-                      <%=Scorestd.first[0]%>
-                    </div>
+                    <div class="score_1"><%=Scorestd.first[0]%></div>
                   </td>
+                  
                   <td>
+                    
                     <div class="selectbox">
                       <div class="select">
                         <select id="mySelect1">
-                          <option value="0">0</option>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                          <option value="5">5</option>
-                          <option value="6">6</option>
-                          <option value="7">7</option>
+                         
+                          <% for (let i=0; i < 8; i++) {%>
+                            <% if (i==Score.first[0]) {%>
+                              <option value="<%= i %>" selected="selected">
+                                <%= i %>
+                              </option>
+                              <% } else { %>
+                                <option value="<%= i %>">
+                                  <%= i %>
+                                </option>
+                                <% } %>
+                            <% } %>
                         </select>
                       </div>
                     </div>
+                    
+    
                   </td>
                   <td>
-                    <div class="score_1">
-                      <%=Score.first[0]%>
-                    </div>
+                    <div class="score_1"><%=Scorek.first[0]%></div>
                   </td>
-
                 </tr>
+
                 <tr>
                   <td>
                     <p class="first-column-value">
@@ -102,33 +1597,35 @@
                   <td>2 điểm
                   </td>
                   <td>
-                    <div class="score_1">
-                      <%=Scorestd.first[1]%>
-                    </div>
-
+                    <div class="score_1"><%=Scorestd.first[1]%>
+          </div>
+    
+          </td>
+          
+          <td>
+          
+            <div class="selectbox">
+              <div class="select">
+                <select id="mySelect2">
+                  <% for (let i=0; i < 3; i++) {%>
+                    <% if (i==Score.first[1]) {%>
+                      <option value="<%= i %>" selected="selected">
+                        <%= i %>
+                      </option>
+                      <% } else { %>
+                        <option value="<%= i %>">
+                          <%= i %>
+                        </option>
+                        <% } %>
+                    <% } %>
+                </select>
+              </div>
+            </div>
+            
                   </td>
                   <td>
-                    <!-- <select style="width: 80%" class="comboMark" id="score_02" name="score_02">
-                  <option value="0">0</option>
-                  <option value="1">1</option>
-                  <option value="2" selected="">2</option>
-                </select> -->
-                    <div class="selectbox">
-                      <div class="select">
-                        <select id="mySelect2">
-                          <option value="0">0</option>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                        </select>
-                      </div>
-                    </div>
+                    <div class="score_1"><%=Scorek.first[1]%></div>
                   </td>
-                  <td>
-                    <div class="score_1">
-                      <%=Score.first[1]%>
-                    </div>
-                  </td>
-
                 </tr>
                 <tr>
                   <td>
@@ -140,37 +1637,35 @@
                   <td>4 điểm
                   </td>
                   <td>
-                    <div class="score_1">
-                      <%=Scorestd.first[2]%>
-                    </div>
-
+                    <div class="score_1"><%=Scorestd.first[2]%>
+        </div>
+    
+        </td>
+       
+        <td>
+          
+          <div class="selectbox">
+            <div class="select">
+              <select id="mySelect3">
+                <% for (let i=0; i < 5; i++) {%>
+                  <% if (i==Score.first[2]) {%>
+                    <option value="<%= i %>" selected="selected">
+                      <%= i %>
+                    </option>
+                    <% } else { %>
+                      <option value="<%= i %>">
+                        <%= i %>
+                      </option>
+                      <% } %>
+                  <% } %>
+              </select>
+            </div>
+          </div>
+          
                   </td>
                   <td>
-                    <!-- <select style="width: 80%" class="comboMark" id="score_03" name="score_03">
-                  <option value="0">0</option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4" selected="">4</option>
-                </select> -->
-                    <div class="selectbox">
-                      <div class="select">
-                        <select id="mySelect3">
-                          <option value="0">0</option>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                        </select>
-                      </div>
-                    </div>
+                    <div class="score_1"><%=Scorek.first[2]%></div>
                   </td>
-                  <td>
-                    <div class="score_1">
-                      <%=Score.first[2]%>
-                    </div>
-                  </td>
-
                 </tr>
                 <tr>
                   <td>
@@ -181,29 +1676,39 @@
                   <td>2 điểm
                   </td>
                   <td>
-                    <%if (Scorestd.first[2]==2){%>
-                      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-                      <%} else {%>
-                        <div class="check_score"></div>
-                        <%}%>
+                    <%if (Scorestd.first[2] == 2){%>
+          <div class="check_score"><i class="fa-solid fa-check"></i></div>
+          <%} else {%>
+          <div class="check_score"></div>
+          <%}%> 
+                  </td>
+                  
+                  <td>
+                    <%if (Score.first[2] == 2){%>
+                      <div class="checkbox-wrapper-4">
+                        <input type="checkbox" id="morning1" checked class="inp-cbx" value="2" />
+                        <label for="morning1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                        </label>
+                
+                      </div>
+                      <div id="hoverbox_01" class="pop-up-bc-tooltip"></div>
+          <%} else {%>
+          <div class="checkbox-wrapper-4">
+            <input type="checkbox" id="morning1" class="inp-cbx" value="2" />
+            <label for="morning1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+            </label>
+    
+          </div>
+          <div id="hoverbox_01" class="pop-up-bc-tooltip"></div>
+          <%}%>  
                   </td>
                   <td>
-                    <div class="checkbox-wrapper-4">
-                      <input type="checkbox" id="morning1" class="inp-cbx" value="2" />
-                      <label for="morning1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                      </label>
-
-                    </div>
-                    <div id="hoverbox_01" class="pop-up-bc-tooltip"></div>
+                    <%if (Scorek.first[2] == 2){%>
+          <div class="check_score"><i class="fa-solid fa-check"></i></div>
+          <%} else {%>
+          <div class="check_score"></div>
+          <%}%>  
                   </td>
-                  <td>
-                    <%if (Score.first[2]==2){%>
-                      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-                      <%} else {%>
-                        <div class="check_score"></div>
-                        <%}%>
-                  </td>
-
                 </tr>
                 <tr>
                   <td>
@@ -214,30 +1719,39 @@
                   <td>0 điểm
                   </td>
                   <td>
-                    <%if (Scorestd.first[2]==0){%>
-                      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-                      <%} else {%>
-                        <div class="check_score"></div>
-                        <%}%>
+                    <%if (Scorestd.first[2] == 0){%>
+          <div class="check_score"><i class="fa-solid fa-check"></i></div>
+          <%} else {%>
+          <div class="check_score"></div>
+          <%}%>  
+                  </td>
+                  
+                  <td>
+                    <%if (Score.first[2] == 0){%>
+                      <div class="checkbox-wrapper-4">
+                        <input type="checkbox" id="morning2" checked class="inp-cbx" value="0" />
+                        <label for="morning2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                        </label>
+                
+                      </div>
+                      <div id="hoverbox_01" class="pop-up-bc-tooltip"></div>
+          <%} else {%>
+          <div class="checkbox-wrapper-4">
+            <input type="checkbox" id="morning2" class="inp-cbx" value="0" />
+            <label for="morning2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+            </label>
+    
+          </div>
+          <div id="hoverbox_01" class="pop-up-bc-tooltip"></div>
+          <%}%>
                   </td>
                   <td>
-                    <div class="checkbox-wrapper-4">
-                      <input type="checkbox" id="morning2" class="inp-cbx" value="0" checked />
-                      <label for="morning2" class="cbx">
-                        <span> <svg height="10px" width="12px"></svg></span>
-                      </label>
-
-                    </div>
-                    <div id="hoverbox_02" class="pop-up-bc-tooltip"></div>
+                    <%if (Scorek.first[2] == 0){%>
+          <div class="check_score"><i class="fa-solid fa-check"></i></div>
+          <%} else {%>
+          <div class="check_score"></div>
+          <%}%>  
                   </td>
-                  <td>
-                    <%if (Score.first[2]==0){%>
-                      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-                      <%} else {%>
-                        <div class="check_score"></div>
-                        <%}%>
-                  </td>
-
                 </tr>
                 <tr>
                   <td>
@@ -248,28 +1762,36 @@
                   <td>2 điểm
                   </td>
                   <td>
-                    <div class="score_1">
-                      <%=Scorestd.first[3]%>
-                    </div>
-
+                    <div class="score_1"><%=Scorestd.first[3]%>
+      </div>
+    
+      </td>
+      
+      <td>
+       
+        <div class="selectbox">
+          <div class="select">
+            <select id="mySelect4">
+              <% for (let i=0; i < 3; i++) {%>
+                <% if (i==Score.first[3]) {%>
+                  <option value="<%= i %>" selected="selected">
+                    <%= i %>
+                  </option>
+                  <% } else { %>
+                    <option value="<%= i %>">
+                      <%= i %>
+                    </option>
+                    <% } %>
+                <% } %>
+            </select>
+          </div>
+        </div>
+        
+    
                   </td>
                   <td>
-                    <div class="selectbox">
-                      <div class="select">
-                        <select id="mySelect4">
-                          <option value="0">0</option>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                        </select>
-                      </div>
-                    </div>
+                    <div class="score_1"><%=Scorek.first[3]%></div>
                   </td>
-                  <td>
-                    <div class="score_1">
-                      <%=Score.first[3]%>
-                    </div>
-                  </td>
-
                 </tr>
                 <tr>
                   <td>
@@ -279,47 +1801,59 @@
                   </td>
                   <td>5 điểm
                   </td>
-                  <td class="score_1">
-                    <%=Scorestd.first[4]%>
+                  <td class="score_1"> <%=Scorestd.first[4]%>
+    
+      </td>
+      <td id="score_05"> <%=Score.first[4]%> điểm
+      </td>
+      <td class="score_1"> <%=Scorek.first[4]%>
+    
+      </td>
+      
+      </tr>
 
+      <tr>
+        <td>
+          <p class="first-column-value">
+            - Loại Trung bình: Điểm số từ 2.0 đến 2.49
+          </p>
+        </td>
+        <td>2 điểm
+        </td>
+        <td>
+          <%if (Scorestd.first[4] == 2){%>
+          <div class="check_score"><i class="fa-solid fa-check"></i></div>
+          <%} else {%>
+          <div class="check_score"></div>
+          <%}%>   
                   </td>
-                  <td id="score_05">0 điểm</td>
-                  <td class="score_1">
-                    <%=Score.first[4]%>
-                  </td>
-                </tr>
-                <tr>
+                  
                   <td>
-                    <p class="first-column-value">
-                      - Loại Trung bình: Điểm số từ 2.0 đến 2.49
-                    </p>
-                  </td>
-                  <td>2 điểm
-                  </td>
-                  <td>
-                    <%if (Scorestd.first[4]==2){%>
-                      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-                      <%} else {%>
-                        <div class="check_score"></div>
-                        <%}%>
-                  </td>
-                  <td>
-                    <div class="checkbox-wrapper-4">
-                      <input type="checkbox" id="morning3" class="inp-cbx" value="2" />
-                      <label for="morning3" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                      </label>
-
-                    </div>
-                    <div id="hoverbox_03" class="pop-up-bc-tooltip"></div>
+                    <%if (Score.first[4] == 2){%>
+                      <div class="checkbox-wrapper-4">
+                        <input type="checkbox" id="morning3" checked class="inp-cbx" value="2" />
+                        <label for="morning3" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                        </label>
+                
+                      </div>
+                      <div id="hoverbox_03" class="pop-up-bc-tooltip"></div>
+          <%} else {%>
+          <div class="checkbox-wrapper-4">
+            <input type="checkbox" id="morning3" class="inp-cbx" value="2" />
+            <label for="morning3" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+            </label>
+    
+          </div>
+          <div id="hoverbox_03" class="pop-up-bc-tooltip"></div>
+          <%}%>  
                   </td>
                   <td>
-                    <%if (Score.first[4]==2){%>
-                      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-                      <%} else {%>
-                        <div class="check_score"></div>
-                        <%}%>
+                    <%if (Scorek.first[4] == 2){%>
+          <div class="check_score"><i class="fa-solid fa-check"></i></div>
+          <%} else {%>
+          <div class="check_score"></div>
+          <%}%>          
                   </td>
-
                 </tr>
                 <tr>
                   <td>
@@ -330,29 +1864,39 @@
                   <td>3 điểm
                   </td>
                   <td>
-                    <%if (Scorestd.first[4]==3){%>
-                      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-                      <%} else {%>
-                        <div class="check_score"></div>
-                        <%}%>
+                    <%if (Scorestd.first[4] == 3){%>
+          <div class="check_score"><i class="fa-solid fa-check"></i></div>
+          <%} else {%>
+          <div class="check_score"></div>
+          <%}%>    
+                  </td>
+                  
+                  <td>
+                    <%if (Score.first[4] == 3){%>
+                      <div class="checkbox-wrapper-4">
+                        <input type="checkbox" id="morning4" checked class="inp-cbx" value="3" />
+                        <label for="morning4" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                        </label>
+                
+                      </div>
+                      <div id="hoverbox_04" class="pop-up-bc-tooltip"></div>
+          <%} else {%>
+          <div class="checkbox-wrapper-4">
+            <input type="checkbox" id="morning4" class="inp-cbx" value="3" />
+            <label for="morning4" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+            </label>
+    
+          </div>
+          <div id="hoverbox_04" class="pop-up-bc-tooltip"></div>
+          <%}%>   
                   </td>
                   <td>
-                    <div class="checkbox-wrapper-4">
-                      <input type="checkbox" id="morning4" class="inp-cbx" value="3" />
-                      <label for="morning4" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                      </label>
-
-                    </div>
-                    <div id="hoverbox_04" class="pop-up-bc-tooltip"></div>
+                    <%if (Scorek.first[4] == 3){%>
+          <div class="check_score"><i class="fa-solid fa-check"></i></div>
+          <%} else {%>
+          <div class="check_score"></div>
+          <%}%>             
                   </td>
-                  <td>
-                    <%if (Score.first[4]==3){%>
-                      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-                      <%} else {%>
-                        <div class="check_score"></div>
-                        <%}%>
-                  </td>
-
                 </tr>
                 <tr>
                   <td>
@@ -363,30 +1907,39 @@
                   <td>4 điểm
                   </td>
                   <td>
-                    <%if (Scorestd.first[4]==4){%>
-                      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-                      <%} else {%>
-                        <div class="check_score"></div>
-                        <%}%>
+                    <%if (Scorestd.first[4] == 4){%>
+          <div class="check_score"><i class="fa-solid fa-check"></i></div>
+          <%} else {%>
+          <div class="check_score"></div>
+          <%}%>  
+                  </td>
+                  
+                  <td>
+                    <%if (Score.first[4] == 4){%>
+                      <div class="checkbox-wrapper-4">
+                        <input type="checkbox" id="morning5" checked class="inp-cbx" value="4" />
+                        <label for="morning5" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                        </label>
+                
+                      </div>
+                      <div id="hoverbox_05" class="pop-up-bc-tooltip"></div>
+          <%} else {%>
+          <div class="checkbox-wrapper-4">
+            <input type="checkbox" id="morning5" class="inp-cbx" value="4" />
+            <label for="morning5" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+            </label>
+    
+          </div>
+          <div id="hoverbox_05" class="pop-up-bc-tooltip"></div>
+          <%}%>  
                   </td>
                   <td>
-                    <div class="checkbox-wrapper-4">
-                      <input type="checkbox" id="morning5" class="inp-cbx" value="4" />
-                      <label for="morning5" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                      </label>
-
-                    </div>
-
-                    <div id="hoverbox_05" class="pop-up-bc-tooltip"></div>
-                  </td>
-                  <td>
-                    <%if (Score.first[4]==4){%>
-                      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-                      <%} else {%>
-                        <div class="check_score"></div>
-                        <%}%>
-                  </td>
-
+                    <%if (Scorek.first[4] == 4){%>
+          <div class="check_score"><i class="fa-solid fa-check"></i></div>
+          <%} else {%>
+          <div class="check_score"></div>
+          <%}%>     
+                    </td>
                 </tr>
                 <tr>
                   <td>
@@ -397,30 +1950,41 @@
                   <td>5 điểm
                   </td>
                   <td>
-                    <%if (Scorestd.first[4]==5){%>
-                      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-                      <%} else {%>
-                        <div class="check_score"></div>
-                        <%}%>
+                    <%if (Scorestd.first[4] == 5){%>
+          <div class="check_score"><i class="fa-solid fa-check"></i></div>
+          <%} else {%>
+          <div class="check_score"></div>
+          <%}%> 
+                  </td>
+                  
+                  <td>
+                    <%if (Score.first[4] == 5){%>
+                      <div class="checkbox-wrapper-4">
+                        <input type="checkbox" id="morning6" checked class="inp-cbx" value="5" />
+                        <label for="morning6" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                        </label>
+                
+                      </div>
+                      <div id="hoverbox_06" class="pop-up-bc-tooltip"></div>
+          <%} else {%>
+          <div class="checkbox-wrapper-4">
+            <input type="checkbox" id="morning6" class="inp-cbx" value="5" />
+            <label for="morning6" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+            </label>
+    
+          </div>
+          <div id="hoverbox_06" class="pop-up-bc-tooltip"></div>
+          <%}%> 
                   </td>
                   <td>
-                    <div class="checkbox-wrapper-4">
-                      <input type="checkbox" id="morning6" class="inp-cbx" value="5" />
-                      <label for="morning6" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                      </label>
-
-                    </div>
-                    <div id="hoverbox_06" class="pop-up-bc-tooltip"></div>
+                    <%if (Scorek.first[4] == 5){%>
+          <div class="check_score"><i class="fa-solid fa-check"></i></div>
+          <%} else {%>
+          <div class="check_score"></div>
+          <%}%> 
                   </td>
-                  <td>
-                    <%if (Score.first[4]==5){%>
-                      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-                      <%} else {%>
-                        <div class="check_score"></div>
-                        <%}%>
-                  </td>
-
                 </tr>
+                
                 <tr>
                   <td>
                     <p class="first-column-value">
@@ -429,1038 +1993,1074 @@
                   </td>
                   <td>
                   </td>
-                  <td id="total_muc_1">
-                    <%= Scorestd.first[0] + Scorestd.first[1] + Scorestd.first[2] + Scorestd.first[3] +
-                      Scorestd.first[4] %> điểm
+                  <td id="total_muc_1"> <%=  Scorestd.first[0] + Scorestd.first[1] + Scorestd.first[2] + Scorestd.first[3] + Scorestd.first[4] %> điểm
+        </td>
+        
+                 
+        <td id="total_muc_1k"> <%=  Score.first[0] + Score.first[1] + Score.first[2] + Score.first[3] + Score.first[4] %> điểm
+          
                   </td>
-                  <%if (Scorek.first[0]=='Chưa chấm' ) {%>
-                    <td id="total_muc_1">
-                      <%= Scorek.first[0]%>
-                        <%}else {%>
-                    <td id="total_muc_1">
-                      <%= Scorek.first[0] + Scorek.first[1] + Scorek.first[2] + Scorek.first[3] + Scorek.first[4] %>
-                        điểm
-                        <%}%>
-                    </td>
-                    <%if (Score.first[0]=='Chưa chấm' ) {%>
-                      <td id="total_muc_1">
-                        <%= Score.first[0]%>
-                          <%}else {%>
-                      <td id="total_muc_1">
-                        <%= Score.first[0] + Score.first[1] + Score.first[2] + Score.first[3] + Score.first[4] %> điểm
-                          <%}%>
-                      </td>
-
-
-                </tr>
-                <tr class="tr-title">
-                  <td>
-
-                    <p class="title">2. Đánh giá về ý thức và kết quả chấp hành nội quy, quy
-                      chế, quy định trong nhà trường</p>
-
-                  </td>
-                  <td>
-                  </td>
-                  <td>
-                  </td>
-                  <td>
-                  </td>
-                  <td>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <p class="first-column-value">
-                      a. Ý thức chấp hành các văn bản chỉ đạo của ngành, của cơ
-                      quan chỉ đạo cấp trên được thực hiện trong nhà trường.
-                    </p>
-                  </td>
-                  <td>15 điểm
-                  </td>
-                  <td>
-                    <div class="score_2">
-                      <%=Scorestd.second[0]%>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="selectbox">
-                      <div class="select">
-                        <select id="mySelect5">
-                          <option value="0">0</option>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                          <option value="5">5</option>
-                          <option value="6">6</option>
-                          <option value="7">7</option>
-                          <option value="8">8</option>
-                          <option value="9">9</option>
-                          <option value="10">10</option>
-                          <option value="11">11</option>
-                          <option value="12">12</option>
-                          <option value="13">13</option>
-                          <option value="14">14</option>
-                          <option value="15">15</option>
-                        </select>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="score_2">
-                      <%=Score.second[0]%>
-                    </div>
-                  </td>
-
-                </tr>
-                <tr>
-                  <td>
-                    <p class="first-column-value">
-                      - Bị nhắc nhở trong việc thực hiện
-                    </p>
-                  </td>
-                  <td>10 điểm
-                  </td>
-                  <td>
-                    <%if (Scorestd.second[0]==10){%>
-                      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-                      <%} else {%>
-                        <div class="check_score"></div>
-                        <%}%>
-                  </td>
-                  <td>
-                    <div class="checkbox-wrapper-4">
-                      <input type="checkbox" id="morning7" class="inp-cbx" value="10" />
-                      <label for="morning7" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                      </label>
-
-                    </div>
-                    <div id="hoverbox_07" class="pop-up-bc-tooltip"></div>
-                  </td>
-                  <td>
-                    <%if (Score.second[0]==10){%>
-                      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-                      <%} else {%>
-                        <div class="check_score"></div>
-                        <%}%>
-                  </td>
-
-                </tr>
-                <tr>
-                  <td>
-                    <p class="first-column-value">
-                      - Bị xử lý kỷ luật từ mức khiển trách trở lên
-                    </p>
-                  </td>
-                  <td>0 điểm
-                  </td>
-                  <td>
-                    <%if (Scorestd.second[0]==0){%>
-                      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-                      <%} else {%>
-                        <div class="check_score"></div>
-                        <%}%>
-                  </td>
-                  <td>
-                    <div class="checkbox-wrapper-4">
-                      <input type="checkbox" id="morning8" class="inp-cbx" value="0" checked />
-                      <label for="morning8" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                      </label>
-
-                    </div>
-                    <div id="hoverbox_08" class="pop-up-bc-tooltip"></div>
-                  </td>
-                  <td>
-                    <%if (Score.second[0]==0){%>
-                      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-                      <%} else {%>
-                        <div class="check_score"></div>
-                        <%}%>
-                  </td>
-
-                </tr>
-                <tr>
-                  <td>
-                    <p class="first-column-value">
-                      b. Ý thức chấp hành tốt, đầy đủ các nội quy, quy chế và
-                      các quy định khác của nhà trường
-                    </p>
-                  </td>
-                  <td>10 điểm
-                  </td>
-                  <td>
-                    <div class="score_2">
-                      <%=Scorestd.second[1]%>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="selectbox">
-                      <div class="select">
-                        <select id="mySelect6">
-                          <option value="0">0</option>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                          <option value="5">5</option>
-                          <option value="6">6</option>
-                          <option value="7">7</option>
-                          <option value="8">8</option>
-                          <option value="9">9</option>
-                          <option value="10">10</option>
-                        </select>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="score_2">
-                      <%=Score.second[1]%>
-                    </div>
-                  </td>
-
-                </tr>
-                <tr>
-                  <td>
-                    <p class="first-column-value">
-                      - Bị nhắc nhở trong việc thực hiện
-                    </p>
-                  </td>
-                  <td>5 điểm
-                  </td>
-                  <td>
-                    <%if (Scorestd.second[1]==5){%>
-                      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-                      <%} else {%>
-                        <div class="check_score"></div>
-                        <%}%>
-                  </td>
-                  <td>
-                    <div class="checkbox-wrapper-4">
-                      <input type="checkbox" id="morning9" class="inp-cbx" value="5" />
-                      <label for="morning9" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                      </label>
-
-                    </div>
-                    <div id="hoverbox_09" class="pop-up-bc-tooltip"></div>
-                  </td>
-                  <td>
-                    <%if (Score.second[1]==5){%>
-                      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-                      <%} else {%>
-                        <div class="check_score"></div>
-                        <%}%>
-                  </td>
-
-                </tr>
-                <tr>
-                  <td>
-                    <p class="first-column-value">
-                      - Bị xử lý kỷ luật từ mức khiển trách trở lên
-                    </p>
-                  </td>
-                  <td>0 điểm
-                  </td>
-                  <td>
-                    <%if (Scorestd.second[1]==0){%>
-                      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-                      <%} else {%>
-                        <div class="check_score"></div>
-                        <%}%>
-                  </td>
-                  <td>
-                    <div class="checkbox-wrapper-4">
-                      <input type="checkbox" id="morning10" class="inp-cbx" value="0" checked />
-                      <label for="morning10" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                      </label>
-
-                    </div>
-                    <div id="hoverbox_10" class="pop-up-bc-tooltip"></div>
-                  </td>
-                  <td>
-                    <%if (Score.second[1]==0){%>
-                      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-                      <%} else {%>
-                        <div class="check_score"></div>
-                        <%}%>
-                  </td>
-
-                </tr>
-                <tr>
-                  <td>
-                    <p class="first-column-value">
-                      Điểm tối đa nội dung 2 là 25 điểm
-                    </p>
-                  </td>
-                  <td>
-                  </td>
-                  <td id="total_muc_2">
-                    0 điểm
-                  </td>
-                  <td>
-                    <%=Scorestd.second[0]+Scorestd.second[1]%> điểm
-
-                      <%if (Score.first[0]=='Chưa chấm' ) {%>
-                  <td id="total_muc_1">
-                    <%= Score.first[0]%>
+                  <%if (Scorek.first[0] == 'Chưa chấm') {%>
+                    <td id="total_muc_1"> <%=  Scorek.first[0]%>
                       <%}else {%>
-                  <td id="total_muc_2">
-                    <%=Score.second[0]+Score.second[1]%> điểm
+                    <td id="total_muc_1"> <%=  Scorek.first[0] + Scorek.first[1] + Scorek.first[2] + Scorek.first[3] + Scorek.first[4] %> điểm
                       <%}%>
-                  </td>
-
-
+                                  </td>
                 </tr>
-                <tr class="tr-title">
-                  <td>
-
-                    <p class="title">3. Đánh giá về ý thức và kết quả tham gia các hoạt động
-                      chính trị, xã hội, văn hoá, văn nghệ, thể thao, phòng
-                      chống tội phạm và các tệ nạn xã hội</p>
-
-                  </td>
-                  <td>
-                  </td>
-                  <td>
-                  </td>
-                  <td>
-                  </td>
-                  <td>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <p class="first-column-value">
-                      a. Tham gia tích cực các hoạt động chính trị, xã hội, văn
-                      hoá, văn nghệ, thể thao và có sự trưởng thành của bản thân
-                      qua các hoạt động rèn luyện:
-                    </p>
-                  </td>
-                  <td>8 điểm
-                  </td>
-                  <td>
-                    <div class="score_3">
-                      <%=Scorestd.third[0]%>
-                    </div>
-
-                  </td>
-                  <td>
-                    <div class="selectbox">
-                      <div class="select">
-                        <select id="mySelect7">
-                          <option value="0">0</option>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                          <option value="5">5</option>
-                          <option value="6">6</option>
-                          <option value="7">7</option>
-                          <option value="8">8</option>
-                        </select>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="score_3">
-                      <%=Score.third[0]%>
-                    </div>
-                  </td>
-
-                </tr>
-                <tr>
-                  <td>
-                    <p class="first-column-value">
-                      - Tích cực tham gia các hoạt động chính trị, xã hội, văn
-                      hoá, văn nghệ, thể thao
-                    </p>
-                  </td>
-                  <td>5 điểm
-                  </td>
-                  <td>
-                    <%if (Scorestd.third[0]==5){%>
-                      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-                      <%} else {%>
-                        <div class="check_score"></div>
-                        <%}%>
-                  </td>
-                  <td>
-                    <div class="checkbox-wrapper-4">
-                      <input type="checkbox" id="morning11" class="inp-cbx" value="5" />
-                      <label for="morning11" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                      </label>
-
-                    </div>
-                    <div id="hoverbox_11" class="pop-up-bc-tooltip"></div>
-                  </td>
-                  <td>
-                    <%if (Score.third[0]==5){%>
-                      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-                      <%} else {%>
-                        <div class="check_score"></div>
-                        <%}%>
-                  </td>
-
-                </tr>
-                <tr>
-                  <td>
-                    <p class="first-column-value">
-                      - Được kết nạp Đảng hoặc đạt danh hiệu Đoàn viên ưu tú
-                      hoặc đạt giải Nhất, Nhì, Ba trong các hoạt động chính trị,
-                      văn hóa, thể thao từ cấp trường trở lên
-                    </p>
-                  </td>
-                  <td>8 điểm
-                  </td>
-                  <td>
-                    <%if (Scorestd.third[0]==8){%>
-                      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-                      <%} else {%>
-                        <div class="check_score"></div>
-                        <%}%>
-                  </td>
-                  <td>
-                    <div class="checkbox-wrapper-4">
-                      <input type="checkbox" id="morning12" class="inp-cbx" value="8" />
-                      <label for="morning12" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                      </label>
-
-                    </div>
-                    <div id="hoverbox_12" class="pop-up-bc-tooltip"></div>
-                  </td>
-                  <td>
-                    <%if (Score.third[0]==8){%>
-                      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-                      <%} else {%>
-                        <div class="check_score"></div>
-                        <%}%>
-                  </td>
-
-                </tr>
-                <tr>
-                  <td>
-                    <p class="first-column-value">
-                      b. Tích cực tham gia các hoạt động công ích, tình nguyện,
-                      công tác xã hội
-                    </p>
-                  </td>
-                  <td>6 điểm
-                  </td>
-                  <td>
-                    <div class="score_3">
-                      <%=Scorestd.third[1]%>
-                    </div>
-
-                  </td>
-                  <td>
-                    <div class="selectbox">
-                      <div class="select">
-                        <select id="mySelect8">
-                          <option value="0">0</option>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                          <option value="5">5</option>
-                          <option value="6">6</option>
-                        </select>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="score_3">
-                      <%=Score.third[1]%>
-                    </div>
-                  </td>
-
-                </tr>
-                <tr>
-                  <td>
-                    <p class="first-column-value">
-                      c. Tham gia tuyên truyền, phòng chống tội phạm, các tệ nạn
-                      xã hội và các hoạt động khác do lớp, khoa, trường, các
-                      đoàn thể, địa phương tổ chức
-                    </p>
-                  </td>
-                  <td>6 điểm
-                  </td>
-                  <td>
-                    <div class="score_3">
-                      <%=Scorestd.third[2]%>
-                    </div>
-
-                  </td>
-                  <td>
-                    <!-- <select style="width: 80%" class="comboMark" id="score_10" name="score_10">
-        <option value="0">0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6" selected="">6</option>
-      </select> -->
-                    <div class="selectbox">
-                      <div class="select">
-                        <select id="mySelect9">
-                          <option value="0">0</option>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                          <option value="5">5</option>
-                          <option value="6">6</option>
-                        </select>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="score_3">
-                      <%=Score.third[2]%>
-                    </div>
-                  </td>
-
-                </tr>
-                <tr>
-                  <td>
-                    <p>
-                      Điểm tối đa nội dung 3 là 20 điểm
-                    </p>
-                  </td>
-                  <td>
-                  </td>
-                  <td>
-                    <%=Scorestd.third[0]+Scorestd.third[1]+Scorestd.third[2]%> điểm
-
-                  </td>
-                  <td id="total_muc_3">
-                    0 điểm
-                  </td>
-                  <%if (Score.first[0]=='Chưa chấm' ) {%>
-                    <td id="total_muc_1">
-                      <%= Score.first[0]%>
-                        <%}else {%>
-                    <td id="total_muc_1">
-                      <%=Score.third[0]+Score.third[1]+Score.third[2]%> điểm
-                        <%}%>
-                    </td>
-
-
-
-                </tr>
-                <tr class="tr-title">
-                  <td>
-
-                    <p class="title">4. Đánh giá về ý thức công dân trong quan hệ cộng
-                      đồng</p>
-
-                  </td>
-                  <td>
-                  </td>
-                  <td>
-                  </td>
-                  <td>
-                  </td>
-                  <td>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <p class="first-column-value">
-                      a. Chấp hành và tham gia tuyên truyền các chủ trương của
-                      Đảng, chính sách, pháp luật của Nhà nước tại nơi cư trú
-                    </p>
-                  </td>
-                  <td>10 điểm
-                  </td>
-                  <td>
-                    <div class="score_4">
-                      <%=Scorestd.fourth[0]%>
-                    </div>
-
-                  </td>
-                  <td>
-                    <!-- <select style="width: 80%" class="comboMark" id="score_11" name="score_11">
-        <option value="0">0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="10" selected="">10</option>
-      </select> -->
-                    <div class="selectbox">
-                      <div class="select">
-                        <select id="mySelect10">
-                          <option value="0">0</option>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                          <option value="5">5</option>
-                          <option value="6">6</option>
-                          <option value="7">7</option>
-                          <option value="8">8</option>
-                          <option value="9">9</option>
-                          <option value="10">10</option>
-                        </select>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="score_4">
-                      <%=Score.fourth[0]%>
-                    </div>
-                  </td>
-
-                </tr>
-                <tr>
-                  <td>
-                    <p class="first-column-value">
-                      b. Được ghi nhận, biểu dương, khen thưởng về tham gia các
-                      hoạt động xã hội
-                    </p>
-                  </td>
-                  <td>5 điểm
-                  </td>
-                  <td>
-                    <div class="score_4">
-                      <%=Scorestd.fourth[1]%>
-                    </div>
-
-                  </td>
-                  <td>
-                    <!-- <select style="width: 80%" class="comboMark" id="score_12" name="score_12">
-        <option value="0" selected="">0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-      </select> -->
-                    <div class="selectbox">
-                      <div class="select">
-                        <select id="mySelect11">
-                          <option value="0">0</option>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                          <option value="5">5</option>
-                        </select>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="score_4">
-                      <%=Score.fourth[1]%>
-                    </div>
-                  </td>
-
-                </tr>
-                <tr>
-                  <td>
-                    <p class="first-column-value">
-                      c. Có tinh thần chia sẻ, giúp đỡ bạn bè, người thân, người
-                      có hoàn cảnh khó khăn, hoạn nạn.
-                    </p>
-                  </td>
-                  <td>10 điểm
-                  </td>
-                  <td>
-                    <div class="score_4">
-                      <%=Scorestd.fourth[2]%>
-                    </div>
-
-                  </td>
-                  <td>
-                    <!-- <select style="width: 80%" class="comboMark" id="score_13" name="score_13">
-        <option value="0">0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="10" selected="">10</option>
-      </select> -->
-                    <div class="selectbox">
-                      <div class="select">
-                        <select id="mySelect12">
-                          <option value="0">0</option>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                          <option value="5">5</option>
-                          <option value="6">6</option>
-                          <option value="7">7</option>
-                          <option value="8">8</option>
-                          <option value="9">9</option>
-                          <option value="10">10</option>
-                        </select>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="score_4">
-                      <%=Score.fourth[2]%>
-                    </div>
-                  </td>
-
-                </tr>
-                <tr>
-                  <td>
-                    <p>
-                      Điểm tối đa nội dung 4 là 25 điểm</p>
-                  </td>
-                  <td>
-                  </td>
-                  <td id="total_muc_4">
-                    <%=Scorestd.fourth[0]+Scorestd.fourth[1]+Scorestd.fourth[2]%> điểm
-                  </td>
-                  <td id="total_muc_4">
-                    0 điểm
-                  </td>
-                  <%if (Score.first[0]=='Chưa chấm' ) {%>
-                    <td id="total_muc_4">
-                      <%= Score.first[0]%>
-                        <%}else {%>
-                    <td id="total_muc_4">
-                      <%=Score.fourth[0]+Score.fourth[1]+Score.fourth[2]%> điểm
-                        <%}%>
-                    </td>
-
-                </tr>
-                <tr class="tr-title">
-                  <td colspan="2">
-
-                    <p class="title" style="font-size: 1.5rem;">5. Đánh giá về ý thức và kết quả tham gia công tác phụ
-                      trách lớp, các đoàn thể, tổ chức trong nhà trường hoặc
-                      đạt được thành tích đặc biệt trong học tập, rèn luyện
-                      của học sinh, sinh viên</p>
-
-                  </td>
-                  <td>
-                  </td>
-                  <td>
-                  </td>
-                  <td>
-                  </td>
-                  <td>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <p class="first-column-value">
-                      a. Tham gia tích cực vào phong trào của Lớp, Đoàn, Hội
-                      sinh viên và các công tác đoàn thể xã hội khác
-                    </p>
-                  </td>
-                  <td>3 điểm
-                  </td>
-                  <td>
-                    <div class="score_5">
-                      <%=Scorestd.fifth[0]%>
-                    </div>
-
-                  </td>
-                  <td>
-                    <!-- <select style="width: 80%" class="comboMark" id="score_14" name="score_14">
-        <option value="0">0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3" selected="">3</option>
-      </select> -->
-                    <div class="selectbox">
-                      <div class="select">
-                        <select id="mySelect13">
-                          <option value="0">0</option>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                        </select>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="score_5">
-                      <%=Score.fifth[0]%>
-                    </div>
-                  </td>
-
-                </tr>
-                <tr>
-                  <td>
-                    <p class="first-column-value">
-                      b. Phát huy vai trò và hoàn thành tốt nhiệm vụ người cán
-                      bộ Chi đoàn, Lớp, Câu lạc bộ, Đội tự quản
-                    </p>
-                  </td>
-                  <td>3 điểm
-                  </td>
-                  <td>
-                    <div class="score_5">
-                      <%=Scorestd.fifth[1]%>
-                    </div>
-
-                  </td>
-                  <td>
-                    <!-- <select style="width: 80%" class="comboMark" id="score_15" name="score_15">
-        <option value="0" selected="">0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-      </select> -->
-                    <div class="selectbox">
-                      <div class="select">
-                        <select id="mySelect14">
-                          <option value="0">0</option>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                        </select>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="score_5">
-                      <%=Score.fifth[1]%>
-                    </div>
-                  </td>
-
-                </tr>
-                <tr>
-                  <td>
-                    <p class="first-column-value">
-                      c. Đảm nhiệm, đóng góp có hiệu quả cho công tác Đoàn
-                      trường, Hội sinh viên, Liên chi đoàn, Đội tự quản, Câu lạc
-                      bộ
-                    </p>
-                  </td>
-                  <td>2 điểm
-                  </td>
-                  <td>
-                    <div class="score_5">
-                      <%=Scorestd.fifth[2]%>
-                    </div>
-
-                  </td>
-                  <td>
-                    <!-- <select style="width: 80%" class="comboMark" id="score_16" name="score_16">
-        <option value="0">0</option>
-        <option value="1">1</option>
-        <option value="2" selected="">2</option>
-      </select> -->
-                    <div class="selectbox">
-                      <div class="select">
-                        <select id="mySelect15">
-                          <option value="0">0</option>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                        </select>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="score_5">
-                      <%=Score.fifth[2]%>
-                    </div>
-                  </td>
-
-                </tr>
-                <tr>
-                  <td>
-                    <p class="first-column-value">
-                      d. Được biểu dương, khen thưởng vì có thành tích đặc biệt
-                      trong học tập, rèn luyện và các hoạt động khác
-                    </p>
-                  </td>
-                  <td>2 điểm
-                  </td>
-                  <td>
-                    <div class="score_5">
-                      <%=Scorestd.fifth[3]%>
-                    </div>
-
-                  </td>
-                  <td>
-                    <!-- <select style="width: 80%" class="comboMark" id="score_17" name="score_17">
-        <option value="0" selected="">0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-      </select> -->
-                    <div class="selectbox">
-                      <div class="select">
-                        <select id="mySelect16">
-                          <option value="0">0</option>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                        </select>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="score_5">
-                      <%=Score.fifth[3]%>
-                    </div>
-                  </td>
-
-                </tr>
-                <tr>
-                  <td>
-                    <p class="first-column-value">- Cấp khoa</p>
-                  </td>
-                  <td>1 điểm
-                  </td>
-                  <td>
-                    <%if (Scorestd.fifth[3]==1){%>
-                      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-                      <%} else {%>
-                        <div class="check_score"></div>
-                        <%}%>
-                  </td>
-                  <td>
-                    <div class="checkbox-wrapper-4">
-                      <input type="checkbox" id="morning13" class="inp-cbx" value="1" />
-                      <label for="morning13" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                      </label>
-
-                    </div>
-                    <div id="hoverbox_13" class="pop-up-bc-tooltip"></div>
-                  </td>
-                  <td>
-                    <%if (Score.fifth[3]==1){%>
-                      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-                      <%} else {%>
-                        <div class="check_score"></div>
-                        <%}%>
-                  </td>
-
-                </tr>
-                <tr>
-                  <td>
-                    <p class="first-column-value">- Cấp trường trở lên</p>
-                  </td>
-                  <td>2 điểm
-                  </td>
-                  <td>
-                    <%if (Scorestd.fifth[3]==2){%>
-                      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-                      <%} else {%>
-                        <div class="check_score"></div>
-                        <%}%>
-                  </td>
-                  <td>
-                    <div class="checkbox-wrapper-4">
-                      <input type="checkbox" id="morning14" class="inp-cbx" value="2" />
-                      <label for="morning14" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                      </label>
-
-                    </div>
-                    <div id="hoverbox_14" class="pop-up-bc-tooltip"></div>
-                  </td>
-                  <td>
-                    <%if (Score.fifth[3]==2){%>
-                      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-                      <%} else {%>
-                        <div class="check_score"></div>
-                        <%}%>
-                  </td>
-
-                </tr>
-                <tr>
-                  <td>
-                    <p>
-                      Điểm tối đa nội dung 5 là 10 điểm
-                      </>
-                  </td>
-                  <td>
-                  </td>
-                  <td id="total_muc_5d">
-                    <%=Scorestd.fifth[0]+Scorestd.fifth[1]+Scorestd.fifth[2]+Scorestd.fifth[3]%> điểm
-
-                  </td>
-                  <td id="total_muc_5">
-                    0 điểm
-                  </td>
-                  <%if (Score.first[0]=='Chưa chấm' ) {%>
-                    <td id="total_muc_5d">
-                      <%= Score.first[0]%>
-                        <%}else {%>
-                    <td id="total_muc_5d">
-                      <%=Score.fifth[0]+Score.fifth[1]+Score.fifth[2]+Score.fifth[3]%> điểm
-                        <%}%>
-                    </td>
-
-                </tr>
-                <tr>
-                  <td>
-                    <p>
-                      Tổng điểm tối đa: 100 điểm
-                    </p>
-                  </td>
-                  <td>
-
-                  </td>
-                  <td id="total_all_std">
-                    <%=Scorestd.total%> điểm
-                  </td>
-                  <%if (Score.first[0]=='Chưa chấm' ) {%>
-                    <td id="total_all">
-                      <%=Score.total%>
-                        <%}else {%>
-                    <td id="total_all">
-                      <%=Score.total%> điểm
-                        <%}%>
-                    </td>
-
-                    <%if (Scorek.first[0]=='Chưa chấm' ) {%>
-                      <td id="total_all_dep">
-                        <%=Scorek.total%>
-                          <%}else {%>
-                      <td id="total_all_dep">
-                        <%=Scorek.total%> điểm
-                          <%}%>
-                      </td>
-
-                </tr>
-              </tbody>
-            </table>
-            <div class="complete_img">
-              <button class="button-35 up-btn post-btn">
-                Tải ảnh
-              </button>
-              <button class="button-35 up-btn save-btn">
-                Lưu
-              </button>
-            </div>
-
-            <div class="main_img content_top">
-              <h2>HÌNH ẢNH LIÊN QUAN</h2>
-              <div class="main_img_list">
-                <%for (img_info of img){%>
-                  <div class="main_img_item">
-                    <img src="<%=img_info.fileLink%>" alt="<%=img_info.fileDescription%>">
-                    <div class="main_img_item_title">
-                      <%=img_info.fileDescription%>
-                    </div>
-                  </div>
-                  <%}%>
-              </div>
+          <tr class="tr-title">
+            <td >
+    
+              <p class="title">2. Đánh giá về ý thức và kết quả chấp hành nội quy, quy
+                chế, quy định trong nhà trường</p>
+    
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p class="first-column-value">
+                a. Ý thức chấp hành các văn bản chỉ đạo của ngành, của cơ
+                quan chỉ đạo cấp trên được thực hiện trong nhà trường.
+              </p>
+            </td>
+            <td>15 điểm
+            </td>
+            <td>
+                <div class="score_2"><%=Scorestd.second[0]%></div>
+        </td>
+       
+        <td>
+         
+          <div class="selectbox">
+            <div class="select">
+              <select id="mySelect5">
+                <% for (let i=0; i < 16; i++) {%>
+                  <% if (i==Score.second[0]) {%>
+                    <option value="<%= i %>" selected="selected">
+                      <%= i %>
+                    </option>
+                    <% } else { %>
+                      <option value="<%= i %>">
+                        <%= i %>
+                      </option>
+                      <% } %>
+                  <% } %>
+              </select>
             </div>
           </div>
+        
+    
+            </td>
+            <td>
+              <div class="score_2"><%=Scorek.second[0]%></div>
+            </td>
+          </tr>
+          <tr>
+          <td>
+            <p class="first-column-value">
+              - Bị nhắc nhở trong việc thực hiện
+            </p>
+          </td>
+          <td>10 điểm
+          </td>
+          <td>
+            <%if (Scorestd.second[0] == 10){%>
+          <div class="check_score"><i class="fa-solid fa-check"></i></div>
+          <%} else {%>
+          <div class="check_score"></div>
+          <%}%>
+            </td>
+            
+            <td>
+              <%if (Score.second[0] == 10){%>
+                <div class="checkbox-wrapper-4">
+                  <input type="checkbox" id="morning7" checked class="inp-cbx" value="10" />
+                  <label for="morning7" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                  </label>
+          
+                </div>
+                <div id="hoverbox_07" class="pop-up-bc-tooltip"></div>
+          <%} else {%>
+          <div class="checkbox-wrapper-4">
+            <input type="checkbox" id="morning7" class="inp-cbx" value="10" />
+            <label for="morning7" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+            </label>
+    
+          </div>
+          <div id="hoverbox_07" class="pop-up-bc-tooltip"></div>
+          <%}%>
+            </td>
+            
+            <td>
+              <%if (Scorek.second[0] == 10){%>
+          <div class="check_score"><i class="fa-solid fa-check"></i></div>
+          <%} else {%>
+          <div class="check_score"></div>
+          <%}%>
+            </td>
+
+          </tr>
+          <tr>
+            <td>
+              <p class="first-column-value">
+                - Bị xử lý kỷ luật từ mức khiển trách trở lên
+              </p>
+            </td>
+            <td>0 điểm
+            </td>
+            <td>
+              <%if (Scorestd.second[0] == 0){%>
+          <div class="check_score"><i class="fa-solid fa-check"></i></div>
+          <%} else {%>
+          <div class="check_score"></div>
+          <%}%> 
+            </td>
+            
+            <td>
+              <%if (Score.second[0] == 0){%>
+                <div class="checkbox-wrapper-4">
+                  <input type="checkbox" id="morning8" class="inp-cbx" value="0" checked />
+                  <label for="morning8" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                  </label>
+          
+                </div>
+                <div id="hoverbox_08" class="pop-up-bc-tooltip"></div>
+          <%} else {%>
+          <div class="checkbox-wrapper-4">
+            <input type="checkbox" id="morning8" class="inp-cbx" value="0"  />
+            <label for="morning8" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+            </label>
+    
+          </div>
+          <div id="hoverbox_08" class="pop-up-bc-tooltip"></div>
+          <%}%> 
+            </td>
+
+            <td>
+              <%if (Scorek.second[0] == 0){%>
+          <div class="check_score"><i class="fa-solid fa-check"></i></div>
+          <%} else {%>
+          <div class="check_score"></div>
+          <%}%>     
+            </td>
+
+          </tr>
+
+          <tr>
+            <td>
+              <p class="first-column-value">
+                b. Ý thức chấp hành tốt, đầy đủ các nội quy, quy chế và
+                các quy định khác của nhà trường
+              </p>
+            </td>
+            <td>10 điểm
+            </td>
+            <td>
+              <div class="score_2"><%=Scorestd.second[1]%></div>
+        </td>
+        
+        <td>
+        
+          <div class="selectbox">
+            <div class="select">
+              <select id="mySelect6">
+                <% for (let i=0; i < 11; i++) {%>
+                  <% if (i==Score.second[1]) {%>
+                    <option value="<%= i %>" selected="selected">
+                      <%= i %>
+                    </option>
+                    <% } else { %>
+                      <option value="<%= i %>">
+                        <%= i %>
+                      </option>
+                      <% } %>
+                  <% } %>
+              </select>
+            </div>
+          </div>
+          
+            </td>
+            <td>
+              <div class="score_2"><%=Scorek.second[1]%></div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p class="first-column-value">
+                - Bị nhắc nhở trong việc thực hiện
+              </p>
+            </td>
+            <td>5 điểm
+            </td>
+            <td>
+            <%if (Scorestd.second[1] == 5){%>
+          <div class="check_score"><i class="fa-solid fa-check"></i></div>
+          <%} else {%>
+          <div class="check_score"></div>
+          <%}%> 
+            </td>
+            
+            <td>
+              <%if (Score.second[1] == 5){%>
+                <div class="checkbox-wrapper-4">
+                  <input type="checkbox" id="morning9" checked class="inp-cbx" value="5" />
+                  <label for="morning9" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                  </label>
+          
+                </div>
+                <div id="hoverbox_09" class="pop-up-bc-tooltip"></div>
+          <%} else {%>
+          <div class="checkbox-wrapper-4">
+            <input type="checkbox" id="morning9" class="inp-cbx" value="5" />
+            <label for="morning9" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+            </label>
+    
+          </div>
+          <div id="hoverbox_09" class="pop-up-bc-tooltip"></div>
+          <%}%>  
+            </td>
+            <td>
+              <%if (Scorek.second[1] == 5){%>
+          <div class="check_score"><i class="fa-solid fa-check"></i></div>
+          <%} else {%>
+          <div class="check_score"></div>
+          <%}%>      
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p class="first-column-value">
+                - Bị xử lý kỷ luật từ mức khiển trách trở lên
+              </p>
+            </td>
+            <td>0 điểm
+            </td>
+            <td>
+              <%if (Scorestd.second[1] == 0){%>
+          <div class="check_score"><i class="fa-solid fa-check"></i></div>
+          <%} else {%>
+          <div class="check_score"></div>
+          <%}%> 
+            </td>
+            
+            <td>
+              <%if (Score.second[1] == 0){%>
+                <div class="checkbox-wrapper-4">
+                  <input type="checkbox" id="morning10" class="inp-cbx" value="0" checked />
+                  <label for="morning10" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                  </label>
+          
+                </div>
+                <div id="hoverbox_10" class="pop-up-bc-tooltip"></div>
+          <%} else {%>
+          <div class="checkbox-wrapper-4">
+            <input type="checkbox" id="morning10" class="inp-cbx" value="0"  />
+            <label for="morning10" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+            </label>
+    
+          </div>
+          <div id="hoverbox_10" class="pop-up-bc-tooltip"></div>
+          <%}%>
+            </td>
+
+            <td>
+              <%if (Scorek.second[1] == 0){%>
+          <div class="check_score"><i class="fa-solid fa-check"></i></div>
+          <%} else {%>
+          <div class="check_score"></div>
+          <%}%>         
+            </td>
+
+          </tr>
+          <tr>
+            <td>
+              <p class="first-column-value">
+                Điểm tối đa nội dung 2 là 25 điểm
+              </p>
+            </td>
+            <td>
+            </td>
+            <td>
+              <%=Scorestd.second[0]+Scorestd.second[1]%> điểm
+    
+          
+        
+     
+        <td id="total_muc_2k"> <%=Score.second[0]+Score.second[1]%> điểm
+          
+    
+          </td>
+
+
+          <%if (Scorek.first[0] == 'Chưa chấm') {%>
+            <td id="total_muc_1"> <%=  Scorek.first[0]%>
+              <%}else {%>
+            <td id="total_muc_2"> <%=Scorek.second[0]+Scorek.second[1]%> điểm
+              <%}%>
+                  </td>
+          </tr>
+          <tr class="tr-title">
+            <td>
+    
+              <p class="title">3. Đánh giá về ý thức và kết quả tham gia các hoạt động
+                chính trị, xã hội, văn hoá, văn nghệ, thể thao, phòng
+                chống tội phạm và các tệ nạn xã hội</p>
+    
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p class="first-column-value">
+                a. Tham gia tích cực các hoạt động chính trị, xã hội, văn
+                hoá, văn nghệ, thể thao và có sự trưởng thành của bản thân
+                qua các hoạt động rèn luyện:
+              </p>
+            </td>
+            <td>8 điểm
+            </td>
+            <td>
+              <div class="score_3"><%=Scorestd.third[0]%></div>
+    
+        </td>
+       
+        <td>
+          
+          <div class="selectbox">
+            <div class="select">
+              <select id="mySelect7">
+                <% for (let i=0; i < 9; i++) {%>
+                  <% if (i==Score.third[0]) {%>
+                    <option value="<%= i %>" selected="selected">
+                      <%= i %>
+                    </option>
+                    <% } else { %>
+                      <option value="<%= i %>">
+                        <%= i %>
+                      </option>
+                      <% } %>
+                  <% } %>
+              </select>
+            </div>
+          </div>
+         
+    
+            </td>
+
+            <td>
+              <div class="score_3"><%=Scorek.third[0]%></div>
+            </td>
+          </tr>
+          <tr>
+        <td>
+          <p class="first-column-value">
+            - Tích cực tham gia các hoạt động chính trị, xã hội, văn
+            hoá, văn nghệ, thể thao
+          </p>
+        </td>
+        <td>5 điểm
+        </td>
+        <td>
+          <%if (Scorestd.third[0] == 5){%>
+          <div class="check_score"><i class="fa-solid fa-check"></i></div>
+          <%} else {%>
+          <div class="check_score"></div>
+          <%}%>   
+          </td>
+          
+          <td>
+            <%if (Score.third[0] == 5){%>
+              <div class="checkbox-wrapper-4">
+                <input type="checkbox" id="morning11" checked class="inp-cbx" value="5" />
+                <label for="morning11" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                </label>
+        
+              </div>
+              <div id="hoverbox_11" class="pop-up-bc-tooltip"></div>
+          <%} else {%>
+          <div class="checkbox-wrapper-4">
+            <input type="checkbox" id="morning11" class="inp-cbx" value="5" />
+            <label for="morning11" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+            </label>
+    
+          </div>
+          <div id="hoverbox_11" class="pop-up-bc-tooltip"></div>
+          <%}%> 
+          </td>
+          <td>
+            <%if (Scorek.third[0] == 5){%>
+          <div class="check_score"><i class="fa-solid fa-check"></i></div>
+          <%} else {%>
+          <div class="check_score"></div>
+          <%}%>           
+          </td>
+          </tr>
+        <tr>
+          <td>
+            <p class="first-column-value">
+              - Được kết nạp Đảng hoặc đạt danh hiệu Đoàn viên ưu tú
+              hoặc đạt giải Nhất, Nhì, Ba trong các hoạt động chính trị,
+              văn hóa, thể thao từ cấp trường trở lên
+            </p>
+          </td>
+          <td>8 điểm
+          </td>
+          <td>
+            <%if (Scorestd.third[0] == 8){%>
+          <div class="check_score"><i class="fa-solid fa-check"></i></div>
+          <%} else {%>
+          <div class="check_score"></div>
+          <%}%>  
+          </td>
+          <!-- tao lam toi day roi -->
+          
+          <td>
+            <%if (Score.third[0] == 8){%>
+              <div class="checkbox-wrapper-4">
+                <input type="checkbox" id="morning12" checked class="inp-cbx" value="8" />
+                <label for="morning12" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                </label>
+        
+              </div>
+              <div id="hoverbox_12" class="pop-up-bc-tooltip"></div>
+          <%} else {%>
+          <div class="checkbox-wrapper-4">
+            <input type="checkbox" id="morning12" class="inp-cbx" value="8" />
+            <label for="morning12" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+            </label>
+    
+          </div>
+          <div id="hoverbox_12" class="pop-up-bc-tooltip"></div>
+          <%}%> 
+          </td>
+
+          <td>
+            <%if (Scorek.third[0] == 8){%>
+          <div class="check_score"><i class="fa-solid fa-check"></i></div>
+          <%} else {%>
+          <div class="check_score"></div>
+          <%}%>  
+          </td>
+
+        </tr>
+        <tr>
+          <td>
+            <p class="first-column-value">
+              b. Tích cực tham gia các hoạt động công ích, tình nguyện,
+              công tác xã hội
+            </p>
+          </td>
+          <td>6 điểm
+          </td>
+          <td>
+            <div class="score_3"><%=Scorestd.third[1]%></div>
+    
+        </td>
+       
+        <td>
+         
+          <div class="selectbox">
+            <div class="select">
+              <select id="mySelect8">
+                <% for (let i=0; i < 7; i++) {%>
+                  <% if (i==Score.third[1]) {%>
+                    <option value="<%= i %>" selected="selected">
+                      <%= i %>
+                    </option>
+                    <% } else { %>
+                      <option value="<%= i %>">
+                        <%= i %>
+                      </option>
+                      <% } %>
+                  <% } %>
+              </select>
+            </div>
+          </div>
+          
+    
+          </td>
+
+          <td>
+            <div class="score_3"><%=Scorek.third[1]%></div>
+          </td>
+
+        </tr>
+      <tr>
+        <td>
+          <p class="first-column-value">
+            c. Tham gia tuyên truyền, phòng chống tội phạm, các tệ nạn
+            xã hội và các hoạt động khác do lớp, khoa, trường, các
+            đoàn thể, địa phương tổ chức
+          </p>
+        </td>
+        <td>6 điểm
+        </td>
+        <td>
+          <div class="score_3"><%=Scorestd.third[2]%></div>
+    
+        </td>
+        
+        <td>
+       
+          <div class="selectbox">
+            <div class="select">
+              <select id="mySelect9">
+                <% for (let i=0; i < 7; i++) {%>
+                  <% if (i==Score.third[2]) {%>
+                    <option value="<%= i %>" selected="selected">
+                      <%= i %>
+                    </option>
+                    <% } else { %>
+                      <option value="<%= i %>">
+                        <%= i %>
+                      </option>
+                      <% } %>
+                  <% } %>
+              </select>
+            </div>
+          </div>
+         
+    
+        </td>
+
+        <td>
+          <div class="score_3"><%=Scorek.third[2]%></div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>
+            Điểm tối đa nội dung 3 là 20 điểm
+          </p>
+        </td>
+        <td>
+        </td>
+        <td>
+          <%=Scorestd.third[0]+Scorestd.third[1]+Scorestd.third[2]%> điểm
+    
+        </td>
+        
+      
+      
+      
+        <td id="total_muc_3k"> <%=Score.third[0]+Score.third[1]+Score.third[2]%> điểm
+        
+        </td>
+
+        <%if (Scorek.first[0] == 'Chưa chấm') {%>
+          <td id="total_muc_3"> <%=  Scorek.first[0]%>
+            <%}else {%>
+          <td id="total_muc_3"> <%=Scorek.third[0]+Scorek.third[1]+Scorek.third[2]%> điểm
+            <%}%>
+              </td>
+      </tr>
+      <tr class="tr-title">
+        <td>
+    
+          <p class="title">4. Đánh giá về ý thức công dân trong quan hệ cộng
+            đồng</p>
+    
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p class="first-column-value">
+            a. Chấp hành và tham gia tuyên truyền các chủ trương của
+            Đảng, chính sách, pháp luật của Nhà nước tại nơi cư trú
+          </p>
+        </td>
+        <td>10 điểm
+        </td>
+        <td>
+          <div class="score_4"><%=Scorestd.fourth[0]%></div>
+    
+        </td>
+        
+        <td>
+         
+          <div class="selectbox">
+            <div class="select">
+              <select id="mySelect10">
+                <% for (let i=0; i < 11; i++) {%>
+                  <% if (i==Score.fourth[0]) {%>
+                    <option value="<%= i %>" selected="selected">
+                      <%= i %>
+                    </option>
+                    <% } else { %>
+                      <option value="<%= i %>">
+                        <%= i %>
+                      </option>
+                      <% } %>
+                  <% } %>
+              </select>
+            </div>
+          </div>
+         
+    
+        </td>
+
+        <td>
+          <div class="score_4"><%=Scorek.fourth[0]%></div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p class="first-column-value">
+            b. Được ghi nhận, biểu dương, khen thưởng về tham gia các
+            hoạt động xã hội
+          </p>
+        </td>
+        <td>5 điểm
+        </td>
+        <td>
+          <div class="score_4"><%=Scorestd.fourth[1]%></div>
+    
+        </td>
+        
+        <td>
+         
+          <div class="selectbox">
+            <div class="select">
+              <select id="mySelect11">
+                <% for (let i=0; i < 6; i++) {%>
+                  <% if (i==Score.fourth[1]) {%>
+                    <option value="<%= i %>" selected="selected">
+                      <%= i %>
+                    </option>
+                    <% } else { %>
+                      <option value="<%= i %>">
+                        <%= i %>
+                      </option>
+                      <% } %>
+                  <% } %>
+              </select>
+            </div>
+          </div>
+       
+    
+        </td>
+
+        <td>
+          <div class="score_4"><%=Scorek.fourth[1]%></div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p class="first-column-value">
+            c. Có tinh thần chia sẻ, giúp đỡ bạn bè, người thân, người
+            có hoàn cảnh khó khăn, hoạn nạn.
+          </p>
+        </td>
+        <td>10 điểm
+        </td>
+        <td>
+          <div class="score_4"><%=Scorestd.fourth[2]%></div>
+    
+        </td>
+        
+        <td>
+        
+          <div class="selectbox">
+            <div class="select">
+              <select id="mySelect12">
+                <% for (let i=0; i < 11; i++) {%>
+                  <% if (i==Score.fourth[2]) {%>
+                    <option value="<%= i %>" selected="selected">
+                      <%= i %>
+                    </option>
+                    <% } else { %>
+                      <option value="<%= i %>">
+                        <%= i %>
+                      </option>
+                      <% } %>
+                  <% } %>
+              </select>
+            </div>
+          </div>
+          
+    
+        </td>
+        <td>
+          <div class="score_4"><%=Scorek.fourth[2]%></div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>
+            Điểm tối đa nội dung 4 là 25 điểm</p>
+        </td>
+        <td>
+        </td>
+        <td id="total_muc_4">
+          <%=Scorestd.fourth[0]+Scorestd.fourth[1]+Scorestd.fourth[2]%> điểm
+        </td>
+        
+         
+        <td id="total_muc_4k"> <%=Score.fourth[0]+Score.fourth[1]+Score.fourth[2]%> điểm
+          
+        </td>
+
+        <%if (Scorek.first[0] == 'Chưa chấm') {%>
+          <td id="total_muc_4"> <%=  Scorek.first[0]%>
+            <%}else {%>
+          <td id="total_muc_4"> <%=Scorek.fourth[0]+Scorek.fourth[1]+Scorek.fourth[2]%> điểm
+            <%}%>
+          </td>
+      </tr>
+      <tr class="tr-title">
+        <td colspan="2">
+    
+          <p class="title" style="font-size: 1.5rem;">5. Đánh giá về ý thức và kết quả tham gia công tác phụ
+            trách lớp, các đoàn thể, tổ chức trong nhà trường hoặc
+            đạt được thành tích đặc biệt trong học tập, rèn luyện
+            của học sinh, sinh viên</p>
+    
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p class="first-column-value">
+            a. Tham gia tích cực vào phong trào của Lớp, Đoàn, Hội
+            sinh viên và các công tác đoàn thể xã hội khác
+          </p>
+        </td>
+        <td>3 điểm
+        </td>
+        <td>
+          <div class="score_5"><%=Scorestd.fifth[0]%></div>
+    
+        </td>
+        
+        <td>
+         
+          <div class="selectbox">
+            <div class="select">
+              <select id="mySelect13">
+                  <% for (let i=0; i < 4; i++) {%>
+                  <% if (i==Score.fifth[0]) {%>
+                    <option value="<%= i %>" selected="selected">
+                      <%= i %>
+                    </option>
+                    <% } else { %>
+                      <option value="<%= i %>">
+                        <%= i %>
+                      </option>
+                      <% } %>
+                  <% } %>
+              </select>
+            </div>
+          </div>
+       
+    
+        </td>
+
+        <td>
+          <div class="score_5"><%=Scorek.fifth[0]%></div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p class="first-column-value">
+            b. Phát huy vai trò và hoàn thành tốt nhiệm vụ người cán
+            bộ Chi đoàn, Lớp, Câu lạc bộ, Đội tự quản
+          </p>
+        </td>
+        <td>3 điểm
+        </td>
+        <td>
+          <div class="score_5"><%=Scorestd.fifth[1]%></div>
+    
+        </td>
+        
+        <td>
+         
+          <div class="selectbox">
+            <div class="select">
+              <select id="mySelect14">
+                <% for (let i=0; i < 4; i++) {%>
+                  <% if (i==Score.fifth[1]) {%>
+                    <option value="<%= i %>" selected="selected">
+                      <%= i %>
+                    </option>
+                    <% } else { %>
+                      <option value="<%= i %>">
+                        <%= i %>
+                      </option>
+                      <% } %>
+                  <% } %>
+              </select>
+            </div>
+          </div>
+          
+    
+        </td>
+        <td>
+          <div class="score_5"><%=Scorek.fifth[1]%></div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p class="first-column-value">
+            c. Đảm nhiệm, đóng góp có hiệu quả cho công tác Đoàn
+            trường, Hội sinh viên, Liên chi đoàn, Đội tự quản, Câu lạc
+            bộ
+          </p>
+        </td>
+        <td>2 điểm
+        </td>
+        <td>
+          <div class="score_5"><%=Scorestd.fifth[2]%></div>
+    
+        </td>
+        
+        <td>
+            
+          <div class="selectbox">
+            <div class="select">
+              <select id="mySelect15">
+                <% for (let i=0; i < 3; i++) {%>
+                  <% if (i==Score.fifth[2]) {%>
+                    <option value="<%= i %>" selected="selected">
+                      <%= i %>
+                    </option>
+                    <% } else { %>
+                      <option value="<%= i %>">
+                        <%= i %>
+                      </option>
+                      <% } %>
+                  <% } %>
+              </select>
+            </div>
+          </div>
+          
+    
+        </td>
+        <td>
+          <div class="score_5"><%=Scorek.fifth[2]%></div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p class="first-column-value">
+            d. Được biểu dương, khen thưởng vì có thành tích đặc biệt
+            trong học tập, rèn luyện và các hoạt động khác
+          </p>
+        </td>
+        <td>2 điểm
+        </td>
+        <td>
+          <div class="score_5"><%=Scorestd.fifth[3]%></div>
+    
+        </td>
+        213y12ywe1h212!@#!@%$#<@>ngoc long da o day
+        <td>
+          <div class="score_5"><%=Score.fifth[3]%></div>
+        </td>
+        <td>
+       
+          <div class="selectbox">
+            <div class="select">
+              <select id="mySelect16">
+                <% for (let i=0; i < 3; i++) {%>
+                  <% if (i==Scorek.fifth[3]) {%>
+                    <option value="<%= i %>" selected="selected">
+                      <%= i %>
+                    </option>
+                    <% } else { %>
+                      <option value="<%= i %>">
+                        <%= i %>
+                      </option>
+                      <% } %>
+                  <% } %>
+              </select>
+            </div>
+          </div>
+         
+    
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p class="first-column-value">- Cấp khoa</p>
+        </td>
+        <td>1 điểm
+        </td>
+        <td>
+        <%if (Scorestd.fifth[3] == 1){%>
+          <div class="check_score"><i class="fa-solid fa-check"></i></div>
+          <%} else {%>
+          <div class="check_score"></div>
+          <%}%>  
+        </td>
+        <td>
+          <%if (Score.fifth[3] == 1){%>
+          <div class="check_score"><i class="fa-solid fa-check"></i></div>
+          <%} else {%>
+          <div class="check_score"></div>
+          <%}%>  
+        </td>
+        <td>
+          <%if (Scorek.fifth[3] == 1){%>
+            <div class="checkbox-wrapper-4">
+              <input type="checkbox" id="morning13" checked class="inp-cbx" value="1" />
+              <label for="morning13" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+              </label>
+      
+            </div>
+            <div id="hoverbox_13" class="pop-up-bc-tooltip"></div>
+          <%} else {%>
+          <div class="checkbox-wrapper-4">
+            <input type="checkbox" id="morning13" class="inp-cbx" value="1" />
+            <label for="morning13" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+            </label>
+    
+          </div>
+          <div id="hoverbox_13" class="pop-up-bc-tooltip"></div>
+        </td>
+        <%}%> 
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p class="first-column-value">- Cấp trường trở lên</p>
+        </td>
+        <td>2 điểm
+        </td>
+        <td>
+          <%if (Scorestd.fifth[3] == 2){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%>    
+        </td>
+        <td>
+          <%if (Score.fifth[3] == 2){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%>      
+        </td>
+        <td>
+          <%if (Scorek.fifth[3] == 2){%>
+            <div class="checkbox-wrapper-4">
+              <input type="checkbox" id="morning14" checked class="inp-cbx" value="2" />
+              <label for="morning14" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+              </label>
+        
+            </div>
+            <div id="hoverbox_14" class="pop-up-bc-tooltip"></div>
+        <%} else {%>
+        <div class="checkbox-wrapper-4">
+          <input type="checkbox" id="morning14" class="inp-cbx" value="2" />
+          <label for="morning14" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+          </label>
+    
         </div>
+        <div id="hoverbox_14" class="pop-up-bc-tooltip"></div>
+        <%}%>  
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>
+            Điểm tối đa nội dung 5 là 10 điểm
+            </>
+        </td>
+        <td>
+        </td>
+        <td id="total_muc_5">
+          <%=Scorestd.fifth[0]+Scorestd.fifth[1]+Scorestd.fifth[2]+Scorestd.fifth[3]%> điểm
+    
+        </td>
+        <%if (Score.first[0] == 'Chưa chấm') {%>
+        <td id="total_muc_5"> <%=  Score.first[0]%>
+          <%}else {%>
+        <td id="total_muc_5"> <%=Score.fifth[0]+Score.fifth[1]+Score.fifth[2]+Score.fifth[3]%> điểm
+          <%}%>
+            </td>
+          
+        <td id="total_muc_5k"><%=Scorek.fifth[0]+Scorek.fifth[1]+Scorek.fifth[2]+Scorek.fifth[3]%> điểm
+          
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>
+            Tổng điểm tối đa: 100 điểm
+          </p>
+        </td>
+        <td>
+    
+        </td>
+        <td id="total_all"><%=Scorestd.total%> điểm
+        </td>
+        <%if (Score.first[0] == 'Chưa chấm') {%>
+        <td id="total_all"><%=Score.total%>
+          <%}else {%>
+        <td id="total_all"><%=Score.total%> điểm
+          <%}%>
+        </td>
+        
+        <td id="total_allk"><%=Scorek.total%> điểm
+          
+        </td>
+      </tr>
+      </tbody>
+            </table>
+            <% } %>
+  <div class="complete_img">
+    
+    <button class="button-35 up-btn save-btn">
+      Lưu
+    </button>
+  </div>
+  <div class="main_img content_top">
+    <h2>HÌNH ẢNH LIÊN QUAN</h2>
+    <div class="main_img_list">
+      <%for (img_info of img){%>
+      <div class="main_img_item">
+        <img src="<%=img_info.fileLink%>" alt="<%=img_info.fileDescription%>">
+        <div class="main_img_item_title"><%=img_info.fileDescription%></div>
+      </div>
+    <%}%>
+    </div>
+  </div>
+  </div>
+  </div>
   </div>
   <%- include(footer) %>
-    <script src="/src/JS/bancansu-manage-grades.js"></script>
+      <script src="/src/JS/sinhvien-view-grades.js"></script>
+      <script src="/src/JS/doankhoa-manage-grades.js"></script>
 </body>
 
 </html>

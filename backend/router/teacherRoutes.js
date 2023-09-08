@@ -2,126 +2,16 @@ const express = require("express");
 const router = express.Router();
 const server = require("../lib/csdl_google_lib");
 const { checkIfUserLoginRoute, sortStudentName } = require("../lib/function_lib");
-const { getNameGlobal } = require('../lib/mogodb_lib');
+const { getNameGlobal } = require("../lib/mogodb_lib");
 const name_global_databases = getNameGlobal();
 function createTeacherRouter(client) {
   // giao vien route
   router.get("/quanlyquyen", checkIfUserLoginRoute, async (req, res) => {
-    return res.render("teacher_QL_sv", {
+    return res.render("teacher-manage-student", {
       header: "global-header",
       footer: "global-footer",
       thongbao: "global-notifications",
     });
-  });
-  // nhap diem danh gia
-  router.get("/nhapdiemdanhgia", checkIfUserLoginRoute, async (req, res) => {
-    try {
-      const user = req.session.user;
-      const mssv = req.query.studentId;
-      const cls_st = req.query.classSt;
-      const schoolYearParam = req.query.schoolYear;
-      const studentTotalScore = await client
-        .db(user.dep)
-        .collection(cls_st + "_std_table")
-        .findOne(
-          {
-            mssv: mssv,
-            school_year: schoolYearParam,
-          },
-          {
-            projection: {
-              _id: 0,
-              first: 1,
-              second: 1,
-              third: 1,
-              fourth: 1,
-              fifth: 1,
-              total: 1,
-              img_ids: 1,
-            },
-          }
-        );
-
-      const stfTotalScore = await client
-        .db(user.dep)
-        .collection(cls_st + "_stf_table")
-        .findOne(
-          {
-            mssv: mssv,
-            school_year: schoolYearParam,
-          },
-          {
-            projection: {
-              _id: 0,
-              first: 1,
-              second: 1,
-              third: 1,
-              fourth: 1,
-              fifth: 1,
-              total: 1,
-              img_ids: 1,
-            },
-          }
-        );
-
-      const depTotalScore = await client
-        .db(user.dep)
-        .collection(cls_st + "_dep_table")
-        .findOne(
-          {
-            mssv: mssv,
-            school_year: schoolYearParam,
-          },
-          {
-            projection: {
-              _id: 0,
-              first: 1,
-              second: 1,
-              third: 1,
-              fourth: 1,
-              fifth: 1,
-              total: 1,
-              limg_ids: 1,
-            },
-          }
-        );
-      nulltable = {
-        fifth: ["Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm"],
-        first: ["Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm"],
-        fourth: ["Chưa chấm", "Chưa chấm", "Chưa chấm"],
-        second: ["Chưa chấm", "Chưa chấm"],
-        third: ["Chưa chấm", "Chưa chấm", "Chưa chấm"],
-        total: "Chưa chấm",
-      };
-      if (!stfTotalScore) {
-        stfTotalScore = nulltable;
-      }
-      if (!depTotalScore) {
-        depTotalScore = nulltable;
-      }
-      let link_img = [];
-
-      if (studentTotalScore) {
-        for (const i of studentTotalScore.img_ids) {
-          link_img.push(await server.getDriveFileLinkAndDescription(i));
-        }
-        return res.render("bancansu-manage-grades", {
-          header: "global-header",
-          thongbao: "global-notifications",
-          footer: "global-footer",
-          Scorestd: studentTotalScore,
-          Score: stfTotalScore,
-          Scorek: depTotalScore,
-          img: link_img,
-        });
-        console.log(depTotalScore)
-      } else {
-        return res.sendStatus(404);
-      }
-    } catch (err) {
-      console.log("SYSTEM | BAN_CAN_SU_NHAP_DIEM_ROUTE | ERROR | ", err);
-      return res.status(500).json({ error: "Lỗi hệ thống" });
-    }
   });
   // danh sach bang diem co van
   router.get("/danhsachbangdiem", checkIfUserLoginRoute, async (req, res) => {

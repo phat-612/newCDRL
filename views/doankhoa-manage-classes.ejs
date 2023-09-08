@@ -51,16 +51,16 @@
                   <tr>
                     <td>
                       <div class="checkbox-wrapper-4">
-                        <input type="checkbox" id="row__<%= numbers %>" class="inp-cbx" value="<%= classes[branchs[i]._id][j] %>" />
+                        <input type="checkbox" id="row__<%= numbers %>" class="inp-cbx normal-cbx" value="<%= classes[branchs[i]._id][j] %> " />
                         <label for="row__<%= numbers %>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                         </label>
                       </div>
                     </td>
-                    <td style="width: 3%;">1</td>
+                    <td style="width: 3%;"><%= numbers + 1 %></td>
                     <td class="cls_name"><%= classes[branchs[i]._id][j] %></td>
                     <td class="b_name" style="width: 20%;"><%= branchs[i].name %></td>
-                    <td style="width: 10%;"><%= dep_name %></td>
-                    <td class="t_name"><%= class_teachers[numbers].last_name + ' ' + class_teachers[numbers].first_name %></td>
+                    <td class="d_name" style="width: 10%;"><%= dep_name %></td>
+                    <td class="t_name" value="<%= class_teachers[numbers]._id %>"><%= class_teachers[numbers].last_name + ' ' + class_teachers[numbers].first_name %></td>
                     <td>
                       <a id="edit__class" href="#">Sửa</a>
                     </td>
@@ -92,7 +92,7 @@
                   <main id="select-main">
                     <div class="select">
                       <label for="select-level" class="input--label">Bộ Môn</label>
-                      <select id="select-level">
+                      <select class="select_branch" id="select-level">
                         <% for (let i = 0; i < branchs.length; i++) {%>
                         <option value="<%= branchs[i]._id %>"><%= branchs[i].name %></option>
                         <% } %>
@@ -104,10 +104,10 @@
                 <div class="selectbox co_van">
                   <main id="select-main">
                     <div class="select">
-                      <label for="select-level" class="input--label">Cố vấn</label>
-                      <select>
+                      <label for="select-level" class="input--label">Cố Vấn</label>
+                      <select class="select_teacher" id="select-level">
                         <% for (let k = 0; k < teachers.length; k++) {%>
-                        <option value="<%= k %>"><%= teachers[k] %></option>
+                        <option value="<%= teachers_id[k] %>"><%= teachers[k] %></option>
                         <% } %>
                       </select>
                     </div>
@@ -145,7 +145,7 @@
                   <main id="select-main">
                     <div class="select">
                       <label for="select-level" class="input--label">Bộ Môn</label>
-                      <select id="select-level">
+                      <select class="select_branch" id="select-level">
                         <% for (let i = 0; i < branchs.length; i++) {%>
                         <option value="<%= branchs[i]._id %>"><%= branchs[i].name %></option>
                         <% } %>
@@ -157,10 +157,10 @@
                 <div class="selectbox co_van">
                   <main id="select-main">
                     <div class="select">
-                      <label for="select-level" class="input--label">Cố vấn</label>
-                      <select>
+                      <label for="select-level" class="input--label">Cố Vấn</label>
+                      <select class="select_teacher" id="select-level">
                         <% for (let k = 0; k < teachers.length; k++) {%>
-                        <option value="<%= k %>"><%= teachers[k] %></option>
+                        <option value="<%= teachers_id[k] %>"><%= teachers[k] %></option>
                         <% } %>
                       </select>
                     </div>

@@ -1759,7 +1759,7 @@ function createAPIRouter(client, wss) {
   });
 
   // api add and edit new class
-  router.post("/api/addOrEditClasses", checkIfUserLoginAPI, async (req, res) => {
+  router.post("/addOrEditClasses", checkIfUserLoginAPI, async (req, res) => {
     try {
       const user = req.session.user;
       const data = req.body; // data = {new_id: KTPM0121, old_id: CNTT0221, branch: KTPM, cvht: 18101911}
@@ -1877,24 +1877,38 @@ function createAPIRouter(client, wss) {
   });
 
   // api delete classes checked
-  router.post("/api/deleteClasses", checkIfUserLoginAPI, async (req, res) => {
+  router.post("/deleteClasses", checkIfUserLoginAPI, async (req, res) => {
     try {
       const user = req.session.user;
-      const data = req.body; // data = {rm_cls: ["18102003" (class_id), ...]}
+      const data = req.body; // data = {rm_cls: ["KTPM0121" (class_id), ...], rm_ts: ["18101911" (teacher_id), ...]}
 
       // must be department to use this api
       if (user.pow[9]) {
         // remove all checked classes in remove branchs líst in user_info and login_info
-        await client
-          .db(name_global_databases)
-          .collection("classes")
-          .deleteMany({
-            _id: { $in: data.rm_cls },
-          });
+        // remove class from teacher's class
+        for (let i = 0; i < data.rm_cls.length; i++) {
+          await client
+            .db(name_global_databases)
+            .collection("classes")
+            .deleteMany({
+              _id: data.rm_cls[i],
+            });
+  
+          await client
+            .db(name_global_databases)
+            .collection("user_info")
+            .updateOne(
+              {
+                _id: data.rm_ts[i],
+              },
+              {
+                $pull: {class: data.rm_cls[i]},
+              }
+            );
+        }
       } else {
         return res.sendStatus(403); // back to home
       }
-
       return res.sendStatus(200);
     } catch (err) {
       console.log("SYSTEM | DELETE_TEACHER | ERROR | ", err);

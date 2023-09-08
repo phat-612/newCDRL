@@ -9,7 +9,7 @@ $(document).on("click", "#edit__class", async function () {
 
   // set default edit info
   // class name
-  $(".subject--input").val(old_id);
+  $(".edit .subject--input").val(old_id);
 
   // branch
   $('.bo_mon #select-level option').each(function () {
@@ -80,4 +80,170 @@ $(document).on("change", ".inp-cbx", async function () {
   } else {
     $(".all-cbx").prop("checked", false);
   }
+});
+
+
+//save button
+$(".save_btn").click(async function () {
+  // check if user is fill all input or not
+  const new_id = $(this).parent().parent().parent().parent().find('.subject--input').val()
+  if (new_id) {
+    // new name, branch, teacher
+    const curr_branchs = $(this).parent().parent().parent().parent().find('.select_branch :selected');
+    const curr_teacher = $(this).parent().parent().parent().parent().find('.select_teacher :selected');
+    
+    console.log(curr_branchs.text(), curr_teacher.text());
+    // disable curr button
+    $(this).prop('disabled', true);
+
+    // find input
+    let found = false// check variable
+    $('.add').each(function () {
+      if ($(this).is(":visible")) { // when add new class only
+        // check does input id exist or not
+        $('.normal-cbx').each(async function () {
+          // check have same id with existed ids
+          if ($(this).val() == new_id) {
+            found = true
+          }
+        })
+      }
+    })
+
+    if (found) {
+      notify('!', 'Tên lớp đã tồn tại!');
+      // able curr button
+      $(this).prop('disabled', false);
+    } else {
+
+      notify('!', 'Đang cập nhật dữ liệu!');
+
+      // request
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          new_id: new_id,
+          old_id: old_id,
+          branch: curr_branchs.val(),
+          cvht: curr_teacher.val()
+        })
+      };
+
+      const response = await fetch('/api/addOrEditClasses', requestOptions);
+      if (response.ok) {
+        if (curr_edit) {
+          // set current edit line to new version
+          curr_edit.find('.inp-cbx').val(new_id)
+          curr_edit.find('.t_name').text(curr_teacher.text());
+          curr_edit.find('.t_name').val(curr_teacher.val());
+          curr_edit.find('.b_name').text(curr_branchs.text());
+
+        } else {
+          let length = $('table tbody tr').length;
+          $('table tbody').append(`
+          <tr>
+            <td>
+              <div class="checkbox-wrapper-4">
+                <input type="checkbox" id="row__${length}" class="inp-cbx normal-cbx" value="${new_id}" />
+                <label for="row__${length}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                </label>
+              </div>
+            </td>
+            <td style="width: 3%;">${length + 1}</td>
+            <td class="cls_name">${new_id}</td>
+            <td class="b_name" style="width: 20%;">${curr_branchs.text()}</td>
+            <td style="width: 10%;">${$('.d_name').first().text()}</td>
+            <td class="t_name" value="${curr_teacher.val()}">${curr_teacher.text()}</td>
+            <td>
+              <a id="edit__class" href="#">Sửa</a>
+            </td>
+          </tr>
+          `)
+        }
+        // able curr button
+        $(this).prop('disabled', false);
+        // disappear curr dialog 
+        $(".modal.add").hide();
+        $(".modal.edit").hide();
+        notify('n', 'Đã hoàn tất cập nhật lớp học.')
+      }
+      else if (response.status == 500) {
+        // Error occurred during upload
+        notify('x', 'Có lỗi xảy ra!');
+        // able curr button
+        $(this).prop('disabled', false);
+        // disappear curr dialog 
+        $(".modal.add").hide();
+        $(".modal.edit").hide();
+      }
+    }
+  } else {
+    notify('!', 'Hãy nhập đầy đủ thông tin!');
+  }
+});
+
+// delete check checkbox row
+$("#delete__class").click(async function () {
+  // disable curr button
+  $(this).prop('disabled', true);
+
+  notify('!', 'Đang xóa dữ liệu!')
+
+  let rm_cls = []
+  let rm_ts = []
+
+  $('table tbody .inp-cbx').each(function () {
+    if (this.checked) {
+      rm_cls.push(this.value);
+      rm_ts.push($(this).parent().parent().parent().find('.t_name').val())
+      console.log($(this).parent().parent().parent().find('.t_name').val()); 
+    }
+  })
+  console.log(rm_cls, rm_ts);
+
+  // // request
+  // if (rm_ts.length > 0) {
+  //   const requestOptions = {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify({
+  //       rm_ts: rm_ts
+  //     })
+  //   };
+
+  //   const response = await fetch('/api/deleteTeachers', requestOptions);
+  //   if (response.ok) {
+  //     $('table tbody .inp-cbx').each(function () {
+  //       if (this.checked) {
+  //         // remove currline
+  //         $(this).parent().parent().parent().remove();
+  //       }
+  //     })
+
+  //     // rewrite all numbers of lines after remove 
+  //     let index = 1;
+  //     $('table tbody .nums').each(function () {
+  //       $(this).text(index);
+  //       index += 1;
+  //     });
+
+  //     // able curr button
+  //     $(this).prop('disabled', false);
+
+  //     notify('n', 'Đã xóa các cố vấn được đánh dấu')
+  //   }
+  //   else if (response.status == 500) {
+  //     // Error occurred during upload
+  //     notify('x', 'Có lỗi xảy ra!');
+  //     // able curr button
+  //     $(this).prop('disabled', false);
+  //   }
+  // } else {
+  //   notify('!', 'Không có cố vấn được đánh dấu');
+  // }
 });

@@ -8,7 +8,6 @@ const studentIdIndex = url.indexOf('studentId=') + 'studentId='.length;
 const ampersandIndex = url.indexOf('&', studentIdIndex);
 const mssv = url.slice(studentIdIndex, ampersandIndex !== -1 ? ampersandIndex : 'aaa');
 
-console.log(mssv);
 // tính điểm ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 function getSelectValue(selectId) {
@@ -212,16 +211,6 @@ selectboxes.forEach((selectbox) => {
 });
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------
-function generateUUID() {
-  // Hàm tạo chuỗi UUID
-  // Tham khảo: https://stackoverflow.com/a/2117523/13347726
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-    var r = (Math.random() * 16) | 0,
-      v = c === 'x' ? r : (r & 0x3) | 0x8;
-    return v.toString(16);
-  });
-}
-
 
 
 async function mark() {
@@ -292,35 +281,3 @@ $(document).on("click", ".save-btn", async function () {
   notify('!', 'Đang upload phiếu điểm...');
   await mark()
 });
-
-
-// điểm
-
-function select_point0() {
-  for (let i = 1; i < 17; i++) {
-    const mySelect = document.getElementById(`mySelect${i}`);
-    mySelect.value = 0
-    if (i >= 3 && i <= 6) {
-      const mybox = document.getElementById(`morning${i}`);
-      if (mybox.checked) {
-        mybox.click();
-      }
-    }
-  }
-
-}
-
-function remarksellect() {
-  const selectboxes = document.querySelectorAll(".selectbox select");
-  selectboxes.forEach((selectbox) => {
-    let event = {
-      target: selectbox
-    };
-    handleSelectChange(event);
-  });
-}
-
-
-function removeNow() {
-  $('.menu .button').removeClass('now');
-}

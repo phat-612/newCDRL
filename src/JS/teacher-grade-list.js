@@ -69,9 +69,18 @@ $(document).on("click", ".auto_mark_btn", async function () {
         $('.auto_mark_btn').text('Chấm bảng điểm đã chọn');
         
         $('table tbody .inp-cbx').each(function(){
-          let score = $(this).parent().parent().parent().find('.set_score_btn').text().trim()
-          if (score && this.checked) {
-            mssv_list.push(this.value);
+          let check = $(this).parent().parent().parent().find('.set_score_btn').text().trim()
+          let name_marker = $('.avatar_wrap').find('p').text().trim()
+          if (check && this.checked) {
+          let score = $(this).parent().parent().parent().find('.zero_score').text().trim()
+          
+            // xoá vàng khè
+            $(this).parent().parent().parent().find('.zero_score').removeClass('new_update')
+            $(this).parent().parent().parent().find('.first_score').addClass('new_update')
+            
+          $(this).parent().parent().parent().find('.first_score').text(score)
+          $(this).parent().parent().parent().find('.marker_name').text(name_marker)
+            
           }
         })
 
@@ -103,7 +112,6 @@ $(document).on("click", ".load_list_btn", async function () {
     const requestOptions = {
       method: 'GET',
     };
-    console.log(`/api/teacher/loadScoresList?year=${year}&cls=${current_class}`);
     const response = await fetch(`/api/teacher/loadScoresList?year=${year}&cls=${current_class}`, requestOptions);
     if (response.ok) {
       const data = await response.json();

@@ -54,7 +54,7 @@ function createDepRouter(client) {
   });
 
   // quan li lop - doan khoa route
-  router.get("/doankhoa/quanlilop", checkIfUserLoginRoute, async (req, res) => {
+  router.get("/quanlilop", checkIfUserLoginRoute, async (req, res) => {
     const user = req.session.user;
 
     // get all branch of department:
@@ -129,7 +129,6 @@ function createDepRouter(client) {
           }, // user is teacher
           {
             projection: {
-              _id: 0,
               first_name: 1,
               last_name: 1,
             },
@@ -449,12 +448,12 @@ function createDepRouter(client) {
           }
         );
       nulltable = {
-        fifth: ["Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm"],
-        first: ["Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm"],
-        fourth: ["Chưa chấm", "Chưa chấm", "Chưa chấm"],
-        second: ["Chưa chấm", "Chưa chấm"],
-        third: ["Chưa chấm", "Chưa chấm", "Chưa chấm"],
-        total: "Chưa chấm",
+        fifth: [0, 0, 0, 0],
+        first: [0, 0, 0, 0, 0],
+        fourth: [0, 0, 0],
+        second: [0, 0],
+        third: [0, 0, 0],
+        total: 0,
       };
       if (!stfTotalScore) {
         stfTotalScore = nulltable;
@@ -462,7 +461,6 @@ function createDepRouter(client) {
       if (!depTotalScore) {
         depTotalScore = nulltable;
       }
-      console.log(depTotalScore);
       let link_img = [];
 
       if (studentTotalScore) {

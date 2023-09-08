@@ -90,7 +90,6 @@ function createStaffRouter(client) {
         if (!depTotalScore) {
           depTotalScore = nulltable;
         }
-        console.log(studentTotalScore,stfTotalScore,depTotalScore)
       let link_img = [];
       if (studentTotalScore) {
         for (const i of studentTotalScore.img_ids) {

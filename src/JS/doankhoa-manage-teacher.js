@@ -57,36 +57,24 @@ $(".exist_btn").click(function () {
 //save button
 $(".save_btn").click(async function () {
   // check if user is fill all input or not
-  if (
-    $(this).parent().parent().parent().find('.name--input').val()
-    && $(this).parent().parent().parent().find('.account--input').val()
-  ) {
+  const new_name = $(this).parent().parent().parent().find('.name--input').val();
+  const acc = $(this).parent().parent().parent().find('.account--input').val();
+  if (new_name && acc) {
     // new name, branch
-    const new_name = $(this).parent().parent().parent().find('.name--input').val();
-    const acc = $(this).parent().parent().parent().find('.account--input').val();
     const curr_branchs = $(this).parent().parent().parent().find('#select-level :selected');
-
-    // check does input id exist is not
-    $('.normal-cbx').each(function () {
-      if ($(this).val() == acc) { // check have same id with existed ids
-        notify('!', 'ID đã tồn tại!');
-        // end function and not request
-        return;
-      }
-    });
 
     // disable curr button
     $(this).prop('disabled', true);
 
     // find input
-    $('.modal').each(function () {
+    let found = false// check variable
+    $('.add').each(function () { // when add new teacher only
       if ($(this).is(":visible")) {
         // get new id
         new_id = $(this).find('.account--input').val();
 
-        let found = false// check variable
         // check does input id exist or not
-        $('.normal-cbx').each(async function (index) {
+        $('.normal-cbx').each(async function () {
           // check have same id with existed ids
           if ($(this).val() == acc) {
             found = true
@@ -97,11 +85,10 @@ $(".save_btn").click(async function () {
 
     if (found) {
       notify('!', 'Tên đăng nhập đã tồn tại!');
+      // able curr button
+      $(this).prop('disabled', false);
 
     } else {
-      // disable curr button
-      $(this).prop('disabled', true);
-
       // find input
       $('.modal').each(function () {
         if ($(this).is(":visible")) {

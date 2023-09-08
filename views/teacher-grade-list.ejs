@@ -118,9 +118,25 @@
                   <span class="dau_sao">*</span>
                   <%}%>
                 </td>
+                <%if(department_scores[i] != '-'){%>
+                  
+                  <td class=" zero_score"><%= student_scores[i] %></td>
+                  <td class="first_score"><%= staff_scores[i] %></td>
+                  <td class="new_update marker_name"><%= staff_name[i] %></td>
+              
+                  <td class="last_score"><%= department_scores[i] %></td>
+              <%}else {%>
+            <%if(staff_scores[i] != '-'){%>
+              <td class="zero_score"><%= student_scores[i] %></td>
+              <td class="new_update first_score"><%= staff_scores[i] %></td>
+              
+              <%}else {%>
                 <td class="new_update zero_score"><%= student_scores[i] %></td>
-                <td class="first_score"><%= staff_scores[i] %></td>
-                <td><%= staff_name[i] %></td>
+              <td class="first_score"><%= staff_scores[i] %></td>
+                
+                <%}%>
+                <%}%>
+                <td class="marker_name"><%= staff_name[i] %></td>
                 <td class="last_score"><%= department_scores[i] %></td>
                 <%if(student_scores[i] != '-' &&  student_scores[i]!= 0){%>
                   <td><a href="/bancansu/nhapdiemdanhgia?schoolYear=<%=global_year%>&studentId=<%=student_list[i]._id%>" class="set_score_btn">Chấm điểm</a></td>
