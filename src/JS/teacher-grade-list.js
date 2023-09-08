@@ -4,11 +4,13 @@ $(document).on("click", ".export_btn", async function () {
   $('.export_btn').prop('disabled', true);
   $('.export_btn').text('Downloading...')
   notify('!', 'Đợi chút đang xuất bảng điểm!');
+  const cls = $(".--class option:selected").text().trim()
+
   try {
     const requestOptions = {
       method: 'GET',
     };
-    const response = await fetch(`/api/exportClassScore?year=${curr_tb_year}`, requestOptions);
+    const response = await fetch(`/api/exportClassScore?year=${curr_tb_year}&cls=${cls}`, requestOptions);
     if (response.ok) {
       // reset export button to clickable
       $('.export_btn').prop('disabled', false);
@@ -66,7 +68,7 @@ $(document).on("click", ".auto_mark_btn", async function () {
       const response = await fetch('/api/autoMark', requestOptions);
       if (response.ok) {
         $('.auto_mark_btn').prop('disabled', false);
-        $('.auto_mark_btn').text('Chấm bảng điểm đã chọn');
+        $('.auto_mark_btn').text('Duyệt bảng điểm đã chọn');
         
         $('table tbody .inp-cbx').each(function(){
           let check = $(this).parent().parent().parent().find('.set_score_btn').text().trim()
@@ -92,7 +94,7 @@ $(document).on("click", ".auto_mark_btn", async function () {
       }
     } else {
       $('.auto_mark_btn').prop('disabled', false);
-      $('.auto_mark_btn').text('Chấm bảng điểm đã chọn');
+      $('.auto_mark_btn').text('Duyệt bảng điểm đã chọn');
       notify('!', 'Không có sinh viên được đánh dấu');
     }
   } catch (error) {
@@ -151,10 +153,10 @@ $(document).on("click", ".load_list_btn", async function () {
         
       } 
       $('.set_score_btn').click(function() {
-        console.log(curr_tb_year,year_available)
         if(year_available===curr_tb_year){
           const studentId = $(this).closest('tr').find('td:nth-child(3)').text();
-          this.href = `/giaovien/nhapdiemdanhgia?schoolYear=${curr_tb_year}&studentId=${studentId}`
+          const lop = $(".selectbox.lop .select select").val();
+          this.href = `/bancansu/nhapdiemdanhgia?schoolYear=${curr_tb_year}&studentId=${studentId}&current_class=${lop}`;
         }
         else{
           notify('!', 'Chưa mở chấm điểm vui lòng chọn năm khác.');
@@ -205,9 +207,10 @@ $(document).on("change", ".inp-cbx", async function () {
 
 // cham diem 
 $('.set_score_btn').click(function() {
-  if(year_available>=curr_tb_year){
+  if(year_available==curr_tb_year){
     const studentId = $(this).closest('tr').find('td:nth-child(3)').text();
-    this.href = `/giaovien/nhapdiemdanhgia?schoolYear=${curr_tb_year}&studentId=${studentId}`
+    const lop = $(".selectbox.lop .select select").val();
+    this.href = `/bancansu/nhapdiemdanhgia?schoolYear=${curr_tb_year}&studentId=${studentId}&current_class=${lop}`;
   }
   else{
     notify('!', 'Chưa mở chấm điểm vui lòng chọn năm khác.');

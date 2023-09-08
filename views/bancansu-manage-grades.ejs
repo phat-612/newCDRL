@@ -2426,7 +2426,8 @@
           <div class="check_score"></div>
           <%}%>  
           </td>
-          <!-- tao lam toi day roi -->
+
+
           
           <td>
             <%if (Score.third[0] == 8){%>
@@ -2457,6 +2458,8 @@
           </td>
 
         </tr>
+
+
         <tr>
           <td>
             <p class="first-column-value">
@@ -2882,17 +2885,15 @@
           <div class="score_5"><%=Scorestd.fifth[3]%></div>
     
         </td>
-        213y12ywe1h212!@#!@%$#<@>ngoc long da o day
-        <td>
-          <div class="score_5"><%=Score.fifth[3]%></div>
-        </td>
+
+       
         <td>
        
           <div class="selectbox">
             <div class="select">
               <select id="mySelect16">
                 <% for (let i=0; i < 3; i++) {%>
-                  <% if (i==Scorek.fifth[3]) {%>
+                  <% if (i==Score.fifth[3]) {%>
                     <option value="<%= i %>" selected="selected">
                       <%= i %>
                     </option>
@@ -2908,7 +2909,12 @@
          
     
         </td>
+        <td>
+          <div class="score_5"><%=Scorek.fifth[3]%></div>
+        </td>
       </tr>
+
+      
       <tr>
         <td>
           <p class="first-column-value">- Cấp khoa</p>
@@ -2930,7 +2936,7 @@
           <%}%>  
         </td>
         <td>
-          <%if (Scorek.fifth[3] == 1){%>
+          <%if (Score.fifth[3] == 1){%>
             <div class="checkbox-wrapper-4">
               <input type="checkbox" id="morning13" checked class="inp-cbx" value="1" />
               <label for="morning13" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
@@ -2949,6 +2955,14 @@
         </td>
         <%}%> 
         </td>
+
+        <td>
+          <%if (Scorek.fifth[3] == 1){%>
+          <div class="check_score"><i class="fa-solid fa-check"></i></div>
+          <%} else {%>
+          <div class="check_score"></div>
+          <%}%>  
+        </td>
       </tr>
       <tr>
         <td>
@@ -2963,15 +2977,9 @@
         <div class="check_score"></div>
         <%}%>    
         </td>
+       
         <td>
           <%if (Score.fifth[3] == 2){%>
-        <div class="check_score"><i class="fa-solid fa-check"></i></div>
-        <%} else {%>
-        <div class="check_score"></div>
-        <%}%>      
-        </td>
-        <td>
-          <%if (Scorek.fifth[3] == 2){%>
             <div class="checkbox-wrapper-4">
               <input type="checkbox" id="morning14" checked class="inp-cbx" value="2" />
               <label for="morning14" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
@@ -2989,6 +2997,16 @@
         <div id="hoverbox_14" class="pop-up-bc-tooltip"></div>
         <%}%>  
         </td>
+        
+        <td>
+          <%if (Scorek.fifth[3] == 2){%>
+        <div class="check_score"><i class="fa-solid fa-check"></i></div>
+        <%} else {%>
+        <div class="check_score"></div>
+        <%}%>      
+        </td>
+
+
       </tr>
       <tr>
         <td>
@@ -3002,16 +3020,19 @@
           <%=Scorestd.fifth[0]+Scorestd.fifth[1]+Scorestd.fifth[2]+Scorestd.fifth[3]%> điểm
     
         </td>
-        <%if (Score.first[0] == 'Chưa chấm') {%>
-        <td id="total_muc_5"> <%=  Score.first[0]%>
-          <%}else {%>
-        <td id="total_muc_5"> <%=Score.fifth[0]+Score.fifth[1]+Score.fifth[2]+Score.fifth[3]%> điểm
-          <%}%>
-            </td>
+        
           
-        <td id="total_muc_5k"><%=Scorek.fifth[0]+Scorek.fifth[1]+Scorek.fifth[2]+Scorek.fifth[3]%> điểm
+        <td id="total_muc_5k"><%=Score.fifth[0]+Score.fifth[1]+Score.fifth[2]+Score.fifth[3]%> điểm
           
         </td>
+
+        <%if (Score.first[0] == 'Chưa chấm') {%>
+          <td id="total_muc_5"> <%=  Score.first[0]%>
+            <%}else {%>
+          <td id="total_muc_5"> <%=Score.fifth[0]+Score.fifth[1]+Score.fifth[2]+Score.fifth[3]%> điểm
+            <%}%>
+              </td>
+
       </tr>
       <tr>
         <td>
@@ -3024,16 +3045,18 @@
         </td>
         <td id="total_all"><%=Scorestd.total%> điểm
         </td>
-        <%if (Score.first[0] == 'Chưa chấm') {%>
-        <td id="total_all"><%=Score.total%>
-          <%}else {%>
-        <td id="total_all"><%=Score.total%> điểm
-          <%}%>
-        </td>
+       
         
-        <td id="total_allk"><%=Scorek.total%> điểm
+        <td id="total_allk"><%=Score.total%> điểm
           
         </td>
+
+        <%if (Scorek.first[0] == 'Chưa chấm') {%>
+          <td id="total_all"><%=Score.total%>
+            <%}else {%>
+          <td id="total_all"><%=Score.total%> điểm
+            <%}%>
+          </td>
       </tr>
       </tbody>
             </table>
@@ -3060,7 +3083,7 @@
   </div>
   <%- include(footer) %>
       <script src="/src/JS/sinhvien-view-grades.js"></script>
-      <script src="/src/JS/doankhoa-manage-grades.js"></script>
+      <script src="/src/JS/bancansu-manage-grades.js"></script>
 </body>
 
 </html>

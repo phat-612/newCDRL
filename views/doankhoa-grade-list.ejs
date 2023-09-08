@@ -120,7 +120,7 @@
         <div class="danh_sach_bang_diem">
           <div class="control">
             <button class="button-35 export_btn">Xuất báo cáo</button>
-            <button class="button-35 auto_mark_btn">Chấm bảng điểm đã chọn</button>
+            <button class="button-35 auto_mark_btn">Duyệt bảng điểm đã chọn</button>
           </div>
           <div class="chu_thich">
             <p><span class="dau_sao">*</span> Không nộp bảng điểm tự chấm</p>
@@ -172,11 +172,11 @@
                   </td>
                   <%if(department_scores[i] != '-'){%>
                   
-                    <td class=" zero_score"><%= student_scores[i] %></td>
+                    <td class="zero_score"><%= student_scores[i] %></td>
                     <td class="first_score"><%= staff_scores[i] %></td>
                     <td class="marker_name"><%= staff_name[i] %></td>
                     <td class="new_update khoa_score"><%= department_scores[i] %></td>
-                    <td>Done</td>
+                    <td><a class="chamdiem">Chấm điểm</a></td>
                 <%}else {%>
               <%if(staff_scores[i] != '-'){%>
                 <td class="zero_score"><%= student_scores[i] %></td>
@@ -190,7 +190,7 @@
                   <td class="marker_name"><%= staff_name[i] %></td>
                   <td class="khoa_score"><%= department_scores[i] %></td>
                   <%if(student_scores[i] != '-' &&  student_scores[i]!= 0){%>
-                    <td><a href="/bancansu/nhapdiemdanhgia?schoolYear=<%=global_year%>&studentId=<%=student_list[i]._id%>" class="set_score_btn">Chấm điểm</a></td>
+                    <td><a  class="chamdiem">Chấm điểm</a></td>
   
                     <%}else {%>
                       <td>-</td>

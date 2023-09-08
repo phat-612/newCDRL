@@ -131,7 +131,7 @@ $(".save_btn").click(async function () {
                 </label>
               </div>
             </td>
-            <td>${length + 1}</td>
+            <td class="nums">${length + 1}</td>
             <td class="t_name">${new_name}</td>
             <td class="b_name">${curr_branchs.text()}</td>
             <td></td>

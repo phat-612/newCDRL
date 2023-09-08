@@ -1,12 +1,8 @@
 
 const url = window.location.href
-console.log(url)
 const lastIndex = url.lastIndexOf('=');
-const cls = url.slice(lastIndex + 1);
+const mssv = url.slice(lastIndex + 1);
 
-const studentIdIndex = url.indexOf('studentId=') + 'studentId='.length;
-const ampersandIndex = url.indexOf('&', studentIdIndex);
-const mssv = url.slice(studentIdIndex, ampersandIndex !== -1 ? ampersandIndex : 'aaa');
 
 // tính điểm ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -248,7 +244,6 @@ async function mark() {
         getSelectValue("mySelect11"),
         getSelectValue("mySelect12"),
       ],
-      class: cls,
       mssv: mssv,
       fifth: [
         getSelectValue("mySelect13"),

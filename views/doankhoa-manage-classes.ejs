@@ -51,16 +51,16 @@
                   <tr>
                     <td>
                       <div class="checkbox-wrapper-4">
-                        <input type="checkbox" id="row__<%= numbers %>" class="inp-cbx normal-cbx" value="<%= classes[branchs[i]._id][j] %> " />
+                        <input type="checkbox" id="row__<%= numbers %>" class="inp-cbx normal-cbx" value="<%= classes[branchs[i]._id][j] %>" />
                         <label for="row__<%= numbers %>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                         </label>
                       </div>
                     </td>
-                    <td style="width: 3%;"><%= numbers + 1 %></td>
+                    <td class="nums" style="width: 3%;"><%= numbers + 1 %></td>
                     <td class="cls_name"><%= classes[branchs[i]._id][j] %></td>
                     <td class="b_name" style="width: 20%;"><%= branchs[i].name %></td>
                     <td class="d_name" style="width: 10%;"><%= dep_name %></td>
-                    <td class="t_name" value="<%= class_teachers[numbers]._id %>"><%= class_teachers[numbers].last_name + ' ' + class_teachers[numbers].first_name %></td>
+                    <td class="t_name" id="<%= class_teachers[numbers]._id %>"><%= class_teachers[numbers].last_name + ' ' + class_teachers[numbers].first_name %></td>
                     <td>
                       <a id="edit__class" href="#">Sửa</a>
                     </td>

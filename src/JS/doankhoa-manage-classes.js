@@ -138,7 +138,7 @@ $(".save_btn").click(async function () {
           // set current edit line to new version
           curr_edit.find('.inp-cbx').val(new_id)
           curr_edit.find('.t_name').text(curr_teacher.text());
-          curr_edit.find('.t_name').val(curr_teacher.val());
+          curr_edit.find('.t_name').attr('id', curr_teacher.val());
           curr_edit.find('.b_name').text(curr_branchs.text());
 
         } else {
@@ -152,11 +152,11 @@ $(".save_btn").click(async function () {
                 </label>
               </div>
             </td>
-            <td style="width: 3%;">${length + 1}</td>
+            <td class="nums" style="width: 3%;">${length + 1}</td>
             <td class="cls_name">${new_id}</td>
             <td class="b_name" style="width: 20%;">${curr_branchs.text()}</td>
             <td style="width: 10%;">${$('.d_name').first().text()}</td>
-            <td class="t_name" value="${curr_teacher.val()}">${curr_teacher.text()}</td>
+            <td class="t_name" id="${curr_teacher.val()}">${curr_teacher.text()}</td>
             <td>
               <a id="edit__class" href="#">Sửa</a>
             </td>
@@ -198,52 +198,52 @@ $("#delete__class").click(async function () {
   $('table tbody .inp-cbx').each(function () {
     if (this.checked) {
       rm_cls.push(this.value);
-      rm_ts.push($(this).parent().parent().parent().find('.t_name').val())
-      console.log($(this).parent().parent().parent().find('.t_name').val()); 
+      console.log($(this).val())
+      rm_ts.push($(this).parent().parent().parent().find('.t_name').attr('id'))
     }
-  })
-  console.log(rm_cls, rm_ts);
+  });
 
-  // // request
-  // if (rm_ts.length > 0) {
-  //   const requestOptions = {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify({
-  //       rm_ts: rm_ts
-  //     })
-  //   };
+  // request
+  if (rm_ts.length > 0) {
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        rm_cls: rm_cls,
+        rm_ts: rm_ts
+      })
+    };
 
-  //   const response = await fetch('/api/deleteTeachers', requestOptions);
-  //   if (response.ok) {
-  //     $('table tbody .inp-cbx').each(function () {
-  //       if (this.checked) {
-  //         // remove currline
-  //         $(this).parent().parent().parent().remove();
-  //       }
-  //     })
+    const response = await fetch('/api/deleteClasses', requestOptions);
+    if (response.ok) {
+      $('table tbody .inp-cbx').each(function () {
+        if (this.checked) {
+          // remove currline
+          $(this).parent().parent().parent().remove();
+        }
+      })
 
-  //     // rewrite all numbers of lines after remove 
-  //     let index = 1;
-  //     $('table tbody .nums').each(function () {
-  //       $(this).text(index);
-  //       index += 1;
-  //     });
+      // rewrite all numbers of lines after remove 
+      let index = 1;
+      $('table tbody .nums').each(function () {
+        $(this).text(index);
+        index += 1;
+      });
 
-  //     // able curr button
-  //     $(this).prop('disabled', false);
+      // able curr button
+      $(this).prop('disabled', false);
 
-  //     notify('n', 'Đã xóa các cố vấn được đánh dấu')
-  //   }
-  //   else if (response.status == 500) {
-  //     // Error occurred during upload
-  //     notify('x', 'Có lỗi xảy ra!');
-  //     // able curr button
-  //     $(this).prop('disabled', false);
-  //   }
-  // } else {
-  //   notify('!', 'Không có cố vấn được đánh dấu');
-  // }
+      notify('n', 'Đã xóa các lớp được đánh dấu')
+    }
+    else if (response.status == 500) {
+      // Error occurred during upload
+      notify('x', 'Có lỗi xảy ra!');
+      // able curr button
+      $(this).prop('disabled', false);
+    }
+  } else {
+    notify('!', 'Không có dữ liệu được đánh dấu');
+  }
 });

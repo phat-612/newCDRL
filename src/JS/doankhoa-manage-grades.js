@@ -122,12 +122,7 @@ const showUploadImg = () => {
     // $(".post-btn").show();
   }
   // else {
-  //   $(".post-btn").hide();
-  // }
-};
-
-function handleCheckboxChange(event) {
-  const checkbox = event.target;
+  //   $(".post-btn").hide();school_year
   if (checkbox.checked) {
     for (const [tier, checkboxTier] of Object.entries(checkbox_list)) {
       if (checkboxTier.includes(checkbox.id)) {

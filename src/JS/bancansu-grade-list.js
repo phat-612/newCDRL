@@ -56,7 +56,7 @@ $(document).on("click", ".auto_mark_btn", async function () {
         .parent()
         .parent()
         .parent()
-        .find(".new_update")
+        .find(".zero_score")
         .text()
         .trim();
       if (score != "0" && score != "-" && score != "" && this.checked) {
@@ -79,7 +79,7 @@ $(document).on("click", ".auto_mark_btn", async function () {
       const response = await fetch("/api/autoMark", requestOptions);
       if (response.ok) {
         $(".auto_mark_btn").prop("disabled", false);
-        $(".auto_mark_btn").text("Chấm bảng điểm đã chọn");
+        $(".auto_mark_btn").text("Duyệt bảng điểm đã chọn");
         notify(
           "n",
           "Đã hoàn tất chấm điểm tự động những sinh viên được đánh dấu!"
@@ -90,7 +90,7 @@ $(document).on("click", ".auto_mark_btn", async function () {
       }
     } else {
       $(".auto_mark_btn").prop("disabled", false);
-      $(".auto_mark_btn").text("Chấm bảng điểm đã chọn");
+      $(".auto_mark_btn").text("Duyệt bảng điểm đã chọn");
       notify("!", "Không có sinh viên được đánh dấu");
     }
   } catch (error) {
