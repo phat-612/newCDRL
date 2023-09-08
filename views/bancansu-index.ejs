@@ -34,7 +34,7 @@
           <div class="submit-mark">
             <div class="content content_top">
               <h2>ĐÁNH GIÁ ĐIỂM CÁ NHÂN</h2>
-              <a href="/nhapdiemdanhgia"><button class="button-35">Nộp bảng điểm</button></a>
+              <a href="/hocsinh/nhapdiemdanhgia"><button class="button-35">Nộp bảng điểm</button></a>
             </div>
           </div>
 
@@ -85,7 +85,7 @@
                           <%=bandiem[i].total%>
                         </td>
                         <%if (bandiem[i].total !='Chưa có điểm' ){%>
-                          <td><a href="/xembangdiem?schoolYear=<%=bandiem[i].year%>" id="HK<%=i+1%>">Xem Bảng Điểm</a>
+                          <td><a href="/hocsinh/xembangdiem?schoolYear=<%=bandiem[i].year%>" id="HK<%=i+1%>">Xem Bảng Điểm</a>
                           </td>
                           <%} else {%>
                             <td><a id="HK<%=i+1%>" style="display: none;">Xem Bảng Điểm</a></td>
