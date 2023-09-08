@@ -8,7 +8,7 @@ $("#mySelect2").change(async function () {
   data.forEach((item) => {
     console.log(item.year);
     const totalResultElement = $(`.total-result[data-year="${item.year}_total"]`);
-    document.querySelector(`td a#${item.year}`).href = `/xembangdiem?schoolYear=${item.year}_${selectedYear}`;
+    document.querySelector(`td a#${item.year}`).href = `/hocsinh/xembangdiem?schoolYear=${item.year}_${selectedYear}`;
     totalResultElement.text(item.total);
   });
 

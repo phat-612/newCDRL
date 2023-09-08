@@ -1,0 +1,47 @@
+/* Ghi chú: --------------------------------------------------------------------------------------------------------------
+Ban all who's name Nguyen Ngoc Long on this server file
+
+ROUTE NẾU KHÔNG CÓ QUYỀN THÌ CHUYỂN HƯỚNG TRANG CHỦ  res.redirect('/');
+API NẾU KHÔNG CÓ QUYỀN THÌ GỬI STATUS 403 res.sendStatus(403);
+
+@dawn1810:
+  phân quyền người dùng:
+    0: nhập điểm và tra cứu điểm bản thân (sinh viên)
+    1: chấm điểm lần 1 (ban cán sự, giáo viên)
+    2: chấp điểm lần 2 || duyệt điểm (khoa)
+    3: quản lý hoạt động (ban cán sự, giáo viên)
+    4: cấp quyền cho học sinh (giáo viên)
+    5: quản lý bộ môn (khoa)
+    6: thiết lập thời hạn chấm điểm (khoa)
+    7: quản lý lớp (khoa)
+    8: quản lý cố vấn (khoa)
+    9: quản lý lớp (khoa)
+    ...
+    
+    role sv [0]
+    role bancansu [0, 1, 3]
+    role gv [ 1, 3, 4]
+    role khoa [2,3,4,5,6,7,8]
+
+  admin: 19112003 | 18102003
+  khoa: 16102003 | 29092006 
+  giáo viên: 10022003 | 21072003
+  học sinh: 000000 | 1
+  ban cán sự 2 quyền: 11110000 | 1
+  ban cán sự 1 quyền chấm điểm: 11110001 | 1
+  ban cán sự 1 quyền hoạt động: 11110002 | 1
+
+  power = {
+    0: true,
+  }
+@RuriMeiko
+  classes (in global database)
+  0: {
+    "_id": "KTPM0121",
+    "dep": "CNTT",
+    "years": {
+      "2021-2022": [1, 2, 3],
+      "2022-2023": [1, 2, 3]
+    }
+  }
+-------------------------------------------------------------------------------------------------------------------------- */
