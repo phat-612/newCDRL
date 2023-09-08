@@ -11,7 +11,7 @@ function createStaffRouter(client) {
       const user = req.session.user;
       const mssv = req.query.studentId;
       const schoolYearParam = req.query.schoolYear;
-      const studentTotalScore = await client
+      let studentTotalScore = await client
         .db(user.dep)
         .collection(user.cls[0] + "_std_table")
         .findOne(
@@ -76,22 +76,22 @@ function createStaffRouter(client) {
             },
           }
         );
-      nulltable = {
-        fifth: ["Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm"],
-        first: ["Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm"],
-        fourth: ["Chưa chấm", "Chưa chấm", "Chưa chấm"],
-        second: ["Chưa chấm", "Chưa chấm"],
-        third: ["Chưa chấm", "Chưa chấm", "Chưa chấm"],
-        total: "Chưa chấm",
-      };
-      if (!stfTotalScore) {
-        stfTotalScore = nulltable;
-      }
-      if (!depTotalScore) {
-        depTotalScore = nulltable;
-      }
+        nulltable = {
+          fifth: ["Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm"],
+          first: ["Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm"],
+          fourth: ["Chưa chấm", "Chưa chấm", "Chưa chấm"],
+          second: ["Chưa chấm", "Chưa chấm"],
+          third: ["Chưa chấm", "Chưa chấm", "Chưa chấm"],
+          total: "Chưa chấm",
+        };
+        if (!stfTotalScore) {
+          stfTotalScore = nulltable;
+        }
+        if (!depTotalScore) {
+          depTotalScore = nulltable;
+        }
+        console.log(studentTotalScore,stfTotalScore,depTotalScore)
       let link_img = [];
-      console.log("diem cua bancansu" + stfTotalScore.total);
       if (studentTotalScore) {
         for (const i of studentTotalScore.img_ids) {
           link_img.push(await server.getDriveFileLinkAndDescription(i));

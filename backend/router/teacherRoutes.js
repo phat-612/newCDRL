@@ -42,7 +42,7 @@ function createTeacherRouter(client) {
           }
         );
 
-      let stfTotalScore = await client
+      const stfTotalScore = await client
         .db(user.dep)
         .collection(cls_st + "_stf_table")
         .findOne(
@@ -64,7 +64,7 @@ function createTeacherRouter(client) {
           }
         );
 
-      let depTotalScore = await client
+      const depTotalScore = await client
         .db(user.dep)
         .collection(cls_st + "_dep_table")
         .findOne(
@@ -114,6 +114,7 @@ function createTeacherRouter(client) {
           Scorek: depTotalScore,
           img: link_img,
         });
+        console.log(depTotalScore)
       } else {
         return res.sendStatus(404);
       }

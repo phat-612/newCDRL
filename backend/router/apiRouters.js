@@ -16,6 +16,7 @@ const {
   randomPassword,
   checkIfUserLoginAPI,
   createId,
+  get_full_id,
 } = require("../lib/function_lib");
 
 if (!fs.existsSync(uploadDirectory)) {

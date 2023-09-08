@@ -1410,18 +1410,26 @@
                   <td>
 
                   </td>
-                  <td id="total_all1">
+                  <td id="total_all_std">
                     <%=Scorestd.total%> điểm
                   </td>
-                  <td id="total_all">0 điểm</td>
                   <%if (Score.first[0]=='Chưa chấm' ) {%>
-                    <td id="total_all1">
+                    <td id="total_all">
                       <%=Score.total%>
                         <%}else {%>
-                    <td id="total_all1">
+                    <td id="total_all">
                       <%=Score.total%> điểm
                         <%}%>
                     </td>
+
+                    <%if (Scorek.first[0]=='Chưa chấm' ) {%>
+                      <td id="total_all_dep">
+                        <%=Scorek.total%>
+                          <%}else {%>
+                      <td id="total_all_dep">
+                        <%=Scorek.total%> điểm
+                          <%}%>
+                      </td>
 
                 </tr>
               </tbody>

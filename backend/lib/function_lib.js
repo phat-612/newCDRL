@@ -176,7 +176,7 @@ async function mark(table, user, mssv, data, marker, cls) {
       .collection(cls + table)
       .updateOne(
         {
-          mssv: user._id,
+          mssv: mssv,
           school_year: school_year.year,
         },
         {
