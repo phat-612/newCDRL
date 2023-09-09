@@ -1,9 +1,12 @@
 
 const url = window.location.href
-const lastIndex = url.lastIndexOf('=');
-const mssv = url.slice(lastIndex + 1);
+var regex = /studentId=([^&]+)/; // Biểu thức chính quy để tìm chuỗi "studentId=" và các ký tự sau đó
+var match = url.match(regex); // Tìm kiếm sự khớp trong chuỗi
+var mssv = match[1]
 
-
+var parts = url.split("=");
+var currentClass = parts.pop();
+console.log(mssv)
 // tính điểm ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 function getSelectValue(selectId) {
@@ -244,6 +247,7 @@ async function mark() {
         getSelectValue("mySelect11"),
         getSelectValue("mySelect12"),
       ],
+      class: currentClass,
       mssv: mssv,
       fifth: [
         getSelectValue("mySelect13"),

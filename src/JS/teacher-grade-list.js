@@ -155,7 +155,9 @@ $(document).on("click", ".load_list_btn", async function () {
       $('.set_score_btn').click(function() {
         if(year_available===curr_tb_year){
           const studentId = $(this).closest('tr').find('td:nth-child(3)').text();
-          const lop = $(".selectbox.lop .select select").val();
+          const lop = $(".selectbox.lop select").val()
+
+          alert(lop)
           this.href = `/bancansu/nhapdiemdanhgia?schoolYear=${curr_tb_year}&studentId=${studentId}&current_class=${lop}`;
         }
         else{
@@ -209,7 +211,9 @@ $(document).on("change", ".inp-cbx", async function () {
 $('.set_score_btn').click(function() {
   if(year_available==curr_tb_year){
     const studentId = $(this).closest('tr').find('td:nth-child(3)').text();
-    const lop = $(".selectbox.lop .select select").val();
+    const lop = $(".selectbox.lop select").val()
+
+    alert(lop)
     this.href = `/bancansu/nhapdiemdanhgia?schoolYear=${curr_tb_year}&studentId=${studentId}&current_class=${lop}`;
   }
   else{

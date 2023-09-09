@@ -121,8 +121,8 @@ $(document).ready(async function () {
 
       if (response.ok) {
         const data = await response.json();
-        const year_available = data.year_available.year;
-        console.log(data.year_available);
+        const year_available = data.years;
+        alert(data.year_available);
 
         // empty old table:
         $("table tbody").empty();
@@ -181,7 +181,11 @@ $(document).ready(async function () {
               .closest("tr")
               .find("td:nth-child(3)")
               .text();
-            this.href = `/bancansu/nhapdiemdanhgia?schoolYear=${curr_tb_year}&studentId=${studentId}`;
+              const className = $(".--class option:selected").text().trim();
+
+              console.log(className)
+
+              this.href = `/doankhoa/nhapdiemdanhgia?schoolYear=${cur_tb_year}&studentId=${studentId}&class=${className}`
           } else {
             notify("!", "chưa mở chấm điểm vui lòng chọn năm khác.");
           }
@@ -236,7 +240,11 @@ $(document).on("change", ".inp-cbx", async function () {
 $(".set_score_btn").click(function () {
   if (year_available >= curr_tb_year) {
     const studentId = $(this).closest("tr").find("td:nth-child(3)").text();
-    this.href = `/bancansu/nhapdiemdanhgia?schoolYear=${curr_tb_year}&studentId=${studentId}`;
+    const className = $(".--class option:selected").text().trim();
+
+    console.log(className)
+
+    this.href = `/doankhoa/nhapdiemdanhgia?schoolYear=${cur_tb_year}&studentId=${studentId}&class=${className}`
   } else {
     notify("!", "chưa mở chấm điểm vui lòng chọn năm khác.");
   }

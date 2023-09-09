@@ -517,7 +517,7 @@ function createAPIRouter(client, wss) {
             }
           );
 
-        await mark("_stf_table", user, data.mssv, data, marker, data.cls[0]);
+        await mark("_stf_table", user, data.mssv, data, marker, data.class);
 
         return res.sendStatus(200);
       } catch (err) {
