@@ -100,9 +100,13 @@ $(document).on("click", ".auto_mark_btn", async function () {
         .text()
         .trim();
       if (score != "-" && score != "" && this.checked) {
-        $(this).parent().parent().parent().find(".khoa_score").text(score);
+        // $(this).parent().parent().parent().find(".khoa_score").text(score);
         mssv_list.push(this.value);
       }
+      // else {
+      //   mssv_list = []
+      //   return false;
+      // }
     });
 
     const requestOptions = {
@@ -122,24 +126,46 @@ $(document).on("click", ".auto_mark_btn", async function () {
       if (response.ok) {
         $(".auto_mark_btn").prop("disabled", false);
         $(".auto_mark_btn").text("Duyệt bảng điểm đã chọn");
+
+        $("table tbody .inp-cbx").each(function () {
+          let check = $(this)
+            .parent()
+            .parent()
+            .parent()
+            .find(".chamdiem")
+            .text()
+            .trim();
+          if (check == "Chấm điểm" && this.checked) {
+            let score = $(this)
+              .parent()
+              .parent()
+              .parent()
+              .find(".first_score")
+              .text()
+              .trim();
+
+            // xoá vàng khè
+            $(this)
+              .parent()
+              .parent()
+              .parent()
+              .find(".first_score")
+              .removeClass("new_update");
+            $(this)
+              .parent()
+              .parent()
+              .parent()
+              .find(".khoa_score")
+              .addClass("new_update");
+
+            $(this).parent().parent().parent().find(".khoa_score").text(score);
+          }
+        });
+
         notify(
           "n",
           "Đã hoàn tất chấm điểm tự động những sinh viên được đánh dấu!"
         );
-        let = [];
-        $("table tbody .inp-cbx").each(function () {
-          let score = $(this)
-            .parent()
-            .parent()
-            .parent()
-            .find(".first_score")
-            .text()
-            .trim();
-          if (score != "0" && score != "-" && score != "" && this.checked) {
-            $(this).parent().parent().parent().find(".khoa_score").text(score);
-            mssv_list.push(this.value);
-          }
-        });
       } else if (response.status == 500) {
         // Error occurred during upload
         notify("x", "Có lỗi xảy ra!");
@@ -147,7 +173,7 @@ $(document).on("click", ".auto_mark_btn", async function () {
     } else {
       $(".auto_mark_btn").prop("disabled", false);
       $(".auto_mark_btn").text("Duyệt bảng điểm đã chọn");
-      notify("!", "Không có sinh viên được đánh dấu");
+      notify("!", "Không có sinh viên được đánh dấu hoặc không đủ điều kiện để chấm điểm.");
     }
   } catch (error) {
     notify("x", "Có lỗi xảy ra!");
@@ -188,17 +214,21 @@ $(document).on("click", ".button-35-a", async function () {
       $("table tbody").empty();
       // load new table:
       for (let i = 0; i < data.student_list.length; i++) {
-        let newdep, newstf, newstd;
+        let newdep = "khoa_score",
+          newstf = "first_score",
+          newstd = "zero_score";
         if (data.department_scores[i] != "-") {
-          newdep = "new_update ";
+          newdep = "new_update khoa_score";
         } else if (data.staff_name[i] != "-") {
-          newstf = "new_update ";
+          newstf = "new_update first_score";
+        } else if (data.student_scores[i] != "-") {
+          newstd = "new_update zero_score";
         } else {
-          newstd = "new_update ";
+          newstd = "zero_score";
         }
-        let std_score_html = `<td class="${newstd}zero_score">${data.student_scores[i]}</td>`;
-        let stf_score_html = `<td class="${newstf}first_score">${data.staff_scores[i]}</td>`;
-        let dep_score_html = `<td class="${newdep}khoa_score">${data.department_scores[i]}</td>`;
+        let std_score_html = `<td class="${newstd}">${data.student_scores[i]}</td>`;
+        let stf_score_html = `<td class="${newstf}">${data.staff_scores[i]}</td>`;
+        let dep_score_html = `<td class="${newdep}">${data.department_scores[i]}</td>`;
 
         if (data.student_scores[i] != "-" && data.student_scores[i] != 0) {
           $("table tbody").append(`
@@ -260,10 +290,9 @@ $(document).on("click", ".button-35-a", async function () {
 
         // add '*' to student have not mark yet
         if (data.student_scores[i] == "-" || data.student_scores[i] == 0) {
-          console.log(data.student_scores[i])
-          console.log(i)
+          console.log(data.student_scores[i]);
+          console.log(i);
           $("table tbody tr")
-           
             .eq(i)
             .find(".std_name_row")
             .append(`<span class="dau_sao">*</span>`);

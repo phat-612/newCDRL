@@ -158,7 +158,43 @@ const showUploadImg = () => {
   }
   total_tier();
 }
+function handleCheckboxChange(event) {
+  const checkbox = event.target;
+  if (checkbox.checked) {
+    for (const [tier, checkboxTier] of Object.entries(checkbox_list)) {
+      if (checkboxTier.includes(checkbox.id)) {
+        if (tier == "tier_2") {
+          document.getElementById("score_05").innerText =
+            checkbox.value + " điểm";
+        }
+        if (select_list[tier]) {
+          const selectElement = document.getElementById(select_list[tier]);
+          selectElement.value = parseInt(checkbox.value);
+        }
 
+        checkboxTier.forEach((checkbox_i) => {
+          if (checkbox.id != checkbox_i) {
+            document.getElementById(checkbox_i).checked = false;
+          }
+        });
+      }
+    }
+  } else {
+    for (const [tier, checkboxTier] of Object.entries(checkbox_list)) {
+      if (checkboxTier.includes(checkbox.id)) {
+        if (select_list[tier]) {
+          const selectElement = document.getElementById(select_list[tier]);
+          selectElement.value = 0;
+          blockUnTick(selectElement);
+        }
+        if (tier == "tier_2") {
+          document.getElementById("score_05").innerText = "0 điểm";
+        }
+      }
+    }
+  }
+  total_tier();
+}
 
 function blockUnTick(selectbox) {
   for (const [tier, selectboxTier] of Object.entries(select_list)) {
@@ -276,3 +312,25 @@ $(document).on("click", ".save-btn", async function () {
   notify('!', 'Đang upload phiếu điểm...');
   await mark()
 });
+function remarksellect() {
+  const selectboxes = document.querySelectorAll(".selectbox select");
+  selectboxes.forEach((selectbox) => {
+    let event = {
+      target: selectbox
+    };
+    handleSelectChange(event);
+  });
+}
+function select_point0() {
+  for (let i = 1; i < 17; i++) {
+    const mySelect = document.getElementById(`mySelect${i}`);
+    mySelect.value = 0
+    if (i >= 3 && i <= 6) {
+      const mybox = document.getElementById(`morning${i}`);
+      if (mybox.checked) {
+        mybox.click();
+      }
+    }
+  }
+
+}

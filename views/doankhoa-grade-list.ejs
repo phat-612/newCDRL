@@ -140,10 +140,10 @@
                 </th>
                 <th style="width: 3%">STT</th>
                 <th style="width: 11%">MSSV</th>
-                <th style="width: 23%">Họ Tên</th>
+                <th >Họ Tên</th>
                 <th style="width: 6%">Điểm Tự Chấm</th>
                 <th style="width: 6%">Tổng điểm Lần 1</th>
-                <th style="width: 10%">Chấm Lần 1</th>
+                <th >Chấm Lần 1</th>
                 <th style="width: 6%">Tổng Điểm Chính Thức</th>
                 <th style="width: 10%"></th>
               </tr>
@@ -183,9 +183,14 @@
                 <td class="new_update first_score"><%= staff_scores[i] %></td>
                 
                 <%}else {%>
+                  <%if(student_scores[i] != '-'){%>
                   <td class="new_update zero_score"><%= student_scores[i] %></td>
-                <td class="first_score"><%= staff_scores[i] %></td>
-                  
+                  <td class="first_score"><%= staff_scores[i] %></td>
+                  <%}else {%>
+                    <td class="zero_score"><%= student_scores[i] %></td>
+                    <td class="first_score"><%= staff_scores[i] %></td>
+                  <%}%>
+
                   <%}%>
                   <td class="marker_name"><%= staff_name[i] %></td>
                   <td class="khoa_score"><%= department_scores[i] %></td>

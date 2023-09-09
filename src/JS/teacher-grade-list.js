@@ -42,30 +42,49 @@ $(document).on("click", ".export_btn", async function () {
 
 $(document).on("click", ".auto_mark_btn", async function () {
   // disabled button until it done start down load
-  $('.auto_mark_btn').prop('disabled', true);
-  $('.auto_mark_btn').text('Loading...');
+  $(".auto_mark_btn").prop("disabled", true);
+  $(".auto_mark_btn").text("Loading...");
   try {
     // get all student was check
-    let mssv_list = []
-    $('table tbody .inp-cbx').each(function(){
-      let score = $(this).parent().parent().parent().find('.set_score_btn').text().trim()
-      if (score && this.checked) {
+    let mssv_list = [];
+    $("table tbody .inp-cbx").each(function () {
+      let cdiem = $(this)
+        .parent()
+        .parent()
+        .parent()
+        .find(".set_score_btn")
+        .text()
+        .trim();
+        let score = $(this)
+        .parent()
+        .parent()
+        .parent()
+        .find(".zero_score")
+        .text()
+        .trim();
+      if (cdiem == 'Chấm điểm' && score != "-" && score != "" && this.checked) {
+        console.log('gaga')
+        // $(this).parent().parent().parent().find(".first_score").text(score);
         mssv_list.push(this.value);
       }
-    })
+      // else {
+      //   mssv_list = []
+      //   return false;
+      // }
+    });
 
     const requestOptions = {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         year: curr_tb_year,
-        std_list: mssv_list
-      })
+        std_list: mssv_list,
+      }),
     };
     if (mssv_list.length > 0) {
-      const response = await fetch('/api/autoMark', requestOptions);
+      const response = await fetch("/api/autoMark", requestOptions);
       if (response.ok) {
         $('.auto_mark_btn').prop('disabled', false);
         $('.auto_mark_btn').text('Duyệt bảng điểm đã chọn');
@@ -73,7 +92,7 @@ $(document).on("click", ".auto_mark_btn", async function () {
         $('table tbody .inp-cbx').each(function(){
           let check = $(this).parent().parent().parent().find('.set_score_btn').text().trim()
           let name_marker = $('.avatar_wrap').find('p').text().trim()
-          if (check && this.checked) {
+          if (check == 'Chấm điểm' && this.checked) {
           let score = $(this).parent().parent().parent().find('.zero_score').text().trim()
           
             // xoá vàng khè
@@ -88,20 +107,19 @@ $(document).on("click", ".auto_mark_btn", async function () {
 
         notify('n', 'Đã hoàn tất chấm điểm tự động những sinh viên được đánh dấu!')
       }
-      else if (response.status == 500) {
+       else if (response.status == 500) {
         // Error occurred during upload
-        notify('x', 'Có lỗi xảy ra!');
+        notify("x", "Có lỗi xảy ra!");
       }
     } else {
-      $('.auto_mark_btn').prop('disabled', false);
-      $('.auto_mark_btn').text('Duyệt bảng điểm đã chọn');
-      notify('!', 'Không có sinh viên được đánh dấu');
+      $(".auto_mark_btn").prop("disabled", false);
+      $(".auto_mark_btn").text("Duyệt bảng điểm đã chọn");
+      notify("!", "Không có sinh viên được đánh dấu hoặc không đủ điều kiện để chấm điểm.");
     }
   } catch (error) {
-    console.log(error);
-    notify('x', 'Có lỗi xảy ra!');
+    notify("x", "Có lỗi xảy ra!");
   }
-});
+ });
 
 $(document).on("click", ".load_list_btn", async function () {
   // disabled button until it done start down load
