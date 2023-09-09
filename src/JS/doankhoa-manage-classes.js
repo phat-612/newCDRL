@@ -140,7 +140,6 @@ $(".save_btn").click(async function () {
           curr_edit.find('.t_name').text(curr_teacher.text());
           curr_edit.find('.t_name').attr('id', curr_teacher.val());
           curr_edit.find('.b_name').text(curr_branchs.text());
-
         } else {
           let length = $('table tbody tr').length;
           $('table tbody').append(`

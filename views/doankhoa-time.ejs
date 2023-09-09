@@ -110,7 +110,7 @@
             <input type="date" class="time start_time" value="<%= school_year.start_day.toISOString().substring(0,10) %>">
           </div>
         </div>
-        <div class="input-container tiem_end">
+        <div class="input-container time_end">
           <label for="">Thời gian kết thúc</label>
           <div class="selectbox">
             <% if (school_year.end_day) {%>
@@ -120,9 +120,14 @@
             <% } %>
           </div>
         </div>
+
         <button class="button-35 up-btn setd_btn">
           Đặt lịch
         </button>
+        
+        <div class="time_set_note">
+          <span>* Lưu ý:</span> để thiết lập không giới hạn cho thời gian kết thúc hãy <a href="#">clear</a> đầu vào "Thời gian kết thúc".
+        </div>
       </div>
       <!-- <button class="button-35 up-btn save-btn">
         Lưu

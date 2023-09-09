@@ -328,7 +328,7 @@ h2{
     position: absolute;
     max-width: 90rem;
     width: 52rem;
-    height: 33rem;
+    height: 40rem;
     transform: translate(-50%, -50%);
     background-color: var(--white-color);
     border-radius: 0.8rem;
@@ -337,4 +337,17 @@ h2{
 
   .checkbox-wrapper-4{
     display: flex;
+  }
+
+  .time_set_note span {
+    font-weight: 700;
+    color: #ea2222;
+  }
+
+  .time_set_note a {
+    color: var(--td-a)
+  }
+
+  .time_set_note a:active {
+    color: rebeccapurple
   }

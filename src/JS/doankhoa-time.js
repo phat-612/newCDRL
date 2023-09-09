@@ -100,3 +100,7 @@ async function SaveButtonClick(event) {
   }
 }
 
+// clear end_time input
+$(document).on("click", ".time_set_note a", () => {
+  $('.end_time').val('')
+})
