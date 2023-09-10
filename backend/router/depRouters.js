@@ -359,6 +359,7 @@ function createDepRouter(client) {
       header: "global-header",
       footer: "global-footer",
       menu: "doankhoa-menu",
+      thongbao: "global-notifications",
     });
   });
 

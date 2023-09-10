@@ -125,120 +125,165 @@ $(document).on("click", ".auto_mark_btn", async function () {
   }
  });
 
-$(document).ready(async function () {
-  async function loadScoresList() {
-    $(".load_list_btn").prop("disabled", true);
-    $(".load_list_btn").text("Loading...");
-    notify("!", "Đợi chút đang tải bảng điểm!");
-    try {
-      const year =
-        "HK" +
-        $(".hoc_ky select option:selected").text() +
-        "_" +
-        $(".nien_khoa select option:selected").text();
+ $(document).on("click", ".load_list_btn", async function () {
+  // disabled button until it done start down load
+  $('.load_list_btn').prop('disabled', true);
+  $('.load_list_btn').text('Loading...')
+  notify('!', 'Đợi chút đang tải bảng điểm!');
+  try {
+    const year = "HK" + $(".hoc_ky select option:selected").text() + "_" + $(".nien_khoa select option:selected").text();
+    const requestOptions = {
+      method: 'GET',
+    };
+    const response = await fetch(`/api/loadScoresList?year=${year}`, requestOptions);
+    if (response.ok) {
+      const data = await response.json();
+      
+      const year_available=data.year_available.year
+      console.log(data.year_available);
+      console.log(year);
 
-      const requestOptions = {
-        method: "GET",
-      };
+      // empty old table:
+      $('table tbody').empty();
+      // load new table:
+      for (let i = 0; i < data.student_list.length; i++) {
+        let newdep = "khoa_score",
+          newstf = "first_score",
+          newstd = "zero_score";
+        if (data.department_scores[i] != "-") {
+          newdep = "new_update khoa_score";
+        } else if (data.staff_name[i] != "-") {
+          newstf = "new_update first_score";
+        } else if (data.student_scores[i] != "-") {
+          newstd = "new_update zero_score";
+        } else {
+          newstd = "zero_score";
+        }
+        let std_score_html = `<td class="${newstd}">${data.student_scores[i]}</td>`;
+        let stf_score_html = `<td class="${newstf}">${data.staff_scores[i]}</td>`;
+        let dep_score_html = `<td class="${newdep}">${data.department_scores[i]}</td>`;
 
-      const response = await fetch(
-        `/api/loadScoresList?year=${year}`,
-        requestOptions
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        const year_available = data.years;
-        alert(data.year_available);
-
-        // empty old table:
-        $("table tbody").empty();
-        // load new table:
-        for (let i = 0; i < data.student_list.length; i++) {
-          $("table tbody").append(`
+        if (data.student_scores[i] != "-" && data.student_scores[i] != 0) {
+          if (data.department_scores[i] != "-") {
+            $("table tbody").append(`
+          <tr>
+            <td>
+              <div class="checkbox-wrapper-4">
+                <input type="checkbox" id="row${i + 1}" class="inp-cbx" value="${data.student_list[i]._id
+              }" />
+                <label for="row${i + 1
+              }" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                </label>
+              </div>
+            </td>
+            <td>${i + 1}</td>
+            <td>${data.student_list[i]._id}</td>
+            <td class='std_name_row'>${data.student_list[i].last_name +
+              " " +
+              data.student_list[i].first_name
+              }</td>
+            ${std_score_html}
+            ${stf_score_html}
+            <td>${data.staff_name[i]}</td>
+            ${dep_score_html}
+            <td><a href="/hocsinh/xembangdiem?schoolYear=${curr_tb_year}&mssv=${data.student_list[i]._id}">Xem điểm</a></td>
+          </tr>
+          `);
+          } else {
+            $("table tbody").append(`
         <tr>
           <td>
             <div class="checkbox-wrapper-4">
               <input type="checkbox" id="row${i + 1}" class="inp-cbx" value="${data.student_list[i]._id
-            }" />
+              }" />
               <label for="row${i + 1
-            }" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+              }" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
               </label>
             </div>
           </td>
           <td>${i + 1}</td>
           <td>${data.student_list[i]._id}</td>
           <td class='std_name_row'>${data.student_list[i].last_name +
-            " " +
-            data.student_list[i].first_name
-            }</td>
-          <td class="new_update">${data.student_scores[i]}</td>
-          <td class="first_score">${data.staff_scores[i]}</td>
+              " " +
+              data.student_list[i].first_name
+              }</td>
+          ${std_score_html}
+          ${stf_score_html}
           <td>${data.staff_name[i]}</td>
-          <td>${data.department_scores[i]}</td>
-          <td><a class="chamdiem">Chấm điểm</a></td>
+          ${dep_score_html}
+          <td><a class="set_score_btn">Chấm điểm</a></td>
         </tr>
         `);
-
-          // add '*' to student have not mark yet
-          if (data.student_scores[i] == "-" || data.student_scores[i] == 0) {
-            $("table tbody")
-              .children()
-              .eq(i)
-              .find(".std_name_row")
-              .append(`<span class="dau_sao">*</span>`);
           }
+        } 
+        else {
+          $("table tbody").append(`
+        <tr>
+          <td>
+            <div class="checkbox-wrapper-4">
+              <input type="checkbox" id="row${i + 1}" class="inp-cbx" value="${
+            data.student_list[i]._id
+          }" />
+              <label for="row${
+                i + 1
+              }" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+              </label>
+            </div>
+          </td>
+          <td>${i + 1}</td>
+          <td>${data.student_list[i]._id}</td>
+          <td class='std_name_row'>${
+            data.student_list[i].last_name +
+            " " +
+            data.student_list[i].first_name
+          }</td>
+          ${std_score_html}
+          ${stf_score_html}
+          <td>${data.staff_name[i]}</td>
+          ${dep_score_html}
+          <td>-</td>
+        </tr>
+        `);
         }
 
-        // an nut cham diem cho ai chua cham diem 
-        $("table tbody tr").each(function () {
-          const diemTuCham = $(this).find(".new_update").text();
-          const diemLan1 = $(this).find(".first_score").text();
-          const diemChinhThuc = $(this).find(".total_score").text();
-
-          if (diemTuCham === "-" || diemLan1 === "-" || diemChinhThuc === "-") {
-            $(this).find(".chamdiem").hide();
-          }
-        });
-
-
-        $(".chamdiem").click(function () {
-          if (year_available == curr_tb_year) {
-            const studentId = $(this)
-              .closest("tr")
-              .find("td:nth-child(3)")
-              .text();
-              const className = $(".--class option:selected").text().trim();
-
-              console.log(className)
-
-              this.href = `/doankhoa/nhapdiemdanhgia?schoolYear=${cur_tb_year}&studentId=${studentId}&class=${className}`
-          } else {
-            notify("!", "chưa mở chấm điểm vui lòng chọn năm khác.");
-          }
-        });
-
-        // update current table school year
-        curr_tb_year = year;
-
-        // reset export button to clickable
-        $(".load_list_btn").prop("disabled", false);
-        $(".load_list_btn").text("Chọn");
-        notify("n", "Đã hoàn tất tải bảng điểm.");
-      } else if (response.status == 500) {
-        // Error occurred during upload
-        notify("x", "Có lỗi xảy ra!");
+        // add '*' to student have not mark yet
+        if (data.student_scores[i] == "-" || data.student_scores[i] == 0) {
+          console.log(data.student_scores[i]);
+          console.log(i);
+          $("table tbody tr")
+            .eq(i)
+            .find(".std_name_row")
+            .append(`<span class="dau_sao">*</span>`);
+        }
       }
-    } catch (error) {
-      console.log(error);
-      notify("x", "Có lỗi xảy ra!");
+      $('.set_score_btn').click(function() {
+        if(year_available===curr_tb_year){
+          const studentId = $(this).closest('tr').find('td:nth-child(3)').text();
+          const lop = $(".selectbox.lop select").val()
+
+          alert(lop)
+          this.href = `/bancansu/nhapdiemdanhgia?schoolYear=${curr_tb_year}&studentId=${studentId}&current_class=${lop}`;
+        }
+        else{
+          notify('!', 'Chưa mở chấm điểm vui lòng chọn năm khác.');
+        }
+      });
+      // update current table school year
+      curr_tb_year = year;
+
+      // reset export button to clickable
+      $('.load_list_btn').prop('disabled', false);
+      $('.load_list_btn').text('Chọn')
+      notify('n', 'Đã hoàn tất tải bảng điểm.');
     }
+    else if (response.status == 500) {
+      // Error occurred during upload
+      notify('x', 'Có lỗi xảy ra!');
+    }
+  } catch (error) {
+    console.log(error);
+    notify('x', 'Có lỗi xảy ra!');
   }
-
-
-  $(".hoc_ky select, .nien_khoa select").change(async function () {
-    await loadScoresList();
-  });
 });
 // all checkbox set (if all-cbx tick all checkboxs will tick otherwise untick all)
 $(document).on("change", ".all-cbx", async function () {

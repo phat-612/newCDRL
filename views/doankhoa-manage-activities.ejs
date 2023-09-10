@@ -12,7 +12,7 @@
 <body>
   <div class="main">
     <%- include(header) %>
-
+    <%- include(thongbao) %>
       <div class="container">
         <%- include(menu) %>
 
@@ -71,7 +71,7 @@
                   </div>
                 </div>
               </div>
-              <button class="button-35 button-35-a">Chọn</button>
+              <button class="button-35 button-35-a load_btn">Chọn</button>
 
             </div>
 
@@ -85,9 +85,6 @@
                 <thead>
                   <tr>
                     <th style="width: 4%">
-                      <!-- set id của input == for của label -->
-                      <!-- thêm class "new_update" cho td có cập nhật điểm mới chưa được chấm -->
-                      <!-- <span class="dau_sao">*</span> đứng phía sau tên (ai không tự đánh giá) -->
                       <div class="checkbox-wrapper-4">
                         <input type="checkbox" id="row__all" class="inp-cbx" value="2" />
                         <label for="row__all" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
@@ -110,32 +107,6 @@
                     </td>
                     <td>1</td>
                     <td>Hoạt động 1</td>
-                    <td>Cấp khoa</td>
-                    <td><a href="/doankhoa/quanlihoatdong/danhgiahoatdong">Chi tiết</a></td>
-                    <td><a class="more_list" href="#">Chỉnh sửa</a></td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="checkbox-wrapper-4">
-                        <input type="checkbox" id="row__0__1" class="inp-cbx" value="2" />
-                        <label for="row__0__1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                        </label>
-                    </td>
-                    <td>1</td>
-                    <td>Hoạt động 2</td>
-                    <td>Cấp khoa</td>
-                    <td><a href="/doankhoa/quanlihoatdong/danhgiahoatdong">Chi tiết</a></td>
-                    <td><a class="more_list" href="#">Chỉnh sửa</a></td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="checkbox-wrapper-4">
-                        <input type="checkbox" id="row__1__1" class="inp-cbx" value="2" />
-                        <label for="row__1__1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                        </label>
-                    </td>
-                    <td>1</td>
-                    <td>Hoạt động 3</td>
                     <td>Cấp khoa</td>
                     <td><a href="/doankhoa/quanlihoatdong/danhgiahoatdong">Chi tiết</a></td>
                     <td><a class="more_list" href="#">Chỉnh sửa</a></td>
@@ -211,7 +182,7 @@
           </div>
       </div>
   </div>
-
+  <%- include(footer) %>
 </body>
 <div class="modal edit">
   <div class="modal_wrap edit">
@@ -257,7 +228,7 @@
       </div>
     </div>
     <div class="close_modal">
-      <i class="fa-brands fa-x-twitter"></i>
+      <i class="fa-solid fa-xmark"></i>
 
     </div>
   </div>
@@ -306,7 +277,7 @@
       </div>
     </div>
     <div class="close_modal">
-      <i class="fa-brands fa-x-twitter"></i>
+      <i class="fa-solid fa-xmark"></i>
 
     </div>
   </div>

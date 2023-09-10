@@ -124,7 +124,7 @@
                   <td class="first_score"><%= staff_scores[i] %></td>
                   <td class="marker_name"><%= staff_name[i] %></td>
                   <td class="new_update last_score"><%= department_scores[i] %></td>
-                  <td>Done</td>
+                  <td><a href="/hocsinh/xembangdiem?schoolYear=<%=global_year%>&mssv=<%=student_list[i]._id%>">Xem điểm</a></td>
               <%}else {%>
             <%if(staff_scores[i] != '-'){%>
               <td class="zero_score"><%= student_scores[i] %></td>

@@ -29,12 +29,16 @@ html {
   --mauvang-ne: rgb(251, 251, 138);
   /* modal */
   --modal-color: rgba(233, 233, 233, .6);
+  --btn-delete: #f0f0f0;
+  --no-img: #d4d1d1;
+  --modal_img_btn : #aeaeae;
   /* input */
   --input-hover: #d9d9d982;
   --input-placeholder: #767676;
   /* table border */
   --table-border: #aeaeae;
   --select-bg: #ffffff00;
+
   --red-color: red;
 
   /* OTP */
@@ -54,6 +58,7 @@ body {
 input{
   color: var(--black-color);
 }
+
 /* :root{
   var
 } */
@@ -313,6 +318,9 @@ input{
 td .select select {
   box-shadow: none !important;
 }
+td .select select option{
+  background-color: var(--white-color);
+}
 
 .select select {
   color: var(--black-color);
@@ -330,6 +338,12 @@ td .select select {
   cursor: pointer;
   box-shadow: transparent 0 0 0 0.3rem, #797272 0 1px 3px 0px;
 
+}
+.modal .select select option{
+  background-color: var(--white-color) !important;
+}
+.modal .select select{
+  background: inherit !important;
 }
 
 .select {
@@ -485,13 +499,14 @@ textarea{
 
 /*------ Settings ------*/
 .theme_btn {
-  transform: translateX(-20px);
+  transform: translateX(-50px);
+  position: absolute;
+  right: 0;
   --color: #38329b;
   --size: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
   cursor: pointer;
   font-size: var(--size);
   user-select: none;

@@ -58,7 +58,7 @@ async function checkIfUserLoginRoute(req, res, next) {
     // Cookie không tồn tại, chặn truy cập
     return res.redirect("/login");
   } else {
-    const hslink = ["/hocsinh/nhapdiemdanhgia", "/hocsinh/xembangdiem"];
+    const hslink = ["/hocsinh/nhapdiemdanhgia"];
     const gvlink = [
       "/giaovien/quanlyquyen",
       "/giaovien/nhapdiemdanhgia",

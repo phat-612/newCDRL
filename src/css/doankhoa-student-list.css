@@ -180,3 +180,6 @@ tr td:nth-child(4) {
 .js_md_cancel {
   right: 18rem !important;
 }
+.js_md_add {
+  float: right;
+}

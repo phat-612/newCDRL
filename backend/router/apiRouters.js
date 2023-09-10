@@ -894,9 +894,7 @@ function createAPIRouter(client, wss) {
         let scores = [];
 
         if (student_list.length !== 0) {
-
           for (let i = 0; i < student_list.length; i++) {
-
             // [stt, mssv. ho, ten, lop,
             // 1.0, 1.1, 1.2, 1.3, 1.4,
             // 2.0, 2.1,
@@ -1007,12 +1005,7 @@ function createAPIRouter(client, wss) {
         const data = req.query;
         //data = {year: "HK1_2022-2023", cls: "1"}
         const school_year = data.year;
-        let cls = data.cls;
-        // check for post data.cls if class define this mean they choose class so that must
-        if (!cls) {
-          cls = 0;
-        }
-
+        console.log(school_year);
         const year_available = await client
           .db(name_global_databases)
           .collection("school_year")
@@ -1033,7 +1026,7 @@ function createAPIRouter(client, wss) {
             .db(name_global_databases)
             .collection("user_info")
             .find(
-              { class: user.cls[cls], "power.0": { $exists: true } },
+              { class: user.cls[0], "power.0": { $exists: true } },
               { projection: { first_name: 1, last_name: 1 } }
             )
             .toArray()
@@ -1048,10 +1041,12 @@ function createAPIRouter(client, wss) {
           department_scores: [],
           year_available: year_available,
         };
+        // console.log(student_list);
+        // console.log(user.cls[0]);
         for (student of student_list) {
           const curr_student_score = await client
-            .db(cls)
-            .collection(user.cls[parseInt(cls)] + "_std_table")
+            .db(user.dep)
+            .collection(user.cls[0] + "_std_table")
             .findOne(
               {
                 mssv: student._id,
@@ -1064,9 +1059,10 @@ function createAPIRouter(client, wss) {
                 },
               }
             );
+          console.log("khoa" + user.dep);
           const curr_staff_score = await client
-            .db(cls)
-            .collection(user.cls[parseInt(cls)] + "_stf_table")
+            .db(user.dep)
+            .collection(user.cls[0] + "_stf_table")
             .findOne(
               {
                 mssv: student._id,
@@ -1081,8 +1077,8 @@ function createAPIRouter(client, wss) {
               }
             );
           const curr_departmentt_score = await client
-            .db(cls)
-            .collection(user.cls[parseInt(cls)] + "_dep_table")
+            .db(user.dep)
+            .collection(user.cls[0] + "_dep_table")
             .findOne(
               {
                 mssv: student._id,
@@ -1354,7 +1350,6 @@ function createAPIRouter(client, wss) {
               },
             }
           );
-     
 
         // check if table is exist or not
         // update or add new table copy from std_table to staff_table
@@ -1754,22 +1749,29 @@ function createAPIRouter(client, wss) {
     try {
       const user = req.session.user;
       if (user.pow[3]) {
+      
         const data = req.body;
         if (data.cap === "khoa") {
+          
           await client.db(user.dep).collection("activities").insertOne({
             activities_name: data.activities_name,
             activities_content: data.activities_content,
           });
+          
         } else if (data.cap == "lop") {
+          
           await client.db(user.dep).collection("activities_class").insertOne({
             activities_name: data.activities_name,
             activities_content: data.activities_content,
             class: data.class,
           });
+          
         }
+        return res.status(200).json({ message: 'Success' });
       } else {
         return res.sendStatus(403);
       }
+      return res.status(200).json({ message: 'Success' });
     } catch (err) {
       console.log("SYSTEM | ADD_ACTIVITIES | ERROR | ", err);
       return res.sendStatus(500);
@@ -2025,6 +2027,50 @@ function createAPIRouter(client, wss) {
     }
   });
 
+  // api set activities -------------------------------------------------------------------------------------------------------------------------------
+router.post("/load_Activities_list", checkIfUserLoginAPI, async (req, res) => {
+  try {
+    const user = req.session.user;
+    const data = req.body;
+    if (user.pow[3]) {
+    
+      const data = req.body;
+      const khoa_activities = await client
+          .db(user.dep)
+          .collection("activities")
+          .findOne(
+            {},
+            {
+              projection: {
+                _id: 0,
+                activities_name:1,
+              },
+            }
+          );
+        const activities_class = await client
+          .db(user.dep)
+          .collection("activities_class")
+          .findOne(
+            {},
+            {
+              projection: {
+                _id: 0,
+                activities_name:1,
+              },
+            }
+          );
+          console.log(activities_class,khoa_activities);
+      return res.status(200).json({ message: 'Success' });
+    } else {
+      return res.sendStatus(403);
+    }
+    return res.status(200).json({ message: 'Success' });
+  } catch (err) {
+    console.log("SYSTEM | ADD_ACTIVITIES | ERROR | ", err);
+    return res.sendStatus(500);
+  }
+});
+
   // api delete classes checked
   router.post("/deleteClasses", checkIfUserLoginAPI, async (req, res) => {
     try {
@@ -2067,4 +2113,6 @@ function createAPIRouter(client, wss) {
 
   return router;
 }
+
+
 module.exports = createAPIRouter;

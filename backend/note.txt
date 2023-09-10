@@ -26,7 +26,7 @@ API NẾU KHÔNG CÓ QUYỀN THÌ GỬI STATUS 403 res.sendStatus(403);
   admin: 19112003 | 18102003
   khoa: 16102003 | 29092006 
   giáo viên: 10022003 | 21072003
-  học sinh: 000000 | 1
+  giáo viên: 000000 | 1
   ban cán sự 2 quyền: 11110000 | 1
   ban cán sự 1 quyền chấm điểm: 11110001 | 1
   ban cán sự 1 quyền hoạt động: 11110002 | 1

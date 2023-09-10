@@ -43,7 +43,9 @@ function setLight() {
   rootStyle.setProperty("--secoColor", "#555555");
   rootStyle.setProperty("--modal-color", "rgb(233 233 233 / 60%)");
   rootStyle.setProperty("--input-hover", "#d9d9d982");
-
+  rootStyle.setProperty("--btn-delete", "#f0f0f0");
+  rootStyle.setProperty("--no-img", "#d4d1d1"); 
+  rootStyle.setProperty("--modal_img_btn", "#aeaeae"); 
   // rootStyle.setProperty("--checkbox-active", "rgb(143, 213, 229)");
   // rootStyle.setProperty("--tr-hover", "rgb(247 234 255)");
   // rootStyle.setProperty("--table-header", "rgb(206, 206, 206)");
@@ -85,8 +87,9 @@ function setDark() {
     rootStyle.setProperty("--secoColor", "#70685c");
   rootStyle.setProperty("--modal-color", "rgb(12 12 12 / 60%)");
   rootStyle.setProperty("--input-hover", "#4d484882");
-    
-    
+  rootStyle.setProperty("--btn-delete", "#50575b");
+  rootStyle.setProperty("--no-img", "#313537"); 
+  rootStyle.setProperty("--modal_img_btn", "#464c4f"); 
 
   // rootStyle.setProperty("--checkbox-active", "rgb(143, 213, 229)");
   // rootStyle.setProperty("--tr-hover", "rgb(247 234 255)");

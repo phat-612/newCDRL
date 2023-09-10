@@ -201,6 +201,7 @@ td .title{
   color: var(#5c5c5c);
   border-radius: 0.8rem;
   transition: background 0.3s ease-in-out;
+  background-color: var(--btn-delete);
 }
 
 .complete_img {
@@ -210,7 +211,7 @@ td .title{
 }
 
 .drop_img:hover {
-  background: #9e9e9e;
+  background: var(--no-img);
   color: white;
 }
 
@@ -226,6 +227,7 @@ td .title{
 
 .modal_wrap {
   border-radius: 0.8rem;
+  background-color: var(--white-color);
 }
 
 .modal_img {
@@ -237,7 +239,7 @@ td .title{
 .no-img {
   text-align: center;
   font-size: 2rem;
-  background-color: #d4d1d1;
+  background-color: var(--no-img);
 }
 
 .modal_wrap_img {
@@ -280,7 +282,7 @@ textarea::placeholder {
 }
 
 .modal_img_btn {
-  background-color: var(--table-border);
+  background-color: var(--modal_img_btn);
   height: 16%;
   display: flex;
   justify-content: center;
