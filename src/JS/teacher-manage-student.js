@@ -225,6 +225,8 @@ $(document).ready(() => {
     console.log(inpCd.prop("checked"));
     console.log(inpLbhd.prop("checked"));
     try {
+      let updateStudent = true;
+      
       let postData = JSON.stringify({
         mssv: inpMssv.val(),
         ho: inpHo.val(),
@@ -233,7 +235,8 @@ $(document).ready(() => {
         dangvien: inpDv.prop("checked"),
         chamdiem: inpCd.prop("checked"),
         lbhd: inpLbhd.prop("checked"),
-        cls: cls,
+        cls,
+        updateStudent
       });
       const requestOptions = {
         method: "POST",
@@ -286,16 +289,16 @@ $(".btn_upload").on("click", async () => {
       if (response.ok) {
         loadStudents(cls);
         notify("n", "Thêm sinh viên thành công");
-        const blobUrl = URL.createObjectURL(await response.blob());
+        // const blobUrl = URL.createObjectURL(await response.blob());
         // Tạo một thẻ <a> ẩn để tải xuống và nhấn vào nó
-        const downloadLink = document.createElement("a");
-        downloadLink.href = blobUrl;
-        downloadLink.download = "Danh_sach_sinh_vien.xlsx"; // Đặt tên cho tệp tải xuống
-        downloadLink.style.display = "none";
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
+        // const downloadLink = document.createElement("a");
+        // downloadLink.href = blobUrl;
+        // downloadLink.download = "Danh_sach_sinh_vien.xlsx"; // Đặt tên cho tệp tải xuống
+        // downloadLink.style.display = "none";
+        // document.body.appendChild(downloadLink);
+        // downloadLink.click();
         // Giải phóng URL tạm thời sau khi tải xuống hoàn thành
-        URL.revokeObjectURL(blobUrl);
+        // URL.revokeObjectURL(blobUrl);
       } else {
         notify("!", "Thêm sinh viên thất bại ");
       }

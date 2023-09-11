@@ -468,7 +468,7 @@ async function mark(img_ids) {
 
 // Save table infomation --------------------------------------------------------------------------------------------------------------------------------------------------
 $(document).on("click", ".save-btn", async function () {
-  notify("!", "Đang upload phiếu điểm...");
+  notify("!", "Đang upload phiếu điểm... (Vui lòng không thoát khỏi trang lúc này!)");
   uploadImage();
 });
 

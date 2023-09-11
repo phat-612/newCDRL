@@ -160,6 +160,7 @@ $(document).ready(() => {
   }
   $('.js_lop').on('change', async (event) => {
     cls = event.target.value;
+    $("#row0")[0].checked = false;
     loadStudents(dataStudents[cls])
   })
   $("#add-student").click(function () {
@@ -298,37 +299,42 @@ $(document).ready(() => {
   });
   // up file
   $(".btn_upload").on("click", async () => {
-    if (selectedFile) {
-      const formData = new FormData();
-      formData.append('file', selectedFile);
-      formData.append("cls", $(".js_lop").val());
-      try {
-        const response = await fetch('/api/createAccount', {
-          method: 'POST',
-          body: formData,
-        });
-        if (response.ok) {
-          await getStudentList()
-          loadStudents(dataStudents[cls])
-          notify('n', 'Thêm sinh viên thành công')
-          const blobUrl = URL.createObjectURL(await response.blob());
-          // Tạo một thẻ <a> ẩn để tải xuống và nhấn vào nó
-          const downloadLink = document.createElement('a');
-          downloadLink.href = blobUrl;
-          downloadLink.download = 'Danh_sach_sinh_vien.xlsx'; // Đặt tên cho tệp tải xuống
-          downloadLink.style.display = 'none';
-          document.body.appendChild(downloadLink);
-          downloadLink.click();
-          // Giải phóng URL tạm thời sau khi tải xuống hoàn thành
-          URL.revokeObjectURL(blobUrl);
+    quest('hahahahaha')
+    // if (selectedFile) {
+    //   const formData = new FormData();
+    //   formData.append('file', selectedFile);
+    //   formData.append("cls", $(".js_lop").val());
+    //   try {
+    //     const response = await fetch('/api/createAccount', {
+    //       method: 'POST',
+    //       body: formData,
+    //     });
+    //     if (response.ok) {
+    //       await getStudentList()
+    //       loadStudents(dataStudents[cls])
+    //       notify('n', 'Thêm sinh viên thành công')
+    //       const blobUrl = URL.createObjectURL(await response.blob());
+    //       // // Tạo một thẻ <a> ẩn để tải xuống và nhấn vào nó
+    //       // const downloadLink = document.createElement('a');
+    //       // downloadLink.href = blobUrl;
+    //       // downloadLink.download = 'Danh_sach_sinh_vien.xlsx'; // Đặt tên cho tệp tải xuống
+    //       // downloadLink.style.display = 'none';
+    //       // document.body.appendChild(downloadLink);
+    //       // downloadLink.click();
+    //       // // Giải phóng URL tạm thời sau khi tải xuống hoàn thành
+    //       URL.revokeObjectURL(blobUrl);
 
-        } else {
-          notify('!', 'Thêm sinh viên thất bại ')
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
+    //     } else {
+    //       notify('!', 'Thêm sinh viên thất bại ')
+    //     }
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // }
+    // else {
+    //   notify('!', 'Bạn chưa chọn file để tải lên !')
+
+    // }
   })
   // delete students
   $('#delete-student').on('click', async () => {

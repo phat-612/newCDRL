@@ -21,7 +21,9 @@
           <div class="select">
             <select class="js_lop">
               <option value="0">Lớp</option>
-              <option value="KTPM0121">KTPM0121</option>
+              <% for (let i = 0; i < classes.length; i++) {%>
+                <option value="<%= classes[i] %>"><%= classes[i] %></option>
+              <% } %>
             </select>
           </div>
         </div>

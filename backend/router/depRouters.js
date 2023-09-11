@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const server = require("../lib/csdl_google_lib");
-const { checkIfUserLoginRoute, sortStudentName } = require("../lib/function_lib");
+const {
+  checkIfUserLoginRoute,
+  sortStudentName,
+} = require("../lib/function_lib");
 const { getNameGlobal } = require("../lib/mogodb_lib");
 const name_global_databases = getNameGlobal();
 // doan khoa route
@@ -144,7 +147,9 @@ function createDepRouter(client) {
       dep_name: user.dep,
       branchs: branchs,
       classes: classes,
-      teachers: teachers.map((teacher) => teacher.last_name + " " + teacher.first_name),
+      teachers: teachers.map(
+        (teacher) => teacher.last_name + " " + teacher.first_name
+      ),
       teachers_id: teachers.map((teacher) => teacher._id),
       class_teachers: class_teachers,
     });
@@ -178,7 +183,10 @@ function createDepRouter(client) {
         const years = await client
           .db(name_global_databases)
           .collection("classes")
-          .findOne({ _id: classlist[0]._id }, { projection: { _id: 0, years: 1 } });
+          .findOne(
+            { _id: classlist[0]._id },
+            { projection: { _id: 0, years: 1 } }
+          );
 
         // get all student in staff member class:
         let student_list = await client
@@ -366,12 +374,51 @@ function createDepRouter(client) {
   // danh sach sinh vien route
   router.get("/danhsachsinhvien", checkIfUserLoginRoute, async (req, res) => {
     const user = req.session.user;
+
     if (user.pow[4] || user.pow[7]) {
+      // get all branch of department:
+      const branchs = await client
+        .db(name_global_databases)
+        .collection("branchs")
+        .find(
+          {
+            dep: user.dep,
+          }, // find all data
+          {
+            projection: {
+              _id: 1,
+            },
+          }
+        )
+        .toArray();
+
+      // get all classes of department
+      let classes = []; // class_teachers = [18102003, 19112003, (class_ids) ...]
+      for (let i = 0; i < branchs.length; i++) {
+        let dummy = await client
+          .db(name_global_databases)
+          .collection("classes")
+          .find(
+            {
+              branch: branchs[i]._id,
+            }, // find all data
+            {
+              projection: {
+                _id: 1,
+              },
+            }
+          )
+          .toArray();
+        
+        classes.push(...dummy.map((cls) => cls._id));
+      }
+
       return res.render("doankhoa-student-list", {
         header: "global-header",
         footer: "global-footer",
         thongbao: "global-notifications",
         menu: "doankhoa-menu",
+        classes: classes
       });
     } else {
       return res.redirect("/");
@@ -532,12 +579,16 @@ function createDepRouter(client) {
   });
 
   //doan khoa danh gia hoat dong route
-  router.get("/quanlihoatdong/danhgiahoatdong", checkIfUserLoginRoute, async (req, res) => {
-    return res.render("doankhoa-activity-assessment", {
-      header: "global-header",
-      footer: "global-footer",
-    });
-  });
+  router.get(
+    "/quanlihoatdong/danhgiahoatdong",
+    checkIfUserLoginRoute,
+    async (req, res) => {
+      return res.render("doankhoa-activity-assessment", {
+        header: "global-header",
+        footer: "global-footer",
+      });
+    }
+  );
 
   return router;
 }

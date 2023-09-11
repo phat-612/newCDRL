@@ -5,6 +5,8 @@ const fs = require("fs");
 const { getClient, getNameGlobal } = require('./mogodb_lib');
 const client = getClient();
 const name_global_databases = getNameGlobal();
+const path = require("path");
+
 // ------------------------------------------------------------------------------------------------
 async function sendEmail(password, email) {
   try {

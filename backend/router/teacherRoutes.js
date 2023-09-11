@@ -7,10 +7,12 @@ const name_global_databases = getNameGlobal();
 function createTeacherRouter(client) {
   // giao vien route
   router.get("/quanlyquyen", checkIfUserLoginRoute, async (req, res) => {
+    const user = req.session.user;
     return res.render("teacher-manage-student", {
       header: "global-header",
       footer: "global-footer",
       thongbao: "global-notifications",
+      cls: user.cls,
     });
   });
   // danh sach bang diem co van

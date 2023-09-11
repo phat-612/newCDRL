@@ -34,7 +34,7 @@
   align-items: center;
 }
 
-.toast-content i {
+.icon-right {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -44,6 +44,15 @@
   border-radius: 50%;
   border: 3px solid var(--color_i);
   color: var(--color_i);
+}
+.button{
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  
+}
+.button .button-35{
+  margin: 0 !important;
 }
 
 .toast-content .message {

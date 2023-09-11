@@ -734,19 +734,13 @@ function createAPIRouter(client, wss) {
             ].toString()}`
           );
           let power;
-          if (dataStudent["vaitro"] == "1") {
-            power = {
-              0: true,
-              1: true,
-              3: true,
-            };
-          } else {
+          
             power = {
               0: true,
               1: dataStudent["chamdiem"],
               3: dataStudent["lbhd"],
             };
-          }
+          
           let dataInsertUser = {
             _id: dataStudent["mssv"].toString(),
             first_name: dataStudent["ten"],
@@ -964,7 +958,7 @@ function createAPIRouter(client, wss) {
 
             // add curr_score to scores
             scores.push(curr_score);
-            console.log(scores);
+            // console.log(scores);
           }
         } else {
         }
@@ -1005,7 +999,7 @@ function createAPIRouter(client, wss) {
         const data = req.query;
         //data = {year: "HK1_2022-2023", cls: "1"}
         const school_year = data.year;
-        console.log(school_year);
+        // console.log(school_year);
         const year_available = await client
           .db(name_global_databases)
           .collection("school_year")
@@ -1059,7 +1053,7 @@ function createAPIRouter(client, wss) {
                 },
               }
             );
-          console.log("khoa" + user.dep);
+          // console.log("khoa" + user.dep);
           const curr_staff_score = await client
             .db(user.dep)
             .collection(user.cls[0] + "_stf_table")
@@ -1333,7 +1327,7 @@ function createAPIRouter(client, wss) {
       if (user.pow[2]) {
         const data = req.body;
         let cls = data.cls;
-        console.log(cls);
+        // console.log(cls);
         //data = {year: "HK1_2022-2023", cls: "1", std_list = []}
 
         // get staff member info :
