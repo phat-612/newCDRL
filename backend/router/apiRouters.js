@@ -1850,29 +1850,72 @@ function createAPIRouter(client, wss) {
     }
   });
 
-  // api set activities -------------------------------------------------------------------------------------------------------------------------------
+  // api add and edit activities -------------------------------------------------------------------------------------------------------------------------------
   router.post("/addOrEditActivities", checkIfUserLoginAPI, async (req, res) => {
     try {
       const user = req.session.user;
       if (user.pow[3]) {
-        const data = req.body; // data = {name: 'Hoat dong hay nha'; content: 'Di du thu noi'; 'level': 'dep'; ; cls_id:'KTPM'}
-        if (data.cap === "khoa") {
-          await client.db(user.dep).collection("activities").insertOne({
-            activities_name: data.activities_name,
-            activities_content: data.activities_content,
-          });
-        } else if (data.cap == "lop") {
-          await client.db(user.dep).collection("activities_class").insertOne({
-            activities_name: data.activities_name,
-            activities_content: data.activities_content,
-            class: data.class,
-          });
+        const data = req.body; // data = {atv_id: '19181011' (activity's id); name: 'Hoat dong hay nha'; content: 'Di du thu noi'; 'level': 'khoa'; ; cls_id:'KTPM'}
+        // if it is a new one Send fake id and sure that not exist in database 
+        switch (data.level) {
+          case 'lop':
+
+            // save activity in 'Class name' + _activities collection in 'Department name' database
+            await client.db(user.dep).collection(data.cls_id + '_activities').updateOne(
+              {
+                _id: data.atv_id
+              },
+              {
+                name: data.name,
+                content: data.content,
+                level: 'lop',
+                cls: data.cls_id,
+              },
+              {
+                upsert: true
+              }
+            );
+
+          case 'khoa':
+
+            // save activity in activities collection in 'Dep name' database
+            await client.db(user.dep).collection('activities').updateOne(
+              {
+                _id: data.atv_id
+              },
+              {
+                name: data.name,
+                content: data.content,
+                level: 'khoa',
+              },
+              {
+                upsert: true
+              }
+            );
+          case 'truong':
+            // save activity in activities collection in global database
+            await client.db(name_global_databases).collection('activities').updateOne(
+              {
+                _id: data.atv_id
+              },
+              {
+                name: data.name,
+                content: data.content,
+                level: 'truong',
+              },
+              {
+                upsert: true
+              }
+            );
         }
         return res.status(200).json({ message: "Success" });
       } else {
         return res.sendStatus(403);
       }
-      return res.status(200).json({ message: "Success" });
+
+      // use later to update student joining inside activities database
+      // student_list: {}, // change later to list of student with value is boolean (true for joining and false for not joining)
+      // bonus_list: [], // list of student's id that have bonus. 
     } catch (err) {
       console.log("SYSTEM | ADD_ACTIVITIES | ERROR | ", err);
       return res.sendStatus(500);

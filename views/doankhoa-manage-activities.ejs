@@ -116,40 +116,75 @@
                 <button class="button-35 " id="add__activity">Thêm hoạt động</button>
                 <button class="button-35 " id="edit__activity">Xoá hoạt động</button>
               </div>
-              <!-- table -->
-              <table class="table">
+
+              <table class="table" id="school_tb">
                 <thead>
                   <tr>
                     <th style="width: 4%">
                       <div class="checkbox-wrapper-4">
-                        <input type="checkbox" id="row__all" class="inp-cbx" value="2" />
-                        <label for="row__all" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                        <input type="checkbox" id="row__0" class="inp-cbx all-cbx"/>
+                        <label for="row__0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                         </label>
                     </th>
                     <th style="width: 5%;">STT</th>
                     <th style="width: 40%;">Hoạt động</th>
-                    <th style="width: 15%;">Cấp</th>
                     <th style="width: 20%;">Đánh giá</th>
                     <th style="width: 15%;">Cập nhật</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>
-                      <div class="checkbox-wrapper-4">
-                        <input type="checkbox" id="row__all__1" class="inp-cbx" value="2" />
-                        <label for="row__all__1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                        </label>
-                    </td>
-                    <td>1</td>
-                    <td>Hoạt động 1</td>
-                    <td>Cấp khoa</td>
-                    <td><a href="/doankhoa/quanlihoatdong/danhgiahoatdong">Chi tiết</a></td>
-                    <td><a class="more_list" href="#">Chỉnh sửa</a></td>
-                  </tr>
+                  <% for (let i = 0; i < school_atv.length; i++) { %>
+                    <tr>
+                      <td>
+                        <div class="checkbox-wrapper-4">
+                          <input type="checkbox" id="row__0__<%= i %>" class="inp-cbx" value="<%= school_atv[i]._id %>" />
+                          <label for="row__0__<%= i %>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                          </label>
+                      </td>
+                      <td><%= i + 1 %></td>
+                      <td><%= school_atv[i].name %></td>
+                      <td><a href="/doankhoa/quanlihoatdongkhoa/<%= school_atv[i]._id %>">Chi tiết</a></td>
+                      <td><a class="more_list" href="#">Chỉnh sửa</a></td>
+                    </tr>
+                  <% } %>
                 </tbody>
               </table>
-              <table class="table">
+
+              <!-- table -->
+              <table class="table" id="dep_tb">
+                <thead>
+                  <tr>
+                    <th style="width: 4%">
+                      <div class="checkbox-wrapper-4">
+                        <input type="checkbox" id="row__1" class="inp-cbx all-cbx"/>
+                        <label for="row__1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                        </label>
+                    </th>
+                    <th style="width: 5%;">STT</th>
+                    <th style="width: 40%;">Hoạt động</th>
+                    <th style="width: 20%;">Đánh giá</th>
+                    <th style="width: 15%;">Cập nhật</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% for (let i = 0; i < dep_atv.length; i++) { %>
+                    <tr>
+                      <td>
+                        <div class="checkbox-wrapper-4">
+                          <input type="checkbox" id="row__1__<%= i %>" class="inp-cbx" value="<%= dep_atv[i]._id %>" />
+                          <label for="row__1__<%= i %>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                          </label>
+                      </td>
+                      <td><%= i + 1 %></td>
+                      <td><%= dep_atv[i].name %></td>
+                      <td><a href="/doankhoa/quanlihoatdongkhoa/<%= dep_atv[i]._id %>">Chi tiết</a></td>
+                      <td><a class="more_list" href="#">Chỉnh sửa</a></td>
+                    </tr>
+                  <% } %>
+                </tbody>
+              </table>
+
+              <table class="table" id="cls_tb">
                 <thead>
                   <tr>
                     <th style="width: 4%">
@@ -157,61 +192,33 @@
                       <!-- thêm class "new_update" cho td có cập nhật điểm mới chưa được chấm -->
                       <!-- <span class="dau_sao">*</span> đứng phía sau tên (ai không tự đánh giá) -->
                       <div class="checkbox-wrapper-4">
-                        <input type="checkbox" id="row__all__2" class="inp-cbx" value="2" />
-                        <label for="row__all__2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                        <input type="checkbox" id="row__2" class="inp-cbx all-cbx"/>
+                        <label for="row__2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                         </label>
                     </th>
                     <th style="width: 3%;">STT</th>
                     <th style="width: 30%;">Hoạt động</th>
-                    <th style="width: 10%;">Cấp</th>
                     <th style="width: 20%;">Lớp</th>
                     <th style="width: 15%;">Đánh giá</th>
                     <th style="width: 15%;">Cập nhật</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>
-                      <div class="checkbox-wrapper-4">
-                        <input type="checkbox" id="row__0__2" class="inp-cbx" value="2" />
-                        <label for="row__0__2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                        </label>
-                    </td>
-                    <td>1</td>
-                    <td>Hoạt động 1</td>
-                    <td>Cấp lớp</td>
-                    <td>KTPM0121</td>
-                    <td><a href="/doankhoa/quanlihoatdong/danhgiahoatdong">Chi tiết</a></td>
-                    <td><a class="more_list" href="#">Chỉnh sửa</a></td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="checkbox-wrapper-4">
-                        <input type="checkbox" id="row__1__2" class="inp-cbx" value="2" />
-                        <label for="row__1__2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                        </label>
-                    </td>
-                    <td>1</td>
-                    <td>Hoạt động 2</td>
-                    <td>Cấp lớp</td>
-                    <td>KTPM0121</td>
-                    <td><a href="/doankhoa/quanlihoatdong/danhgiahoatdong">Chi tiết</a></td>
-                    <td><a class="more_list" href="#">Chỉnh sửa</a></td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="checkbox-wrapper-4">
-                        <input type="checkbox" id="row__2__2" class="inp-cbx" value="2" />
-                        <label for="row__2__2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                        </label>
-                    </td>
-                    <td>1</td>
-                    <td>Hoạt động 3</td>
-                    <td>Cấp lớp</td>
-                    <td>CNTT0121</td>
-                    <td><a href="/doankhoa/quanlihoatdong/danhgiahoatdong">Chi tiết</a></td>
-                    <td><a class="more_list" href="#">Chỉnh sửa</a></td>
-                  </tr>
+                  <% for (let i = 0; i < cls_atv.length; i++) { %>
+                    <tr>
+                      <td>
+                        <div class="checkbox-wrapper-4">
+                          <input type="checkbox" id="row__2__<%= i %>" class="inp-cbx" value="<%= cls_atv[i]._id %>" />
+                          <label for="row__2__<%= i %>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                          </label>
+                      </td>
+                      <td><%= i + 1 %></td>
+                      <td><%= cls_atv[i].name %></td>
+                      <td><%= cls_atv[i].cls %></td>
+                      <td><a href="/doankhoa/quanlihoatdong/<%= cls_atv[i]._id %>">Chi tiết</a></td>
+                      <td><a class="more_list" href="#">Chỉnh sửa</a></td>
+                    </tr>
+                  <% } %>
                 </tbody>
               </table>
             </div>
@@ -243,8 +250,8 @@
                 <label for="select-level">Cấp Độ</label>
                 <select id="select-level2" class="select_level">
                   <option value="lop">Cấp Lớp</option>
-                  <option>Cấp Khoa</option>
-                  <option>Cấp Trường trở lên</option>
+                  <option value="khoa">Cấp Khoa</option>
+                  <option value="truong">Cấp Trường trở lên</option>
                 </select>
               </div>
               <div class="select" id="select_lop2">
@@ -291,8 +298,8 @@
                 <label for="select-level">Cấp Độ</label>
                 <select id="select-level1" class="select_level">
                   <option value="lop">Cấp Lớp</option>
-                  <option>Cấp Khoa</option>
-                  <option>Cấp Trường trở lên</option>
+                  <option value="khoa">Cấp Khoa</option>
+                  <option value="truong">Cấp Trường trở lên</option>
                 </select>
               </div>
               <div class="select" id="select_lop1">
@@ -321,7 +328,7 @@
   const class_list = <%-JSON.stringify(cls) %>;
   const year_cur = <%-JSON.stringify(curr_year) %>;
 </script>
-<script src="/src/JS/bancansu-manage-activities.js"></script>
+<!-- <script src="/src/JS/bancansu-manage-activities.js"></script> -->
 <script src="/src/JS/doankhoa-manage-activities.js"></script>
 
 </html>

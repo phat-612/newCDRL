@@ -402,10 +402,54 @@ function createDepRouter(client) {
           { projection: { first_name: 1, last_name: 1 } }
         )
         .toArray();
-      // get all branch of department:
 
-      // get all student total score from themself:
-      let render = {
+      // get all activities of school
+      const school_atv = await client.db(name_global_databases).collection('activities').find(
+        {},
+        {
+          projection: {
+            name: 1
+          }
+        }
+      )
+
+      // get all activities of dep 
+      const dep_atv = await client.db(user.dep).collection('activities').find(
+        {},
+        {
+          projection: {
+            name: 1
+          }
+        }
+      )
+
+      // get all activities of class of department
+      let cls_atv = [];
+      await client.db(user.dep).listCollections().toArray((err, collections) => { // get all collection in dep database
+        if (err) {
+          console.error('Failed to retrieve collections:', err);
+        }
+
+        // Filter collections ending with '_activities'
+        const activityCollections = collections.filter((collection) => collection.name.endsWith('_activities'));
+
+        // Loop through activity collections and retrieve all documents
+        activityCollections.forEach(async (collection) => {
+          const dummy = await client.db(user.dep).collection(collection.name).find(
+            {},
+            {
+              projection: {
+                name: 1,
+                cls: 1
+              }
+            }
+          ).toArray();
+          
+          cls_atv.push(...dummy);
+        });
+      });
+
+      return res.render("doankhoa-manage-activities", {
         header: "global-header",
         footer: "global-footer",
         thongbao: "global-notifications",
@@ -414,10 +458,12 @@ function createDepRouter(client) {
         years: years.years,
         curr_year: school_year.year,
         branch: branch_list,
-      };
+        school_atv: school_atv,
+        dep_atv: dep_atv,
+        cls_atv: cls_atv
+      });
 
-      return res.render("doankhoa-manage-activities", render);
-    }else {
+    } else {
       return res.sendStatus(403);
     }
 
