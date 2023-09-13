@@ -29,6 +29,7 @@ function validateFile(file) {
 }
 //////////////////////
 $(document).ready(function () {
+  checkDangVien();
   $(".post-btn").click(function () {
     const modal_wrap_img = document.querySelectorAll(".modal_wrap_img");
     if (modal_wrap_img.length < 5) {
@@ -162,7 +163,10 @@ $(document).mouseup(function (e) {
   }
 });
 // tính điểm ------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+async function checkDangVien(){
+  const infoMark = await fetch("https://localhost:8181/api/getStudentInfoMark");
+  console.log(infoMark);
+}
 function getSelectValue(selectId) {
   return parseInt(document.getElementById(selectId).value);
 }

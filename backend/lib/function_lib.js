@@ -2,7 +2,7 @@ const server = require("./csdl_google_lib");
 const nodemailer = require("nodemailer");
 const ejs = require("ejs");
 const fs = require("fs");
-const { getClient, getNameGlobal } = require('./mogodb_lib');
+const { getClient, getNameGlobal } = require("./mogodb_lib");
 const client = getClient();
 const name_global_databases = getNameGlobal();
 const path = require("path");
@@ -18,8 +18,14 @@ async function sendEmail(password, email) {
       },
     });
 
-    const emailTXT = fs.readFileSync(path.join("src", "emailTemplate", "email.txt"), "utf8");
-    const emailHTML = fs.readFileSync(path.join("src", "emailTemplate", "email.ejs"), "utf8");
+    const emailTXT = fs.readFileSync(
+      path.join("src", "emailTemplate", "email.txt"),
+      "utf8"
+    );
+    const emailHTML = fs.readFileSync(
+      path.join("src", "emailTemplate", "email.ejs"),
+      "utf8"
+    );
 
     const mailOptions = {
       from: '"Quản lý điểm rèn luyện" <nguytuan04@gmail.com>',
@@ -82,7 +88,7 @@ async function checkIfUserLoginRoute(req, res, next) {
       "/doankhoa/nhapdiemdanhgia",
       "/doankhoa/thoihan",
     ];
-    const fullPath = req.baseUrl+req.path;
+    const fullPath = req.baseUrl + req.path;
     if (hslink.includes(fullPath)) {
       if (!user.pow[0]) {
         return res.redirect("/");
@@ -114,7 +120,10 @@ async function checkIfUserLoginRoute(req, res, next) {
       const user_info = await client
         .db(name_global_databases)
         .collection("user_info")
-        .findOne({ _id: user._id }, { projection: { _id: 0, avt: 1, displayName: 1 } });
+        .findOne(
+          { _id: user._id },
+          { projection: { _id: 0, avt: 1, displayName: 1 } }
+        );
       res.locals.avt = user_info.avt;
       res.locals.displayName = user_info.displayName;
     }
@@ -195,7 +204,10 @@ async function get_full_id(directoryPath, listName, listdep) {
     // Đọc các file trong thư mục một cách đồng bộ
     for (let i = 0; i < listName.length; i++) {
       list_id.push(
-        await server.uploadFileToDrive(path.join(directoryPath, listName[i]), listdep[i])
+        await server.uploadFileToDrive(
+          path.join(directoryPath, listName[i]),
+          listdep[i]
+        )
       );
     }
     return list_id;
@@ -271,22 +283,34 @@ function scheduleFileDeletion(filePath) {
 
 // Function to sort name of student in list
 function sortStudentName(std_list) {
-  std_list.sort((a, b) => {
-    const lastFirstNameWordA = a.first_name.split(" ").pop();
-    const lastFirstNameWordB = b.first_name.split(" ").pop();
+  if (std_list) {
+    std_list.sort((a, b) => {
+      if (a && b) {
+        const lastFirstNameWordA = a.first_name.split(" ").pop();
+        const lastFirstNameWordB = b.first_name.split(" ").pop();
 
-    const firstNameComparison = lastFirstNameWordA.localeCompare(lastFirstNameWordB, "vi", {
-      sensitivity: "base",
-    });
-    if (firstNameComparison !== 0) {
-      return firstNameComparison;
-    }
+        const firstNameComparison = lastFirstNameWordA.localeCompare(
+          lastFirstNameWordB,
+          "vi",
+          {
+            sensitivity: "base",
+          }
+        );
+        if (firstNameComparison !== 0) {
+          return firstNameComparison;
+        }
 
-    return a.last_name.localeCompare(b.last_name, "vi", {
-      sensitivity: "base",
+        return a.last_name.localeCompare(b.last_name, "vi", {
+          sensitivity: "base",
+        });
+      } else {
+        return std_list;
+      }
     });
-  });
-  return std_list;
+    return std_list;
+  } else {
+    return std_list;
+  }
 }
 
 // Function to create id for string (get all start letter of words and cobine together)

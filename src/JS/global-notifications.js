@@ -45,27 +45,27 @@ function notify(type, text_2) {
 }
 
 function quest(text_2) {
-  toast_icon.classList = ["fa-solid fa-question icon-right"];
-  toast.querySelector(".text-1").innerHTML = "Chấm hỏi";
-  document.documentElement.style.setProperty("--color_i", "#8f671b");
+  const button = document.querySelector(".button");
+  button.style.display = "flex";
+  return new Promise((resolve, reject) => {
+    toast_icon.classList = ["fa-solid fa-question icon-right"];
+    toast.querySelector(".text-1").innerHTML = "Chấm hỏi";
+    document.documentElement.style.setProperty("--color_i", "#8f671b");
 
-  toast.querySelector(".text-2").innerHTML = text_2;
-  toast.classList.add("active");
-  progress.classList.add("active");
+    toast.querySelector(".text-2").innerHTML = text_2;
+    toast.classList.add("active");
+    progress.classList.add("active");
 
-  ok_btn.addEventListener("click", () => {
-    console.log("ok");
-    toast.classList.remove("active");
-    return true;
+    ok_btn.addEventListener("click", () => {
+      console.log("ok");
+      toast.classList.remove("active");
+      resolve(true);
+    });
+
+    not_btn.addEventListener("click", () => {
+      console.log("not");
+      toast.classList.remove("active");
+      resolve(false);
+    });
   });
-
-  not_btn.addEventListener("click", () => {
-    console.log("not");
-    toast.classList.remove("active");
-    return false;
-  });
-
- 
-    
-  
 }

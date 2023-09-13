@@ -13,67 +13,103 @@
   <div class="main">
     <%- include(header) %>
     <%- include(thongbao) %>
-      <div class="container">
-        <%- include(menu) %>
+    <% let cy=curr_year.split('_'); %>
+    <%let global_year = ""%>
 
-          <div class="content">
+    <div class="container">
+      <%- include(menu) %>
+      <div class="content">
 
-            <div class="hk_nk">
-              <div class="year_full">
-                <div class="hk">
-                  <span>Học kỳ</span>
-                  <div class="selectbox selectbox--hocky">
-                    <div class="select">
-                      <select>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="2">Tất cả</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <div class="hk">
-                  <span>Niên khóa</span>
-                  <div class="selectbox nien_khoa">
-                    <div class="select">
-                      <select>
-                        <option>2021-2022</option>
-                        <option>2022-2023</option>
-                      </select>
-                    </div>
-                  </div>
+        <div class="hk_nk">
+          <div class="year_full">
+            <div class="hk">
+              <span>Học kỳ</span>
+              <div class="selectbox selectbox--hocky">
+                <div class="select">
+                  <select>
+                    <% for (let i=1; i <=years[cy[1]].length; i++) {%>
+                    <% if (i==parseInt(cy[0].slice(2))) {%>
+                    <option value="<%= i %>" selected="selected">
+                      <%= i %>
+                    </option>
+                    <%global_year = `HK${i}_`%>
+
+                    <% } else { %>
+                    <option value="<%= i %>">
+                      <%= i %>
+                    </option>
+                    <% } %>
+                    <% } %>
+                  </select>
                 </div>
               </div>
-              <div class="year_full">
-                <div class="hk">
-                  <span>Bộ môn</span>
-                  <div class="selectbox --bomon">
-                    <div class="select">
-                      <select>
-                        <option value="1">Công Nghệ Thông Tin</option>
-                        <option value="2">Kỹ Thuật Phần Mềm</option>
-                        <option value="2">Hệ Thống Thông Tin</option>
-                        <option value="2">Khoa Học Dữ Liệu</option>
-                        <option value="2">Tất cả</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <div class="hk">
-                  <span>Lớp</span>
-                  <div class="selectbox --class">
-                    <div class="select">
-                      <select>
-                        <option value="1">KTPM0121</option>
-                        <option value="2">CNTT0121</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <button class="button-35 button-35-a load_btn">Chọn</button>
-
             </div>
+            <div class="hk">
+              <span>Niên khóa</span>
+              <div class="selectbox nien_khoa">
+                <div class="select">
+                  <select>
+                    <% for (const key of Object.keys(years)) {%>
+                    <% if (key==cy[1]) {%>
+                    <option selected="selected">
+                      
+                      <%= key %>
+                    </option>
+                    <%global_year += key%>
+                    <% } else { %>
+                    <option>
+                      <%= key %>
+                    </option>
+                    <% } %>
+                    <% } %>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="year_full">
+            <div class="hk">
+              <span>Bộ môn</span>
+              <div class="selectbox --bomon">
+                <div class="select">
+                  <select>
+                    <%let curr_index=0%>
+                    <% for (let i=0; i < branch.length; i++) {%>
+                    <% if (branch[i]._id==cls[0].branch) {%>
+                    <%curr_index=i%>
+                    <option value="<%= branch[i]._id %>" selected="selected">
+                      <%= branch[i].name %>
+                    </option>
+                    <% } else { %>
+                    <option value="<%= branch[i]._id %>">
+                      <%= branch[i].name %>
+                    </option>
+                    <% } %>
+                    <% } %>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="hk">
+              <span>Lớp</span>
+              <div class="selectbox --class">
+                <div class="select">
+                  <select>
+                    <% for (let i=0; i < cls.length; i++) {%>
+                      <% if (cls[i].branch==branch[curr_index]._id) {%>
+                        <option value="<%= i %>" selected="selected">
+                          <%= cls[i]._id %>
+                        </option>
+                      <% } %>
+                    <% } %>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="button-35 button-35-a">Chọn</button>
+
+        </div>
 
             <div class="activity-board">
               <div class="control">
@@ -205,15 +241,18 @@
             <main id="select-main">
               <div class="select">
                 <label for="select-level">Cấp Độ</label>
-                <select id="select-level select_level">
-                  <option>Cấp Lớp</option>
+                <select id="select-level2" class="select_level">
+                  <option value="lop">Cấp Lớp</option>
                   <option>Cấp Khoa</option>
+                  <option>Cấp Trường trở lên</option>
                 </select>
               </div>
-              <div class="select">
+              <div class="select" id="select_lop2">
                 <label for="select-level">Lớp</label>
                 <select id="select-level select_class">
-                  <option>KTPM-0121</option>
+                  <% for (let i = 0; i < cls.length; i++) {%>
+                    <option value="<%= cls[i]._id %>"><%= cls[i]._id %></option>
+                  <% } %>
                 </select>
               </div>
             </main>
@@ -221,15 +260,11 @@
         </div>
         <div>
           <main id="button-main">
-            <div><button class="button-35">Hoàn Tác</button></div>
-            <div><button class="button-35 add_activities_btn">Xong</button></div>
+            <button class="button-35 exist_btn">Huỷ</button>
+            <button class="button-35 save_btn">Xong</button>
           </main>
         </div>
       </div>
-    </div>
-    <div class="close_modal">
-      <i class="fa-solid fa-xmark"></i>
-
     </div>
   </div>
 </div>
@@ -238,7 +273,7 @@
   <div class="modal_wrap add">
     <div class="modal_main">
       <div class="content title">
-        <h2 class="title-box">CHỈNH SỬA HOẠT ĐỘNG</h2>
+        <h2 class="title-box">THÊM HOẠT ĐỘNG</h2>
       </div>
       <div class="content_main">
         <div class="content subtitle">
@@ -254,15 +289,18 @@
             <main id="select-main">
               <div class="select">
                 <label for="select-level">Cấp Độ</label>
-                <select id="select-level" class="select_level">
+                <select id="select-level1" class="select_level">
                   <option value="lop">Cấp Lớp</option>
-                  <option value="khoa">Cấp Khoa</option>
+                  <option>Cấp Khoa</option>
+                  <option>Cấp Trường trở lên</option>
                 </select>
               </div>
-              <div class="select">
+              <div class="select" id="select_lop1">
                 <label for="select-level">Lớp</label>
                 <select id="select-level" class="select_class">
-                  <option value="KTPM-0121">KTPM-0121</option>
+                  <% for (let i = 0; i < cls.length; i++) {%>
+                    <option value="<%= cls[i]._id %>"><%= cls[i]._id %></option>
+                  <% } %>
                 </select>
               </div>
             </main>
@@ -270,19 +308,19 @@
         </div>
         <div>
           <main id="button-main">
-            <div><button class="button-35">Hoàn Tác</button></div>
-            <div><button id="add_activities_btn" class="button-35 ">Xong</button></div>
+            <button class="button-35 exist_btn">Huỷ</button>
+            <button class="button-35 save_btn">Xong</button>
           </main>
         </div>
       </div>
     </div>
-    <div class="close_modal">
-      <i class="fa-solid fa-xmark"></i>
-
-    </div>
   </div>
 </div>
-
+<script>
+  const branch_list = <%-JSON.stringify(branch) %>;
+  const class_list = <%-JSON.stringify(cls) %>;
+  const year_cur = <%-JSON.stringify(curr_year) %>;
+</script>
 <script src="/src/JS/bancansu-manage-activities.js"></script>
 <script src="/src/JS/doankhoa-manage-activities.js"></script>
 

@@ -21,7 +21,6 @@ $(document).on("change", ".--bomon select", async function () {
   }
   for (let i = 0; i < class_list.length; i++) {
     if (class_list[i].branch === selectedBranchId) {
-      console.log("hahahaa");
       selectedClassName = class_list[i]._id;
       classList.push(selectedClassName);
     }
@@ -37,9 +36,9 @@ $(document).on("change", ".--bomon select", async function () {
     option.text(branch);
     selectElement.append(option);
   });
-  console.log(selectedBranchId);
-  console.log(selectedBranch);
-  console.log(classList);
+  // console.log(selectedBranchId);
+  // console.log(selectedBranch);
+  // console.log(classList);
 });
 
 $(document).on("click", ".export_btn", async function () {

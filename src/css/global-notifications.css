@@ -46,10 +46,10 @@
   color: var(--color_i);
 }
 .button{
-  display: flex;
+  /* display: flex; */
   gap: 1rem;
   justify-content: flex-end;
-  
+  display: none;
 }
 .button .button-35{
   margin: 0 !important;

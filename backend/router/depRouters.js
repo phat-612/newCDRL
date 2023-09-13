@@ -363,12 +363,64 @@ function createDepRouter(client) {
 
   // Quan li hoat dong khoa route
   router.get("/quanlihoatdongkhoa", checkIfUserLoginRoute, async (req, res) => {
-    return res.render("doankhoa-manage-activities", {
-      header: "global-header",
-      footer: "global-footer",
-      menu: "doankhoa-menu",
-      thongbao: "global-notifications",
-    });
+    const user = req.session.user;
+
+    const school_year = await client
+      .db(name_global_databases)
+      .collection("school_year")
+      .findOne({}, { projection: { _id: 0, year: 1 } });
+    // check user login:
+    if (user.pow[3]) {
+      let branch_list = await client
+        .db(name_global_databases)
+        .collection("branchs")
+        .find({ dep: user.dep }, { projection: { _id: 1, name: 1 } })
+        .toArray();
+
+      const classlist = await client
+        .db(name_global_databases)
+        .collection("classes")
+        .find(
+          { branch: { $in: branch_list.map((branch) => branch._id) } },
+          { projection: { _id: 1, branch: 1 } }
+        )
+        .toArray();
+      const years = await client
+        .db(name_global_databases)
+        .collection("classes")
+        .findOne(
+          { _id: classlist[0]._id },
+          { projection: { _id: 0, years: 1 } }
+        );
+
+      // get all student in staff member class:
+      let student_list = await client
+        .db(name_global_databases)
+        .collection("user_info")
+        .find(
+          { class: classlist[0]._id, "power.0": { $exists: true } },
+          { projection: { first_name: 1, last_name: 1 } }
+        )
+        .toArray();
+      // get all branch of department:
+
+      // get all student total score from themself:
+      let render = {
+        header: "global-header",
+        footer: "global-footer",
+        thongbao: "global-notifications",
+        menu: "doankhoa-menu",
+        cls: classlist,
+        years: years.years,
+        curr_year: school_year.year,
+        branch: branch_list,
+      };
+
+      return res.render("doankhoa-manage-activities", render);
+    }else {
+      return res.sendStatus(403);
+    }
+
   });
 
   // danh sach sinh vien route
@@ -409,7 +461,7 @@ function createDepRouter(client) {
             }
           )
           .toArray();
-        
+
         classes.push(...dummy.map((cls) => cls._id));
       }
 
@@ -418,7 +470,7 @@ function createDepRouter(client) {
         footer: "global-footer",
         thongbao: "global-notifications",
         menu: "doankhoa-menu",
-        classes: classes
+        classes: classes,
       });
     } else {
       return res.redirect("/");

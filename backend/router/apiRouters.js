@@ -622,6 +622,7 @@ function createAPIRouter(client, wss) {
       const user = req.session.user;
       if (user.pow[4] || user.pow[7]) {
         const fileStudents = req.file;
+        console.log(req.body);
         async function generateEmail(str) {
           let s1 =
             "ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠạẢảẤấẦầẨẩẪẫẬậẮắẰằẲẳẴẵẶặẸẹẺẻẼẽẾếỀềỂểỄễỆệỈỉỊịỌọỎỏỐốỒồỔổỖỗỘộỚớỜờỞởỠỡỢợỤụỦủỨứỪừỬửỮữỰựỲỳỴỵỶỷỸỹ";
@@ -650,81 +651,182 @@ function createAPIRouter(client, wss) {
         }
 
         if (fileStudents) {
-          try {
-            // read excel file:
-            // create all account
-            const workbook = await XlsxPopulate.fromFileAsync(
-              fileStudents.path
-            );
-            const sheet = workbook.sheet(0);
-            const values = sheet.usedRange().value();
-            let maxWidthEmail = 0;
-            //[['MSSV', 'Họ', 'Tên' ]]
-            sheet.cell("D1").value("Email");
-            sheet.cell("E1").value("Password");
-            for (let i = 1; i < values.length; i++) {
-              let pw = await randomPassword();
-              let email = await generateEmail(
-                `${values[i][1]} ${values[i][2]} ${values[i][0].toString()}`
+          if (req.body.status == "true") {
+            try {
+              // read excel file:
+              // create all account
+              const workbook = await XlsxPopulate.fromFileAsync(
+                fileStudents.path
               );
-              let dataInsertUser = {
-                _id: values[i][0].toString(),
-                first_name: values[i][2],
-                last_name: values[i][1],
-                avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
-                power: { 0: true },
-                class: [req.body.cls],
-                displayName: `${values[i][1]} ${values[i][2]}`,
-                email: email,
-              };
-              let dataInsertLogin = {
-                _id: values[i][0].toString(),
-                password: pw,
-                first: "new_user",
-              };
-              client.db("global").collection("user_info").updateOne(
-                {
-                  _id: dataInsertUser._id,
-                },
-                {
-                  $set: dataInsertUser,
-                },
-                {
-                  upsert: true,
+              const sheet = workbook.sheet(0);
+              const values = sheet.usedRange().value();
+              let maxWidthEmail = 0;
+              //[['MSSV', 'Họ', 'Tên' ]]
+              sheet.cell("D1").value("Email");
+              sheet.cell("E1").value("Password");
+              for (let i = 1; i < values.length; i++) {
+                let pw = await randomPassword();
+                let email = await generateEmail(
+                  `${values[i][1]} ${values[i][2]} ${values[i][0].toString()}`
+                );
+                let dataInsertUser = {
+                  _id: values[i][0].toString(),
+                  first_name: values[i][2],
+                  last_name: values[i][1],
+                  avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
+                  power: { 0: true },
+                  class: [req.body.cls],
+                  displayName: `${values[i][1]} ${values[i][2]}`,
+                  email: email,
+                };
+                let dataInsertLogin = {
+                  _id: values[i][0].toString(),
+                  password: pw,
+                  first: "new_user",
+                };
+                client.db("global").collection("user_info").updateOne(
+                  {
+                    _id: dataInsertUser._id,
+                  },
+                  {
+                    $set: dataInsertUser,
+                  },
+                  {
+                    upsert: true,
+                  }
+                );
+                client.db("global").collection("login_info").updateOne(
+                  {
+                    _id: dataInsertLogin._id,
+                  },
+                  {
+                    $set: dataInsertLogin,
+                  },
+                  {
+                    upsert: true,
+                  }
+                );
+                await sheet.cell(`D${i + 1}`).value(email);
+                await sheet.cell(`E${i + 1}`).value(pw);
+                const range = sheet.range(`D${i + 1}:E${i + 1}`);
+                range.style({ border: true });
+                if (email.length > maxWidthEmail) {
+                  maxWidthEmail = email.length;
                 }
-              );
-              client.db("global").collection("login_info").updateOne(
-                {
-                  _id: dataInsertLogin._id,
-                },
-                {
-                  $set: dataInsertLogin,
-                },
-                {
-                  upsert: true,
-                }
-              );
-              await sheet.cell(`D${i + 1}`).value(email);
-              await sheet.cell(`E${i + 1}`).value(pw);
-              const range = sheet.range(`D${i + 1}:E${i + 1}`);
-              range.style({ border: true });
-              if (email.length > maxWidthEmail) {
-                maxWidthEmail = email.length;
               }
+              // Write to file.
+              sheet.column("D").width(maxWidthEmail);
+              const uuid = uuidv4();
+              await workbook.toFileAsync(
+                path.join(".downloads", uuid + ".xlsx")
+              );
+              res.download(path.join(".downloads", uuid + ".xlsx"));
+              // xoa file sau khi xu ly
+              scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
+            } catch (err) {
+              console.log("SYSTEM | CREATE_ACCOUNT | ERROR | ", err);
+              return res.sendStatus(500);
             }
-            // Write to file.
-            sheet.column("D").width(maxWidthEmail);
-            const uuid = uuidv4();
-            await workbook.toFileAsync(path.join(".downloads", uuid + ".xlsx"));
-            res.download(path.join(".downloads", uuid + ".xlsx"));
-            // xoa file sau khi xu ly
-            scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
-          } catch (err) {
-            console.log("SYSTEM | CREATE_ACCOUNT | ERROR | ", err);
-            return res.sendStatus(500);
+          } else {
+            try {
+              console.log("ngu");
+              // read excel file:
+              // create all account
+              const workbook = await XlsxPopulate.fromFileAsync(
+                fileStudents.path
+              );
+              const sheet = workbook.sheet(0);
+              const values = sheet.usedRange().value();
+              let maxWidthEmail = 0;
+              //[['MSSV', 'Họ', 'Tên' ]]
+              sheet.cell("D1").value("Email");
+              sheet.cell("E1").value("Password");
+              for (let i = 1; i < values.length; i++) {
+                console.log(values[i][0].toString());
+                let studentIdToCheck = values[i][0].toString(); // Mã số sinh viên cần kiểm tra
+
+                db.students.findOne(
+                  { studentId: studentIdToCheck },
+                  function (err, result) {
+                    if (err) {
+                      console.error(err);
+                      return;
+                    }
+
+                    var isStudentIdExists = result !== null; // Kiểm tra kết quả trả về
+
+                    console.log(
+                      "Mã số sinh viên có tồn tại trong cơ sở dữ liệu:",
+                      isStudentIdExists
+                    );
+                  }
+                );
+              }
+
+              // for (let i = 1; i < values.length; i++) {
+              //   let pw = await randomPassword();
+              //   let email = await generateEmail(
+              //     `${values[i][1]} ${values[i][2]} ${values[i][0].toString()}`
+              //   );
+              //   let dataInsertUser = {
+              //     _id: values[i][0].toString(),
+              //     first_name: values[i][2],
+              //     last_name: values[i][1],
+              //     avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
+              //     power: { 0: true },
+              //     class: [req.body.cls],
+              //     displayName: `${values[i][1]} ${values[i][2]}`,
+              //     email: email,
+              //   };
+              //   let dataInsertLogin = {
+              //     _id: values[i][0].toString(),
+              //     password: pw,
+              //     first: "new_user",
+              //   };
+              //   client.db("global").collection("user_info").updateOne(
+              //     {
+              //       _id: dataInsertUser._id,
+              //     },
+              //     {
+              //       $set: dataInsertUser,
+              //     },
+              //     {
+              //       upsert: true,
+              //     }
+              //   );
+              //   client.db("global").collection("login_info").updateOne(
+              //     {
+              //       _id: dataInsertLogin._id,
+              //     },
+              //     {
+              //       $set: dataInsertLogin,
+              //     },
+              //     {
+              //       upsert: true,
+              //     }
+              //   );
+              //   await sheet.cell(`D${i + 1}`).value(email);
+              //   await sheet.cell(`E${i + 1}`).value(pw);
+              //   const range = sheet.range(`D${i + 1}:E${i + 1}`);
+              //   range.style({ border: true });
+              //   if (email.length > maxWidthEmail) {
+              //     maxWidthEmail = email.length;
+              //   }
+              // }
+              // // Write to file.
+              // sheet.column("D").width(maxWidthEmail);
+              // const uuid = uuidv4();
+              // await workbook.toFileAsync(path.join(".downloads", uuid + ".xlsx"));
+              // res.download(path.join(".downloads", uuid + ".xlsx"));
+              // // xoa file sau khi xu ly
+              // scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
+            } catch (err) {
+              console.log("SYSTEM | CREATE_ACCOUNT | ERROR | ", err);
+              return res.sendStatus(500);
+            }
           }
         } else {
-          // console.log('them 1 sinh vien');
+          console.log("them 1 sinh vien");
           const dataStudent = req.body;
           // console.log(dataStudent);
           let pw = await randomPassword();
@@ -734,13 +836,14 @@ function createAPIRouter(client, wss) {
             ].toString()}`
           );
           let power;
-          
-            power = {
-              0: true,
-              1: dataStudent["chamdiem"],
-              3: dataStudent["lbhd"],
-            };
-          
+
+          power = {
+            0: true,
+            1: dataStudent["chamdiem"],
+            3: dataStudent["lbhd"],
+            10: dataStudent["dangvien"],
+          };
+
           let dataInsertUser = {
             _id: dataStudent["mssv"].toString(),
             first_name: dataStudent["ten"],
@@ -1415,6 +1518,7 @@ function createAPIRouter(client, wss) {
           let lap_hoat_dong = false;
           if (item.power["1"] || item.power["3"]) {
             role = "Ban cán sự";
+            dang_vien = item.power["10"] ? true : false;
             cham_diem = item.power["1"] ? true : false;
             lap_hoat_dong = item.power["3"] ? true : false;
           } else if (item.power["0"]) {
@@ -1439,7 +1543,15 @@ function createAPIRouter(client, wss) {
       return res.sendStatus(404);
     }
   });
-
+  router.get("/getStudentInfoMark", checkIfUserLoginAPI, async (req, res) => {
+    const user = req.session.user;
+    let result = {
+      dang_vien: user.pow[10] ? true : false,
+      cham_diem: user.pow[1] ? true : false,
+      lap_hoat_dong: user.pow[3] ? true : false,
+    };
+    return res.status(200).json(result);
+  });
   router.get("/getuserscore", checkIfUserLoginAPI, async (req, res) => {
     try {
       const user = req.session.user;
@@ -1739,38 +1851,80 @@ function createAPIRouter(client, wss) {
   });
 
   // api set activities -------------------------------------------------------------------------------------------------------------------------------
-  router.post("/add_activities", checkIfUserLoginAPI, async (req, res) => {
+  router.post("/addOrEditActivities", checkIfUserLoginAPI, async (req, res) => {
     try {
       const user = req.session.user;
       if (user.pow[3]) {
-      
-        const data = req.body;
+        const data = req.body; // data = {name: 'Hoat dong hay nha'; content: 'Di du thu noi'; 'level': 'dep'; ; cls_id:'KTPM'}
         if (data.cap === "khoa") {
-          
           await client.db(user.dep).collection("activities").insertOne({
             activities_name: data.activities_name,
             activities_content: data.activities_content,
           });
-          
         } else if (data.cap == "lop") {
-          
           await client.db(user.dep).collection("activities_class").insertOne({
             activities_name: data.activities_name,
             activities_content: data.activities_content,
             class: data.class,
           });
-          
         }
-        return res.status(200).json({ message: 'Success' });
+        return res.status(200).json({ message: "Success" });
       } else {
         return res.sendStatus(403);
       }
-      return res.status(200).json({ message: 'Success' });
+      return res.status(200).json({ message: "Success" });
     } catch (err) {
       console.log("SYSTEM | ADD_ACTIVITIES | ERROR | ", err);
       return res.sendStatus(500);
     }
   });
+
+  // api set activities -------------------------------------------------------------------------------------------------------------------------------
+  router.post(
+    "/load_Activities_list",
+    checkIfUserLoginAPI,
+    async (req, res) => {
+      try {
+        const user = req.session.user;
+        const data = req.body;
+        if (user.pow[3]) {
+          const data = req.body;
+          const khoa_activities = await client
+            .db(user.dep)
+            .collection("activities")
+            .findOne(
+              {},
+              {
+                projection: {
+                  _id: 0,
+                  activities_name: 1,
+                },
+              }
+            );
+          const activities_class = await client
+            .db(user.dep)
+            .collection("activities_class")
+            .findOne(
+              {},
+              {
+                projection: {
+                  _id: 0,
+                  activities_name: 1,
+                },
+              }
+            );
+          console.log(activities_class, khoa_activities);
+          return res.status(200).json({ message: "Success" });
+        } else {
+          return res.sendStatus(403);
+        }
+        return res.status(200).json({ message: "Success" });
+      } catch (err) {
+        console.log("SYSTEM | ADD_ACTIVITIES | ERROR | ", err);
+        return res.sendStatus(500);
+      }
+    }
+  );
 
   // load bang diem cua giao vien------------------------------------------------------------------------------------------------------------------
   router.get(
@@ -2021,50 +2175,6 @@ function createAPIRouter(client, wss) {
     }
   });
 
-  // api set activities -------------------------------------------------------------------------------------------------------------------------------
-router.post("/load_Activities_list", checkIfUserLoginAPI, async (req, res) => {
-  try {
-    const user = req.session.user;
-    const data = req.body;
-    if (user.pow[3]) {
-    
-      const data = req.body;
-      const khoa_activities = await client
-          .db(user.dep)
-          .collection("activities")
-          .findOne(
-            {},
-            {
-              projection: {
-                _id: 0,
-                activities_name:1,
-              },
-            }
-          );
-        const activities_class = await client
-          .db(user.dep)
-          .collection("activities_class")
-          .findOne(
-            {},
-            {
-              projection: {
-                _id: 0,
-                activities_name:1,
-              },
-            }
-          );
-          console.log(activities_class,khoa_activities);
-      return res.status(200).json({ message: 'Success' });
-    } else {
-      return res.sendStatus(403);
-    }
-    return res.status(200).json({ message: 'Success' });
-  } catch (err) {
-    console.log("SYSTEM | ADD_ACTIVITIES | ERROR | ", err);
-    return res.sendStatus(500);
-  }
-});
-
   // api delete classes checked
   router.post("/deleteClasses", checkIfUserLoginAPI, async (req, res) => {
     try {
@@ -2107,6 +2217,5 @@ router.post("/load_Activities_list", checkIfUserLoginAPI, async (req, res) => {
 
   return router;
 }
-
 
 module.exports = createAPIRouter;

@@ -98,15 +98,11 @@
                 <div class="select">
                   <select>
                     <% for (let i=0; i < cls.length; i++) {%>
-                    <% if (cls[i].branch==branch[curr_index]._id) {%>
-                    <option value="<%= i %>" selected="selected">
-                      <%= cls[i]._id %>
-                    </option>
-                    <% } else { %>
-                    <option value="<%= i %>">
-                      <%= cls[i]._id %>
-                    </option>
-                    <% } %>
+                      <% if (cls[i].branch==branch[curr_index]._id) {%>
+                        <option value="<%= i %>" selected="selected">
+                          <%= cls[i]._id %>
+                        </option>
+                      <% } %>
                     <% } %>
                   </select>
                 </div>
