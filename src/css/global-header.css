@@ -31,7 +31,7 @@ html {
   --modal-color: rgba(233, 233, 233, .6);
   --btn-delete: #f0f0f0;
   --no-img: #d4d1d1;
-  --modal_img_btn : #aeaeae;
+  --modal_img_btn: #aeaeae;
   /* input */
   --input-hover: #d9d9d982;
   --input-placeholder: #767676;
@@ -55,7 +55,8 @@ body {
   margin: 0;
   padding: 0;
 }
-input{
+
+input {
   color: var(--black-color);
 }
 
@@ -318,7 +319,8 @@ input{
 td .select select {
   box-shadow: none !important;
 }
-td .select select option{
+
+td .select select option {
   background-color: var(--white-color);
 }
 
@@ -339,10 +341,12 @@ td .select select option{
   box-shadow: transparent 0 0 0 0.3rem, #797272 0 1px 3px 0px;
 
 }
-.modal .select select option{
+
+.modal .select select option {
   background-color: var(--white-color) !important;
 }
-.modal .select select{
+
+.modal .select select {
   background: inherit !important;
 }
 
@@ -377,9 +381,11 @@ td .select select option{
 .tittle-table {
   color: var(--black-color);
 }
-td a{
+
+td a {
   cursor: pointer;
 }
+
 .bang_cham_diem {
   color: var(--black-color);
 }
@@ -459,14 +465,25 @@ td a:hover {
 .content_main {
   margin-top: 10rem;
 }
-.modal_wrap{
-  box-shadow:  0 0 10px var(--black-color);
-  -webkit-box-shadow:  0 0 10px var(--black-color);
-  -moz-box-shadow:  0 0 10px var(--black-color);
+
+.modal_wrap {
+  box-shadow: 0 0 10px var(--black-color);
+  -webkit-box-shadow: 0 0 10px var(--black-color);
+  -moz-box-shadow: 0 0 10px var(--black-color);
 }
-textarea{
+
+textarea {
   background-color: var(--input-hover);
   color: var(--black-color);
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--modal-color);
 }
 
 

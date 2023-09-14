@@ -385,6 +385,7 @@ function createDepRouter(client) {
           { projection: { _id: 1, branch: 1 } }
         )
         .toArray();
+      
       const years = await client
         .db(name_global_databases)
         .collection("classes")
@@ -393,35 +394,27 @@ function createDepRouter(client) {
           { projection: { _id: 0, years: 1 } }
         );
 
-      // get all student in staff member class:
-      let student_list = await client
-        .db(name_global_databases)
-        .collection("user_info")
-        .find(
-          { class: classlist[0]._id, "power.0": { $exists: true } },
-          { projection: { first_name: 1, last_name: 1 } }
-        )
-        .toArray();
-
       // get all activities of school
       const school_atv = await client.db(name_global_databases).collection('activities').find(
         {},
         {
           projection: {
-            name: 1
+            name: 1,
+            year: 1
           }
         }
-      )
+      ).toArray();
 
       // get all activities of dep 
       const dep_atv = await client.db(user.dep).collection('activities').find(
         {},
         {
           projection: {
-            name: 1
+            name: 1,
+            year: 1
           }
         }
-      )
+      ).toArray();
 
       // get all activities of class of department
       let cls_atv = [];
@@ -440,11 +433,12 @@ function createDepRouter(client) {
             {
               projection: {
                 name: 1,
-                cls: 1
+                cls: 1,
+                year: 1
               }
             }
           ).toArray();
-          
+
           cls_atv.push(...dummy);
         });
       });

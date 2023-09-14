@@ -51,8 +51,7 @@
                   <select>
                     <% for (const key of Object.keys(years)) {%>
                     <% if (key==cy[1]) {%>
-                    <option selected="selected">
-                      
+                    <option selected="selected" value="<%= key %>">
                       <%= key %>
                     </option>
                     <%global_year += key%>
@@ -96,11 +95,11 @@
                 <div class="select">
                   <select>
                     <% for (let i=0; i < cls.length; i++) {%>
-                      <% if (cls[i].branch==branch[curr_index]._id) {%>
-                        <option value="<%= i %>" selected="selected">
-                          <%= cls[i]._id %>
-                        </option>
-                      <% } %>
+                    <% if (cls[i].branch==branch[curr_index]._id) {%>
+                    <option value="<%= i %>" selected="selected">
+                      <%= cls[i]._id %>
+                    </option>
+                    <% } %>
                     <% } %>
                   </select>
                 </div>
@@ -111,119 +110,153 @@
 
         </div>
 
-            <div class="activity-board">
-              <div class="control">
-                <button class="button-35 " id="add__activity">Thêm hoạt động</button>
-                <button class="button-35 " id="edit__activity">Xoá hoạt động</button>
-              </div>
-
-              <table class="table" id="school_tb">
-                <thead>
-                  <tr>
-                    <th style="width: 4%">
-                      <div class="checkbox-wrapper-4">
-                        <input type="checkbox" id="row__0" class="inp-cbx all-cbx"/>
-                        <label for="row__0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                        </label>
-                    </th>
-                    <th style="width: 5%;">STT</th>
-                    <th style="width: 40%;">Hoạt động</th>
-                    <th style="width: 20%;">Đánh giá</th>
-                    <th style="width: 15%;">Cập nhật</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% for (let i = 0; i < school_atv.length; i++) { %>
-                    <tr>
-                      <td>
-                        <div class="checkbox-wrapper-4">
-                          <input type="checkbox" id="row__0__<%= i %>" class="inp-cbx" value="<%= school_atv[i]._id %>" />
-                          <label for="row__0__<%= i %>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                          </label>
-                      </td>
-                      <td><%= i + 1 %></td>
-                      <td><%= school_atv[i].name %></td>
-                      <td><a href="/doankhoa/quanlihoatdongkhoa/<%= school_atv[i]._id %>">Chi tiết</a></td>
-                      <td><a class="more_list" href="#">Chỉnh sửa</a></td>
-                    </tr>
-                  <% } %>
-                </tbody>
-              </table>
-
-              <!-- table -->
-              <table class="table" id="dep_tb">
-                <thead>
-                  <tr>
-                    <th style="width: 4%">
-                      <div class="checkbox-wrapper-4">
-                        <input type="checkbox" id="row__1" class="inp-cbx all-cbx"/>
-                        <label for="row__1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                        </label>
-                    </th>
-                    <th style="width: 5%;">STT</th>
-                    <th style="width: 40%;">Hoạt động</th>
-                    <th style="width: 20%;">Đánh giá</th>
-                    <th style="width: 15%;">Cập nhật</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% for (let i = 0; i < dep_atv.length; i++) { %>
-                    <tr>
-                      <td>
-                        <div class="checkbox-wrapper-4">
-                          <input type="checkbox" id="row__1__<%= i %>" class="inp-cbx" value="<%= dep_atv[i]._id %>" />
-                          <label for="row__1__<%= i %>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                          </label>
-                      </td>
-                      <td><%= i + 1 %></td>
-                      <td><%= dep_atv[i].name %></td>
-                      <td><a href="/doankhoa/quanlihoatdongkhoa/<%= dep_atv[i]._id %>">Chi tiết</a></td>
-                      <td><a class="more_list" href="#">Chỉnh sửa</a></td>
-                    </tr>
-                  <% } %>
-                </tbody>
-              </table>
-
-              <table class="table" id="cls_tb">
-                <thead>
-                  <tr>
-                    <th style="width: 4%">
-                      <!-- set id của input == for của label -->
-                      <!-- thêm class "new_update" cho td có cập nhật điểm mới chưa được chấm -->
-                      <!-- <span class="dau_sao">*</span> đứng phía sau tên (ai không tự đánh giá) -->
-                      <div class="checkbox-wrapper-4">
-                        <input type="checkbox" id="row__2" class="inp-cbx all-cbx"/>
-                        <label for="row__2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                        </label>
-                    </th>
-                    <th style="width: 3%;">STT</th>
-                    <th style="width: 30%;">Hoạt động</th>
-                    <th style="width: 20%;">Lớp</th>
-                    <th style="width: 15%;">Đánh giá</th>
-                    <th style="width: 15%;">Cập nhật</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% for (let i = 0; i < cls_atv.length; i++) { %>
-                    <tr>
-                      <td>
-                        <div class="checkbox-wrapper-4">
-                          <input type="checkbox" id="row__2__<%= i %>" class="inp-cbx" value="<%= cls_atv[i]._id %>" />
-                          <label for="row__2__<%= i %>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                          </label>
-                      </td>
-                      <td><%= i + 1 %></td>
-                      <td><%= cls_atv[i].name %></td>
-                      <td><%= cls_atv[i].cls %></td>
-                      <td><a href="/doankhoa/quanlihoatdong/<%= cls_atv[i]._id %>">Chi tiết</a></td>
-                      <td><a class="more_list" href="#">Chỉnh sửa</a></td>
-                    </tr>
-                  <% } %>
-                </tbody>
-              </table>
-            </div>
+        <div class="activity-board">
+          <div class="control">
+            <button class="button-35 " id="add__activity">Thêm hoạt động</button>
+            <button class="button-35 " id="edit__activity">Xoá hoạt động</button>
           </div>
+        </div>
+
+        <!-- table -->
+        <div class="activity-board activity_school">
+          <h2>HOẠT ĐỘNG CẤP TRƯỜNG TRỞ LÊN</h2>
+          <table class="table" id="school_tb">
+            <thead>
+              <tr>
+                <th style="width: 1%">
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="row__0" class="inp-cbx all-cbx" />
+                    <label for="row__0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+                </th>
+                <th style="width: 2%;">STT</th>
+                <th style="width: 40%;">Hoạt động</th>
+                <th style="width: 10%;">Thời gian</th>
+                <th style="width: 10%;">Đánh giá</th>
+                <th style="width: 10%;">Cập nhật</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for (let i = 0; i < school_atv.length; i++) { %>
+              <tr class="atv_box">
+                <td>
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="row__0__<%= i %>" class="inp-cbx" value="<%= school_atv[i]._id %>" />
+                    <label for="row__0__<%= i %>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+                </td>
+                <td><%= i + 1 %></td>
+                <td><%= school_atv[i].name %></td>
+                <td><%= school_atv[i].year.split("_")[0] + " " + school_atv[i].year.split("_")[1] %></td>
+                <td><a href="/doankhoa/quanlihoatdongkhoa/<%= school_atv[i]._id %>">Chi tiết</a></td>
+                <td><a class="more_list" href="#">Sửa</a></td>
+              </tr>
+              <tr class="copy_box">
+                <!-- fill link google forn here NTHL xấu trai -->
+                <td colspan="2"> COPY </td>
+                <td><a href="#">Link đăng kí hoạt động</a></td>
+                <td colspan="3"><a href="#">Link điểm danh hoạt động</a></td>
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="activity-board activity_dep">
+          <h2>HOẠT ĐỘNG CẤP KHOA</h2>
+          <table class="table" id="dep_tb">
+            <thead>
+              <tr>
+                <th style="width: 1%">
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="row__1" class="inp-cbx all-cbx" />
+                    <label for="row__1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+                </th>
+                <th style="width: 2%;">STT</th>
+                <th style="width: 40%;">Hoạt động</th>
+                <th style="width: 10%;">Thời gian</th>
+                <th style="width: 10%;">Đánh giá</th>
+                <th style="width: 10%;">Cập nhật</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for (let i = 0; i < dep_atv.length; i++) { %>
+              <tr class="atv_box">
+                <td>
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="row__1__<%= i %>" class="inp-cbx" value="<%= dep_atv[i]._id %>" />
+                    <label for="row__1__<%= i %>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+                </td>
+                <td><%= i + 1 %></td>
+                <td><%= dep_atv[i].name %></td>
+                <td><%= dep_atv[i].year.split("_")[0] + " " + dep_atv[i].year.split("_")[1] %></td>
+                <td><a href="/doankhoa/quanlihoatdongkhoa/<%= dep_atv[i]._id %>">Chi tiết</a></td>
+                <td><a class="more_list" href="#">Sửa</a></td>
+              </tr>
+              <tr class="copy_box">
+                <!-- fill link google forn here NTHL xấu trai -->
+                <td colspan="2"> COPY </td>
+                <td><a href="#">Link đăng kí hoạt động</a></td>
+                <td colspan="3"><a href="#">Link điểm danh hoạt động</a></td>
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="activity-board activity_class">
+          <h2>HOẠT ĐỘNG CẤP LỚP</h2>
+          <table class="table" id="cls_tb">
+            <thead>
+              <tr>
+                <th style="width: 1%">
+                  <!-- set id của input == for của label -->
+                  <!-- thêm class "new_update" cho td có cập nhật điểm mới chưa được chấm -->
+                  <!-- <span class="dau_sao">*</span> đứng phía sau tên (ai không tự đánh giá) -->
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="row__2" class="inp-cbx all-cbx" />
+                    <label for="row__2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+                </th>
+                <th style="width: 2%;">STT</th>
+                <th style="width: 30%;">Hoạt động</th>
+                <th style="width: 10%;">Lớp</th>
+                <th style="width: 10%;">Thời gian</th>
+                <th style="width: 10%;">Đánh giá</th>
+                <th style="width: 10%;">Cập nhật</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for (let i = 0; i < cls_atv.length; i++) { %>
+              <tr class="atv_box">
+                <td>
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="row__2__<%= i %>" class="inp-cbx" value="<%= cls_atv[i]._id %>" />
+                    <label for="row__2__<%= i %>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+                </td>
+                <td><%= i + 1 %></td>
+                <td><%= cls_atv[i].name %></td>
+                <td><%= cls_atv[i].cls %></td>
+                <td><%= cls_atv[i].year.split("_")[0] + " " + cls_atv[i].year.split("_")[1] %></td>
+                <td><a href="/doankhoa/quanlihoatdong/<%= cls_atv[i]._id %>">Chi tiết</a></td>
+                <td><a class="more_list" href="#">Chỉnh sửa</a></td>
+              </tr>
+              <tr class="copy_box">
+                <!-- fill link google forn here NTHL xấu trai -->
+                <td colspan="2"> COPY </td>
+                <td><a href="#">Link đăng kí hoạt động</a></td>
+                <td colspan="3"><a href="#">Link điểm danh hoạt động</a></td>
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
+
+        </div>
       </div>
+    </div>
   </div>
   <%- include(footer) %>
 </body>
@@ -236,18 +269,17 @@
       <div class="content_main">
         <div class="content subtitle">
           <h3 class="sub-title name">Tên Hoạt Động</h3>
-          <input class="subject--input " type="text" placeholder="Nhập tên hoạt động">
+          <input class="subject--input" id="activities_title" type="text" placeholder="Nhập tên hoạt động">
         </div>
         <div class="content">
           <h3 class="sub-title descrip">Nội Dung Hoạt Động</h3>
-          <textarea name="" id="activities_content" cols="30" rows="10"
-            placeholder="Nhập nội dung hoạt động"></textarea>
+          <textarea name="" id="activities_content" cols="30" rows="10" placeholder="Nhập nội dung hoạt động"></textarea>
         </div>
         <div class="select_year">
           <div class="selectbox nien_khoa">
             <main id="select-main">
               <div class="select">
-                <label for="select-level">Cấp Độ</label>
+                <label class="model-lb" for="select-level">Cấp Độ</label>
                 <select id="select-level2" class="select_level">
                   <option value="lop">Cấp Lớp</option>
                   <option value="khoa">Cấp Khoa</option>
@@ -255,10 +287,10 @@
                 </select>
               </div>
               <div class="select" id="select_lop2">
-                <label for="select-level">Lớp</label>
-                <select id="select-level select_class">
+                <label class="model-lb" for="select-level">Lớp</label>
+                <select id="select-class2 select_class">
                   <% for (let i = 0; i < cls.length; i++) {%>
-                    <option value="<%= cls[i]._id %>"><%= cls[i]._id %></option>
+                  <option value="<%= cls[i]._id %>"><%= cls[i]._id %></option>
                   <% } %>
                 </select>
               </div>
@@ -289,13 +321,13 @@
         </div>
         <div class="content">
           <h3 class="sub-title descrip">Nội Dung Hoạt Động</h3>
-          <textarea name="" class="activities_content" cols="30" rows="10" placeholder="Nhập nội dung hoạt động"></textarea>
+          <textarea class="activities_content" id="activities_content" cols="30" rows="10" placeholder="Nhập nội dung hoạt động"></textarea>
         </div>
         <div class="select_year">
           <div class="selectbox nien_khoa">
             <main id="select-main">
               <div class="select">
-                <label for="select-level">Cấp Độ</label>
+                <label class="model-lb" for="select-level">Cấp Độ</label>
                 <select id="select-level1" class="select_level">
                   <option value="lop">Cấp Lớp</option>
                   <option value="khoa">Cấp Khoa</option>
@@ -303,10 +335,10 @@
                 </select>
               </div>
               <div class="select" id="select_lop1">
-                <label for="select-level">Lớp</label>
-                <select id="select-level" class="select_class">
+                <label class="model-lb" for="select-level">Lớp</label>
+                <select id="select-class1" class="select_class">
                   <% for (let i = 0; i < cls.length; i++) {%>
-                    <option value="<%= cls[i]._id %>"><%= cls[i]._id %></option>
+                  <option value="<%= cls[i]._id %>"><%= cls[i]._id %></option>
                   <% } %>
                 </select>
               </div>

@@ -1,13 +1,13 @@
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = "mongodb+srv://binhminh19112003:Zr3uGIK4dCymOXON@database.sefjqcb.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    serverApi: {
-        version: ServerApiVersion.v1,
-        strict: true,
-        deprecationErrors: true,
-    }
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
 });
 // clear seasion của người dùng
 // server.atomic_table('global',['sessions', 'sessions_manager'],'18102003').catch(eror => console.log(eror));
@@ -24,10 +24,10 @@ const client = new MongoClient(uri, {
 //     { projection: { _id: 0, class: 1, power: 1 } }
 // ).then((ok) => { console.log(ok); })
 
-client.db('global').collection('user_info').find(
-  { dep: user.dep },
-  { projection: { _id: 1, name: 0, dep: 0 } }
-  ).toArray().then((ok) => { console.log(ok); });
+// client.db('global').collection('user_info').find(
+//   { dep: user.dep },
+//   { projection: { _id: 1, name: 0, dep: 0 } }
+//   ).toArray().then((ok) => { console.log(ok); });
 // client.db('global').collection('user_info').updateOne(
 //     { _id: '2101111' },
 //     {$set: {
@@ -41,7 +41,7 @@ client.db('global').collection('user_info').find(
 //         email: ''
 //     }},
 //     {upsert: true}
-    
+
 // ).then(() => { console.log('them thong tin thanh cong'); })
 // client.db('global').collection('login_info').updateOne(
 //     { _id: '2101111' },
@@ -50,7 +50,7 @@ client.db('global').collection('user_info').find(
 //         password: '2101111'
 //     }},
 //     {upsert: true}
-    
+
 // ).then(() => { console.log('them tai khoan thanh cong'); })
 
 
@@ -87,3 +87,9 @@ client.db('global').collection('user_info').find(
 //     },
 //     { $set: { power: { 0: true, 1: true } } }
 // ).then(console.log('ok'));
+
+
+client.db('global').collection('activities').find(
+  {},
+  { projection: { name: 1 } }
+).toArray().then((ok) => { console.log(ok); });
