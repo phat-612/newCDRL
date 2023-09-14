@@ -27,7 +27,9 @@ html {
 } */
 
 
-
+.content{
+  padding: 1rem;
+}
 
 th {
   font-size: 2rem;

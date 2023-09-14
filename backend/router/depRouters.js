@@ -385,7 +385,7 @@ function createDepRouter(client) {
           { projection: { _id: 1, branch: 1 } }
         )
         .toArray();
-      
+
       const years = await client
         .db(name_global_databases)
         .collection("classes")
@@ -395,72 +395,90 @@ function createDepRouter(client) {
         );
 
       // get all activities of school
-      const school_atv = await client.db(name_global_databases).collection('activities').find(
-        {},
-        {
-          projection: {
-            name: 1,
-            year: 1
+      const school_atv = await client
+        .db(name_global_databases)
+        .collection("activities")
+        .find(
+          {},
+          {
+            projection: {
+              name: 1,
+              content: 1,
+              year: 1,
+            },
           }
-        }
-      ).toArray();
+        )
+        .toArray();
 
-      // get all activities of dep 
-      const dep_atv = await client.db(user.dep).collection('activities').find(
-        {},
-        {
-          projection: {
-            name: 1,
-            year: 1
+      // get all activities of dep
+      const dep_atv = await client
+        .db(user.dep)
+        .collection("activities")
+        .find(
+          {},
+          {
+            projection: {
+              name: 1,
+              content: 1,
+              year: 1,
+            },
           }
-        }
-      ).toArray();
+        )
+        .toArray();
 
       // get all activities of class of department
-      let cls_atv = [];
-      await client.db(user.dep).listCollections().toArray((err, collections) => { // get all collection in dep database
-        if (err) {
-          console.error('Failed to retrieve collections:', err);
-        }
+      const collections = await client.db(user.dep).listCollections().toArray();
 
-        // Filter collections ending with '_activities'
-        const activityCollections = collections.filter((collection) => collection.name.endsWith('_activities'));
+      // Filter collections ending with '_activities'
+      const activityCollections = collections.filter((collection) =>
+        collection.name.endsWith("_activities")
+      );
 
-        // Loop through activity collections and retrieve all documents
-        activityCollections.forEach(async (collection) => {
-          const dummy = await client.db(user.dep).collection(collection.name).find(
+      // Loop through activity collections and retrieve all documents
+      const cls_atvs = await activityCollections.map(async (collection) => {
+        const dummy = await client
+          .db(user.dep)
+          .collection(collection.name)
+          .find(
             {},
             {
               projection: {
                 name: 1,
+                content: 1,
                 cls: 1,
-                year: 1
-              }
+                year: 1,
+              },
             }
-          ).toArray();
-
-          cls_atv.push(...dummy);
+          )
+          .toArray();
+        return dummy;
+      });
+      Promise.all(cls_atvs)
+        .then((results) => {
+          // Khi tất cả các promise đã hoàn thành, results sẽ là một mảng chứa kết quả từ mỗi truy vấn.
+          // Bạn có thể làm gì đó với kết quả ở đây.
+          const cls_atv = [].concat(...results); // Kết hợp kết quả từ các truy vấn vào một mảng duy nhất
+          return res.render("doankhoa-manage-activities", {
+            header: "global-header",
+            footer: "global-footer",
+            thongbao: "global-notifications",
+            menu: "doankhoa-menu",
+            cls: classlist,
+            years: years.years,
+            curr_year: school_year.year,
+            branch: branch_list,
+            school_atv: school_atv,
+            dep_atv: dep_atv,
+            cls_atv: cls_atv,
+          });
+        })
+        .catch((error) => {
+          // Xử lý lỗi nếu có
+          console.error(error);
         });
-      });
-
-      return res.render("doankhoa-manage-activities", {
-        header: "global-header",
-        footer: "global-footer",
-        thongbao: "global-notifications",
-        menu: "doankhoa-menu",
-        cls: classlist,
-        years: years.years,
-        curr_year: school_year.year,
-        branch: branch_list,
-        school_atv: school_atv,
-        dep_atv: dep_atv,
-        cls_atv: cls_atv
-      });
-
     } else {
       return res.sendStatus(403);
     }
-
   });
 
   // danh sach sinh vien route

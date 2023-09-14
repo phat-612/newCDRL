@@ -223,7 +223,7 @@ function createRootRouter(client) {
   });
 
   // Quen mat khau
-  router.get("/quenmatkhau", async (req, res) => {
+  router.get("/quenmatkhau", checkIfUserLoginRoute,async (req, res) => {
     const user = req.session.user;
     if (user) {
       return res.redirect("/");
@@ -234,6 +234,15 @@ function createRootRouter(client) {
       thongbao: "global-notifications",
       avt: null,
     });
+  });
+
+
+  router.get("/dangkyhoatdong", checkIfUserLoginRoute, async (req, res) => {
+        return res.render("sinhvien-activeregistration", {
+          header: "global-header",
+          thongbao: "global-notifications",
+          footer: "global-footer",
+        });
   });
 
   // 403 route

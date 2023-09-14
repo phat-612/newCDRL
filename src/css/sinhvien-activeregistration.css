@@ -12,34 +12,6 @@
   /* padding: 1.5rem; */
 }
 
-.content .hk_nk {
-  font-size: 2rem;
-  position: relative;
-
-  /* padding: 1rem; */
-}
-.year_full {
-  width:107rem;
-  display: flex;
-  padding-bottom: 1rem;
-}
-.hk {
-  width: 38%;
-  display: flex;
-  align-items: center;
-}
-.hk span {
-  width: 30%;
-}
-
-/* activity-board */
-
-.button-35-a {
-  position: absolute !important;
-  top: 10%;
-  right: 13%;
-}
-
 .activity-board {
   margin-top: 2rem;
   padding: 1rem;
@@ -160,54 +132,12 @@ tr:hover {
   font-size: 1.5rem;
 }
 
-textarea {
-  width: 97%;
-  padding: 1rem;
-  margin: 1rem 1rem 0rem 0rem;
-  border-radius: 0.8rem;
-}
-
-/* Tùy chỉnh chú mờ */
-textarea::placeholder {
-  color: var(--black-color);
-  opacity: 0.5;
-  /* Xám mờ với alpha 0.5 */
-  font-style: italic;
-}
-
-.content.selection {
-  display: flex;
-}
-
 label {
   display: flex;
   align-items: center;
   /* margin-right: 10px; */
   /* Để tạo khoảng cách giữa label và select */
   font-size: 1.8rem;
-}
-
-#select-main {
-  display: flex;
-  gap: 5rem;
-}
-
-#button-main {
-  display: flex;
-  gap: 1rem;
-  margin: 1rem 0rem 0rem 57rem;
-}
-
-.select_year {
-  margin-top: 1rem;
-}
-
-.copy_box {
-  display: none;
-}
-
-.copy_box:hover {
-  
 }
 
 .activity-board {
@@ -226,4 +156,21 @@ label {
 
 .model-lb {
   margin-right: 2rem;
+}
+
+
+.activity_body_details{
+    text-align: left;
+    margin: 0 auto;
+    padding: 4rem;
+    font-size: 2rem;
+    line-height: 3rem;
+}
+
+.activity_body_alert{
+    padding: 9rem 0 15rem 0;
+    color: #61ff61;
+}
+.activity_body_studentname{
+    padding: 2rem 0;
 }

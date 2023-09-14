@@ -86,6 +86,8 @@ function createAPIRouter(client, wss) {
               { _id: data.mssv },
               { projection: { _id: 0, class: 1, power: 1, dep: 1 } }
             );
+          // console.log(cls);
+
           if (!cls.power[2]) {
             const branch = await client
               .db(name_global_databases)
@@ -94,6 +96,7 @@ function createAPIRouter(client, wss) {
                 { _id: cls.class[0] },
                 { projection: { _id: 0, branch: 1 } }
               );
+            // console.log(branch);
             if (branch) {
               const dep = await client
                 .db(name_global_databases)
@@ -651,146 +654,75 @@ function createAPIRouter(client, wss) {
         }
 
         if (fileStudents) {
-          
-          const workbook = await XlsxPopulate.fromFileAsync(
-            fileStudents.path
-          );
+          const workbook = await XlsxPopulate.fromFileAsync(fileStudents.path);
           const sheet = workbook.sheet(0);
-         
+          // const sheetCount = workbook.sheetCount();
           const values = sheet.usedRange().value();
           const usedRange = sheet.usedRange();
 
-          if (usedRange) {
-            console.log("Tệp Excel chứa dữ liệu");
-            if (req.body.status == "true") {
-              try {
-                // read excel file:
-                // create all account
-                
-                let maxWidthEmail = 0;
-                //[['MSSV', 'Họ', 'Tên' ]]
-                sheet.cell("D1").value("Email");
-                sheet.cell("E1").value("Password");
-                for (let i = 1; i < values.length; i++) {
-                  let pw = await randomPassword();
-                  let email = await generateEmail(
-                    `${values[i][1].toString()} ${values[i][2].toString()} ${values[i][0].toString()}`
-                  );
-                  let dataInsertUser = {
-                    _id: values[i][0].toString(),
-                    first_name: values[i][2].toString(),
-                    last_name: values[i][1].toString(),
-                    avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
-                    power: { 0: true },
-                    class: [req.body.cls],
-                    displayName: `${values[i][1].toString()} ${values[i][2].toString()}`,
-                    email: email,
-                  };
-                  let dataInsertLogin = {
-                    _id: values[i][0].toString(),
-                    password: pw,
-                    first: "new_user",
-                  };
-                  client.db("global").collection("user_info").updateOne(
-                    {
-                      _id: dataInsertUser._id,
-                    },
-                    {
-                      $set: dataInsertUser,
-                    },
-                    {
-                      upsert: true,
-                    }
-                  );
-                  client.db("global").collection("login_info").updateOne(
-                    {
-                      _id: dataInsertLogin._id,
-                    },
-                    {
-                      $set: dataInsertLogin,
-                    },
-                    {
-                      upsert: true,
-                    }
-                  );
-                  await sheet.cell(`D${i + 1}`).value(email);
-                  await sheet.cell(`E${i + 1}`).value(pw);
-                  const range = sheet.range(`D${i + 1}:E${i + 1}`);
-                  range.style({ border: true });
-                  if (email.length > maxWidthEmail) {
-                    maxWidthEmail = email.length;
-                  }
+          const expectedValues = ["MSSV", "HỌ", "TÊN"];
+          // const columnCount = expectedValues.length;
+          let isCorrect = true;
+          const endCell = usedRange.endCell();
+          const rowCount = endCell.rowNumber();
+          const columnCount = 3;
+
+          for (let column = 1; column <= columnCount; column++) {
+            const cell = sheet.cell(1, column); // Ô đầu tiên trên hàng 1 và cột column
+            const value = cell.value();
+
+            if (value !== expectedValues[column - 1]) {
+              isCorrect = false;
+              break;
+            }
+          }
+
+          if (isCorrect) {
+            console.log("Các giá trị đúng theo thứ tự");
+
+            let havevalue = true;
+
+            for (let row = 2; row <= 5; row++) {
+              let hasValue = false;
+              console.log("ok");
+              for (let column = 1; column <= columnCount; column++) {
+                console.log("ko");
+
+                const cell = sheet.cell(row, column);
+                const value = cell.value();
+
+                if (value) {
+                  hasValue = true;
+                  break;
                 }
-                // Write to file.
-                sheet.column("D").width(maxWidthEmail);
-                const uuid = uuidv4();
-                await workbook.toFileAsync(
-                  path.join(".downloads", uuid + ".xlsx")
-                );
-                res.download(path.join(".downloads", uuid + ".xlsx"));
-                // xoa file sau khi xu ly
-                scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
-              } catch (err) {
-                console.log("SYSTEM | CREATE_ACCOUNT | ERROR | ", err);
-                return res.sendStatus(500);
               }
-            } else {
-              try {
-                console.log("ngu");
-                // read excel file:
-                // create all account
-                const workbook = await XlsxPopulate.fromFileAsync(
-                  fileStudents.path
-                );
-                const sheet = workbook.sheet(0);
-                
-                const values = sheet.usedRange().value();
-                let maxWidthEmail = 0;
-                //[['MSSV', 'Họ', 'Tên' ]]
-                sheet.cell("D1").value("Email");
-                sheet.cell("E1").value("Password");
-                for (let i = 1; i < values.length; i++) {
-                  let studentIdToCheck = values[i][0].toString(); // Mã số sinh viên cần kiểm tra
-                  console.log(studentIdToCheck);
-  
-                  // client.db("global")
-                  // .collection("user_info").findOne(
-                  //   { 
-                  //     _id: studentIdToCheck 
-                  //   },
-                  //   function (err, result) {
-                  //     if (err) {
-                  //       console.error(err);
-                  //       return;
-                  //     }
-  
-                  //     var isStudentIdExists = result !== null; // Kiểm tra kết quả trả về
-  
-                  //     console.log(
-                  //       "Mã số sinh viên có tồn tại trong cơ sở dữ liệu:",
-                  //       isStudentIdExists
-                  //     );
-                  //   }
-                  // );
-                  const marker = await client
-                    .db(name_global_databases)
-                    .collection("user_info")
-                    .findOne(
-                      { _id: studentIdToCheck },
-                      {
-                        projection: {
-                          _id: 0,
-                          last_name: 1,
-                          first_name: 1,
-                        },
-                      }
-                    );
-                  console.log(marker)
-                  if (!marker) {
-                    console.log('k có trong DB')
+
+              if (hasValue) {
+                console.log(`Hàng ${row}: Có giá trị`);
+              } else {
+                console.log(`Hàng ${row}: Không có giá trị`);
+                havevalue = false;
+                console.log(havevalue);
+                break;
+              }
+            }
+            if (havevalue) {
+              console.log("Tệp Excel chứa dữ liệu");
+              if (req.body.status == "true") {
+                try {
+                  // read excel file:
+                  // create all account
+
+                  let maxWidthEmail = 0;
+                  //[['MSSV', 'Họ', 'Tên' ]]
+                  sheet.cell("D1").value("Email");
+                  sheet.cell("E1").value("Password");
+                  for (let i = 1; i < values.length; i++) {
                     let pw = await randomPassword();
                     let email = await generateEmail(
-                      `${values[i][1]} ${values[i][2]} ${values[i][0].toString()}`
+                      `${values[i][1].toString()} ${values[
+                        i
+                      ][2].toString()} ${values[i][0].toString()}`
                     );
                     let dataInsertUser = {
                       _id: values[i][0].toString(),
@@ -799,7 +731,9 @@ function createAPIRouter(client, wss) {
                       avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
                       power: { 0: true },
                       class: [req.body.cls],
-                      displayName: `${values[i][1].toString()} ${values[i][2].toString()}`,
+                      displayName: `${values[i][1].toString()} ${values[
+                        i
+                      ][2].toString()}`,
                       email: email,
                     };
                     let dataInsertLogin = {
@@ -836,35 +770,156 @@ function createAPIRouter(client, wss) {
                     if (email.length > maxWidthEmail) {
                       maxWidthEmail = email.length;
                     }
-  
-                    // Write to file.
-                    sheet.column("D").width(maxWidthEmail);
-                    const uuid = uuidv4();
-                    await workbook.toFileAsync(path.join(".downloads", uuid + ".xlsx"));
-                    res.download(path.join(".downloads", uuid + ".xlsx"));
-                    // xoa file sau khi xu ly
-                    scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
-                  } else {
-                    console.log('có trong DB')
                   }
+                  // Write to file.
+                  sheet.column("D").width(maxWidthEmail);
+                  const uuid = uuidv4();
+                  await workbook.toFileAsync(
+                    path.join(".downloads", uuid + ".xlsx")
+                  );
+                  res.download(path.join(".downloads", uuid + ".xlsx"));
+                  // xoa file sau khi xu ly
+                  scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
+                } catch (err) {
+                  console.log("SYSTEM | CREATE_ACCOUNT | ERROR | ", err);
+                  return res.sendStatus(500);
                 }
-  
-  
-  
-              } catch (err) {
-                console.log("SYSTEM | CREATE_ACCOUNT | ERROR | ", err);
-                return res.sendStatus(500);
+              } else {
+                try {
+                  console.log("ngu");
+                  // read excel file:
+                  // create all account
+                  const workbook = await XlsxPopulate.fromFileAsync(
+                    fileStudents.path
+                  );
+                  const sheet = workbook.sheet(0);
+
+                  const values = sheet.usedRange().value();
+                  let maxWidthEmail = 0;
+                  //[['MSSV', 'Họ', 'Tên' ]]
+                  sheet.cell("D1").value("Email");
+                  sheet.cell("E1").value("Password");
+                  for (let i = 1; i < values.length; i++) {
+                    let studentIdToCheck = values[i][0].toString(); // Mã số sinh viên cần kiểm tra
+                    console.log(studentIdToCheck);
+
+                    // client.db("global")
+                    // .collection("user_info").findOne(
+                    //   {
+                    //     _id: studentIdToCheck
+                    //   },
+                    //   function (err, result) {
+                    //     if (err) {
+                    //       console.error(err);
+                    //       return;
+                    //     }
+
+                    //     var isStudentIdExists = result !== null; // Kiểm tra kết quả trả về
+
+                    //     console.log(
+                    //       "Mã số sinh viên có tồn tại trong cơ sở dữ liệu:",
+                    //       isStudentIdExists
+                    //     );
+                    //   }
+                    // );
+                    const marker = await client
+                      .db(name_global_databases)
+                      .collection("user_info")
+                      .findOne(
+                        { _id: studentIdToCheck },
+                        {
+                          projection: {
+                            _id: 0,
+                            last_name: 1,
+                            first_name: 1,
+                          },
+                        }
+                      );
+                    console.log(marker);
+                    if (!marker) {
+                      console.log("k có trong DB");
+                      let pw = await randomPassword();
+                      let email = await generateEmail(
+                        `${values[i][1]} ${values[i][2]} ${values[
+                          i
+                        ][0].toString()}`
+                      );
+                      let dataInsertUser = {
+                        _id: values[i][0].toString(),
+                        first_name: values[i][2].toString(),
+                        last_name: values[i][1].toString(),
+                        avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
+                        power: { 0: true },
+                        class: [req.body.cls],
+                        displayName: `${values[i][1].toString()} ${values[
+                          i
+                        ][2].toString()}`,
+                        email: email,
+                      };
+                      let dataInsertLogin = {
+                        _id: values[i][0].toString(),
+                        password: pw,
+                        first: "new_user",
+                      };
+                      client.db("global").collection("user_info").updateOne(
+                        {
+                          _id: dataInsertUser._id,
+                        },
+                        {
+                          $set: dataInsertUser,
+                        },
+                        {
+                          upsert: true,
+                        }
+                      );
+                      client.db("global").collection("login_info").updateOne(
+                        {
+                          _id: dataInsertLogin._id,
+                        },
+                        {
+                          $set: dataInsertLogin,
+                        },
+                        {
+                          upsert: true,
+                        }
+                      );
+                      await sheet.cell(`D${i + 1}`).value(email);
+                      await sheet.cell(`E${i + 1}`).value(pw);
+                      const range = sheet.range(`D${i + 1}:E${i + 1}`);
+                      range.style({ border: true });
+                      if (email.length > maxWidthEmail) {
+                        maxWidthEmail = email.length;
+                      }
+
+                      // Write to file.
+                      sheet.column("D").width(maxWidthEmail);
+                      const uuid = uuidv4();
+                      await workbook.toFileAsync(
+                        path.join(".downloads", uuid + ".xlsx")
+                      );
+                      res.download(path.join(".downloads", uuid + ".xlsx"));
+                      // xoa file sau khi xu ly
+                      scheduleFileDeletion(
+                        path.join(".downloads", uuid + ".xlsx")
+                      );
+                    } else {
+                      console.log("có trong DB");
+                    }
+                  }
+                } catch (err) {
+                  console.log("SYSTEM | CREATE_ACCOUNT | ERROR | ", err);
+                  return res.sendStatus(500);
+                }
               }
+            } else {
+              console.log("ngu hon nua");
+              
+              return res.sendStatus(404);
             }
-            
           } else {
-            console.log("ngu hon nua");
-            return res.sendStatus(403);
-
+            console.log("Các giá trị không đúng theo thứ tự");
+            return res.sendStatus(405);
           }
-
-
-          
         } else {
           console.log("them 1 sinh vien");
           const dataStudent = req.body;
@@ -1903,61 +1958,80 @@ function createAPIRouter(client, wss) {
 
       if (user.pow[3]) {
         const data = req.body; // data = {atv_id: '19181011' (activity's id); name: 'Hoat dong hay nha'; content: 'Di du thu noi'; 'level': 'khoa'; ; cls_id:'KTPM'}
-        // if it is a new one Send fake id and sure that not exist in database 
+        // if it is a new one Send fake id and sure that not exist in database
         switch (data.level) {
-          case 'lop':
-
+          case "lop":
             // save activity in 'Class name' + _activities collection in 'Department name' database
-            await client.db(user.dep).collection(data.cls_id + '_activities').updateOne(
-              {
-                _id: data.atv_id
-              },
-              {
-                name: data.name,
-                content: data.content,
-                level: 'lop',
-                cls: data.cls_id,
-                year: school_year.year
-              },
-              {
-                upsert: true
-              }
-            );
+            await client
+              .db(user.dep)
+              .collection(data.cls_id + "_activities")
+              .updateOne(
+                {
+                  _id: data.atv_id,
+                },
+                {
+                  $set: {
+                    name: data.name,
+                    content: data.content,
+                    level: "lop",
+                    cls: data.cls_id,
+                    year: school_year.year,
+                  },
+                },
+                {
+                  upsert: true,
+                }
+              );
 
-          case 'khoa':
+            break;
 
+          case "khoa":
             // save activity in activities collection in 'Dep name' database
-            await client.db(user.dep).collection('activities').updateOne(
-              {
-                _id: data.atv_id
-              },
-              {
-                name: data.name,
-                content: data.content,
-                level: 'khoa',
-                year: school_year.year
-              },
-              {
-                upsert: true
-              }
-            );
+            await client
+              .db(user.dep)
+              .collection("activities")
+              .updateOne(
+                {
+                  _id: data.atv_id,
+                },
+                {
+                  $set: {
+                    name: data.name,
+                    content: data.content,
+                    level: "khoa",
+                    year: school_year.year,
+                  },
+                },
+                {
+                  upsert: true,
+                }
+              );
 
-          case 'truong':
+            break;
+
+          case "truong":
             // save activity in activities collection in global database
-            await client.db(name_global_databases).collection('activities').updateOne(
-              {
-                _id: data.atv_id
-              },
-              {
-                name: data.name,
-                content: data.content,
-                level: 'truong',
-                year: school_year.year
-              },
-              {
-                upsert: true
-              }
-            );
+            await client
+              .db(name_global_databases)
+              .collection("activities")
+              .updateOne(
+                {
+                  _id: data.atv_id,
+                },
+                {
+                  $set: {
+                    name: data.name,
+                    content: data.content,
+                    level: "truong",
+                    year: school_year.year,
+                  },
+                },
+                {
+                  upsert: true,
+                }
+              );
+
+            break;
         }
         return res.status(200).json({ message: "Success" });
       } else {
@@ -1966,7 +2040,7 @@ function createAPIRouter(client, wss) {
 
       // use later to update student joining inside activities database
       // student_list: {}, // change later to list of student with value is boolean (true for joining and false for not joining)
-      // bonus_list: [], // list of student's id that have bonus. 
+      // bonus_list: [], // list of student's id that have bonus.
     } catch (err) {
       console.log("SYSTEM | ADD_ACTIVITIES | ERROR | ", err);
       return res.sendStatus(500);

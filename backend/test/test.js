@@ -1,5 +1,6 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://binhminh19112003:Zr3uGIK4dCymOXON@database.sefjqcb.mongodb.net/?retryWrites=true&w=majority";
+const { MongoClient, ServerApiVersion } = require("mongodb");
+const uri =
+  "mongodb+srv://binhminh19112003:Zr3uGIK4dCymOXON@database.sefjqcb.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -7,7 +8,7 @@ const client = new MongoClient(uri, {
     version: ServerApiVersion.v1,
     strict: true,
     deprecationErrors: true,
-  }
+  },
 });
 // clear seasion của người dùng
 // server.atomic_table('global',['sessions', 'sessions_manager'],'18102003').catch(eror => console.log(eror));
@@ -53,7 +54,6 @@ const client = new MongoClient(uri, {
 
 // ).then(() => { console.log('them tai khoan thanh cong'); })
 
-
 // add quyên cho người dùng
 // server.update_many_Data('user_info', {}, { $set: { class: 'KTPM0121' } });
 
@@ -88,8 +88,46 @@ const client = new MongoClient(uri, {
 //     { $set: { power: { 0: true, 1: true } } }
 // ).then(console.log('ok'));
 
+// client
+//   .db("global")
+//   .collection("activities")
+//   .find({}, { projection: { name: 1 } })
+//   .toArray()
+//   .then((ok) => {
+//     console.log(ok);
+//   });
 
-client.db('global').collection('activities').find(
-  {},
-  { projection: { name: 1 } }
-).toArray().then((ok) => { console.log(ok); });
+async function inet() {
+  let a = await client.db("CNTT").listCollections().toArray();
+
+  {
+    // get all collection in dep database
+
+    // Filter collections ending with '_activities'
+    const activityCollections = a.filter((collection) => 
+      collection.name.endsWith("_activities")
+    );
+    let cls_atv = [];
+    // Loop through activity collections and retrieve all documents
+    activityCollections.forEach(async (collection) => {
+      const dummy = await client
+        .db("CNTT")
+        .collection(collection.name)
+        .find(
+          {},
+          {
+            projection: {
+              name: 1,
+              cls: 1,
+              year: 1,
+            },
+          }
+        )
+        .toArray();
+
+      cls_atv.push(...dummy);
+      console.log(cls_atv);
+    });
+  }
+}
+inet();

@@ -328,7 +328,14 @@ $(document).ready(() => {
                 // // Giải phóng URL tạm thời sau khi tải xuống hoàn thành
                 URL.revokeObjectURL(blobUrl);
       
-              } else {
+              }
+              else if (response.status == 404) {
+                notify('!', 'File không có đủ dữ liệu !')
+              }
+              else if (response.status == 405) {
+                notify('!', 'File không đúng mẫu !')
+              }
+              else {
                 notify('!', 'Thêm sinh viên thất bại ')
               }
             } catch (error) {

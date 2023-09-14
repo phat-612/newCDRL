@@ -29,7 +29,7 @@ function validateFile(file) {
 }
 //////////////////////
 $(document).ready(function () {
-  checkDangVien();
+  autoCheck();
   $(".post-btn").click(function () {
     const modal_wrap_img = document.querySelectorAll(".modal_wrap_img");
     if (modal_wrap_img.length < 5) {
@@ -163,8 +163,17 @@ $(document).mouseup(function (e) {
   }
 });
 // tính điểm ------------------------------------------------------------------------------------------------------------------------------------------------------------
-async function checkDangVien(){
-  const infoMark = await fetch("https://localhost:8181/api/getStudentInfoMark");
+async function autoCheck(){
+  const response = await fetch("https://localhost:8181/api/getStudentInfoMark");
+  let infoMark = await response.json();
+  if (infoMark["dang_vien"]){
+    $("#morning12").prop('checked', true);
+    $("#morning12").trigger('change');
+  }
+  if (infoMark["cham_diem"] || infoMark["lap_hoat_dong"]){
+    $("#mySelect14").val('3');
+    $("#mySelect14").trigger('change');
+  }
   console.log(infoMark);
 }
 function getSelectValue(selectId) {
