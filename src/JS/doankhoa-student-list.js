@@ -214,7 +214,7 @@ $(document).ready(() => {
             _id: inpMssv.val(),
             last_name: inpHo.val(),
             first_name: inpTen.val(),
-            role: inpCd.prop('checked') || inpLbhd.prop('checked') ? 'Ban cán sự' : 'Lớp viên',
+            role: inpCd.prop('checked') || inpLbhd.prop('checked') ? 'Ban cán sự' : 'Sinh viên',
             dang_vien: inpDv.prop('checked'),
             cham_diem: inpCd.prop('checked'),
             lap_hoat_dong: inpLbhd.prop('checked'),
@@ -224,12 +224,12 @@ $(document).ready(() => {
           notify('n', 'Thêm sinh viên thành công')
           const blobUrl = URL.createObjectURL(await response.blob());
           // Tạo một thẻ <a> ẩn để tải xuống và nhấn vào nó
-          const downloadLink = document.createElement('a');
-          downloadLink.href = blobUrl;
-          downloadLink.download = `${inpMssv.val()}.xlsx`; // Đặt tên cho tệp tải xuống
-          downloadLink.style.display = 'none';
-          document.body.appendChild(downloadLink);
-          downloadLink.click();
+          // const downloadLink = document.createElement('a');
+          // downloadLink.href = blobUrl;
+          // downloadLink.download = `${inpMssv.val()}.xlsx`; // Đặt tên cho tệp tải xuống
+          // downloadLink.style.display = 'none';
+          // document.body.appendChild(downloadLink);
+          // downloadLink.click();
           // Giải phóng URL tạm thời sau khi tải xuống hoàn thành
           URL.revokeObjectURL(blobUrl);
           $('.js_md_add').text('Thêm');
@@ -240,7 +240,7 @@ $(document).ready(() => {
                 _id: inpMssv.val(),
                 last_name: inpHo.val(),
                 first_name: inpTen.val(),
-                role: inpCd.prop('checked') || inpLbhd.prop('checked') ? 'Ban cán sự' : 'Lớp viên',
+                role: inpCd.prop('checked') || inpLbhd.prop('checked') ? 'Ban cán sự' : 'Sinh viên',
                 dang_vien: inpDv.prop('checked'),
                 cham_diem: inpCd.prop('checked'),
                 lap_hoat_dong: inpLbhd.prop('checked'),

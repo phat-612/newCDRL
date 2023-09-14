@@ -12,6 +12,8 @@ closeIcon.addEventListener("click", () => {
 });
 
 function notify(type, text_2) {
+  const button = document.querySelector(".button");
+  button.style.display = "none";
   switch (type) {
     // thong bao
     case "n":
