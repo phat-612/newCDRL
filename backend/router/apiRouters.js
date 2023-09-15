@@ -1611,11 +1611,12 @@ function createAPIRouter(client, wss) {
           let dang_vien = false;
           let cham_diem = false;
           let lap_hoat_dong = false;
+          dang_vien = item.power["10"] ? true : false;
+          cham_diem = item.power["1"] ? true : false;
+          lap_hoat_dong = item.power["3"] ? true : false;
           if (item.power["1"] || item.power["3"]) {
             role = "Ban cán sự";
-            dang_vien = item.power["10"] ? true : false;
-            cham_diem = item.power["1"] ? true : false;
-            lap_hoat_dong = item.power["3"] ? true : false;
+         
           } else if (item.power["0"]) {
             role = "Sinh viên";
           }
