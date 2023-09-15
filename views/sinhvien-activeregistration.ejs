@@ -19,6 +19,7 @@
                     <div class="activity_body_details">
                         <p>chi tiết: hoạt động hỗ trợ các đồng đạo tìm bạn gái đít bự</p>
                         <p>Cấp độ: khoa </p>
+                        <p>Điểm Danh: <i class="fa-solid fa-circle-xmark" style="color: #e01010;"></i>  <i class="fa-solid fa-circle-check" style="color: #5fff33;"></i> </p>
                     </div>
 
                     <!-- sau khi ghi danh -->
@@ -31,19 +32,32 @@
 
 
                     <!--ghi danh -->
+                    <!-- <div class="activity_body_studentname">
+                        <h1>
+                            bạn gái đít bự 
+                        </h1>
+                    </div>
+                    <button class="button-35 button-35-a activeregistration_btn">Ghi Danh</button> -->
+
+                    <!--diem danh -->
                     <div class="activity_body_studentname">
                         <h1>
                             bạn gái đít bự 
                         </h1>
                     </div>
-                    <button class="button-35 button-35-a activeregistration_btn">Ghi Danh</button>
-                    <!--ghi danh -->
+                    <button class="button-35 up-btn post-btn">
+                      Tải ảnh
+                    </button>
+                    <button class="button-35 up-btn save-btn">
+                      Điểm Danh
+                    </button>
+                    <!--diem danh -->
                 </section>
 
             </div>
             
 
-            <div class="activity-board">
+            <!-- <div class="activity-board">
                 <h2>HOẠT ĐỘNG TÌM MẤY CON GHỆ ĐÍT BỰ </h2>
 
 
@@ -76,9 +90,7 @@
                         <td class="school_year">HK1 2022-2023</td>
                         <td><a href="/doankhoa/quanlihoatdongkhoa/18101911">Chi tiết</a></td>
                       </tr>
-                      <tr class="copy_box" style="display: none;">
-                        <!-- fill link google forn here NTHL xấu trai -->
-                      </tr>
+
                       
                       <tr class="atv_box">
                         <td>
@@ -92,9 +104,7 @@
                         <td class="school_year">HK1 2022-2023</td>
                         <td><a href="/doankhoa/quanlihoatdongkhoa/29091610">Chi tiết</a></td>
                       </tr>
-                      <tr class="copy_box" style="display: none;">
-                        <!-- fill link google forn here NTHL xấu trai -->
-                      </tr>
+                    
                       
                       <tr class="atv_box">
                         <td>
@@ -109,7 +119,6 @@
                         <td><a href="/doankhoa/quanlihoatdongkhoa/09e9d942-85a8-428e-bc49-87bb4757bcc1">Chi tiết</a></td>
                       </tr>
                       <tr class="copy_box">
-                        <!-- fill link google forn here NTHL xấu trai -->
                       </tr>
                       
                       <tr class="atv_box">
@@ -124,9 +133,7 @@
                         <td class="school_year">HK1 2022-2023</td>
                         <td><a href="/doankhoa/quanlihoatdongkhoa/7640dd67-8731-4ecb-b99c-60862216c49c">Chi tiết</a></td>
                       </tr>
-                      <tr class="copy_box">
-                        <!-- fill link google forn here NTHL xấu trai -->
-                      </tr>
+                   
                       
                       <tr class="atv_box">
                         <td>
@@ -140,16 +147,41 @@
                         <td class="school_year">HK1 2022-2023</td>
                         <td><a href="/doankhoa/quanlihoatdongkhoa/b8aed8d1-15ef-49ea-a4b9-535829574499">Chi tiết</a></td>
                       </tr>
-                      <tr class="copy_box">
-                        <!-- fill link google forn here NTHL xấu trai -->
-                      </tr>
+                     
                       
                     </tbody>
                   </table>
-            </div>
+            </div>  -->
+            <!--ghi danh -->
         </div>
       </div>
       <%- include(footer) %>
     </div>
+    <script src="/src/JS/sinhvien-activeregistration.js"></script>
   </body>
+
+  <div class="modal">
+    <div class="modal_wrap">
+      <!-- nút tắt dialog -->
+      <button class="close-dialog">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <!-- thêm hinh ảnh và mô tả hoạt động -->
+      <div class="modal_img">
+      </div>
+      <div class="no-img">
+        Số ảnh tối đa (<span>0</span>/5)
+      </div>
+      <div class="modal_img_btn">
+        <button class="button-35 add-btn">Add</button>
+        <button class="button-35 done-btn done-btn2">Done</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="menu" onclick="this.classList.toggle('open')">
+    <div class="button button_medium"><i class="fa-solid fa-star"></i></div>
+    <div class="button button_plus"> <i class="fa-solid fa-star"></i></div>
+    <div class="button button_premium"><i class="fa-solid fa-star"></i></div>
+  </div>
 </html>
