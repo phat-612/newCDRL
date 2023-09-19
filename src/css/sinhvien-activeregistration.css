@@ -85,6 +85,8 @@ tr:hover {
   background-color: rgba(158, 158, 158, 0.507);
 }
 
+
+
 /* modal */
 .modal {
   position: fixed;
@@ -339,7 +341,7 @@ label {
 
 .modal_img {
   margin-top: 4rem;
-  height: 80%;
+  height: 75%;
   overflow: auto;
 }
 
@@ -390,7 +392,7 @@ textarea::placeholder {
 
 .modal_img_btn {
   background-color: var(--modal_img_btn);
-  height: 16%;
+  height: 12.5%;
   display: flex;
   justify-content: center;
   align-items: center;
