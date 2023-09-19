@@ -98,7 +98,7 @@ function createDepRouter(client) {
       classes[branchs[i]._id] = dummy.map((cls) => cls._id);
       class_teachers.push(...dummy.map((cls) => cls.cvht));
     }
-
+    console.log(class_teachers);
     // get all teacher's name in current dep
     const teachers = await client
       .db(name_global_databases)
@@ -138,7 +138,7 @@ function createDepRouter(client) {
           }
         );
     }
-
+    console.log(class_teachers);
     return res.render("doankhoa-manage-classes", {
       header: "global-header",
       footer: "global-footer",

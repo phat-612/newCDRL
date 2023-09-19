@@ -11,13 +11,11 @@ function generateUUID() {
 let atv_id = generateUUID(); // fake id to know a new id
 let curr_edit = undefined;
 
-$(".more_list").click(function () {
+$(document).on("click", ".more_list", async function () {
   // edit dialog often
   curr_edit = $(this).parent().parent();
   atv_id = curr_edit.find(".inp-cbx").val();
-
-  
-
+  //show the edit modal
   $(".modal.edit").show();
 });
 
