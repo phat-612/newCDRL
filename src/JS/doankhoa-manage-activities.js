@@ -15,9 +15,44 @@ $(document).on("click", ".more_list", async function () {
   // edit dialog often
   curr_edit = $(this).parent().parent();
   atv_id = curr_edit.find(".inp-cbx").val();
-  //show the edit modal
+
+
+  // set default for activities' name input
+  $(".modal.edit #activities_title").val(curr_edit.find('.a_name').text())
+
   $(".modal.edit").show();
 });
+
+// set default for input of edit modal
+$(document).on("click", "#school_edit", async function () {
+  // set default for activities' content input
+  $(".modal.edit #activities_content").val(school_content[parseInt(curr_edit.find('.index').text()) - 1])
+  // set default for activities'
+  $('select option[value="truong"]').attr("selected", true);
+  // do not have class choice
+  $(".modal.edit #select_lop2").hide();
+});
+
+$(document).on("click", "#dep_edit", async function () {
+  // set default for activities' content input
+  $(".modal.edit #activities_content").val(dep_content[parseInt(curr_edit.find('.index').text()) - 1])
+  // set default for activities'
+  $('.modal.edit #select-level2 option[value="khoa"]').attr("selected", true);
+  // do not have class choice
+  $(".modal.edit #select_lop2").hide();
+});
+
+$(document).on("click", "#cls_edit", async function () {
+  // set default for activities' content input
+  $(".modal.edit #activities_content").val(cls_content[parseInt(curr_edit.find('.index').text()) - 1])
+  // set default for activities'
+  $('.modal.edit #select-level2 option[value="lop"]').attr("selected", true);
+  // do not have class choice
+  $(".modal.edit #select_lop2").show();
+  $(`.modal.edit #select-class2 option[value="${curr_edit.find('.c_name').text()}"]`).attr("selected", true);
+});
+
+// --------------------------------------------------------------------------------------------------------
 
 $(".modal.edit").click(function () {
   $(".modal.edit").hide();
@@ -182,16 +217,16 @@ $(".save_btn").click(async function () {
                     <label for="row__2__${cls_length}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                     </label>
                 </td>
-                <td>${cls_length + 1}</td>
-                <td class="a_name">${atv_name}</td>
-                <td class="c_name">${cls_id.val()}</td>
-                <td class="school_year">${year_cur.split("_")[0]} ${year_cur.split("_")[1]}</td>
+                <td class="index">${cls_length + 1}</td>
+                <td class="a_name cls_a_name">${atv_name}</td>
+                <td class="c_name cls_c_name">${cls_id.val()}</td>
+                <td class="school_year cls_school_year">${year_cur.split("_")[0]} ${year_cur.split("_")[1]}</td>
                 <td><a href="/doankhoa/quanlihoatdong/${atv_id}">Chi tiết</a></td>
-                <td><a class="more_list" href="#">Chỉnh sửa</a></td>
+                <td><a class="more_list" id="cls_edit" href="#">Chỉnh sửa</a></td>
               </tr>
               <tr class="copy_box">
                 <td colspan="2"> COPY </td>
-                <td><a href="#">Link đăng kí hoạt động</a></td>
+                <td colspan="2"><a href="#">Link đăng kí hoạt động</a></td>
                 <td colspan="3"><a href="#">Link điểm danh hoạt động</a></td>
               </tr>
             `);
@@ -206,11 +241,11 @@ $(".save_btn").click(async function () {
                     <label for="row__1__${dep_length}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                     </label>
                 </td>
-                <td>${dep_length + 1}</td>
-                <td class="a_name">${atv_name}</td>
-                <td class="school_year">${year_cur.split("_")[0]} ${year_cur.split("_")[1]}</td>
+                <td class="index">${dep_length + 1}</td>
+                <td class="a_name dep_a_name">${atv_name}</td>
+                <td class="school_year dep_school_year">${year_cur.split("_")[0]} ${year_cur.split("_")[1]}</td>
                 <td><a href="/doankhoa/quanlihoatdong/${atv_id}">Chi tiết</a></td>
-                <td><a class="more_list" href="#">Chỉnh sửa</a></td>
+                <td><a class="more_list" id="dep_edit" href="#">Chỉnh sửa</a></td>
               </tr>
               <tr class="copy_box">
                 <td colspan="2"> COPY </td>
@@ -229,9 +264,9 @@ $(".save_btn").click(async function () {
                     <label for="row__0__${school_length}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                     </label>
                 </td>
-                <td>${school_length + 1}</td>
-                <td class="a_name">${atv_name}</td>
-                <td class="school_year">${year_cur.split("_")[0]} ${year_cur.split("_")[1]}</td>
+                <td class="index">${school_length + 1}</td>
+                <td class="a_name school_a_name">${atv_name}</td>
+                <td class="school_year school_school_year">${year_cur.split("_")[0]} ${year_cur.split("_")[1]}</td>
                 <td><a href="/doankhoa/quanlihoatdong/${atv_id}">Chi tiết</a></td>
                 <td><a class="more_list" href="#">Chỉnh sửa</a></td>
               </tr>
