@@ -406,3 +406,10 @@ textarea::placeholder {
 .done-btn:last-child {
   margin: 0;
 }
+
+.attendance{
+  color: #e01010;
+}
+.no_attendance_yet{
+  color: #5fff33;
+}

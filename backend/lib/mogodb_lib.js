@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const {MongoClient, ServerApiVersion } = require("mongodb");
 const uri =
   "mongodb+srv://binhminh19112003:Zr3uGIK4dCymOXON@6aesieunhan.sefjqcb.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(uri, {
@@ -14,6 +14,7 @@ const name_global_databases = "global";
 async function connect() {
   try {
     await client.connect();
+    
   } catch (error) {
     console.error("SYSTEM | ERROR | Error connecting to MongoDB:", error);
     throw error;

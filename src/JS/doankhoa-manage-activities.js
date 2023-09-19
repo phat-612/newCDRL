@@ -16,9 +16,8 @@ $(document).on("click", ".more_list", async function () {
   curr_edit = $(this).parent().parent();
   atv_id = curr_edit.find(".inp-cbx").val();
 
-
   // set default for activities' name input
-  $(".modal.edit #activities_title").val(curr_edit.find('.a_name').text())
+  $(".modal.edit #activities_title").val(curr_edit.find(".a_name").text());
 
   $(".modal.edit").show();
 });
@@ -26,7 +25,9 @@ $(document).on("click", ".more_list", async function () {
 // set default for input of edit modal
 $(document).on("click", "#school_edit", async function () {
   // set default for activities' content input
-  $(".modal.edit #activities_content").val(school_content[parseInt(curr_edit.find('.index').text()) - 1])
+  $(".modal.edit #activities_content").val(
+    school_content[parseInt(curr_edit.find(".index").text()) - 1]
+  );
   // set default for activities'
   $('select option[value="truong"]').attr("selected", true);
   // do not have class choice
@@ -35,7 +36,9 @@ $(document).on("click", "#school_edit", async function () {
 
 $(document).on("click", "#dep_edit", async function () {
   // set default for activities' content input
-  $(".modal.edit #activities_content").val(dep_content[parseInt(curr_edit.find('.index').text()) - 1])
+  $(".modal.edit #activities_content").val(
+    dep_content[parseInt(curr_edit.find(".index").text()) - 1]
+  );
   // set default for activities'
   $('.modal.edit #select-level2 option[value="khoa"]').attr("selected", true);
   // do not have class choice
@@ -44,12 +47,18 @@ $(document).on("click", "#dep_edit", async function () {
 
 $(document).on("click", "#cls_edit", async function () {
   // set default for activities' content input
-  $(".modal.edit #activities_content").val(cls_content[parseInt(curr_edit.find('.index').text()) - 1])
+  $(".modal.edit #activities_content").val(
+    cls_content[parseInt(curr_edit.find(".index").text()) - 1]
+  );
   // set default for activities'
   $('.modal.edit #select-level2 option[value="lop"]').attr("selected", true);
   // do not have class choice
   $(".modal.edit #select_lop2").show();
-  $(`.modal.edit #select-class2 option[value="${curr_edit.find('.c_name').text()}"]`).attr("selected", true);
+  $(
+    `.modal.edit #select-class2 option[value="${curr_edit
+      .find(".c_name")
+      .text()}"]`
+  ).attr("selected", true);
 });
 
 // --------------------------------------------------------------------------------------------------------
@@ -202,82 +211,78 @@ $(".save_btn").click(async function () {
     const response = await fetch("/api/addOrEditActivities", requestOptions);
     if (response.ok) {
       if (curr_edit) {
-        // set current edit line name to new name
-        curr_edit.find(".a_name").text(atv_name);
-      } else {
-        // check for add to school, department or class
-        switch (level.val()) {
-          case "lop":
-            let cls_length = $("#cls_tb tbody tr").length / 2;
-            $("#cls_tb tbody").append(`
-              <tr class="atv_box">
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__2__${cls_length}" class="inp-cbx" value="${atv_id}" />
-                    <label for="row__2__${cls_length}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                </td>
-                <td class="index">${cls_length + 1}</td>
-                <td class="a_name cls_a_name">${atv_name}</td>
-                <td class="c_name cls_c_name">${cls_id.val()}</td>
-                <td class="school_year cls_school_year">${year_cur.split("_")[0]} ${year_cur.split("_")[1]}</td>
-                <td><a href="/doankhoa/quanlihoatdong/${atv_id}">Chi tiết</a></td>
-                <td><a class="more_list" id="cls_edit" href="#">Chỉnh sửa</a></td>
-              </tr>
-              <tr class="copy_box">
-                <td colspan="2"> COPY </td>
-                <td colspan="2"><a href="#">Link đăng kí hoạt động</a></td>
-                <td colspan="3"><a href="#">Link điểm danh hoạt động</a></td>
-              </tr>
-            `);
-            break;
-          case "khoa":
-            let dep_length = $("#dep_tb tbody tr").length / 2;
-            $("#dep_tb tbody").append(`
-              <tr class="atv_box">
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__1__${dep_length}" class="inp-cbx" value="${atv_id}" />
-                    <label for="row__1__${dep_length}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                </td>
-                <td class="index">${dep_length + 1}</td>
-                <td class="a_name dep_a_name">${atv_name}</td>
-                <td class="school_year dep_school_year">${year_cur.split("_")[0]} ${year_cur.split("_")[1]}</td>
-                <td><a href="/doankhoa/quanlihoatdong/${atv_id}">Chi tiết</a></td>
-                <td><a class="more_list" id="dep_edit" href="#">Chỉnh sửa</a></td>
-              </tr>
-              <tr class="copy_box">
-                <td colspan="2"> COPY </td>
-                <td><a href="#">Link đăng kí hoạt động</a></td>
-                <td colspan="3"><a href="#">Link điểm danh hoạt động</a></td>
-              </tr>
-            `);
-            break;
-          case "truong":
-            let school_length = $("#school_tb tbody tr").length / 2;
-            $("#school_tb tbody").append(`
-              <tr class="atv_box">
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__0__${school_length}" class="inp-cbx" value="${atv_id}" />
-                    <label for="row__0__${school_length}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                </td>
-                <td class="index">${school_length + 1}</td>
-                <td class="a_name school_a_name">${atv_name}</td>
-                <td class="school_year school_school_year">${year_cur.split("_")[0]} ${year_cur.split("_")[1]}</td>
-                <td><a href="/doankhoa/quanlihoatdong/${atv_id}">Chi tiết</a></td>
-                <td><a class="more_list" href="#">Chỉnh sửa</a></td>
-              </tr>
-              <tr class="copy_box">
-                <td colspan="2"> COPY </td>
-                <td><a href="#">Link đăng kí hoạt động</a></td>
-                <td colspan="3"><a href="#">Link điểm danh hoạt động</a></td>
-              </tr>
-            `);
-            break;
-        }
+        // remove current edit if it is edit
+        curr_edit.remove();
+      }
+      // check for add to school, department or class
+      switch (level.val()) {
+        case "lop":
+          let cls_length = $("#cls_tb tbody tr").length / 2;
+          $("#cls_tb tbody").append(`
+            <tr class="atv_box">
+              <td>
+                <div class="checkbox-wrapper-4">
+                  <input type="checkbox" id="row__2__${cls_length}" class="inp-cbx" value="${atv_id}" />
+                  <label for="row__2__${cls_length}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                  </label>
+              </td>
+              <td class="index">${cls_length + 1}</td>
+              <td class="a_name">${atv_name}</td>
+              <td class="c_name">${cls_id.val()}</td>
+              <td class="school_year">${year_cur.split("_")[0]} ${year_cur.split("_")[1]}</td>
+              <td><a href="/doankhoa/quanlihoatdong/${atv_id}">Chi tiết</a></td>
+              <td><a class="more_list" id="cls_edit" href="#">Sửa</a></td>
+            </tr>
+            <tr class="copy_box">
+              <td colspan="2"> COPY </td>
+              <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
+            </tr>
+          `);
+          break;
+        case "khoa":
+          let dep_length = $("#dep_tb tbody tr").length / 2;
+          $("#dep_tb tbody").append(`
+            <tr class="atv_box">
+              <td>
+                <div class="checkbox-wrapper-4">
+                  <input type="checkbox" id="row__1__${dep_length}" class="inp-cbx" value="${atv_id}" />
+                  <label for="row__1__${dep_length}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                  </label>
+              </td>
+              <td class="index">${dep_length + 1}</td>
+              <td class="a_name">${atv_name}</td>
+              <td class="school_year">${year_cur.split("_")[0]} ${year_cur.split("_")[1]}</td>
+              <td><a href="/doankhoa/quanlihoatdong/${atv_id}">Chi tiết</a></td>
+              <td><a class="more_list" id="dep_edit" href="#">Sửa</a></td>
+            </tr>
+            <tr class="copy_box">
+              <td colspan="2"> COPY </td>
+              <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
+            </tr>
+          `);
+          break;
+        case "truong":
+          let school_length = $("#school_tb tbody tr").length / 2;
+          $("#school_tb tbody").append(`
+            <tr class="atv_box">
+              <td>
+                <div class="checkbox-wrapper-4">
+                  <input type="checkbox" id="row__0__${school_length}" class="inp-cbx" value="${atv_id}" />
+                  <label for="row__0__${school_length}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                  </label>
+              </td>
+              <td class="index">${school_length + 1}</td>
+              <td class="a_name">${atv_name}</td>
+              <td class="school_year">${year_cur.split("_")[0]} ${year_cur.split("_")[1]}</td>
+              <td><a href="/doankhoa/quanlihoatdong/${atv_id}">Chi tiết</a></td>
+              <td><a class="more_list" href="#">Sửa</a></td>
+            </tr>
+            <tr class="copy_box">
+              <td colspan="2"> COPY </td>
+              <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
+            </tr>
+          `);
+          break;
       }
       // able curr button
       $(this).prop("disabled", false);
@@ -296,6 +301,101 @@ $(".save_btn").click(async function () {
     }
   } else {
     notify("!", "Hãy nhập đầy đủ thông tin!");
+  }
+});
+
+// delete button
+// delete check checkbox
+$("#delete__activity").click(async function () {
+  // disable curr button
+  $(this).prop("disabled", true);
+
+  notify("!", "Đang xóa dữ liệu!");
+
+  let school_rmatv = [];
+  let dep_rmatv = [];
+  let cls_rmatv = [];
+
+  // add all checked line in school activities to school activities remove list
+  $("#school_tb tbody .inp-cbx").each(function () {
+    if (this.checked) {
+      school_rmatv.push(this.value);
+    }
+  });
+
+  // add all checked line in department activities to department activities remove list
+  $("#dep_tb tbody .inp-cbx").each(function () {
+    if (this.checked) {
+      dep_rmatv.push(this.value);
+    }
+  });
+
+  // add all checked line in class activities to class activities remove list
+  $("#cls_tb tbody .inp-cbx").each(function () {
+    if (this.checked) {
+      cls_rmatv.push(this.value);
+    }
+    cls_rmatv;
+  });
+
+  if (school_rmatv.length > 0 || dep_rmatv.length > 0 || cls_rmatv.length > 0) {
+    // request
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        school_rmatv: school_rmatv,
+        dep_rmatv: dep_rmatv,
+        cls_rmatv: cls_rmatv,
+      }),
+    };
+
+    const response = await fetch("/api/deleteActivities", requestOptions);
+    if (response.ok) {
+      // remove all checked line
+      $("table tbody .inp-cbx").each(function () {
+        if (this.checked) {
+          // remove currline
+          $(this).parent().parent().parent().remove();
+        }
+      });
+
+      // rewrite all numbers of lines after remove of schoole activities, department activities, class activities
+      // school:
+      let index = 1;
+      $("#school_tb tbody .index").each(function () {
+        $(this).text(index);
+        index += 1;
+      });
+      
+      // department:
+      index = 1;
+      $("#dep_tb tbody .index").each(function () {
+        $(this).text(index);
+        index += 1;
+      });
+
+      // class:
+      index = 1;
+      $("#cls_tb tbody .index").each(function () {
+        $(this).text(index);
+        index += 1;
+      });
+
+      // able curr button
+      $(this).prop("disabled", false);
+
+      notify("n", "Đã xóa các cố vấn được đánh dấu");
+    } else if (response.status == 500) {
+      // Error occurred during upload
+      notify("x", "Có lỗi xảy ra!");
+      // able curr button
+      $(this).prop("disabled", false);
+    }
+  } else {
+    notify("!", "Không có cố vấn được đánh dấu");
   }
 });
 

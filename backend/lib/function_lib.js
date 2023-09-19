@@ -313,6 +313,47 @@ function sortStudentName(std_list) {
   }
 }
 
+// xoá class
+async function deleteClassApi(data, user) {
+  for (let i = 0; i < data.rm_cls.length; i++) {
+    await client
+      .db(name_global_databases)
+      .collection("classes")
+      .deleteMany({ _id: data.rm_cls[i] });
+    const collections = await client.db(user.dep).listCollections().toArray();
+
+    // Lặp qua từng collection và xoá nếu tên bắt đầu bằng "lớp"
+    for (const collection of collections) {
+      if (collection.name.startsWith(data.rm_cls[i])) {
+        await client.db(user.dep).collection(collection.name).drop();
+        // console.log(`Đã xoá collection: ${collection.name}`);
+      }
+    }
+    // xoá học sinh đang thuộc class bên user_info (chuyển sang ghost account)
+    await client
+      .db(name_global_databases)
+      .collection("user_info")
+      .deleteMany({
+        class: [data.rm_cls[i]],
+        "power.0": { $exists: true },
+      });
+    // xoa lop khoi giao vien
+    await client
+      .db(name_global_databases)
+      .collection("user_info")
+      .updateMany(
+        {
+          _id: data.rm_cls[i],
+          "power.1": { $exists: true },
+          "power.4": { $exists: true },
+        },
+        {
+          $pull: { class: data.rm_cls[i] },
+        }
+      );
+  }
+}
+
 // Function to create id for string (get all start letter of words and cobine together)
 function createId(str) {
   let arr = str.toUpperCase().trim().split(" ");
@@ -334,4 +375,5 @@ module.exports = {
   scheduleFileDeletion,
   sortStudentName,
   createId,
+  deleteClassApi,
 };

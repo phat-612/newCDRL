@@ -115,7 +115,7 @@
 
           <div class="control">
             <button class="button-35 " id="add__activity">Thêm hoạt động</button>
-            <button class="button-35 " id="edit__activity">Xoá hoạt động</button>
+            <button class="button-35 " id="delete__activity">Xoá hoạt động</button>
           </div>
         </div>
 
@@ -148,16 +148,15 @@
                     </label>
                 </td>
                 <td class="index"><%= i + 1 %></td>
-                <td class="a_name school_a_name"><%= school_atv[i].name %></td>
-                <td class="school_year school_school_year"><%= school_atv[i].year.split("_")[0] + " " + school_atv[i].year.split("_")[1] %></td>
+                <td class="a_name"><%= school_atv[i].name %></td>
+                <td class="school_year"><%= school_atv[i].year.split("_")[0] + " " + school_atv[i].year.split("_")[1] %></td>
                 <td><a href="/doankhoa/quanlihoatdongkhoa/<%= school_atv[i]._id %>">Chi tiết</a></td>
                 <td><a class="more_list" id="school_edit" href="#">Sửa</a></td>
               </tr>
               <tr class="copy_box">
                 <!-- fill link google forn here NTHL xấu trai -->
                 <td colspan="2"> COPY </td>
-                <td><a href="#">Link đăng kí hoạt động</a></td>
-                <td colspan="3"><a href="#">Link điểm danh hoạt động</a></td>
+                <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
               </tr>
               <% } %>
             </tbody>
@@ -192,16 +191,15 @@
                     </label>
                 </td>
                 <td class="index"><%= i + 1 %></td>
-                <td class="a_name dep_a_name"><%= dep_atv[i].name %></td>
-                <td class="school_year dep_school_year"><%= dep_atv[i].year.split("_")[0] + " " + dep_atv[i].year.split("_")[1] %></td>
+                <td class="a_name"><%= dep_atv[i].name %></td>
+                <td class="school_year"><%= dep_atv[i].year.split("_")[0] + " " + dep_atv[i].year.split("_")[1] %></td>
                 <td><a href="/doankhoa/quanlihoatdongkhoa/<%= dep_atv[i]._id %>">Chi tiết</a></td>
                 <td><a class="more_list" id="dep_edit" href="#">Sửa</a></td>
               </tr>
               <tr class="copy_box">
                 <!-- fill link google forn here NTHL xấu trai -->
                 <td colspan="2"> COPY </td>
-                <td><a href="#">Link đăng kí hoạt động</a></td>
-                <td colspan="3"><a href="#">Link điểm danh hoạt động</a></td>
+                <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
               </tr>
               <% } %>
             </tbody>
@@ -240,17 +238,16 @@
                     </label>
                 </td>
                 <td class="index"><%= i + 1 %></td>
-                <td class="a_name cls_a_name"><%= cls_atv[i].name %></td>
-                <td class="c_name cls_c_name"><%= cls_atv[i].cls %></td>
-                <td class="school_year cls_school_year"><%= cls_atv[i].year.split("_")[0] + " " + cls_atv[i].year.split("_")[1] %></td>
+                <td class="a_name"><%= cls_atv[i].name %></td>
+                <td class="c_name"><%= cls_atv[i].cls %></td>
+                <td class="school_year"><%= cls_atv[i].year.split("_")[0] + " " + cls_atv[i].year.split("_")[1] %></td>
                 <td><a href="/doankhoa/quanlihoatdong/<%= cls_atv[i]._id %>">Chi tiết</a></td>
                 <td><a class="more_list" id="cls_edit" href="#">Sửa</a></td>
               </tr>
               <tr class="copy_box">
                 <!-- fill link google forn here NTHL xấu trai -->
                 <td colspan="2"> COPY </td>
-                <td colspan="2"><a href="#">Link đăng kí hoạt động</a></td>
-                <td colspan="3"><a href="#">Link điểm danh hoạt động</a></td>
+                <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
               </tr>
               <% } %>
             </tbody>

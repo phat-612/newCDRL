@@ -8,6 +8,7 @@
     font-size: 20px;
   }
   details {
+    z-index: 1;
     margin-left: 40px;
     position: fixed;
 

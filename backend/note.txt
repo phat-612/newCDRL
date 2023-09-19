@@ -34,13 +34,6 @@ API NẾU KHÔNG CÓ QUYỀN THÌ GỬI STATUS 403 res.sendStatus(403);
     0: true,
   }
 @RuriMeiko
-  classes (in global database)
-  0: {
-    "_id": "KTPM0121",
-    "dep": "CNTT",
-    "years": {
-      "2021-2022": [1, 2, 3],
-      "2022-2023": [1, 2, 3]
-    }
-  }
+  chỉ xoá user_info sẽ chuyển account sang ghost account
+  các ghost account sẽ bị xoá khi user login vào
 -------------------------------------------------------------------------------------------------------------------------- */

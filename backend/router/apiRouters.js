@@ -4,8 +4,11 @@ const XlsxPopulate = require("xlsx-populate");
 const { v4: uuidv4 } = require("uuid");
 const path = require("path");
 const fs = require("fs");
+const axios = require("axios");
+
 const uploadDirectory = path.join("../../upload_temp");
 const multer = require("multer");
+const { ObjectId } = require("mongodb");
 const { getNameGlobal } = require("../lib/mogodb_lib");
 const name_global_databases = getNameGlobal();
 const {
@@ -17,6 +20,7 @@ const {
   checkIfUserLoginAPI,
   createId,
   get_full_id,
+  deleteClassApi,
 } = require("../lib/function_lib");
 
 if (!fs.existsSync(uploadDirectory)) {
@@ -48,7 +52,18 @@ function createAPIRouter(client, wss) {
           .db(name_global_databases)
           .collection("login_info")
           .findOne({ _id: data.mssv });
-        if (user === null) {
+        let user_info_check = await client
+          .db(name_global_databases)
+          .collection("user_info")
+          .findOne({ _id: data.mssv });
+        if (user === null || user_info_check === null) {
+          // kiểm tra nếu bên login có info mà bên user k có thì xoá bên login (ghost account)
+          if (user) {
+            await client
+              .db(name_global_databases)
+              .collection("login_info")
+              .deleteOne({ _id: data.mssv });
+          }
           // Đăng nhập không thành công
           return res.sendStatus(403);
         } else if (user._id === data.mssv && user.password === data.password) {
@@ -913,7 +928,7 @@ function createAPIRouter(client, wss) {
               }
             } else {
               console.log("ngu hon nua");
-              
+
               return res.sendStatus(404);
             }
           } else {
@@ -1616,7 +1631,6 @@ function createAPIRouter(client, wss) {
           lap_hoat_dong = item.power["3"] ? true : false;
           if (item.power["1"] || item.power["3"]) {
             role = "Ban cán sự";
-         
           } else if (item.power["0"]) {
             role = "Sinh viên";
           }
@@ -1741,6 +1755,35 @@ function createAPIRouter(client, wss) {
             .deleteOne({
               _id: createId(data.rm_bs[i]),
             });
+          const dummy_class = await client
+            .db(name_global_databases)
+            .collection("classes")
+            .find(
+              { branch: createId(data.rm_bs[i]) },
+              { projection: { cvht: 1 } }
+            )
+            .toArray();
+          const cls_rm_data = dummy_class.map((cls) => cls._id);
+          const cvht_rm_data = dummy_class.map((cls) => cls.cvht);
+          const requestData = { rm_cls: cls_rm_data, rm_ts: cvht_rm_data };
+
+          // // Gọi API bằng axios với phương thức POST
+          await deleteClassApi(requestData, user);
+          await client
+            .db(name_global_databases)
+            .collection("user_info")
+            .updateMany(
+              {
+                _id: { $in: cvht_rm_data },
+              },
+              {
+                $set: {
+                  branch: ObjectId.createFromHexString(
+                    "650985a345e2e896b37efd4f"
+                  ),
+                },
+              }
+            );
         }
         return res.sendStatus(200);
       } else {
@@ -1811,7 +1854,7 @@ function createAPIRouter(client, wss) {
             }
           );
         // find to get curr classes
-        const curr_classes = await client
+        const curr_teacher = await client
           .db(name_global_databases)
           .collection("user_info")
           .findOne(
@@ -1827,7 +1870,7 @@ function createAPIRouter(client, wss) {
             }
           );
 
-        if (curr_classes) {
+        if (curr_teacher) {
           // remove old teachers
           await client
             .db(name_global_databases)
@@ -1844,16 +1887,16 @@ function createAPIRouter(client, wss) {
               _id: data.new_id,
               first_name: data.new_name.split(" ").slice(-1).join(" "),
               last_name: data.new_name.split(" ").slice(0, -1).join(" "),
-              avt: curr_classes.avt,
+              avt: curr_teacher.avt,
               power: {
                 1: true,
                 3: true,
                 4: true,
               },
-              class: curr_classes.class,
+              class: curr_teacher.class,
               displayName: data.new_name, // here before pop
               branch: data.branch,
-              email: curr_classes.email,
+              email: curr_teacher.email,
             });
         } else {
           // add new one
@@ -1921,7 +1964,7 @@ function createAPIRouter(client, wss) {
 
       // must be department to use this api
       if (user.pow[8]) {
-        // remove all cheked branch in remove branchs líst in user_info and login_info
+        // remove all cheked teacher in remove teachers líst in user_info and login_info
         await client
           .db(name_global_databases)
           .collection("user_info")
@@ -1935,6 +1978,18 @@ function createAPIRouter(client, wss) {
           .deleteMany({
             _id: { $in: data.rm_ts },
           });
+
+        await client
+          .db(name_global_databases)
+          .collection("classes")
+          .updateMany(
+            { cvht: { $in: data.rm_ts } }, // Điều kiện để xác định tài liệu cần cập nhật
+            {
+              $set: {
+                cvht: ObjectId.createFromHexString("650985a345e2e896b37efd4f"),
+              },
+            } // Sử dụng $pull để xoá các giá trị trong mảng cvht
+          );
       } else {
         return res.sendStatus(403); // back to home
       }
@@ -2049,51 +2104,107 @@ function createAPIRouter(client, wss) {
   });
 
   // api set activities -------------------------------------------------------------------------------------------------------------------------------
-  router.post(
-    "/load_Activities_list",
-    checkIfUserLoginAPI,
-    async (req, res) => {
-      try {
-        const user = req.session.user;
-        const data = req.body;
-        if (user.pow[3]) {
-          const data = req.body;
-          const khoa_activities = await client
+  // router.post(
+  //   "/load_Activities_list",
+  //   checkIfUserLoginAPI,
+  //   async (req, res) => {
+  //     try {
+  //       const user = req.session.user;
+  //       const data = req.body;
+  //       if (user.pow[3]) {
+  //         const data = req.body;
+  //         const khoa_activities = await client
+  //           .db(user.dep)
+  //           .collection("activities")
+  //           .findOne(
+  //             {},
+  //             {
+  //               projection: {
+  //                 _id: 0,
+  //                 activities_name: 1,
+  //               },
+  //             }
+  //           );
+  //         const activities_class = await client
+  //           .db(user.dep)
+  //           .collection("activities_class")
+  //           .findOne(
+  //             {},
+  //             {
+  //               projection: {
+  //                 _id: 0,
+  //                 activities_name: 1,
+  //               },
+  //             }
+  //           );
+  //         console.log(activities_class, khoa_activities);
+  //         return res.status(200).json({ message: "Success" });
+  //       } else {
+  //         return res.sendStatus(403);
+  //       }
+  //       return res.status(200).json({ message: "Success" });
+  //     } catch (err) {
+  //       console.log("SYSTEM | ADD_ACTIVITIES | ERROR | ", err);
+  //       return res.sendStatus(500);
+  //     }
+  //   }
+  // );
+
+  // api delete activities checked
+  router.post("/deleteActivities", checkIfUserLoginAPI, async (req, res) => {
+    try {
+      const user = req.session.user;
+      const data = req.body; // data = {school_rmatv: ["19112003" (school_activity_id), ...], dep_rmatv: ["28091978" (dep_activity_id), ...], cls_rmatv: ["18102003" (cls_activity_id), ...]}
+
+      // must be department to use this api
+      if (user.pow[3]) {
+        // remove all checked school activities
+        await client
+          .db(name_global_databases)
+          .collection("activities")
+          .deleteMany({
+            _id: { $in: data.school_rmatv },
+          });
+
+        // remove all checked dep activities
+        await client
+          .db(user.dep)
+          .collection("activities")
+          .deleteMany({
+            _id: { $in: data.dep_rmatv },
+          });
+
+        // remove all checked class activities
+        // get all activities of class of department
+        const collections = await client
+          .db(user.dep)
+          .listCollections()
+          .toArray();
+
+        // Filter collections ending with '_activities'
+        const activityCollections = await collections.filter((collection) =>
+          collection.name.endsWith("_activities")
+        );
+
+        // Loop through activity collections and retrieve all documents
+        activityCollections.forEach(async (activityCollection) => {
+          await client
             .db(user.dep)
-            .collection("activities")
-            .findOne(
-              {},
-              {
-                projection: {
-                  _id: 0,
-                  activities_name: 1,
-                },
-              }
-            );
-          const activities_class = await client
-            .db(user.dep)
-            .collection("activities_class")
-            .findOne(
-              {},
-              {
-                projection: {
-                  _id: 0,
-                  activities_name: 1,
-                },
-              }
-            );
-          console.log(activities_class, khoa_activities);
-          return res.status(200).json({ message: "Success" });
-        } else {
-          return res.sendStatus(403);
-        }
-        return res.status(200).json({ message: "Success" });
-      } catch (err) {
-        console.log("SYSTEM | ADD_ACTIVITIES | ERROR | ", err);
-        return res.sendStatus(500);
+            .collection(activityCollection.name)
+            .deleteMany({
+              _id: { $in: data.cls_rmatv },
+            });
+        });
+      } else {
+        return res.sendStatus(403); // send user to 403 page
       }
+
+      return res.sendStatus(200);
+    } catch (err) {
+      console.log("SYSTEM | DELETE_TEACHER | ERROR | ", err);
+      return res.sendStatus(500);
     }
-  );
+  });
 
   // load bang diem cua giao vien------------------------------------------------------------------------------------------------------------------
   router.get(
@@ -2354,26 +2465,7 @@ function createAPIRouter(client, wss) {
       if (user.pow[9]) {
         // remove all checked classes in remove branchs líst in user_info and login_info
         // remove class from teacher's class
-        for (let i = 0; i < data.rm_cls.length; i++) {
-          await client
-            .db(name_global_databases)
-            .collection("classes")
-            .deleteMany({
-              _id: data.rm_cls[i],
-            });
-
-          await client
-            .db(name_global_databases)
-            .collection("user_info")
-            .updateOne(
-              {
-                _id: data.rm_ts[i],
-              },
-              {
-                $pull: { class: data.rm_cls[i] },
-              }
-            );
-        }
+        await deleteClassApi(data, user);
       } else {
         return res.sendStatus(403); // back to home
       }
