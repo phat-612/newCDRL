@@ -680,8 +680,8 @@ function createDepRouter(client) {
 
     return res.render("doankhoa-time", {
       header: "global-header",
-      thongbao: "global-notifications",
       footer: "global-footer",
+      thongbao: "global-notifications",
       menu: "doankhoa-menu",
 
       school_year: school_year,
@@ -689,17 +689,52 @@ function createDepRouter(client) {
     });
   });
 
-  //doan khoa danh gia hoat dong route
-  router.get(
-    "/quanlihoatdong/danhgiahoatdong",
-    checkIfUserLoginRoute,
-    async (req, res) => {
-      return res.render("doankhoa-activity-assessment", {
+  // chi tiet hoat dong ------------------------------------------------------------------------------------------
+  // school
+  router.get('/quanlihoatdong/:level/:id', checkIfUserLoginRoute, async (req, res) => {
+    const user = req.session.user;
+    try {
+      // get id by req.params.id
+      // identify current activity of school activities
+      let curr_act;
+      switch (req.params.level) {
+        case 'Truong':
+          curr_act = await client.db(name_global_databases).collection('activities').findOne(
+            {
+              _id: req.params.id
+            }
+          );
+          break;
+        case 'Khoa':
+          curr_act = await client.db(user.dep).collection('activities').findOne(
+            {
+              _id: req.params.id
+            }
+          );
+          break;
+        default:
+          curr_act = await client.db(user.dep).collection(req.params.level + '_activities').findOne(
+            {
+              _id: req.params.id
+            }
+          );
+          break;
+      }
+
+      return res.render('doankhoa-activity-assessment', {
         header: "global-header",
+        thongbao: "global-notifications",
         footer: "global-footer",
+        menu: "doankhoa-menu",
+        curr_act: curr_act
       });
+
+    } catch (err) {
+      console.log('SYSTEM | REVIEWS | ERROR | ', err);
+      res.sendStatus(500);
     }
-  );
+  });
+  // -------------------------------------------------------------------------------------------
 
   return router;
 }

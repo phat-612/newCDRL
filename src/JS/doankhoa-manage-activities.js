@@ -230,7 +230,7 @@ $(".save_btn").click(async function () {
               <td class="a_name">${atv_name}</td>
               <td class="c_name">${cls_id.val()}</td>
               <td class="school_year">${year_cur.split("_")[0]} ${year_cur.split("_")[1]}</td>
-              <td><a href="/doankhoa/quanlihoatdong/${atv_id}">Chi tiết</a></td>
+              <td><a href="/doankhoa/quanlihoatdong/${cls_id.val()}/${atv_id}">Chi tiết</a></td>
               <td><a class="more_list" id="cls_edit" href="#">Sửa</a></td>
             </tr>
             <tr class="copy_box">
@@ -252,7 +252,7 @@ $(".save_btn").click(async function () {
               <td class="index">${dep_length + 1}</td>
               <td class="a_name">${atv_name}</td>
               <td class="school_year">${year_cur.split("_")[0]} ${year_cur.split("_")[1]}</td>
-              <td><a href="/doankhoa/quanlihoatdong/${atv_id}">Chi tiết</a></td>
+              <td><a href="/doankhoa/quanlihoatdong/Khoa/${atv_id}">Chi tiết</a></td>
               <td><a class="more_list" id="dep_edit" href="#">Sửa</a></td>
             </tr>
             <tr class="copy_box">
@@ -274,7 +274,7 @@ $(".save_btn").click(async function () {
               <td class="index">${school_length + 1}</td>
               <td class="a_name">${atv_name}</td>
               <td class="school_year">${year_cur.split("_")[0]} ${year_cur.split("_")[1]}</td>
-              <td><a href="/doankhoa/quanlihoatdong/${atv_id}">Chi tiết</a></td>
+              <td><a href="/doankhoa/quanlihoatdong/Truong/${atv_id}">Chi tiết</a></td>
               <td><a class="more_list" href="#">Sửa</a></td>
             </tr>
             <tr class="copy_box">

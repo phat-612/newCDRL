@@ -11,107 +11,75 @@
 <body>
   <div class="main">
     <%- include(header) %>
+    <%- include(thongbao) %>
+    <%- include(menu) %>
     <div class="container">
       <div class="content">
         <div class="activity">
           <h2 class="activity-elements title">THÔNG TIN HOẠT ĐỘNG</h2>
           <div class="information">
-            <h3 class="activity-elements name" id="activity-name"><span>Giải Bóng Đá Đoàn Khoa CNTT</span> - <span>Cấp Khoa</span></h3>
+            <h3 class="activity-elements name" id="activity-name"><span><%= curr_act.name %></span> - <span>
+                <%console.log(curr_act.level)%>
+                <% if (curr_act.level == 'truong')  { %>
+                Cấp Trường
+                <% } else if (curr_act.level == 'khoa')  { %>
+                Cấp Khoa
+                <% } else { %>
+                Cấp Lớp
+                <% } %>
+              </span></h3>
             <!-- <h3 class="activity-elements level" id="activity-level"><abbr title="Cấp độ hoạt động" style="text-decoration: none;">Cấp Khoa</abbr></h3> -->
-            <p class="activity-elements description" id="activity-description"><abbr title="Mô tả hoạt động" style="text-decoration: none;">Giải bóng đá dành cho sinh viên Khoa CNNT nên thằng nào ở khoa khác thì không được chơi nhé hihi</abbr></p>
+            <p class="activity-elements description" id="activity-description"><abbr title="Mô tả hoạt động" style="text-decoration: none;"><%= curr_act.content %></abbr></p>
           </div>
         </div>
-        <div class="evaluation">
-          <table class="table">
-            <thead>
-              <tr>
-                <th style="width: 5%">STT</th>
-                <th style="width: 10%;">MSSV</th>
-                <th style="width: 20%">Họ Và Tên</th>
-                <th style="width: 5%">Tham Gia</th>
-                <th style="width: 5%">Khen Thưởng</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>2101364</td>
-                <td>Nguyễn Lê Tấn Đạt</td>
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row0-1" class="inp-cbx" value="2" />
-                    <label for="row0-1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                  </div>
-                </td>
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row0-2" class="inp-cbx" value="2" />
-                    <label for="row0-2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>2101364</td>
-                <td>Nguyễn Lê Tấn Đạt</td>
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row1-1" class="inp-cbx" value="2" />
-                    <label for="row1-1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                  </div>
-                </td>
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row1-2" class="inp-cbx" value="2" />
-                    <label for="row1-2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>2101364</td>
-                <td>Nguyễn Lê Tấn Đạt</td>
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row2-1" class="inp-cbx" value="2" />
-                    <label for="row2-1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                  </div>
-                </td>
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row2-2" class="inp-cbx" value="2" />
-                    <label for="row2-2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>2101364</td>
-                <td>Nguyễn Lê Tấn Đạt</td>
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row3-1" class="inp-cbx" value="2" />
-                    <label for="row3-1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                  </div>
-                </td>
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row3-2" class="inp-cbx" value="2" />
-                    <label for="row3-2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <% if (curr_act.student_list) {%>
+          <div class="evaluation">
+            <div class="information">
+
+              <h3 class="activity-elements name" id="activity-name">DANH SÁCH SINH VIÊN THAM GIA HOẠT ĐỘNG</h3>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 5%">STT</th>
+                    <th style="width: 10%;">MSSV</th>
+                    <th style="width: 20%">Họ Và Tên</th>
+                    <th style="width: 5%">Tham Gia</th>
+                    <th style="width: 5%">Khen Thưởng</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>2101364</td>
+                    <td>Nguyễn Lê Tấn Đạt</td>
+                    <td>
+                      <div class="checkbox-wrapper-4">
+                        <input type="checkbox" id="row0-1" class="inp-cbx" value="2" />
+                        <label for="row0-1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                        </label>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="checkbox-wrapper-4">
+                        <input type="checkbox" id="row0-2" class="inp-cbx" value="2" />
+                        <label for="row0-2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                        </label>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        <% } else { %>
+          <div class="evaluation">
+            <div class="information">
+              <h3 class="activity-elements name" id="activity-name">DANH SÁCH SINH VIÊN THAM GIA HOẠT ĐỘNG</h3>
+              <!-- <h3 class="activity-elements level" id="activity-level"><abbr title="Cấp độ hoạt động" style="text-decoration: none;">Cấp Khoa</abbr></h3> -->
+              <p class="activity-elements description" id="activity-description"><abbr title="Mô tả hoạt động" style="text-decoration: none;">Không có sinh viên tham gia hoạt động này</abbr></p>
+            </div>
+          </div>
+        <%}%>
       </div>
     </div>
   </div>
