@@ -56,7 +56,7 @@
 .active {
   color: #0000ffa3 !important;
 }
-.modal {
+.foot_modal{
   display: none;
 }
 @media screen and (max-width: 600px) {
@@ -69,9 +69,15 @@
   }
 
   .foot_modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--modal-color);
     z-index: 1;
     /* position: sticky; */
-    display: none;
+    
     /* background-color: transparent; */
 
     height: 100vh;
@@ -110,8 +116,11 @@
     position: absolute;
     left: 50%;
     transform: translate(-50%, 0px);
-    top: -15%;
+    top: -3.5rem;
     color: var(--white-color);
+  }
+  .close_menu i{
+    font-size: 3rem;
   }
 
   .slideInUp {
@@ -193,6 +202,7 @@
     /* text-align: center; */
     transition: filter 200ms linear 0s;
     cursor: pointer;
+    display: block;
   }
   /* .menu .menu_item:nth-of-type(1) {
         padding-top: 24px;

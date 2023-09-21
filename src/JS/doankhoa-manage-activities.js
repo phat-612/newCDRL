@@ -304,6 +304,27 @@ $(".save_btn").click(async function () {
   }
 });
 
+// year choise button:
+$("#year_choice").click(async function () {
+  // clear all appeareance activities 
+  $('tr').remove()
+
+  // get year
+  
+  // get semester
+
+  // send request to load new activities fix year input
+
+});
+
+// subjects choise button:
+$("#subject_choice").click(async function () {
+  // clear all appeariance activities in class activities table
+  $('#cls_tb tr').remove()
+
+});
+
+
 // delete button
 // delete check checkbox
 $("#delete__activity").click(async function () {

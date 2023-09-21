@@ -237,12 +237,50 @@ function createRootRouter(client) {
   });
 
   router.get("/dangkyhoatdong", checkIfUserLoginRoute, async (req, res) => {
-    
-    return res.render("sinhvien-activeregistration", {
-      header: "global-header",
-      thongbao: "global-notifications",
-      footer: "global-footer",
-    });
+    try {
+      const query = req.query;
+      const user = req.session.user;
+      console.log(user);
+      let activitie_info;
+      const school_i = await client.db(name_global_databases).collection("activities").findOne({
+        _id: query.id,
+      });
+      if (school_i) {
+        activitie_info = school_i;
+      } else {
+        const dep_i = await client.db(user.dep).collection("activities").findOne({
+          _id: query.id,
+        });
+        if (dep_i) {
+          activitie_info = dep_i;
+        } else {
+          const cls_i = await client.db(user.dep).collection(`${user.cls[0]}_activities`).findOne({
+            _id: query.id,
+          });
+          if (cls_i) {
+            activitie_info = cls_i;
+          }
+        }
+      }
+      activitie_info.join = false;
+      activitie_info.diemdanh = false;
+      if (activitie_info.student_list) {
+        if (user._id in activitie_info.student_list) {
+          activitie_info.join = true;
+        }
+        if (activitie_info.student_list[user._id]) {
+          activitie_info.diemdanh = true;
+        }
+      }
+      return res.render("sinhvien-activeregistration", {
+        header: "global-header",
+        thongbao: "global-notifications",
+        footer: "global-footer",
+        activitie_info: activitie_info,
+      });
+    } catch (err) {
+      console.log("SYSTEM | HOAT_DONG_DANG_KY_ROUTE | ERROR | ", err);
+    }
   });
 
   // 403 route

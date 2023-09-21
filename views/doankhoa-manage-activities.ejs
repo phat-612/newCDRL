@@ -24,7 +24,7 @@
           <div class="year_full">
             <div class="hk">
               <span>Học kỳ</span>
-              <div class="selectbox selectbox--hocky">
+              <div class="selectbox selectbox--hocky" id="select_hk">
                 <div class="select">
                   <select>
                     <% for (let i=1; i <=years[cy[1]].length; i++) {%>
@@ -46,7 +46,7 @@
             </div>
             <div class="hk">
               <span>Niên khóa</span>
-              <div class="selectbox nien_khoa">
+              <div class="selectbox nien_khoa" id="select_sm">
                 <div class="select">
                   <select>
                     <% for (const key of Object.keys(years)) {%>
@@ -171,7 +171,7 @@
           <%let curr_index=0%>
           <div class="hk">
             <span>Bộ môn</span>
-            <div class="selectbox --bomon">
+            <div class="selectbox --bomon" id="select_bm">
               <div class="select">
                 <select>
                   <% for (let i=0; i < branch.length; i++) {%>
@@ -192,7 +192,7 @@
           </div>
           <div class="hk">
             <span>Lớp</span>
-            <div class="selectbox --class">
+            <div class="selectbox --class" id="select_cls">
               <div class="select">
                 <select>
                   <% for (let i=0; i < cls.length; i++) {%>

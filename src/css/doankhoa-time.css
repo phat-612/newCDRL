@@ -351,3 +351,19 @@ h2{
   .time_set_note a:active {
     color: rebeccapurple
   }
+
+  @media screen and (max-width: 600px) {
+    .duration_container{
+      width: 100%;
+    }
+    .chamdiem{
+      flex-direction: column;
+
+    }
+    .chamdiem .selectbox{
+      margin: 0;
+    }
+    .chamdiem .selectbox .close_now{
+      font-size: 2rem;
+    }
+  }
