@@ -18,18 +18,30 @@ if (lastSegment == "logout") {
 }
 
 $(".a_menu").click(function () {
-    $(".modal").show();
+    $(".modal").addClass("modal_show");
+    $(".modal_wrap").removeClass("slideInDown");
+    $(".modal_wrap").addClass("slideInUp");
     
 });
+
 $(".modal").click(function () {
-  $(".modal").hide();
+  $(".modal_wrap").addClass("slideInDown"); 
+  setTimeout(() => {
+    $(".modal").removeClass("modal_show");
+    $(".modal_wrap").removeClass("slideInUp");
+  }, 1000);
 });
+
 $(".modal_wrap").click(function (e) {
   e.stopPropagation();
 });
 
 $(".close_menu").click(function () {
-    $(".modal").hide();
+  $(".modal_wrap").addClass("slideInDown");
+  setTimeout(() => {
+    $(".modal").removeClass("modal_show");
+    $(".modal_wrap").removeClass("slideInUp");
+  }, 1000); 
 })
 // const cur_link = window.location.href
 // const menu_item = $(".menu a")

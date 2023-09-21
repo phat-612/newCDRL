@@ -109,8 +109,26 @@ async function checkIfUserLoginRoute(req, res, next) {
         return res.redirect("/");
       }
     }
+    
     if ((user.pow[1] && user.pow[4]) || user.pow[8]) {
       res.locals.isnotST = true;
+    }
+    if ((user.pow[0])) {
+      res.locals.isST = true;
+    }
+    else if (( user.pow[1]) && user.pow[3]) {
+      res.locals.isbancansu = true;
+    }
+    else if ((user.pow[1]) && user.pow[3]) {
+      res.locals.isgiaovien = true;
+    }
+    else if (user.pow[8]) {
+      res.locals.iskhoa = true;
+      res.locals.isbancansu = false;
+      res.locals.isgiaovien = false;
+      res.locals.isST = false;
+
+
     }
     if (user.first == "new_user") {
       return res.redirect("/login/firstlogin");

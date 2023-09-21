@@ -3,8 +3,13 @@
 </head>
 
 
-
+<%if (iskhoa && !isST && !isbancansu && !isgiaovien ){%> 
 <body>
+  <p><%=iskhoa  %></p>
+  <p><%=isnotST  %></p>
+  <p><%=isbancansu  %></p>
+  <p><%=isgiaovien  %></p>
+
     <div class="footer">
         <div class="footer_wrap">
             <a class="a_profile" href="/profile"><i class="fa-solid fa-user"></i> <p>QL Cố Vấn</p> </a>
@@ -16,9 +21,12 @@
 </body>
 
 <div class="modal">
+  
+
     <div class="modal_wrap">
         <div class="close_menu"><i class="fas fa-xmark"></i></div>
-        <nav class="menu">
+       
+          <nav class="menu">
 
             <a href="/doankhoa/quanlibomon" class="footer_item">Bộ Môn</a>
             <div class="footer_item footer_item_more">
@@ -29,7 +37,7 @@
               </nav>
             </div>
             <div class="footer_item footer_item_more">
-              <span>Sinh Viên <i class="fa-solid fa-chevron-down"></i></span>
+              <span><%= isnotST %> <i class="fa-solid fa-chevron-down"></i></span>
               <nav class="lop_item">
                 <div class="footer_item lop_item_more"><a href="/doankhoa/danhsachsinhvien">Danh sách sinh viên</a></div>
                 <div class="footer_item lop_item_more"><a href="/doankhoa/danhsachbangdiem">Điểm rèn luyện</a></div>
@@ -38,7 +46,16 @@
             <a href="/doankhoa/quanlihoatdongkhoa" class="menu_item">Hoạt Động</a>
             <a href="/doankhoa/thoihan" class="menu_item">Thời Hạn</a>
           </nav>
+         
+        
     </div>
     
 </div>
+<%} else if  (true){%>
+  <p><%=iskhoa  %></p>
+  <p><%=isnotST  %></p>
+  <a href="/bancansu/danhsachbangdiem"><button class="button-35">Quản lí điểm rèn luyện</button></a>
+  <%} else if  (pow == 2){%>
+    <a href="/bancansu/quanlihoatdong"><button class="button-35">Quản lí hoạt động</button></a>
+    <%}%>
 <script src="/src/JS/global-footer.js"></script>
