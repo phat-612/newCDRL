@@ -2101,52 +2101,141 @@ function createAPIRouter(client, wss) {
     }
   });
 
-  // api set activities -------------------------------------------------------------------------------------------------------------------------------
-  // router.post(
-  //   "/load_Activities_list",
-  //   checkIfUserLoginAPI,
-  //   async (req, res) => {
-  //     try {
-  //       const user = req.session.user;
-  //       const data = req.body;
-  //       if (user.pow[3]) {
-  //         const data = req.body;
-  //         const khoa_activities = await client
-  //           .db(user.dep)
-  //           .collection("activities")
-  //           .findOne(
-  //             {},
-  //             {
-  //               projection: {
-  //                 _id: 0,
-  //                 activities_name: 1,
-  //               },
-  //             }
-  //           );
-  //         const activities_class = await client
-  //           .db(user.dep)
-  //           .collection("activities_class")
-  //           .findOne(
-  //             {},
-  //             {
-  //               projection: {
-  //                 _id: 0,
-  //                 activities_name: 1,
-  //               },
-  //             }
-  //           );
-  //         console.log(activities_class, khoa_activities);
-  //         return res.status(200).json({ message: "Success" });
-  //       } else {
-  //         return res.sendStatus(403);
-  //       }
-  //       return res.status(200).json({ message: "Success" });
-  //     } catch (err) {
-  //       console.log("SYSTEM | ADD_ACTIVITIES | ERROR | ", err);
-  //       return res.sendStatus(500);
-  //     }
-  //   }
-  // );
+  // api load activities base on years -------------------------------------------------------------------------------------------------------------------------------
+  router.post("/loadYearActivities", checkIfUserLoginAPI, async (req, res) => {
+    try {
+      const user = req.session.user;
+      const data = req.body; // data = {year: '2022-2023', semester: '1'}
+      if (user.pow[3]) {
+        // find all activities in this year:
+        // get all activities of school
+        const school_atv = await client
+          .db(name_global_databases)
+          .collection("activities")
+          .find(
+            {
+              year: 'HK' + data.semester + "_" + data.year
+            },
+            {
+              projection: {
+                name: 1,
+                content: 1,
+                year: 1,
+              },
+            }
+          )
+          .toArray();
+
+        // get all activities of dep
+        const dep_atv = await client
+          .db(user.dep)
+          .collection("activities")
+          .find(
+            {
+              year: 'HK' + data.semester + "_" + data.year
+            },
+            {
+              projection: {
+                name: 1,
+                content: 1,
+                year: 1,
+              },
+            }
+          )
+          .toArray();
+
+        // get all activities of class of department
+        const collections = await client.db(user.dep).listCollections().toArray();
+
+        // Filter collections ending with '_activities'
+        const activityCollections = collections.filter((collection) =>
+          collection.name.endsWith("_activities")
+        );
+
+        // Loop through activity collections and retrieve all documents
+        const cls_atvs = await activityCollections.map(async (collection) => {
+          const dummy = await client
+            .db(user.dep)
+            .collection(collection.name)
+            .find(
+              {
+                year: 'HK' + data.semester + "_" + data.year
+              },
+              {
+                projection: {
+                  name: 1,
+                  content: 1,
+                  cls: 1,
+                  year: 1,
+                },
+              }
+            )
+            .toArray();
+          return dummy;
+        });
+        Promise.all(cls_atvs)
+          .then((results) => {
+            // Khi tất cả các promise đã hoàn thành, results sẽ là một mảng chứa kết quả từ mỗi truy vấn.
+            // Bạn có thể làm gì đó với kết quả ở đây.
+            const cls_atv = [].concat(...results); // Kết hợp kết quả từ các truy vấn vào một mảng duy nhất
+
+            console.log(school_atv, dep_atv, cls_atv);
+            const final = {
+              school_atv: school_atv,
+              dep_atv: dep_atv,
+              cls_atv: cls_atv,
+            };
+
+            res.writeHead(200, { "Content-Type": "applicaiton/json" });
+            return res.end(JSON.stringify(final));
+          })
+          .catch((error) => {
+            // Xử lý lỗi nếu có
+            console.error(error);
+          });
+      } else {
+        return res.sendStatus(403);
+      }
+    } catch (err) {
+      console.log("SYSTEM | LOAD_YEAR_ACTIVITIES | ERROR | ", err);
+      return res.sendStatus(500);
+    }
+  }
+  );
+
+  // api load activities base on class -------------------------------------------------------------------------------------------------------------------------------
+  router.post("/loadClassActivities", checkIfUserLoginAPI, async (req, res) => {
+    try {
+      const user = req.session.user;
+      const data = req.body; // data = {cls: 'KTPM0121'}
+      if (user.pow[3]) {
+        // get all activities in that class:
+        const cls_act = await client
+          .db(user.dep)
+          .collection( data.cls + "_activities")
+          .find(
+            {},
+            {
+              projection: {
+                name: 1,
+                content: 1,
+                year: 1,
+              },
+            }
+          )
+          .toArray();
+
+        res.writeHead(200, { "Content-Type": "applicaiton/json" });
+        return res.end(JSON.stringify(cls_act));
+      } else {
+        return res.sendStatus(403);
+      }
+    } catch (err) {
+      console.log("SYSTEM | LOAD_CLASS_ACTIVITIES | ERROR | ", err);
+      return res.sendStatus(500);
+    }
+  }
+  );
 
   // api delete activities checked
   router.post("/deleteActivities", checkIfUserLoginAPI, async (req, res) => {

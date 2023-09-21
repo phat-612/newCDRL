@@ -306,21 +306,83 @@ $(".save_btn").click(async function () {
 
 // year choise button:
 $("#year_choice").click(async function () {
-  // clear all appeareance activities 
-  $('tr').remove()
+
+  // disable this btn
+  $(this).prop("disabled", true);
 
   // get year
-  
+  const choise_year = $('#select_hk').find("select :selected");
   // get semester
+  const choise_semester = $('#select_sm').find("select :selected");
 
   // send request to load new activities fix year input
+  // request
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      year: choise_year.val(),
+      semester: choise_semester.val()
+    }),
+  };
+
+  const response = await fetch("/api/addOrEditActivities", requestOptions);
+  if (response.ok) {
+    // clear all appeareance activities 
+    $('tr').remove()
+    //append activities to school's table ************************************************************
+    //append activities to department's table ************************************************************
+    //append activities to class' table ************************************************************
+
+    // able curr button
+    $(this).prop("disabled", false);
+
+  } else if (response.status == 500) {
+    // able curr button
+    $(this).prop("disabled", false);
+    // Error occurred during upload
+    notify("x", "Có lỗi xảy ra!");
+  }
 
 });
 
 // subjects choise button:
 $("#subject_choice").click(async function () {
-  // clear all appeariance activities in class activities table
-  $('#cls_tb tr').remove()
+  // disable this btn
+  $(this).prop("disabled", true);
+  // get semester
+  const choise_cls = $('#select_cls').find("select :selected");
+
+  // send request to load new activities fix year input
+  // request
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      cls: choise_cls.val()
+    }),
+  };
+
+  const response = await fetch("/api/addOrEditActivities", requestOptions);
+  if (response.ok) {
+    // clear all appeariance activities in class activities table
+    $('#cls_tb tr').remove()
+    //append activities to class' table ************************************************************
+
+    // able curr button
+    $(this).prop("disabled", false);
+
+  } else if (response.status == 500) {
+    // able curr button
+    $(this).prop("disabled", false);
+
+    // Error occurred during upload
+    notify("x", "Có lỗi xảy ra!");
+  }
 
 });
 
@@ -390,7 +452,7 @@ $("#delete__activity").click(async function () {
         $(this).text(index);
         index += 1;
       });
-      
+
       // department:
       index = 1;
       $("#dep_tb tbody .index").each(function () {
