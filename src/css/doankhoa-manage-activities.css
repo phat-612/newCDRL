@@ -21,24 +21,29 @@
 .year_full {
   width:107rem;
   display: flex;
+  gap: 2rem;
   padding-bottom: 1rem;
 }
+
+#year_full2 {
+  margin-top: 3rem;
+}
+
 .hk {
-  width: 38%;
   display: flex;
   align-items: center;
 }
-.hk span {
+/* .hk span {
   width: 30%;
-}
+} */
 
 /* activity-board */
 
-.button-35-a {
+/* .button-35-a {
   position: absolute !important;
   top: 10%;
   right: 13%;
-}
+} */
 
 .activity-board {
   margin-top: 2rem;

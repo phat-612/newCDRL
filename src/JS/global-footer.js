@@ -9,44 +9,46 @@ function dropItem() {
   }
 }
 
-if (lastSegment == "logout") {
-  item[0].querySelector("i").classList.add("active");
-} else if (lastSegment == "nhapdiemdanhgia") {
-  item[1].querySelector("i").classList.add("active");
-} else if (lastSegment == "profile") {
-  item[3].querySelector("i").classList.add("active");
-}
+// if (lastSegment == "logout") {
+//   item[0].querySelector("i").classList.add("active");
+// } else if (lastSegment == "nhapdiemdanhgia") {
+//   item[1].querySelector("i").classList.add("active");
+// } else if (lastSegment == "profile") {
+//   item[3].querySelector("i").classList.add("active");
+// }
 
 $(".a_menu").click(function () {
-    $(".modal").addClass("modal_show");
-    $(".modal_wrap").removeClass("slideInDown");
-    $(".modal_wrap").addClass("slideInUp");
+    $(".foot_modal").addClass("modal_show");
+    $(".foot_modal .modal_wrap").removeClass("slideInDown");
+    $(".foot_modal .modal_wrap").addClass("slideInUp");
     
 });
 
-$(".modal").click(function () {
-  $(".modal_wrap").addClass("slideInDown"); 
+$(".foot_modal").click(function () {
+  $(".foot_modal .modal_wrap").addClass("slideInDown"); 
   setTimeout(() => {
-    $(".modal").removeClass("modal_show");
-    $(".modal_wrap").removeClass("slideInUp");
+    $(".foot_modal").removeClass("modal_show");
+    $(".foot_modal .modal_wrap").removeClass("slideInUp");
   }, 1000);
 });
 
-$(".modal_wrap").click(function (e) {
+$(".foot_modal .modal_wrap").click(function (e) {
   e.stopPropagation();
 });
 
 $(".close_menu").click(function () {
-  $(".modal_wrap").addClass("slideInDown");
+  $(".foot_modal .modal_wrap").addClass("slideInDown");
   setTimeout(() => {
-    $(".modal").removeClass("modal_show");
-    $(".modal_wrap").removeClass("slideInUp");
+    $(".foot_modal").removeClass("modal_show");
+    $(".foot_modal .modal_wrap").removeClass("slideInUp");
   }, 1000); 
 })
-// const cur_link = window.location.href
-// const menu_item = $(".menu a")
-for (const item of menu_item) {
-  if (cur_link === item.href) {
+
+const cur_links = window.location.href
+const limkitem = document.querySelectorAll(".foot_modal a");
+
+for (const item of limkitem) {
+  if (cur_links === item.href) {
     item.style.color = 'red'
   }
 }
