@@ -20,6 +20,7 @@
             <div class="activity_body_details">
               <p>Chi tiết: <%=activitie_info.content%></p>
               <p>Cấp độ: <%=activitie_info.level%> </p>
+              <%if (isST){%>
               <%if (!activitie_info.join){%>
               <p>Trạng thái: <span class="attendance">Chưa ghi danh</span></p>
               <%} else if (activitie_info.join){%>
@@ -27,31 +28,33 @@
               <%} else if (activitie_info.diemdanh) {%>
               <p>Trạng thái: <span class="activity_body_alert">Đã điểm danh</span></p>
               <%}%>
-            </div>
-            <%if (!activitie_info.join){%>
-              <!--ghi danh -->
-              <div class="activity_body_studentname">
-                <h1>
-                  <%=displayName%>
-                </h1>
-              </div>
-              <button class="button-35 button-35-a activeregistration_btn">Ghi Danh</button>
-              <!--diem danh -->
-              <%} else {%>
-              <!-- sau khi ghi danh -->
-              <div class="activity_body_studentname">
-                <h1>
-                  <%=displayName%>
-                </h1>
-              </div>
-              <button class="button-35 up-btn post-btn">
-                Tải ảnh
-              </button>
-              <button class="button-35 up-btn save-btn">
-                Điểm Danh
-              </button>
-              <!--diem danh -->
               <%}%>
+            </div>
+            <%if (isST){%>
+            <%if (!activitie_info.join){%>
+            <!--ghi danh -->
+            <div class="activity_body_studentname">
+              <h1>
+                <%=displayName%>
+              </h1>
+            </div>
+            <button class="button-35 button-35-a activeregistration_btn">Ghi Danh</button>
+            <!--diem danh -->
+            <%} else {%>
+            <!-- sau khi ghi danh -->
+            <div class="activity_body_studentname">
+              <h1>
+                <%=displayName%>
+              </h1>
+            </div>
+            <button class="button-35 up-btn post-btn">
+              Tải ảnh
+            </button>
+            <button class="button-35 up-btn save-btn">
+              Điểm Danh
+            </button>
+            <!--diem danh -->
+            <%}%>
 
             <!-- sau khi ghi danh -->
             <!-- <div class="activity_body_alert">
@@ -61,115 +64,115 @@
                     </div> -->
             
           </section>
-
+          <%}%>
         </div>
 
 
         <div class="activity-board">
           <h2>DANH SÁCH SINH VIÊN ĐÃ ĐĂNG KÝ</h2>
           <%if (activitie_info.student_list){%>
-              <table class="table" id="school_tb">
-                <thead>
-                  <tr>
-                    <th style="width: 1%">
-                      <div class="checkbox-wrapper-4">
-                        <input type="checkbox" id="row__0" class="inp-cbx all-cbx">
-                        <label for="row__0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                        </label>
-                      </div>
-                    </th>
-                    <th style="width: 2%;">MSSV</th>
-                    <th style="width: 40%;">Họ Và Tên</th>
-                    <th style="width: 10%;">Khoa</th>
-                  </tr>
-                </thead>
-                <tbody>
+          <table class="table" id="school_tb">
+            <thead>
+              <tr>
+                <th style="width: 1%">
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="row__0" class="inp-cbx all-cbx">
+                    <label for="row__0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+                  </div>
+                </th>
+                <th style="width: 2%;">MSSV</th>
+                <th style="width: 40%;">Họ Và Tên</th>
+                <th style="width: 10%;">Khoa</th>
+              </tr>
+            </thead>
+            <tbody>
 
-                  <tr class="atv_box">
-                    <td>
-                      <div class="checkbox-wrapper-4">
-                        <input type="checkbox" id="row__0__0" class="inp-cbx" value="18101911">
-                        <label for="row__0__0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                        </label>
-                      </div>
-                    </td>
-                    <td>1</td>
-                    <td class="a_name">Hoạt động trường 1</td>
-                    <td class="school_year">HK1 2022-2023</td>
-                  </tr>
-                  <tr class="atv_box">
-                    <td>
-                      <div class="checkbox-wrapper-4">
-                        <input type="checkbox" id="row__0__1" class="inp-cbx" value="29091610">
-                        <label for="row__0__1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                        </label>
-                      </div>
-                    </td>
-                    <td>2</td>
-                    <td class="a_name">Hoạt động trường 2</td>
-                    <td class="school_year">HK1 2022-2023</td>
+              <tr class="atv_box">
+                <td>
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="row__0__0" class="inp-cbx" value="18101911">
+                    <label for="row__0__0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+                  </div>
+                </td>
+                <td>1</td>
+                <td class="a_name">Hoạt động trường 1</td>
+                <td class="school_year">HK1 2022-2023</td>
+              </tr>
+              <tr class="atv_box">
+                <td>
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="row__0__1" class="inp-cbx" value="29091610">
+                    <label for="row__0__1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+                  </div>
+                </td>
+                <td>2</td>
+                <td class="a_name">Hoạt động trường 2</td>
+                <td class="school_year">HK1 2022-2023</td>
 
-                  </tr>
-
-
-                  <tr class="atv_box">
-                    <td>
-                      <div class="checkbox-wrapper-4">
-                        <input type="checkbox" id="row__0__2" class="inp-cbx" value="09e9d942-85a8-428e-bc49-87bb4757bcc1">
-                        <label for="row__0__2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                        </label>
-                      </div>
-                    </td>
-                    <td>3</td>
-                    <td class="a_name">Hoạt đông khoa 3</td>
-                    <td class="school_year">HK1 2022-2023</td>
-
-                  </tr>
-                  <tr class="copy_box">
-                  </tr>
-
-                  <tr class="atv_box">
-                    <td>
-                      <div class="checkbox-wrapper-4">
-                        <input type="checkbox" id="row__0__3" class="inp-cbx" value="7640dd67-8731-4ecb-b99c-60862216c49c">
-                        <label for="row__0__3" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                        </label>
-                      </div>
-                    </td>
-                    <td>4</td>
-                    <td class="a_name">Hoạt động trường 3</td>
-                    <td class="school_year">HK1 2022-2023</td>
-
-                  </tr>
+              </tr>
 
 
-                  <tr class="atv_box">
-                    <td>
-                      <div class="checkbox-wrapper-4">
-                        <input type="checkbox" id="row__0__4" class="inp-cbx" value="b8aed8d1-15ef-49ea-a4b9-535829574499">
-                        <label for="row__0__4" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                        </label>
-                      </div>
-                    </td>
-                    <td>5</td>
-                    <td class="a_name">Hoạt động khoa j đó 2</td>
-                    <td class="school_year">HK1 2022-2023</td>
+              <tr class="atv_box">
+                <td>
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="row__0__2" class="inp-cbx" value="09e9d942-85a8-428e-bc49-87bb4757bcc1">
+                    <label for="row__0__2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+                  </div>
+                </td>
+                <td>3</td>
+                <td class="a_name">Hoạt đông khoa 3</td>
+                <td class="school_year">HK1 2022-2023</td>
 
-                  </tr>
+              </tr>
+              <tr class="copy_box">
+              </tr>
+
+              <tr class="atv_box">
+                <td>
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="row__0__3" class="inp-cbx" value="7640dd67-8731-4ecb-b99c-60862216c49c">
+                    <label for="row__0__3" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+                  </div>
+                </td>
+                <td>4</td>
+                <td class="a_name">Hoạt động trường 3</td>
+                <td class="school_year">HK1 2022-2023</td>
+
+              </tr>
 
 
-                </tbody>
-              </table>
-              <%} else {%>
-              <p>Không có học sinh nào!</p>
-              <%}%>
+              <tr class="atv_box">
+                <td>
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="row__0__4" class="inp-cbx" value="b8aed8d1-15ef-49ea-a4b9-535829574499">
+                    <label for="row__0__4" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+                  </div>
+                </td>
+                <td>5</td>
+                <td class="a_name">Hoạt động khoa j đó 2</td>
+                <td class="school_year">HK1 2022-2023</td>
+
+              </tr>
+
+
+            </tbody>
+          </table>
+          <%} else {%>
+          <p>Không có học sinh nào!</p>
+          <%}%>
         </div>
         <!--ghi danh -->
       </div>
     </div>
     <%- include(footer) %>
-            </div>
-            <script src="/src/JS/sinhvien-activeregistration.js"></script>
+        </div>
+        <script src="/src/JS/sinhvien-activeregistration.js"></script>
 </body>
 
 <div class="modal">
