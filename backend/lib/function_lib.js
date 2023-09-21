@@ -18,14 +18,8 @@ async function sendEmail(password, email) {
       },
     });
 
-    const emailTXT = fs.readFileSync(
-      path.join("src", "emailTemplate", "email.txt"),
-      "utf8"
-    );
-    const emailHTML = fs.readFileSync(
-      path.join("src", "emailTemplate", "email.ejs"),
-      "utf8"
-    );
+    const emailTXT = fs.readFileSync(path.join("src", "emailTemplate", "email.txt"), "utf8");
+    const emailHTML = fs.readFileSync(path.join("src", "emailTemplate", "email.ejs"), "utf8");
 
     const mailOptions = {
       from: '"Quản lý điểm rèn luyện" <nguytuan04@gmail.com>',
@@ -109,26 +103,30 @@ async function checkIfUserLoginRoute(req, res, next) {
         return res.redirect("/");
       }
     }
-    
+
     if ((user.pow[1] && user.pow[4]) || user.pow[8]) {
       res.locals.isnotST = true;
     }
-    if ((user.pow[0])) {
+    if (user.pow[0]) {
+      res.locals.iskhoa = false;
+      res.locals.isbancansu = false;
+      res.locals.isgiaovien = false;
       res.locals.isST = true;
-    }
-    else if (( user.pow[1]) && user.pow[3]) {
+    } else if (user.pow[1] && user.pow[3]) {
+      res.locals.iskhoa = false;
       res.locals.isbancansu = true;
-    }
-    else if ((user.pow[1]) && user.pow[3]) {
+      res.locals.isgiaovien = false;
+      res.locals.isST = false;
+    } else if (user.pow[1] && user.pow[3]) {
+      res.locals.iskhoa = false;
+      res.locals.isbancansu = false;
       res.locals.isgiaovien = true;
-    }
-    else if (user.pow[8]) {
+      res.locals.isST = false;
+    } else if (user.pow[8]) {
       res.locals.iskhoa = true;
       res.locals.isbancansu = false;
       res.locals.isgiaovien = false;
       res.locals.isST = false;
-
-
     }
     if (user.first == "new_user") {
       return res.redirect("/login/firstlogin");
@@ -138,10 +136,7 @@ async function checkIfUserLoginRoute(req, res, next) {
       const user_info = await client
         .db(name_global_databases)
         .collection("user_info")
-        .findOne(
-          { _id: user._id },
-          { projection: { _id: 0, avt: 1, displayName: 1 } }
-        );
+        .findOne({ _id: user._id }, { projection: { _id: 0, avt: 1, displayName: 1 } });
       res.locals.avt = user_info.avt;
       res.locals.displayName = user_info.displayName;
     }
@@ -222,10 +217,7 @@ async function get_full_id(directoryPath, listName, listdep) {
     // Đọc các file trong thư mục một cách đồng bộ
     for (let i = 0; i < listName.length; i++) {
       list_id.push(
-        await server.uploadFileToDrive(
-          path.join(directoryPath, listName[i]),
-          listdep[i]
-        )
+        await server.uploadFileToDrive(path.join(directoryPath, listName[i]), listdep[i])
       );
     }
     return list_id;
@@ -307,13 +299,9 @@ function sortStudentName(std_list) {
         const lastFirstNameWordA = a.first_name.split(" ").pop();
         const lastFirstNameWordB = b.first_name.split(" ").pop();
 
-        const firstNameComparison = lastFirstNameWordA.localeCompare(
-          lastFirstNameWordB,
-          "vi",
-          {
-            sensitivity: "base",
-          }
-        );
+        const firstNameComparison = lastFirstNameWordA.localeCompare(lastFirstNameWordB, "vi", {
+          sensitivity: "base",
+        });
         if (firstNameComparison !== 0) {
           return firstNameComparison;
         }
@@ -333,6 +321,7 @@ function sortStudentName(std_list) {
 
 // xoá class
 async function deleteClassApi(data, user) {
+  // console.log(data);
   for (let i = 0; i < data.rm_cls.length; i++) {
     await client
       .db(name_global_databases)
@@ -361,7 +350,7 @@ async function deleteClassApi(data, user) {
       .collection("user_info")
       .updateMany(
         {
-          _id: data.rm_cls[i],
+          _id: data.rm_ts[i],
           "power.1": { $exists: true },
           "power.4": { $exists: true },
         },

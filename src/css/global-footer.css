@@ -251,21 +251,22 @@
   }
 }
 
-.a_nhapdiemdanhgia {
+.a_darktheme {
   border-radius: 50%;
   background-color: var(--black-color);
   position: absolute;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -30%);
+  padding: 20px!important;
 }
 
-.a_nhapdiemdanhgia p {
+.a_darktheme p {
   position: absolute;
   width: 13rem;
   right: -4.4rem;
   top: 6rem;
 }
 
-.a_nhapdiemdanhgia i {
+.a_darktheme i {
   color: var(--white-color) !important;
 }

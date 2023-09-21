@@ -1,11 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const server = require("../lib/csdl_google_lib");
-const {
-  checkIfUserLoginRoute,
-  sortStudentName,
-} = require("../lib/function_lib");
+const { checkIfUserLoginRoute, sortStudentName } = require("../lib/function_lib");
 const { getNameGlobal } = require("../lib/mogodb_lib");
+const { ObjectId } = require("mongodb");
+
 const name_global_databases = getNameGlobal();
 // doan khoa route
 function createDepRouter(client) {
@@ -75,7 +74,6 @@ function createDepRouter(client) {
         }
       )
       .toArray();
-
     // get all classes of branchs:
     let classes = {}; // classes = {KTPM: [KTPM0121, KTPM0108, ...], CNTT: {CNTT0109, CNTT0209, ...}, ...}
     let class_teachers = []; // class_teachers = [18102003, 19112003, ...]
@@ -107,7 +105,10 @@ function createDepRouter(client) {
         {
           "power.1": { $exists: true },
           "power.4": { $exists: true },
-          branch: { $in: branchs.map((branch) => branch._id) },
+          $or: [
+            { branch: { $in: branchs.map((branch) => branch._id) } },
+            { branch: ObjectId.createFromHexString("650985a345e2e896b37efd4f") },
+          ],
         }, // user is teacher
         {
           projection: {
@@ -147,9 +148,7 @@ function createDepRouter(client) {
       dep_name: user.dep,
       branchs: branchs,
       classes: classes,
-      teachers: teachers.map(
-        (teacher) => teacher.last_name + " " + teacher.first_name
-      ),
+      teachers: teachers.map((teacher) => teacher.last_name + " " + teacher.first_name),
       teachers_id: teachers.map((teacher) => teacher._id),
       class_teachers: class_teachers,
     });
@@ -183,10 +182,7 @@ function createDepRouter(client) {
         const years = await client
           .db(name_global_databases)
           .collection("classes")
-          .findOne(
-            { _id: classlist[0]._id },
-            { projection: { _id: 0, years: 1 } }
-          );
+          .findOne({ _id: classlist[0]._id }, { projection: { _id: 0, years: 1 } });
 
         // get all student in staff member class:
         let student_list = await client
@@ -308,7 +304,7 @@ function createDepRouter(client) {
           }
         )
         .toArray();
-      console.log(all_branchs);
+      // console.log(all_branchs);
       // get user name and class in dep
       const teachers = await client
         .db(name_global_databases)
@@ -317,7 +313,12 @@ function createDepRouter(client) {
           {
             "power.1": { $exists: true },
             "power.4": { $exists: true },
-            branch: { $in: all_branchs.map((branch) => branch._id) },
+            "power.999": { $exists: false },
+
+            $or: [
+              { branch: { $in: all_branchs.map((branch) => branch._id) } },
+              { branch: ObjectId.createFromHexString("650985a345e2e896b37efd4f") },
+            ],
           }, // user is teacher
           {
             projection: {
@@ -329,7 +330,7 @@ function createDepRouter(client) {
           }
         )
         .toArray();
-      console.log(teachers);
+      // console.log(teachers);
       let branch_list = [];
       for (let i = 0; i < teachers.length; i++) {
         const branch = await client
@@ -346,7 +347,7 @@ function createDepRouter(client) {
           );
         branch_list.push(branch.name);
       }
-      console.log(branch_list);
+      // console.log(branch_list);
       return res.render("doankhoa-manage-teacher", {
         header: "global-header",
         footer: "global-footer",
@@ -390,10 +391,7 @@ function createDepRouter(client) {
       const years = await client
         .db(name_global_databases)
         .collection("classes")
-        .findOne(
-          { _id: classlist[0]._id },
-          { projection: { _id: 0, years: 1 } }
-        );
+        .findOne({ _id: classlist[0]._id }, { projection: { _id: 0, years: 1 } });
 
       // get all activities of school
       const school_atv = await client
@@ -691,46 +689,42 @@ function createDepRouter(client) {
 
   // chi tiet hoat dong ------------------------------------------------------------------------------------------
   // school
-  router.get('/quanlihoatdong/:level/:id', checkIfUserLoginRoute, async (req, res) => {
+  router.get("/quanlihoatdong/:level/:id", checkIfUserLoginRoute, async (req, res) => {
     const user = req.session.user;
     try {
       // get id by req.params.id
       // identify current activity of school activities
       let curr_act;
       switch (req.params.level) {
-        case 'Truong':
-          curr_act = await client.db(name_global_databases).collection('activities').findOne(
-            {
-              _id: req.params.id
-            }
-          );
+        case "Truong":
+          curr_act = await client.db(name_global_databases).collection("activities").findOne({
+            _id: req.params.id,
+          });
           break;
-        case 'Khoa':
-          curr_act = await client.db(user.dep).collection('activities').findOne(
-            {
-              _id: req.params.id
-            }
-          );
+        case "Khoa":
+          curr_act = await client.db(user.dep).collection("activities").findOne({
+            _id: req.params.id,
+          });
           break;
         default:
-          curr_act = await client.db(user.dep).collection(req.params.level + '_activities').findOne(
-            {
-              _id: req.params.id
-            }
-          );
+          curr_act = await client
+            .db(user.dep)
+            .collection(req.params.level + "_activities")
+            .findOne({
+              _id: req.params.id,
+            });
           break;
       }
 
-      return res.render('doankhoa-activity-assessment', {
+      return res.render("doankhoa-activity-assessment", {
         header: "global-header",
         thongbao: "global-notifications",
         footer: "global-footer",
         menu: "doankhoa-menu",
-        curr_act: curr_act
+        curr_act: curr_act,
       });
-
     } catch (err) {
-      console.log('SYSTEM | REVIEWS | ERROR | ', err);
+      console.log("SYSTEM | REVIEWS | ERROR | ", err);
       res.sendStatus(500);
     }
   });

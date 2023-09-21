@@ -6,16 +6,15 @@
 <%if (iskhoa && !isST && !isbancansu && !isgiaovien ){%> 
 <body>
   <p><%=iskhoa  %></p>
-  <p><%=isnotST  %></p>
   <p><%=isbancansu  %></p>
   <p><%=isgiaovien  %></p>
 
     <div class="footer">
         <div class="footer_wrap">
-            <a class="a_profile" href="/profile"><i class="fa-solid fa-user"></i> <p>QL Cố Vấn</p> </a>
-            <a class="a_menu"><i class="fa-solid fa-bars"></i> <p>Thêm</p></a>
+            <a class="a_home" href="/"><i class="fa-solid fa-house"></i> </a>
+            <a class="a_menu"><i class="fa-solid fa-bars"></i></a>
         </div>
-        <a class="a_nhapdiemdanhgia" href="/nhapdiemdanhgia"><i class="fa-solid fa-square-pen"></i><p>QL Điểm</p> </a>
+        <a class="a_darktheme" href="/nhapdiemdanhgia"><i class="fa-solid fa-square-pen"></i> </a>
 
     </div>
 </body>
@@ -51,11 +50,107 @@
     </div>
     
 </div>
-<%} else if  (true){%>
-  <p><%=iskhoa  %></p>
-  <p><%=isnotST  %></p>
-  <a href="/bancansu/danhsachbangdiem"><button class="button-35">Quản lí điểm rèn luyện</button></a>
-  <%} else if  (pow == 2){%>
-    <a href="/bancansu/quanlihoatdong"><button class="button-35">Quản lí hoạt động</button></a>
-    <%}%>
+
+<!-- sinh vien  -->
+<%} else if(!iskhoa && isST && !isbancansu && !isgiaovien ) {%>
+  <body>
+    <p><%=iskhoa  %></p>
+    <p><%=isbancansu  %></p>
+    <p><%=isgiaovien  %></p>
+  
+      <div class="footer">
+          <div class="footer_wrap">
+              <a class="a_home" href="/"><i class="fa-solid fa-house"></i> </a>
+              <a class="a_menu"><i class="fa-solid fa-bars"></i></a>
+          </div>
+          <a class="a_darktheme" href="/nhapdiemdanhgia"><i class="fa-solid fa-square-pen"></i> </a>
+  
+      </div>
+  </body>
+  
+  <div class="modal">
+    
+  
+      <div class="modal_wrap">
+          <div class="close_menu"><i class="fas fa-xmark"></i></div>
+         
+            <nav class="menu">
+  
+              <a href="/doankhoa/quanlibomon" class="footer_item">Bộ Môn</a>
+              <div class="footer_item footer_item_more">
+                <span>Lớp <i class="fa-solid fa-chevron-down"></i></span>
+                <nav class="lop_item">
+                  <div class="footer_item lop_item_more"><a href="/doankhoa/quanlilop">Danh sách lớp</a></div>
+                  <div class="footer_item lop_item_more"><a href="/doankhoa/quanlicv">Danh sách cố vấn</a></div>
+                </nav>
+              </div>
+              <div class="footer_item footer_item_more">
+                <span> <i class="fa-solid fa-chevron-down"></i></span>
+                <nav class="lop_item">
+                  <div class="footer_item lop_item_more"><a href="/doankhoa/danhsachsinhvien">Danh sách sinh viên</a></div>
+                  <div class="footer_item lop_item_more"><a href="/doankhoa/danhsachbangdiem">Điểm rèn luyện</a></div>
+                </nav>
+              </div>
+              <a href="/doankhoa/quanlihoatdongkhoa" class="menu_item">Hoạt Động</a>
+              <a href="/doankhoa/thoihan" class="menu_item">Thời Hạn</a>
+            </nav>
+           
+          
+      </div>
+      
+  </div>
+<%}%> 
+<!-- ban can su -->
+<%else if (!iskhoa && !isST && isbancansu && !isgiaovien ){%> 
+  <body>
+    <p><%=iskhoa  %></p>
+    <p><%=isbancansu  %></p>
+    <p><%=isgiaovien  %></p>
+  
+      <div class="footer">
+          <div class="footer_wrap">
+              <a class="a_home" href="/"><i class="fa-solid fa-house"></i> </a>
+              <a class="a_menu"><i class="fa-solid fa-bars"></i></a>
+          </div>
+          <a class="a_darktheme" href="/nhapdiemdanhgia"><i class="fa-solid fa-square-pen"></i> </a>
+  
+      </div>
+  </body>
+  
+  <div class="modal">
+    
+  
+      <div class="modal_wrap">
+          <div class="close_menu"><i class="fas fa-xmark"></i></div>
+         
+            <nav class="menu">
+  
+              <a href="/doankhoa/quanlibomon" class="footer_item">Bộ Môn</a>
+              <div class="footer_item footer_item_more">
+                <span>Lớp <i class="fa-solid fa-chevron-down"></i></span>
+                <nav class="lop_item">
+                  <div class="footer_item lop_item_more"><a href="/doankhoa/quanlilop">Danh sách lớp</a></div>
+                  <div class="footer_item lop_item_more"><a href="/doankhoa/quanlicv">Danh sách cố vấn</a></div>
+                </nav>
+              </div>
+              <div class="footer_item footer_item_more">
+                <span><%= isnotST %> <i class="fa-solid fa-chevron-down"></i></span>
+                <nav class="lop_item">
+                  <div class="footer_item lop_item_more"><a href="/doankhoa/danhsachsinhvien">Danh sách sinh viên</a></div>
+                  <div class="footer_item lop_item_more"><a href="/doankhoa/danhsachbangdiem">Điểm rèn luyện</a></div>
+                </nav>
+              </div>
+              <a href="/doankhoa/quanlihoatdongkhoa" class="menu_item">Hoạt Động</a>
+              <a href="/doankhoa/thoihan" class="menu_item">Thời Hạn</a>
+            </nav>
+           
+          
+      </div>
+      
+  </div>
+  
+  <%}
+
+
+// 
 <script src="/src/JS/global-footer.js"></script>

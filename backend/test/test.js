@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { ObjectId, MongoClient, ServerApiVersion } = require("mongodb");
 const uri =
   "mongodb+srv://binhminh19112003:Zr3uGIK4dCymOXON@database.sefjqcb.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(uri, {
@@ -10,6 +10,7 @@ const client = new MongoClient(uri, {
     deprecationErrors: true,
   },
 });
+const name_global_databases = "global";
 // clear seasion của người dùng
 // server.atomic_table('global',['sessions', 'sessions_manager'],'18102003').catch(eror => console.log(eror));
 // client.db('global').collection('OTP').createIndex({ expireAt: 1 }, { expireAfterSeconds: 0 }).then(console.log("ok"));
@@ -98,36 +99,81 @@ const client = new MongoClient(uri, {
 //   });
 
 async function inet() {
-  let a = await client.db("CNTT").listCollections().toArray();
+  const all_branchs = await client
+    .db(name_global_databases)
+    .collection("branchs")
+    .find(
+      {
+        dep: "CNTT",
+      },
+      {
+        projection: {
+          name: 1,
+        },
+      }
+    )
+    .toArray();
+  const teachers = await client
+    .db(name_global_databases)
+    .collection("user_info")
+    .find(
+      {
+        "power.1": { $exists: true },
+        "power.4": { $exists: true },
+        "power.999": { $exists: false },
 
-  {
-    // get all collection in dep database
+        $or: [
+          { branch: { $in: all_branchs.map((branch) => branch._id) } },
+          { branch: ObjectId.createFromHexString("650985a345e2e896b37efd4f") },
+        ],
+      }, // user is teacher
+      {
+        projection: {
+          first_name: 1,
+          last_name: 1,
+          class: 1,
+          branch: 1,
+        },
+      }
+    )
+    .toArray();
 
-    // Filter collections ending with '_activities'
-    const activityCollections = a.filter((collection) => 
-      collection.name.endsWith("_activities")
-    );
-    let cls_atv = [];
-    // Loop through activity collections and retrieve all documents
-    activityCollections.forEach(async (collection) => {
-      const dummy = await client
-        .db("CNTT")
-        .collection(collection.name)
-        .find(
-          {},
+  const cls = await client.db(name_global_databases).collection("classes").find({}).toArray();
+  teachers.forEach(async (teacher) => {
+    cls.forEach(async (cls) => {
+      await client
+        .db(name_global_databases)
+        .collection("user_info")
+        .updateMany(
           {
-            projection: {
-              name: 1,
-              cls: 1,
-              year: 1,
-            },
+            _id: teacher._id,
+            "power.1": { $exists: true },
+            "power.4": { $exists: true },
+            "power.999": { $exists: false },
+          },
+          {
+            $push: { class: cls.cvht == teacher._id ? cls._id : null },
+            // $set: { class: [] },
           }
-        )
-        .toArray();
-
-      cls_atv.push(...dummy);
-      console.log(cls_atv);
+        );
+      await client
+        .db(name_global_databases)
+        .collection("user_info")
+        .updateMany(
+          {
+            _id: teacher._id,
+            "power.1": { $exists: true },
+            "power.4": { $exists: true },
+            "power.999": { $exists: false },
+          },
+          {
+            $pull: { class: null },
+            // $set: { class: [] },
+          }
+        );
     });
-  }
+  });
 }
-inet();
+inet().then(async (inet) => {
+  console.log(inet);
+});

@@ -4,8 +4,6 @@ const XlsxPopulate = require("xlsx-populate");
 const { v4: uuidv4 } = require("uuid");
 const path = require("path");
 const fs = require("fs");
-const axios = require("axios");
-
 const uploadDirectory = path.join("../../upload_temp");
 const multer = require("multer");
 const { ObjectId } = require("mongodb");
@@ -1342,7 +1340,7 @@ function createAPIRouter(client, wss) {
           const data = req.query;
           //data = {year: "HK1_2022-2023", cls: "1"}
           const school_year = data.year;
-          const cls = data.class;
+          let cls = data.class;
           // const bo_mon = data.bo_mon;
           // check for post data.cls if class define this mean they choose class so that must
           if (!cls) {
