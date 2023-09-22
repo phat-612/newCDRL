@@ -186,11 +186,18 @@ tr td:nth-child(4) {
 
 @media screen and (max-width: 600px) {
   .chitiet {
-    overflow: auto;
+    padding: 0;
+    margin-bottom: 100px;
   }
   .control_btn{
     display: flex;
     flex-direction: column-reverse;
+  }
+  .control{
+    flex-direction: column;
+    margin-bottom: 20px !important; 
+
+    padding: 0 20px;
   }
   .button-35{
     margin: 0 !important;
@@ -198,5 +205,19 @@ tr td:nth-child(4) {
   }
   .class_select{
     margin-top: 1rem;
+  }
+  .table_container{
+    overflow: auto;
+  }
+  .file_input,.right{
+    width: 100%;
+    display: flex;
+    gap: 20px;
+  }
+  .left{
+    display: flex;
+    margin: 20px 0;
+    width: 100%;
+    gap: 20px;
   }
 }

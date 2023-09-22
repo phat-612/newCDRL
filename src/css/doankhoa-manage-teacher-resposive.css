@@ -13,4 +13,8 @@
     .add_teacher_lable{
         width: 50%;
     }
+    .container__table{
+        margin-bottom: 100px;
+
+    }
 }

@@ -16,6 +16,8 @@
     }
     .content{
         padding:0;
+        margin-bottom: 100px;
+
     }
     .select::after{
         right:0%;
@@ -60,7 +62,9 @@
         display: flex;
         flex-wrap: wrap;
     }
-    .nien_khoa .select{
-        /* margin: 1rem; */
+    .activity_class
+    {
+        margin-bottom: 100px;
+
     }
 }
