@@ -311,9 +311,9 @@ $("#year_choice").click(async function () {
   $(this).prop("disabled", true);
 
   // get year
-  const choise_year = $('#select_hk').find("select :selected");
+  const choise_semester = $('#select_hk').find("select :selected");
   // get semester
-  const choise_semester = $('#select_sm').find("select :selected");
+  const choise_year = $('#select_sm').find("select :selected");
 
   // send request to load new activities fix year input
   // request
@@ -328,13 +328,82 @@ $("#year_choice").click(async function () {
     }),
   };
 
-  const response = await fetch("/api/addOrEditActivities", requestOptions);
+  const response = await fetch("/api/loadYearActivities", requestOptions);
   if (response.ok) {
     // clear all appeareance activities 
-    $('tr').remove()
-    //append activities to school's table ************************************************************
-    //append activities to department's table ************************************************************
-    //append activities to class' table ************************************************************
+    $('.atv_box').remove()
+    response.json().then(function (result) {
+      //append activities to school's table ************************************************************
+      const school_atv = result.school_atv;
+      const dep_atv = result.dep_atv;
+      const cls_atv = result.cls_atv;
+      for (let i = 0; i < school_atv.length; i++) {
+        $("#school_tb tbody").append(`
+                <tr class="atv_box">
+                  <td>
+                    <div class="checkbox-wrapper-4">
+                      <input type="checkbox" id="row__0__${i}" class="inp-cbx" value="${school_atv[i]._id}" />
+                      <label for="row__0__${i}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                      </label>
+                  </td>
+                  <td class="index">${i + 1}</td>
+                  <td class="a_name">${school_atv[i].name}</td>
+                  <td class="school_year">${school_atv[i].year.split("_")[0]} ${school_atv[i].year.split("_")[1]}</td>
+                  <td><a href="/doankhoa/quanlihoatdong/Truong/${school_atv[i]._id}">Chi tiết</a></td>
+                  <td><a class="more_list" href="#">Sửa</a></td>
+                </tr>
+                <tr class="copy_box">
+                  <td colspan="2"> COPY </td>
+                  <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
+                </tr>
+              `);
+      }
+      //append activities to department's table ************************************************************
+      for (let i = 0; i < dep_atv.length; i++) {
+        $("#dep_tb tbody").append(`
+              <tr class="atv_box">
+                <td>
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="row__1__${i}" class="inp-cbx" value="${dep_atv[i]._id}" />
+                    <label for="row__1__${i}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+                </td>
+                <td class="index">${i + 1}</td>
+                <td class="a_name">${dep_atv[i].name}</td>
+                <td class="school_year">${dep_atv[i].year.split("_")[0]} ${dep_atv[i].year.split("_")[1]}</td>
+                <td><a href="/doankhoa/quanlihoatdong/Khoa/${dep_atv[i]._id}">Chi tiết</a></td>
+                <td><a class="more_list" id="dep_edit" href="#">Sửa</a></td>
+              </tr>
+              <tr class="copy_box">
+                <td colspan="2"> COPY </td>
+                <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
+              </tr>
+            `);
+      }
+      //append activities to class' table ************************************************************
+      for (let i = 0; i < cls_atv.length; i++) {
+        $("#cls_tb tbody").append(`
+              <tr class="atv_box">
+                <td>
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="row__2__${i}" class="inp-cbx" value="${cls_atv[i]._id}" />
+                    <label for="row__2__${i}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+                </td>
+                <td class="index">${i + 1}</td>
+                <td class="a_name">${cls_atv[i].name}</td>
+                <td class="c_name">${cls_atv[i].cls}</td>
+                <td class="school_year">${cls_atv[i].year.split("_")[0]} ${cls_atv[i].year.split("_")[1]}</td>
+                <td><a href="/doankhoa/quanlihoatdong/${cls_atv[i].cls}/${cls_atv[i]._id}">Chi tiết</a></td>
+                <td><a class="more_list" id="cls_edit" href="#">Sửa</a></td>
+              </tr>
+              <tr class="copy_box">
+                <td colspan="2"> COPY </td>
+                <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
+              </tr>
+            `);
+      }
+    });
 
     // able curr button
     $(this).prop("disabled", false);
@@ -367,11 +436,35 @@ $("#subject_choice").click(async function () {
     }),
   };
 
-  const response = await fetch("/api/addOrEditActivities", requestOptions);
+  const response = await fetch("/api/loadClassActivities", requestOptions);
   if (response.ok) {
     // clear all appeariance activities in class activities table
-    $('#cls_tb tr').remove()
+    $('#cls_tb .atv_box').remove()
     //append activities to class' table ************************************************************
+    response.json().then(function (result) {
+      for (let i = 0; i < result.length; i++) {
+        $("#cls_tb tbody").append(`
+              <tr class="atv_box">
+                <td>
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="row__2__${i}" class="inp-cbx" value="${result[i]._id}" />
+                    <label for="row__2__${i}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+                </td>
+                <td class="index">${i + 1}</td>
+                <td class="a_name">${result[i].name}</td>
+                <td class="c_name">${result[i].cls}</td>
+                <td class="school_year">${result[i].year.split("_")[0]} ${result[i].year.split("_")[1]}</td>
+                <td><a href="/doankhoa/quanlihoatdong/${result[i].cls}/${result[i]._id}">Chi tiết</a></td>
+                <td><a class="more_list" id="cls_edit" href="#">Sửa</a></td>
+              </tr>
+              <tr class="copy_box">
+                <td colspan="2"> COPY </td>
+                <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
+              </tr>
+            `);
+      }
+    });
 
     // able curr button
     $(this).prop("disabled", false);

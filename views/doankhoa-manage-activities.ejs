@@ -197,7 +197,7 @@
                 <select>
                   <% for (let i=0; i < cls.length; i++) {%>
                   <% if (cls[i].branch==branch[curr_index]._id) {%>
-                  <option value="<%= i %>" selected="selected">
+                  <option value="<%= cls[i]._id %>" selected="selected">
                     <%= cls[i]._id %>
                   </option>
                   <% } %>
