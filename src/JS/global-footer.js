@@ -43,7 +43,7 @@ $(".foot_modal").click(function () {
   setTimeout(() => {
     $(".foot_modal").removeClass("modal_show");
     $(".foot_modal .modal_wrap").removeClass("slideInUp");
-  }, 1000);
+  }, 200);
 });
 
 $(".foot_modal .modal_wrap").click(function (e) {
@@ -55,7 +55,7 @@ $(".close_menu").click(function () {
   setTimeout(() => {
     $(".foot_modal").removeClass("modal_show");
     $(".foot_modal .modal_wrap").removeClass("slideInUp");
-  }, 1000);
+  }, 200);
   $(".a_menu").html('<i class="fa-solid fa-bars"></i>');
 });
 

@@ -361,7 +361,7 @@ td .select select option {
   /* overflow: hidden; */
 }
 
-.select::after {
+.select_branch_cn::after {
   font-size: 1.2rem;
   /* color: #000; */
   content: "\25BC";
@@ -569,5 +569,62 @@ textarea {
 
   75% {
     transform: rotate(25deg);
+  }
+}
+
+
+
+
+
+@media screen and (max-width: 600px) {
+  .container__table {
+    overflow: auto;
+  }
+  select{
+    display: block;
+    /* width: 100%; */
+    margin: 0 auto !important;
+  }
+  .subtitle {
+    display: block;
+    margin: 0;
+  }
+  #select-main .select {
+    display: block;
+  }
+  .select_branch {
+    margin: 0 0 0 0;
+  }
+  .select{
+    width: 100%;
+  }
+  .select select {
+    appearance:auto;
+  }
+  .subject--input{
+    width: 75%;
+    display: block;
+    margin: 0 auto;
+  }
+  
+
+  .button-35{
+    margin: 1rem 0 0 auto !important;
+  }
+  #button-main{
+    margin: 2rem 0px;
+    flex-direction: column;
+  }
+  #button-main div{
+    width: 100%;
+  }
+  #button-main div .button-35{
+    width: 100%;
+  }
+  .modal_main{
+    height: auto;
+  }
+  .content_main div{
+    display: block;
   }
 }

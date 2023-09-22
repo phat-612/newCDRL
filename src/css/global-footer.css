@@ -126,8 +126,8 @@
   .slideInUp {
     -webkit-animation-name: slideInUp;
     animation-name: slideInUp;
-    -webkit-animation-duration: 1s;
-    animation-duration: 1s;
+    -webkit-animation-duration: 0.2s;
+    animation-duration: 0.2s;
     -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
   }
@@ -135,8 +135,8 @@
   .slideInDown {
     -webkit-animation-name: slideInDown;
     animation-name: slideInDown;
-    -webkit-animation-duration: 1s;
-    animation-duration: 1s;
+    -webkit-animation-duration: 0.2s;
+    animation-duration: 0.2s;
     -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
   }
