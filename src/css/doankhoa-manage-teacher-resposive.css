@@ -1,5 +1,16 @@
 @media screen and (max-width: 600px) {
-    .content--button{
+    .content--button {
         margin: 0;
     }
-  }
+    .button-35 {
+        width: 100%;
+    }
+    .content input{
+        display: block;
+        margin: 0 auto;
+        width: 75%;
+    }
+    .add_teacher_lable{
+        width: 50%;
+    }
+}

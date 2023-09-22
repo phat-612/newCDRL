@@ -183,3 +183,20 @@ tr td:nth-child(4) {
 .js_md_add {
   float: right;
 }
+
+@media screen and (max-width: 600px) {
+  .chitiet {
+    overflow: auto;
+  }
+  .control_btn{
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .button-35{
+    margin: 0 !important;
+    width: 100%;
+  }
+  .class_select{
+    margin-top: 1rem;
+  }
+}
