@@ -59,84 +59,86 @@
             <p><span class="dau_sao">*</span> Không nộp bảng điểm tự chấm</p>
             <p><span class="mau_vang"></span> Có cập nhật mới</p>
           </div>
-          <table>
-            <thead>
-              <tr>
-                <th style="width: 4%">
-                  <!-- set id của input == for của label -->
-                  <!-- thêm class "new_update" cho td có cập nhật điểm mới chưa được chấm -->
-                  <!-- <span class="dau_sao">*</span> đứng phía sau tên (ai không tự đánh giá) -->
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row0" class="inp-cbx all-cbx" value="2" />
-                    <label for="row0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                </th>
-                <th style="width: 3%">STT</th>
-                <th style="width: 11%">MSSV</th>
-                <th >Họ Tên</th>
-                <th style="width: 6%">Điểm Tự Chấm</th>
-                <th style="width: 6%">Tổng điểm Lần 1</th>
-                <th >Chấm Lần 1</th>
-                <th style="width: 6%">Tổng Điểm Chính Thức</th>
-                <th style="width: 10%"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <% for (let i = 0; i < student_list.length; i++)  {%>
-              <tr>
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row<%=i+1%>" class="inp-cbx" value="<%= student_list[i]._id %>" />
-                    <label for="row<%=i+1%>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                  </div>
-                </td>
-                <td><%= i + 1 %></td>
-                <td><%= student_list[i]._id %></td>
-                <td><%= student_list[i].last_name + " " +  student_list[i].first_name%>
-                  <%if(student_scores[i] == '-' ||  student_scores[i]== 0){%>
-                  <span class="dau_sao">*</span>
-                  <%}%>
-                </td>
-                <%if(department_scores[i] != '-'){%>
-                  
-                  <td class="zero_score"><%= student_scores[i] %></td>
-                  <td class="first_score"><%= staff_scores[i] %></td>
-                  <td class="marker_name"><%= staff_name[i] %></td>
-                  <td class="new_update last_score"><%= department_scores[i] %></td>
-                  <td><a href="/hocsinh/xembangdiem?schoolYear=<%=global_year%>&mssv=<%=student_list[i]._id%>">Xem điểm</a></td>
-                  
-              <%}else {%>
-            <%if(staff_scores[i] != '-'){%>
-              <td class="zero_score"><%= student_scores[i] %></td>
-              <td class="new_update first_score"><%= staff_scores[i] %></td>
-              
-              <%}else {%>
-                <%if(student_scores[i] != '-'){%>
-                  <td class="new_update zero_score"><%= student_scores[i] %></td>
-                  <td class="first_score"><%= staff_scores[i] %></td>
-                  <%}else {%>
+          <div class="table_container">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 4%">
+                    <!-- set id của input == for của label -->
+                    <!-- thêm class "new_update" cho td có cập nhật điểm mới chưa được chấm -->
+                    <!-- <span class="dau_sao">*</span> đứng phía sau tên (ai không tự đánh giá) -->
+                    <div class="checkbox-wrapper-4">
+                      <input type="checkbox" id="row0" class="inp-cbx all-cbx" value="2" />
+                      <label for="row0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                      </label>
+                  </th>
+                  <th style="width: 3%">STT</th>
+                  <th style="width: 11%">MSSV</th>
+                  <th >Họ Tên</th>
+                  <th style="width: 6%">Điểm Tự Chấm</th>
+                  <th style="width: 6%">Tổng điểm Lần 1</th>
+                  <th >Chấm Lần 1</th>
+                  <th style="width: 6%">Tổng Điểm Chính Thức</th>
+                  <th style="width: 10%"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% for (let i = 0; i < student_list.length; i++)  {%>
+                <tr>
+                  <td>
+                    <div class="checkbox-wrapper-4">
+                      <input type="checkbox" id="row<%=i+1%>" class="inp-cbx" value="<%= student_list[i]._id %>" />
+                      <label for="row<%=i+1%>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                      </label>
+                    </div>
+                  </td>
+                  <td><%= i + 1 %></td>
+                  <td><%= student_list[i]._id %></td>
+                  <td><%= student_list[i].last_name + " " +  student_list[i].first_name%>
+                    <%if(student_scores[i] == '-' ||  student_scores[i]== 0){%>
+                    <span class="dau_sao">*</span>
+                    <%}%>
+                  </td>
+                  <%if(department_scores[i] != '-'){%>
+                    
                     <td class="zero_score"><%= student_scores[i] %></td>
                     <td class="first_score"><%= staff_scores[i] %></td>
-                  <%}%>
+                    <td class="marker_name"><%= staff_name[i] %></td>
+                    <td class="new_update last_score"><%= department_scores[i] %></td>
+                    <td><a href="/hocsinh/xembangdiem?schoolYear=<%=global_year%>&mssv=<%=student_list[i]._id%>">Xem điểm</a></td>
+                    
+                <%}else {%>
+              <%if(staff_scores[i] != '-'){%>
+                <td class="zero_score"><%= student_scores[i] %></td>
+                <td class="new_update first_score"><%= staff_scores[i] %></td>
                 
-                <%}%>
-                <td class="marker_name"><%= staff_name[i] %></td>
-                <td class="last_score"><%= department_scores[i] %></td>
-                <%if(student_scores[i] != '-' &&  student_scores[i]!= 0){%>
-                  <td><a href="/bancansu/nhapdiemdanhgia?schoolYear=<%=global_year%>&studentId=<%=student_list[i]._id%>" class="set_score_btn">Chấm điểm</a></td>
-
-                  <%}else {%>
-                    <td>-</td>
+                <%}else {%>
+                  <%if(student_scores[i] != '-'){%>
+                    <td class="new_update zero_score"><%= student_scores[i] %></td>
+                    <td class="first_score"><%= staff_scores[i] %></td>
+                    <%}else {%>
+                      <td class="zero_score"><%= student_scores[i] %></td>
+                      <td class="first_score"><%= staff_scores[i] %></td>
+                    <%}%>
+                  
+                  <%}%>
+                  <td class="marker_name"><%= staff_name[i] %></td>
+                  <td class="last_score"><%= department_scores[i] %></td>
+                  <%if(student_scores[i] != '-' &&  student_scores[i]!= 0){%>
+                    <td><a href="/bancansu/nhapdiemdanhgia?schoolYear=<%=global_year%>&studentId=<%=student_list[i]._id%>" class="set_score_btn">Chấm điểm</a></td>
   
+                    <%}else {%>
+                      <td>-</td>
+    
+                    <%}%>
                   <%}%>
-                <%}%>
-                
-                
-              </tr>
-              <% } %>
-            </tbody>
-          </table>
+                  
+                  
+                </tr>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

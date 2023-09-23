@@ -1,9 +1,12 @@
 @media screen and (max-width:600px) {
-    .danh_sach_bang_diem {
+    .table_container {
         overflow: auto;
     }
 
     table tr td:nth-child(9) {
         padding: 24px;
+    }
+    .button-35{
+        font-size: 1.5rem !important;
     }
 }

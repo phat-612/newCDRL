@@ -58,13 +58,13 @@
   visibility: hidden;
 }
 
-.checkbox-wrapper-4 .inp-cbx:checked+.cbx span:first-child {
+.checkbox-wrapper-4 .inp-cbx:checked + .cbx span:first-child {
   background: var(--checkbox-check);
   border-color: var(--checkbox-border);
   animation: wave-4 0.4s ease;
 }
 
-.checkbox-wrapper-4 .inp-cbx:checked+.cbx span:first-child svg {
+.checkbox-wrapper-4 .inp-cbx:checked + .cbx span:first-child svg {
   stroke-dashoffset: 0;
 }
 
@@ -127,14 +127,15 @@ label {
   width: 10rem;
 }
 
-h1 {
-  font-size: 25px;
+.duration_container h1 {
   text-align: center;
-  padding: 20px;
-  text-transform: uppercase;
   border-bottom: 1px solid;
-  /* font-size: 2.8rem; */
-
+  margin-bottom: 1rem;
+  font-size: 2.5rem;
+  background: rgb(27 87 198);
+  border-radius: 0.8rem;
+  color: #ffffff;
+  padding: 1rem;
 }
 
 .content {
@@ -207,13 +208,13 @@ h2 {
   visibility: hidden;
 }
 
-.checkbox-wrapper-4 .inp-cbx:checked+.cbx span:first-child {
+.checkbox-wrapper-4 .inp-cbx:checked + .cbx span:first-child {
   background: var(--checkbox-check);
   border-color: var(--checkbox-border);
   animation: wave-4 0.4s ease;
 }
 
-.checkbox-wrapper-4 .inp-cbx:checked+.cbx span:first-child svg {
+.checkbox-wrapper-4 .inp-cbx:checked + .cbx span:first-child svg {
   stroke-dashoffset: 0;
 }
 
@@ -358,11 +359,11 @@ input[type="date"] {
 }
 
 .time_set_note a {
-  color: var(--td-a)
+  color: var(--td-a);
 }
 
 .time_set_note a:active {
-  color: rebeccapurple
+  color: rebeccapurple;
 }
 
 @media screen and (max-width: 600px) {
@@ -372,7 +373,6 @@ input[type="date"] {
 
   .chamdiem {
     flex-direction: column;
-
   }
 
   .chamdiem .selectbox {
@@ -386,17 +386,17 @@ input[type="date"] {
   .input-container {
     margin: 0rem 2rem 1rem 3rem;
   }
-  .chamdiem{
+  .chamdiem {
     margin-top: 1rem;
   }
-  .modal_wrap{
+  .modal_wrap {
     width: 90vw;
     /* height: auto; */
   }
-  .time_auto{
+  .time_auto {
     padding: 0;
   }
-  .time_auto h2{
+  .time_auto h2 {
     position: unset;
     margin-bottom: 0;
     text-align: center;
@@ -404,22 +404,22 @@ input[type="date"] {
     box-sizing: border-box;
     padding: 1rem;
   }
-  .modal_wrap .content{
+  .modal_wrap .content {
     margin-top: 0;
   }
-  .modal_wrap .input-container{
+  .modal_wrap .input-container {
     margin: 2rem 0;
   }
-  .modal_wrap .input-container label{
+  .modal_wrap .input-container label {
     font-size: 1.8rem;
   }
-  .modal_wrap .input-container .selectbox{
+  .modal_wrap .input-container .selectbox {
     margin: 1rem 0;
   }
-  .modal_wrap .button-35{
+  .modal_wrap .button-35 {
     width: 100%;
   }
-  .menu{
+  .menu {
     height: 0 !important;
   }
 }

@@ -644,4 +644,7 @@ textarea {
   .selectbox{
     margin: 1rem;
   }
+  .table_container{
+    overflow: auto;
+  }
 }
