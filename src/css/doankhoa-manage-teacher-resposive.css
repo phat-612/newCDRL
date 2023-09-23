@@ -13,14 +13,4 @@
     .add_teacher_lable{
         width: 50%;
     }
-    .add_teacher{
-        margin: 0;
-    }
-    .sub-title ,.add_teacher_lable{
-        margin-bottom: 1rem;
-        display: block;
-    }
-    .title-box{
-        padding: 1rem;
-    }
 }
