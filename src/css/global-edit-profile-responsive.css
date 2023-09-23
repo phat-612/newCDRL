@@ -1,6 +1,7 @@
 @media screen and (max-width: 600px) {
     .porfile_container {
         flex-direction: column;
+        padding: 0;
     }
 
     .profile_title {
@@ -11,6 +12,7 @@
     .profile_btn_gr {
         width: 100%;
         justify-content: center;
+        gap: 2rem;
     }
 
     .profile_btn_gr_parent {
@@ -39,6 +41,7 @@
 
     .container {
         width: 100%;
+        margin-bottom: 7rem;
     }
 
     .bt_av {

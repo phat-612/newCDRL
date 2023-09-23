@@ -335,7 +335,7 @@ input[type="date"] {
 /* CSS cho dialog thêm ảnh */
 .modal_wrap {
   position: relative;
-  bottom: 45rem;
+  /* bottom: 45rem; */
   top: 50%;
   left: 50%;
   position: absolute;
@@ -384,7 +384,7 @@ input[type="date"] {
   }
 
   .input-container {
-    margin: 0rem 2rem rem 1rem 3rem;
+    margin: 0rem 2rem 1rem 3rem;
   }
   .chamdiem{
     margin-top: 1rem;
@@ -418,5 +418,8 @@ input[type="date"] {
   }
   .modal_wrap .button-35{
     width: 100%;
+  }
+  .menu{
+    height: 0 !important;
   }
 }

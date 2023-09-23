@@ -297,7 +297,18 @@
   z-index: 10;
   transform: translateX(-50%);
   position: fixed;
-  right: 50%;
-  bottom: 5rem;
+  right: 5%;
+  top: 3rem;
   margin: 0 !important;
+}
+@media screen and (max-width: 600px) {
+  .theme_btn{
+    z-index: 10;
+    transform: translateX(-50%);
+    position: fixed;
+    top: auto;
+    right: 50%;
+    bottom: 5rem;
+    margin: 0 !important;
+  }
 }

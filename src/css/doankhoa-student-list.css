@@ -40,6 +40,7 @@
   height: 100%;
   cursor: pointer;
 }
+
 .file_input input:hover {
   box-shadow: var(--black-color) 0 0 0 0.3rem, transparent 0 0 0 0;
 
@@ -85,7 +86,7 @@ tr td:nth-child(4) {
 
 #md_vt {
   background-color: var(--select-bg);
-  box-shadow:none;
+  /* box-shadow: none; */
 }
 
 .modal_wrap {
@@ -176,10 +177,13 @@ tr td:nth-child(4) {
 .controlbtn {
   display: flex;
   flex-direction: row-reverse;
+  gap: 2rem;
 }
+
 .js_md_cancel {
   right: 18rem !important;
 }
+
 .js_md_add {
   float: right;
 }
@@ -189,35 +193,69 @@ tr td:nth-child(4) {
     padding: 0;
     margin-bottom: 100px;
   }
-  .control_btn{
+
+  .control_btn {
     display: flex;
     flex-direction: column-reverse;
   }
-  .control{
+
+  .control {
     flex-direction: column;
-    margin-bottom: 20px !important; 
+    margin-bottom: 20px !important;
 
     padding: 0 20px;
   }
-  .button-35{
+
+  .button-35 {
     margin: 0 !important;
     width: 100%;
   }
-  .class_select{
+
+  .class_select {
     margin-top: 1rem;
   }
-  .table_container{
+
+  .table_container {
     overflow: auto;
   }
-  .file_input,.right{
+
+  .file_input,
+  .right {
     width: 100%;
     display: flex;
     gap: 20px;
   }
-  .left{
+
+  .left {
     display: flex;
     margin: 20px 0;
     width: 100%;
     gap: 20px;
   }
+
+  .modal_wrap .title-box {
+    width: 100%;
+    padding: 1rem;
+    text-align: center;
+    box-sizing: border-box;
+    position: unset;
+  }
+  .modal_main{
+    padding: 1rem;
+  }
+  .modal_content{
+    margin-top: 0;
+  }
+ 
+  .modal_wrap label{
+    justify-content: flex-start;
+    padding: 0;
+  }
+  .modal_wrap input{
+    width: 60%;
+  }
+  .modal_content> :nth-child(n+4){
+    background-color: unset;
+  }
+
 }
