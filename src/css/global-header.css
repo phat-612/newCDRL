@@ -607,9 +607,12 @@ textarea {
     margin: 0 auto;
   }
   
-
+  .container__button{
+    display: flex;
+    gap: 2rem;
+  }
   .button-35{
-    margin: 1rem 0 0 auto ;
+    margin: 1rem 0 0 0 ;
   }
   #button-main{
     margin: 2rem 0px;
@@ -626,5 +629,19 @@ textarea {
   }
   .content_main div{
     display: block;
+  }
+
+
+  .content.title{
+    position: unset !important;
+    padding: 0;
+    width: 100%;
+    text-align: center;
+  }
+  .content_main{
+    margin-top: 0 !important;
+  }
+  .selectbox{
+    margin: 1rem;
   }
 }

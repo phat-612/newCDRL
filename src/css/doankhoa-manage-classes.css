@@ -189,9 +189,13 @@ label {
   flex-direction: column;
 }
 @media screen and (max-width: 600px) {
-  .button-35{
-    margin: 1rem 0 0 auto !important;
+  .container__button{
+    display: flex;
+    gap: 2rem;
   }
+  /* .button-35{
+    margin: 1rem 0 0 auto !important;
+  } */
   #button-main{
     margin: 2rem 0px;
     flex-direction: column;
@@ -204,6 +208,12 @@ label {
   }
   .modal_main{
     height: auto;
+  }
+  .title-box{
+    padding: 1rem !important;
+  }
+  label{
+    margin-bottom: 1rem;
   }
 }
 
