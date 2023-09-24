@@ -33,7 +33,9 @@
 }
 
 .footer a {
-  display: inline-block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 1rem;
   text-align: center;
 }
@@ -126,8 +128,8 @@
   .slideInUp {
     -webkit-animation-name: slideInUp;
     animation-name: slideInUp;
-    -webkit-animation-duration: 1s;
-    animation-duration: 1s;
+    -webkit-animation-duration: 0.2s;
+    animation-duration: 0.2s;
     -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
   }
@@ -135,8 +137,8 @@
   .slideInDown {
     -webkit-animation-name: slideInDown;
     animation-name: slideInDown;
-    -webkit-animation-duration: 1s;
-    animation-duration: 1s;
+    -webkit-animation-duration: 0.2s;
+    animation-duration: 0.2s;
     -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
   }
@@ -295,6 +297,18 @@
   z-index: 10;
   transform: translateX(-50%);
   position: fixed;
-  right: 50%;
-  bottom: 5rem;
+  right: 5%;
+  top: 3rem;
+  margin: 0 !important;
+}
+@media screen and (max-width: 600px) {
+  .theme_btn{
+    z-index: 10;
+    transform: translateX(-50%);
+    position: fixed;
+    top: auto;
+    right: 50%;
+    bottom: 5rem;
+    margin: 0 !important;
+  }
 }

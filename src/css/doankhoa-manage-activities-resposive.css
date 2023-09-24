@@ -1,0 +1,12 @@
+@media screen and (max-width: 600px) {
+    .year_full{
+        flex-direction: column;
+        width: 100%;
+    }
+    .button-35{
+        margin: 0 !important;
+    }
+    .hk{
+        justify-content: space-between;
+    }
+  }

@@ -8,7 +8,6 @@ html {
   box-sizing: content-box;
 }
 
-
 /* css tra cứu */
 .box-table {
   margin-top: 2rem;
@@ -38,7 +37,6 @@ html {
   margin-top: 3rem;
 }
 
-
 th {
   font-size: 2rem;
 }
@@ -53,12 +51,11 @@ td {
   padding: 1rem;
 }
 
-
 /* css table */
 table,
 th,
 td {
-  border: .1rem solid var(--black-color);
+  border: 0.1rem solid var(--black-color);
   border-collapse: collapse;
 }
 
@@ -75,7 +72,6 @@ th,
 td {
   padding: 1rem;
 }
-
 
 /* modal */
 .modal {
@@ -97,7 +93,6 @@ td {
   background: var(--white-color);
   border-radius: 0.8rem;
   transform: translate(-50%, -50%);
-
 }
 
 .modal_main {
@@ -121,19 +116,16 @@ td {
 .title-box {
   padding: 0 !important;
   font-size: 2.8rem !important;
-
 }
 
 .content_main {
   margin-top: 10rem;
-
 }
 
 .subtitle {
   display: flex;
   align-items: center;
   margin: 0rem 2rem 2rem 0rem;
-
 }
 
 .input--label {
@@ -145,11 +137,10 @@ td {
   line-height: 4rem;
   padding: 0 2rem;
   border-radius: 0.3em;
-  border: .1rem solid rgba(0, 0, 0, 0.3);
+  border: 0.1rem solid rgba(0, 0, 0, 0.3);
   background-color: var(--input-hover);
   transition: box-shadow 0.1s linear;
 }
-
 
 .sub-title {
   font-size: 1.5rem;
@@ -196,6 +187,34 @@ label {
   display: flex;
   gap: 3rem;
   flex-direction: column;
+}
+@media screen and (max-width: 600px) {
+  .container__button{
+    display: flex;
+    gap: 2rem;
+  }
+  /* .button-35{
+    margin: 1rem 0 0 auto !important;
+  } */
+  #button-main{
+    margin: 2rem 0px;
+    flex-direction: column;
+  }
+  #button-main div{
+    width: 100%;
+  }
+  #button-main div .button-35{
+    width: 100%;
+  }
+  .modal_main{
+    height: auto;
+  }
+  .title-box{
+    padding: 1rem !important;
+  }
+  label{
+    margin-bottom: 1rem;
+  }
 }
 
 /* 

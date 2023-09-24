@@ -1,0 +1,30 @@
+@media screen and (max-width: 600px) {
+    .content--button {
+        margin: 0;
+    }
+    .button-35 {
+        width: 100%;
+    }
+    .content input{
+        display: block;
+        margin: 0 auto;
+        width: 75%;
+    }
+    .add_teacher_lable{
+        width: 50%;
+    }
+    .content.title h2{
+        padding: 1rem;
+    }
+    .content.title{
+        margin-bottom: 0;
+    }
+    .content_main label,.content h3{
+        margin-bottom: 1rem;
+        display: block;
+    }
+    .content{
+        margin: 0;
+    }
+    
+}
