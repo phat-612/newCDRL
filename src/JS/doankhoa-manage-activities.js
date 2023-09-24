@@ -24,43 +24,60 @@ $(document).on("click", ".more_list", async function () {
 
 // set default for input of edit modal
 $(document).on("click", "#school_edit", async function () {
+  const curr_index = parseInt(curr_edit.find(".index").text()) - 1;
+  const start_date = new Date(school_st[curr_index]);
   // set default for activities' content input
-  $(".modal.edit #activities_content").val(
-    school_content[parseInt(curr_edit.find(".index").text()) - 1]
-  );
+  $(".modal.edit #activities_content").val(school_content[curr_index]);
+  // --------------------------------------------------------------------------------
+  // set default for activities' start hour input
+  $("#edit-act-time").val((start_date.getHours() - 7) + ':' + start_date.getMinutes()); // minus 7 for GMT
+  // set default for activities' start date input 
+  $("#edit-act-date").val(start_date.getDate());
+  // -------------------------------------------------------------------------------------
   // set default for activities'
-  $('select option[value="truong"]').attr("selected", true);
+  $('.modal.edit #select-level2 option[value="truong"]').prop("selected", true);
   // do not have class choice
   $(".modal.edit #select_lop2").hide();
 });
 
 $(document).on("click", "#dep_edit", async function () {
+  const curr_index = parseInt(curr_edit.find(".index").text()) - 1;
+  const start_date = new Date(dep_st[curr_index]);
   // set default for activities' content input
-  $(".modal.edit #activities_content").val(
-    dep_content[parseInt(curr_edit.find(".index").text()) - 1]
-  );
+  $(".modal.edit #activities_content").val(dep_content[curr_index]);
+  // --------------------------------------------------------------------------------
+  // set default for activities' start hour input
+  $("#edit-act-time").val((start_date.getHours() - 7) + ':' + start_date.getMinutes()); // minus 7 for GMT
+  // set default for activities' start date input 
+  $("#edit-act-date").val(start_date.getDate());
+  // -------------------------------------------------------------------------------------
   // set default for activities'
-  $('.modal.edit #select-level2 option[value="khoa"]').attr("selected", true);
+  $('.modal.edit #select-level2 option[value="khoa"]').prop("selected", true);
   // do not have class choice
   $(".modal.edit #select_lop2").hide();
 });
 
 $(document).on("click", "#cls_edit", async function () {
+  const curr_index = parseInt(curr_edit.find(".index").text()) - 1;
+  const start_date = new Date(cls_st[curr_index]);
   // set default for activities' content input
-  $(".modal.edit #activities_content").val(
-    cls_content[parseInt(curr_edit.find(".index").text()) - 1]
-  );
+  $(".modal.edit #activities_content").val(cls_content[curr_index]);
+  // --------------------------------------------------------------------------------
+  // set default for activities' start hour input
+  $("#edit-act-time").val((start_date.getHours() - 7) + ':' + start_date.getMinutes()); // minus 7 for GMT
+  // set default for activities' start date input 
+  $("#edit-act-date").val(start_date.getDate());
+  // -------------------------------------------------------------------------------------
   // set default for activities'
-  $('.modal.edit #select-level2 option[value="lop"]').attr("selected", true);
+  $('.modal.edit #select-level2 option[value="lop"]').prop("selected", true);
   // do not have class choice
   $(".modal.edit #select_lop2").show();
   $(
     `.modal.edit #select-class2 option[value="${curr_edit
       .find(".c_name")
       .text()}"]`
-  ).attr("selected", true);
+  ).prop("selected", true);
 });
-
 // --------------------------------------------------------------------------------------------------------
 
 $(".modal.edit").click(function () {
@@ -174,7 +191,23 @@ $(".save_btn").click(async function () {
     .find("#activities_content")
     .val();
 
-  if (atv_name && atv_content) {
+  // get start hour and start date of activities
+  const start_hour = $(this)
+    .parent()
+    .parent()
+    .parent()
+    .find(".act-time")
+    .val();
+
+  const start_date = $(this)
+    .parent()
+    .parent()
+    .parent()
+    .find(".act-date")
+    .val();
+
+
+  if (atv_name && atv_content && start_hour && start_date) {
     // check if user enter info or not
     // disable curr button
     $(this).prop("disabled", true);
@@ -187,6 +220,7 @@ $(".save_btn").click(async function () {
       .parent()
       .parent()
       .find(".select_level :selected");
+
     const cls_id = $(this)
       .parent()
       .parent()
@@ -205,18 +239,45 @@ $(".save_btn").click(async function () {
         content: atv_content,
         level: level.val(),
         cls_id: cls_id.val(),
+        start_hour: start_hour,
+        start_date: start_date
       }),
     };
 
     const response = await fetch("/api/addOrEditActivities", requestOptions);
     if (response.ok) {
       if (curr_edit) {
-        // remove current edit if it is edit
+        const curr_index = parseInt(curr_edit.find(".index").text()) - 1;
+        const curr_tb = curr_edit.parent().parent();
+        // remove current activities content in 
+        switch (level.val()) {
+          case "lop":
+            cls_content.splice(curr_index, 1);
+            cls_st.splice(curr_index, 1);
+            break;
+          case "khoa":
+            dep_content.splice(curr_index, 1);
+            dep_st.splice(curr_index, 1);
+            break;
+          case "truong":
+            school_content.splice(curr_index, 1);
+            school_st.splice(curr_index, 1);
+            break;
+        };
+        // remove current edit if it is edit and it;s copy tr
+        curr_edit.next().remove();
         curr_edit.remove();
+        // reedit all rows' index;
+        let index = 0
+        curr_tb.find('.index').each(function () {
+          index += 1;
+          $(this).text(index);
+        });
       }
       // check for add to school, department or class
       switch (level.val()) {
         case "lop":
+          // add new length
           let cls_length = $("#cls_tb tbody tr").length / 2;
           $("#cls_tb tbody").append(`
             <tr class="atv_box">
@@ -238,6 +299,11 @@ $(".save_btn").click(async function () {
               <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
             </tr>
           `);
+
+          // add content and start time to cls list
+          cls_content.push(atv_content);
+          cls_st.push(new Date([start_date, start_hour]));
+          console.log(cls_content);
           break;
         case "khoa":
           let dep_length = $("#dep_tb tbody tr").length / 2;
@@ -260,6 +326,10 @@ $(".save_btn").click(async function () {
               <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
             </tr>
           `);
+          // add content and start time to dep list
+          dep_content.push(atv_content);
+          dep_st.push(new Date([start_date, start_hour]));
+          console.log(dep_content);
           break;
         case "truong":
           let school_length = $("#school_tb tbody tr").length / 2;
@@ -275,13 +345,18 @@ $(".save_btn").click(async function () {
               <td class="a_name">${atv_name}</td>
               <td class="school_year">${year_cur.split("_")[0]} ${year_cur.split("_")[1]}</td>
               <td><a href="/doankhoa/quanlihoatdong/Truong/${atv_id}">Chi tiết</a></td>
-              <td><a class="more_list" href="#">Sửa</a></td>
+              <td><a class="more_list" id="school_edit" href="#">Sửa</a></td>
             </tr>
             <tr class="copy_box">
               <td colspan="2"> COPY </td>
               <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
             </tr>
           `);
+
+          // add content and start time to cls list
+          school_content.push(atv_content);
+          school_st.push(new Date([start_date, start_hour]));
+          console.log(school_content);
           break;
       }
       // able curr button

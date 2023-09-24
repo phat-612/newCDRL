@@ -276,6 +276,15 @@
           <h3 class="sub-title descrip">Nội Dung Hoạt Động</h3>
           <textarea name="" id="activities_content" cols="30" rows="10" placeholder="Nhập nội dung hoạt động"></textarea>
         </div>
+        <div class="content">
+          <h3 class="sub-title descrip">Thời Gian Diễn Ra</h3>
+          <div class="choise_date">
+            <div class="">Giờ: </div>
+            <input class="act-time" id="edit-act-time" type="time" value="" />
+            <div class="">Ngày: </div>
+            <input class="act-date" id="edit-act-date" type="date" value="" />
+          </div>
+        </div>
         <div class="select_year">
           <div class="selectbox nien_khoa">
             <main id="select-main">
@@ -324,6 +333,15 @@
           <h3 class="sub-title descrip">Nội Dung Hoạt Động</h3>
           <textarea class="activities_content" id="activities_content" cols="30" rows="10" placeholder="Nhập nội dung hoạt động"></textarea>
         </div>
+        <div class="content">
+          <h3 class="sub-title descrip">Thời Gian Diễn Ra</h3>
+          <div class="choise_date">
+            <div class="">Giờ: </div>
+            <input class="act-time" id="add-act-time" type="time" value="" />
+            <div class="">Ngày: </div>
+            <input class="act-date" id="add-act-date" type="date" value="" />
+          </div>
+        </div>
         <div class="select_year">
           <div class="selectbox nien_khoa">
             <main id="select-main">
@@ -365,6 +383,9 @@
   const dep_content = <%- JSON.stringify(dep_atv.map((avt) => avt.content)) %>;
   const cls_content = <%- JSON.stringify(cls_atv.map((avt) => avt.content)) %>;
 
+  const school_st = <%- JSON.stringify(school_atv.map((avt) => avt.start_time)) %>;
+  const dep_st = <%- JSON.stringify(dep_atv.map((avt) => avt.start_time)) %>;
+  const cls_st = <%- JSON.stringify(cls_atv.map((avt) => avt.start_time)) %>;
 </script>
 <!-- <script src="/src/JS/bancansu-manage-activities.js"></script> -->
 <script src="/src/JS/doankhoa-manage-activities.js"></script>

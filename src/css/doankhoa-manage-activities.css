@@ -18,8 +18,9 @@
 
   /* padding: 1rem; */
 }
+
 .year_full {
-  width:107rem;
+  width: 107rem;
   display: flex;
   gap: 2rem;
   padding-bottom: 1rem;
@@ -33,6 +34,7 @@
   display: flex;
   align-items: center;
 }
+
 /* .hk span {
   width: 30%;
 } */
@@ -128,6 +130,7 @@ tr:hover {
   background-color: var(--modal-color);
   display: none;
 }
+
 .subject--input {
   margin-top: 0.5rem;
   width: 100%;
@@ -211,9 +214,7 @@ label {
   display: none;
 }
 
-.copy_box:hover {
-  
-}
+.copy_box:hover {}
 
 .activity-board {
   text-align: center;
@@ -231,4 +232,23 @@ label {
 
 .model-lb {
   margin-right: 2rem;
+}
+
+.choise_date {
+  display: flex;
+  gap: 1rem;
+  margin: 2rem 0 3rem;
+  /* justify-content: center; */
+  align-items: center;
+}
+
+.choise_date input{
+  background-color: var(--button-color);
+  padding: 5px;
+  font-family: "Roboto Mono", monospace;
+  color: var(--black-color);
+  font-size: 1.8rem;
+  border: none;
+  outline: none;
+  border-radius: 0.8rem;
 }
