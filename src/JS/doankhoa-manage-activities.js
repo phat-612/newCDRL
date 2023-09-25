@@ -26,14 +26,18 @@ $(document).on("click", ".more_list", async function () {
 $(document).on("click", "#school_edit", async function () {
   const curr_index = parseInt(curr_edit.find(".index").text()) - 1;
   const start_date = new Date(school_st[curr_index]);
+  // Format the date in 'YYYY-MM-DD' format
+  const formattedDate = `${start_date.getFullYear()}-${(start_date.getMonth() + 1).toString().padStart(2, '0')}-${start_date.getDate().toString().padStart(2, '0')}`;
+  // Format the time in 'HH:MM' format
+  const formattedTime = `${start_date.getHours().toString().padStart(2, '0')}:${start_date.getMinutes().toString().padStart(2, '0')}`;
   // set default for activities' content input
   $(".modal.edit #activities_content").val(school_content[curr_index]);
   // --------------------------------------------------------------------------------
-  // set default for activities' start hour input
-  $("#edit-act-time").val((start_date.getHours() - 7) + ':' + start_date.getMinutes()); // minus 7 for GMT
-  // set default for activities' start date input 
-  $("#edit-act-date").val(start_date.getDate());
+  // set default for activities' start date input
+  $("#edit-act-date").val(formattedDate);
   // -------------------------------------------------------------------------------------
+  // set default for activities' start hour input
+  $("#edit-act-time").val(formattedTime);
   // set default for activities'
   $('.modal.edit #select-level2 option[value="truong"]').prop("selected", true);
   // do not have class choice
@@ -43,13 +47,17 @@ $(document).on("click", "#school_edit", async function () {
 $(document).on("click", "#dep_edit", async function () {
   const curr_index = parseInt(curr_edit.find(".index").text()) - 1;
   const start_date = new Date(dep_st[curr_index]);
+  // Format the date in 'YYYY-MM-DD' format
+  const formattedDate = `${start_date.getFullYear()}-${(start_date.getMonth() + 1).toString().padStart(2, '0')}-${start_date.getDate().toString().padStart(2, '0')}`;
+  // Format the time in 'HH:MM' format
+  const formattedTime = `${start_date.getHours().toString().padStart(2, '0')}:${start_date.getMinutes().toString().padStart(2, '0')}`;
   // set default for activities' content input
   $(".modal.edit #activities_content").val(dep_content[curr_index]);
   // --------------------------------------------------------------------------------
-  // set default for activities' start hour input
-  $("#edit-act-time").val((start_date.getHours() - 7) + ':' + start_date.getMinutes()); // minus 7 for GMT
   // set default for activities' start date input 
-  $("#edit-act-date").val(start_date.getDate());
+  $("#edit-act-date").val(formattedDate);
+  // set default for activities' start hour input
+  $("#edit-act-time").val(formattedTime);
   // -------------------------------------------------------------------------------------
   // set default for activities'
   $('.modal.edit #select-level2 option[value="khoa"]').prop("selected", true);
@@ -60,13 +68,17 @@ $(document).on("click", "#dep_edit", async function () {
 $(document).on("click", "#cls_edit", async function () {
   const curr_index = parseInt(curr_edit.find(".index").text()) - 1;
   const start_date = new Date(cls_st[curr_index]);
+  // Format the date in 'YYYY-MM-DD' format
+  const formattedDate = `${start_date.getFullYear()}-${(start_date.getMonth() + 1).toString().padStart(2, '0')}-${start_date.getDate().toString().padStart(2, '0')}`;
+  // Format the time in 'HH:MM' format
+  const formattedTime = `${start_date.getHours().toString().padStart(2, '0')}:${start_date.getMinutes().toString().padStart(2, '0')}`;
   // set default for activities' content input
   $(".modal.edit #activities_content").val(cls_content[curr_index]);
   // --------------------------------------------------------------------------------
-  // set default for activities' start hour input
-  $("#edit-act-time").val((start_date.getHours() - 7) + ':' + start_date.getMinutes()); // minus 7 for GMT
   // set default for activities' start date input 
-  $("#edit-act-date").val(start_date.getDate());
+  $("#edit-act-date").val(formattedDate);
+  // set default for activities' start hour input
+  $("#edit-act-time").val(formattedTime);
   // -------------------------------------------------------------------------------------
   // set default for activities'
   $('.modal.edit #select-level2 option[value="lop"]').prop("selected", true);
