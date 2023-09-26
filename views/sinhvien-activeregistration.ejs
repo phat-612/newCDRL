@@ -19,7 +19,7 @@
           <section class="activity_body">
             <div class="activity_body_details">
               <p>Chi tiết: <%=activitie_info.content%></p>
-              <p>Cấp độ: <%=activitie_info.level%> </p>
+              <p>Cấp độ: <span><%=activitie_info.level%></span></p>
               <%if (isST){%>
               <%if (!activitie_info.join){%>
               <p>Trạng thái: <span class="attendance">Chưa ghi danh</span></p>
@@ -38,7 +38,7 @@
                 <%=displayName%>
               </h1>
             </div>
-            <button class="button-35 button-35-a activeregistration_btn">Ghi Danh</button>
+            <button class="button-35 button-35-a activeregistration_btn" id="<%=id_acti%>">Ghi Danh</button>
             <!--diem danh -->
             <%} else {%>
             <!-- sau khi ghi danh -->
@@ -50,7 +50,7 @@
             <button class="button-35 up-btn post-btn">
               Tải ảnh
             </button>
-            <button class="button-35 up-btn save-btn">
+            <button class="button-35 up-btn save-btn" id="<%=id_acti%>">
               Điểm Danh
             </button>
             <!--diem danh -->

@@ -260,6 +260,8 @@ function createRootRouter(client) {
               cls_i = await client.db(user.dep).collection(`${user.cls[0]}_activities`).findOne({
                 _id: query.id,
               });
+              activitie_info = cls_i;
+  
             } else {
               const collections = await client.db(user.dep).listCollections().toArray();
               // Filter collections ending with '_activities'
@@ -268,9 +270,12 @@ function createRootRouter(client) {
               );
               // Loop through activity collections and retrieve all documents
               for (const activityCollection of activityCollections) {
-                const cls_i = await client.db(user.dep).collection(activityCollection.name).findOne({
-                  _id: query.id,
-                });
+                cls_i = await client
+                  .db(user.dep)
+                  .collection(activityCollection.name)
+                  .findOne({
+                    _id: query.id,
+                  });
                 if (cls_i) {
                   activitie_info = cls_i;
                   break; // Thoát khỏi vòng lặp khi tìm thấy kết quả
@@ -297,6 +302,7 @@ function createRootRouter(client) {
           thongbao: "global-notifications",
           footer: "global-footer",
           activitie_info: activitie_info,
+          id_acti: query.id,
         });
       } else {
         return res.redirect("/");

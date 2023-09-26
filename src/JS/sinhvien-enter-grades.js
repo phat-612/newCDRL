@@ -164,7 +164,7 @@ $(document).mouseup(function (e) {
 });
 // tính điểm ------------------------------------------------------------------------------------------------------------------------------------------------------------
 async function autoCheck(){
-  const response = await fetch("https://localhost:8181/api/getStudentInfoMark");
+  const response = await fetch("/api/getStudentInfoMark");
   let infoMark = await response.json();
   if (infoMark["dang_vien"]){
     $("#morning12").prop('checked', true);
