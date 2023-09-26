@@ -1930,8 +1930,21 @@ function createAPIRouter(client, wss) {
             // check other databases if this activities in thoese collection remove it
             await client.db(name_global_databases).collection('activities').deleteOne({ _id: data.atv_id }); // school
             await client.db(user.dep).collection('activities').deleteOne({ _id: data.atv_id }); // department
-            break;
 
+            // create index for new table has just created
+            await client
+              .db(user.dep)
+              .collection(data.cls_id + "_activities")
+              .createIndexes(
+                {
+                  year: 1
+                },
+                {
+                  name: '_year'
+                }
+              );
+
+            break;
           case "khoa":
             // save activity in activities collection in 'Dep name' database
             await client
@@ -1958,8 +1971,21 @@ function createAPIRouter(client, wss) {
             // check other databases if this activities in thoese collection remove it
             await client.db(name_global_databases).collection('activities').deleteOne({ _id: data.atv_id }); // school
             await client.db(user.dep).collection(data.cls_id + '_activities').deleteOne({ _id: data.atv_id }); // class
-            break;
 
+            // create index for new table has just created
+            await client
+              .db(user.dep)
+              .collection("activities")
+              .createIndexes(
+                {
+                  year: 1
+                },
+                {
+                  name: '_year'
+                }
+              );
+
+            break;
           case "truong":
             // save activity in activities collection in global database
             await client
@@ -1986,8 +2012,23 @@ function createAPIRouter(client, wss) {
             // check other databases if this activities in thoese collection remove it
             await client.db(user.dep).collection('activities').deleteOne({ _id: data.atv_id }); // department
             await client.db(user.dep).collection(data.cls_id + '_activities').deleteOne({ _id: data.atv_id }); // class
+
+            // create index for new table has just created
+            await client
+              .db(name_global_databases)
+              .collection("activities")
+              .createIndexes(
+                {
+                  year: 1
+                },
+                {
+                  name: '_year'
+                }
+              );
+
             break;
-        }
+        };
+
 
         return res.status(200).json({ message: "Success" });
       } else if (user.pow[0]) {

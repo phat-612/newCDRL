@@ -371,21 +371,20 @@ $(".save_btn").click(async function () {
           console.log(school_content);
           break;
       }
-      // able curr button
-      $(this).prop("disabled", false);
+
       // disappear curr dialog
       $(".modal.add").hide();
       $(".modal.edit").hide();
       notify("n", "Đã hoàn tất cập nhật hoạt động");
     } else if (response.status == 500) {
-      // able curr button
-      $(this).prop("disabled", false);
       // disappear curr dialog
       $(".modal.add").hide();
       $(".modal.edit").hide();
       // Error occurred during upload
       notify("x", "Có lỗi xảy ra!");
     }
+    // able curr button
+    $(this).prop("disabled", false);
   } else {
     notify("!", "Hãy nhập đầy đủ thông tin!");
   }
@@ -492,16 +491,12 @@ $("#year_choice").click(async function () {
       }
     });
 
-    // able curr button
-    $(this).prop("disabled", false);
-
   } else if (response.status == 500) {
-    // able curr button
-    $(this).prop("disabled", false);
     // Error occurred during upload
     notify("x", "Có lỗi xảy ra!");
   }
-
+  // able curr button
+  $(this).prop("disabled", false);
 });
 
 // subjects choise button:
@@ -553,16 +548,13 @@ $("#subject_choice").click(async function () {
       }
     });
 
-    // able curr button
-    $(this).prop("disabled", false);
-
   } else if (response.status == 500) {
-    // able curr button
-    $(this).prop("disabled", false);
 
     // Error occurred during upload
     notify("x", "Có lỗi xảy ra!");
   }
+  // able curr button
+  $(this).prop("disabled", false);
 
 });
 
@@ -602,61 +594,66 @@ $("#delete__activity").click(async function () {
   });
 
   if (school_rmatv.length > 0 || dep_rmatv.length > 0 || cls_rmatv.length > 0) {
-    // request
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        school_rmatv: school_rmatv,
-        dep_rmatv: dep_rmatv,
-        cls_rmatv: cls_rmatv,
-      }),
-    };
+    quest("Bạn có chắc chắn muốn xoá tất cả hoạt động được đánh dấu. Dữ liệu bị xoá sẽ KHÔNG THỂ ĐƯỢC KHÔI PHỤC!").then(async (result) => {
+      if (result) {
+        // request
+        const requestOptions = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            school_rmatv: school_rmatv,
+            dep_rmatv: dep_rmatv,
+            cls_rmatv: cls_rmatv,
+          }),
+        };
 
-    const response = await fetch("/api/deleteActivities", requestOptions);
-    if (response.ok) {
-      // remove all checked line
-      $("table tbody .inp-cbx").each(function () {
-        if (this.checked) {
-          // remove currline
-          $(this).parent().parent().parent().remove();
+        const response = await fetch("/api/deleteActivities", requestOptions);
+        if (response.ok) {
+          // remove all checked line
+          $("table tbody .inp-cbx").each(function () {
+            if (this.checked) {
+              // remove currline
+              $(this).parent().parent().parent().remove();
+            }
+          });
+
+          // rewrite all numbers of lines after remove of schoole activities, department activities, class activities
+          // school:
+          let index = 1;
+          $("#school_tb tbody .index").each(function () {
+            $(this).text(index);
+            index += 1;
+          });
+
+          // department:
+          index = 1;
+          $("#dep_tb tbody .index").each(function () {
+            $(this).text(index);
+            index += 1;
+          });
+
+          // class:
+          index = 1;
+          $("#cls_tb tbody .index").each(function () {
+            $(this).text(index);
+            index += 1;
+          });
+
+          notify("n", "Đã xóa các cố vấn được đánh dấu");
+        } else if (response.status == 500) {
+          // Error occurred during upload
+          notify("x", "Có lỗi xảy ra!");
         }
-      });
 
-      // rewrite all numbers of lines after remove of schoole activities, department activities, class activities
-      // school:
-      let index = 1;
-      $("#school_tb tbody .index").each(function () {
-        $(this).text(index);
-        index += 1;
-      });
-
-      // department:
-      index = 1;
-      $("#dep_tb tbody .index").each(function () {
-        $(this).text(index);
-        index += 1;
-      });
-
-      // class:
-      index = 1;
-      $("#cls_tb tbody .index").each(function () {
-        $(this).text(index);
-        index += 1;
-      });
-
+      }
+      else {
+        console.log('không xoá bất cứ dữ liệu nào');
+      }
       // able curr button
       $(this).prop("disabled", false);
-
-      notify("n", "Đã xóa các cố vấn được đánh dấu");
-    } else if (response.status == 500) {
-      // Error occurred during upload
-      notify("x", "Có lỗi xảy ra!");
-      // able curr button
-      $(this).prop("disabled", false);
-    }
+    });
   } else {
     notify("!", "Không có cố vấn được đánh dấu");
   }
