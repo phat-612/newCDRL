@@ -24,43 +24,72 @@ $(document).on("click", ".more_list", async function () {
 
 // set default for input of edit modal
 $(document).on("click", "#school_edit", async function () {
+  const curr_index = parseInt(curr_edit.find(".index").text()) - 1;
+  const start_date = new Date(school_st[curr_index]);
+  // Format the date in 'YYYY-MM-DD' format
+  const formattedDate = `${start_date.getFullYear()}-${(start_date.getMonth() + 1).toString().padStart(2, '0')}-${start_date.getDate().toString().padStart(2, '0')}`;
+  // Format the time in 'HH:MM' format
+  const formattedTime = `${start_date.getHours().toString().padStart(2, '0')}:${start_date.getMinutes().toString().padStart(2, '0')}`;
   // set default for activities' content input
-  $(".modal.edit #activities_content").val(
-    school_content[parseInt(curr_edit.find(".index").text()) - 1]
-  );
+  $(".modal.edit #activities_content").val(school_content[curr_index]);
+  // --------------------------------------------------------------------------------
+  // set default for activities' start date input
+  $("#edit-act-date").val(formattedDate);
+  // -------------------------------------------------------------------------------------
+  // set default for activities' start hour input
+  $("#edit-act-time").val(formattedTime);
   // set default for activities'
-  $('select option[value="truong"]').attr("selected", true);
+  $('.modal.edit #select-level2 option[value="truong"]').prop("selected", true);
   // do not have class choice
   $(".modal.edit #select_lop2").hide();
 });
 
 $(document).on("click", "#dep_edit", async function () {
+  const curr_index = parseInt(curr_edit.find(".index").text()) - 1;
+  const start_date = new Date(dep_st[curr_index]);
+  // Format the date in 'YYYY-MM-DD' format
+  const formattedDate = `${start_date.getFullYear()}-${(start_date.getMonth() + 1).toString().padStart(2, '0')}-${start_date.getDate().toString().padStart(2, '0')}`;
+  // Format the time in 'HH:MM' format
+  const formattedTime = `${start_date.getHours().toString().padStart(2, '0')}:${start_date.getMinutes().toString().padStart(2, '0')}`;
   // set default for activities' content input
-  $(".modal.edit #activities_content").val(
-    dep_content[parseInt(curr_edit.find(".index").text()) - 1]
-  );
+  $(".modal.edit #activities_content").val(dep_content[curr_index]);
+  // --------------------------------------------------------------------------------
+  // set default for activities' start date input 
+  $("#edit-act-date").val(formattedDate);
+  // set default for activities' start hour input
+  $("#edit-act-time").val(formattedTime);
+  // -------------------------------------------------------------------------------------
   // set default for activities'
-  $('.modal.edit #select-level2 option[value="khoa"]').attr("selected", true);
+  $('.modal.edit #select-level2 option[value="khoa"]').prop("selected", true);
   // do not have class choice
   $(".modal.edit #select_lop2").hide();
 });
 
 $(document).on("click", "#cls_edit", async function () {
+  const curr_index = parseInt(curr_edit.find(".index").text()) - 1;
+  const start_date = new Date(cls_st[curr_index]);
+  // Format the date in 'YYYY-MM-DD' format
+  const formattedDate = `${start_date.getFullYear()}-${(start_date.getMonth() + 1).toString().padStart(2, '0')}-${start_date.getDate().toString().padStart(2, '0')}`;
+  // Format the time in 'HH:MM' format
+  const formattedTime = `${start_date.getHours().toString().padStart(2, '0')}:${start_date.getMinutes().toString().padStart(2, '0')}`;
   // set default for activities' content input
-  $(".modal.edit #activities_content").val(
-    cls_content[parseInt(curr_edit.find(".index").text()) - 1]
-  );
+  $(".modal.edit #activities_content").val(cls_content[curr_index]);
+  // --------------------------------------------------------------------------------
+  // set default for activities' start date input 
+  $("#edit-act-date").val(formattedDate);
+  // set default for activities' start hour input
+  $("#edit-act-time").val(formattedTime);
+  // -------------------------------------------------------------------------------------
   // set default for activities'
-  $('.modal.edit #select-level2 option[value="lop"]').attr("selected", true);
+  $('.modal.edit #select-level2 option[value="lop"]').prop("selected", true);
   // do not have class choice
   $(".modal.edit #select_lop2").show();
   $(
     `.modal.edit #select-class2 option[value="${curr_edit
       .find(".c_name")
       .text()}"]`
-  ).attr("selected", true);
+  ).prop("selected", true);
 });
-
 // --------------------------------------------------------------------------------------------------------
 
 $(".modal.edit").click(function () {
@@ -174,7 +203,23 @@ $(".save_btn").click(async function () {
     .find("#activities_content")
     .val();
 
-  if (atv_name && atv_content) {
+  // get start hour and start date of activities
+  const start_hour = $(this)
+    .parent()
+    .parent()
+    .parent()
+    .find(".act-time")
+    .val();
+
+  const start_date = $(this)
+    .parent()
+    .parent()
+    .parent()
+    .find(".act-date")
+    .val();
+
+
+  if (atv_name && atv_content && start_hour && start_date) {
     // check if user enter info or not
     // disable curr button
     $(this).prop("disabled", true);
@@ -187,6 +232,7 @@ $(".save_btn").click(async function () {
       .parent()
       .parent()
       .find(".select_level :selected");
+
     const cls_id = $(this)
       .parent()
       .parent()
@@ -205,18 +251,45 @@ $(".save_btn").click(async function () {
         content: atv_content,
         level: level.val(),
         cls_id: cls_id.val(),
+        start_hour: start_hour,
+        start_date: start_date
       }),
     };
 
     const response = await fetch("/api/addOrEditActivities", requestOptions);
     if (response.ok) {
       if (curr_edit) {
-        // remove current edit if it is edit
+        const curr_index = parseInt(curr_edit.find(".index").text()) - 1;
+        const curr_tb = curr_edit.parent().parent();
+        // remove current activities content in 
+        switch (level.val()) {
+          case "lop":
+            cls_content.splice(curr_index, 1);
+            cls_st.splice(curr_index, 1);
+            break;
+          case "khoa":
+            dep_content.splice(curr_index, 1);
+            dep_st.splice(curr_index, 1);
+            break;
+          case "truong":
+            school_content.splice(curr_index, 1);
+            school_st.splice(curr_index, 1);
+            break;
+        };
+        // remove current edit if it is edit and it;s copy tr
+        curr_edit.next().remove();
         curr_edit.remove();
+        // reedit all rows' index;
+        let index = 0
+        curr_tb.find('.index').each(function () {
+          index += 1;
+          $(this).text(index);
+        });
       }
       // check for add to school, department or class
       switch (level.val()) {
         case "lop":
+          // add new length
           let cls_length = $("#cls_tb tbody tr").length / 2;
           $("#cls_tb tbody").append(`
             <tr class="atv_box">
@@ -238,6 +311,11 @@ $(".save_btn").click(async function () {
               <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
             </tr>
           `);
+
+          // add content and start time to cls list
+          cls_content.push(atv_content);
+          cls_st.push(new Date([start_date, start_hour]));
+          console.log(cls_content);
           break;
         case "khoa":
           let dep_length = $("#dep_tb tbody tr").length / 2;
@@ -260,6 +338,10 @@ $(".save_btn").click(async function () {
               <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
             </tr>
           `);
+          // add content and start time to dep list
+          dep_content.push(atv_content);
+          dep_st.push(new Date([start_date, start_hour]));
+          console.log(dep_content);
           break;
         case "truong":
           let school_length = $("#school_tb tbody tr").length / 2;
@@ -275,13 +357,18 @@ $(".save_btn").click(async function () {
               <td class="a_name">${atv_name}</td>
               <td class="school_year">${year_cur.split("_")[0]} ${year_cur.split("_")[1]}</td>
               <td><a href="/doankhoa/quanlihoatdong/Truong/${atv_id}">Chi tiết</a></td>
-              <td><a class="more_list" href="#">Sửa</a></td>
+              <td><a class="more_list" id="school_edit" href="#">Sửa</a></td>
             </tr>
             <tr class="copy_box">
               <td colspan="2"> COPY </td>
               <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
             </tr>
           `);
+
+          // add content and start time to cls list
+          school_content.push(atv_content);
+          school_st.push(new Date([start_date, start_hour]));
+          console.log(school_content);
           break;
       }
       // able curr button
@@ -311,9 +398,9 @@ $("#year_choice").click(async function () {
   $(this).prop("disabled", true);
 
   // get year
-  const choise_year = $('#select_hk').find("select :selected");
+  const choise_semester = $('#select_hk').find("select :selected");
   // get semester
-  const choise_semester = $('#select_sm').find("select :selected");
+  const choise_year = $('#select_sm').find("select :selected");
 
   // send request to load new activities fix year input
   // request
@@ -328,13 +415,82 @@ $("#year_choice").click(async function () {
     }),
   };
 
-  const response = await fetch("/api/addOrEditActivities", requestOptions);
+  const response = await fetch("/api/loadYearActivities", requestOptions);
   if (response.ok) {
     // clear all appeareance activities 
-    $('tr').remove()
-    //append activities to school's table ************************************************************
-    //append activities to department's table ************************************************************
-    //append activities to class' table ************************************************************
+    $('.atv_box').remove()
+    response.json().then(function (result) {
+      //append activities to school's table ************************************************************
+      const school_atv = result.school_atv;
+      const dep_atv = result.dep_atv;
+      const cls_atv = result.cls_atv;
+      for (let i = 0; i < school_atv.length; i++) {
+        $("#school_tb tbody").append(`
+                <tr class="atv_box">
+                  <td>
+                    <div class="checkbox-wrapper-4">
+                      <input type="checkbox" id="row__0__${i}" class="inp-cbx" value="${school_atv[i]._id}" />
+                      <label for="row__0__${i}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                      </label>
+                  </td>
+                  <td class="index">${i + 1}</td>
+                  <td class="a_name">${school_atv[i].name}</td>
+                  <td class="school_year">${school_atv[i].year.split("_")[0]} ${school_atv[i].year.split("_")[1]}</td>
+                  <td><a href="/doankhoa/quanlihoatdong/Truong/${school_atv[i]._id}">Chi tiết</a></td>
+                  <td><a class="more_list" href="#">Sửa</a></td>
+                </tr>
+                <tr class="copy_box">
+                  <td colspan="2"> COPY </td>
+                  <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
+                </tr>
+              `);
+      }
+      //append activities to department's table ************************************************************
+      for (let i = 0; i < dep_atv.length; i++) {
+        $("#dep_tb tbody").append(`
+              <tr class="atv_box">
+                <td>
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="row__1__${i}" class="inp-cbx" value="${dep_atv[i]._id}" />
+                    <label for="row__1__${i}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+                </td>
+                <td class="index">${i + 1}</td>
+                <td class="a_name">${dep_atv[i].name}</td>
+                <td class="school_year">${dep_atv[i].year.split("_")[0]} ${dep_atv[i].year.split("_")[1]}</td>
+                <td><a href="/doankhoa/quanlihoatdong/Khoa/${dep_atv[i]._id}">Chi tiết</a></td>
+                <td><a class="more_list" id="dep_edit" href="#">Sửa</a></td>
+              </tr>
+              <tr class="copy_box">
+                <td colspan="2"> COPY </td>
+                <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
+              </tr>
+            `);
+      }
+      //append activities to class' table ************************************************************
+      for (let i = 0; i < cls_atv.length; i++) {
+        $("#cls_tb tbody").append(`
+              <tr class="atv_box">
+                <td>
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="row__2__${i}" class="inp-cbx" value="${cls_atv[i]._id}" />
+                    <label for="row__2__${i}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+                </td>
+                <td class="index">${i + 1}</td>
+                <td class="a_name">${cls_atv[i].name}</td>
+                <td class="c_name">${cls_atv[i].cls}</td>
+                <td class="school_year">${cls_atv[i].year.split("_")[0]} ${cls_atv[i].year.split("_")[1]}</td>
+                <td><a href="/doankhoa/quanlihoatdong/${cls_atv[i].cls}/${cls_atv[i]._id}">Chi tiết</a></td>
+                <td><a class="more_list" id="cls_edit" href="#">Sửa</a></td>
+              </tr>
+              <tr class="copy_box">
+                <td colspan="2"> COPY </td>
+                <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
+              </tr>
+            `);
+      }
+    });
 
     // able curr button
     $(this).prop("disabled", false);
@@ -367,11 +523,35 @@ $("#subject_choice").click(async function () {
     }),
   };
 
-  const response = await fetch("/api/addOrEditActivities", requestOptions);
+  const response = await fetch("/api/loadClassActivities", requestOptions);
   if (response.ok) {
     // clear all appeariance activities in class activities table
-    $('#cls_tb tr').remove()
+    $('#cls_tb .atv_box').remove()
     //append activities to class' table ************************************************************
+    response.json().then(function (result) {
+      for (let i = 0; i < result.length; i++) {
+        $("#cls_tb tbody").append(`
+              <tr class="atv_box">
+                <td>
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="row__2__${i}" class="inp-cbx" value="${result[i]._id}" />
+                    <label for="row__2__${i}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+                </td>
+                <td class="index">${i + 1}</td>
+                <td class="a_name">${result[i].name}</td>
+                <td class="c_name">${result[i].cls}</td>
+                <td class="school_year">${result[i].year.split("_")[0]} ${result[i].year.split("_")[1]}</td>
+                <td><a href="/doankhoa/quanlihoatdong/${result[i].cls}/${result[i]._id}">Chi tiết</a></td>
+                <td><a class="more_list" id="cls_edit" href="#">Sửa</a></td>
+              </tr>
+              <tr class="copy_box">
+                <td colspan="2"> COPY </td>
+                <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
+              </tr>
+            `);
+      }
+    });
 
     // able curr button
     $(this).prop("disabled", false);

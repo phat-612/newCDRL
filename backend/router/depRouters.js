@@ -404,6 +404,7 @@ function createDepRouter(client) {
               name: 1,
               content: 1,
               year: 1,
+              start_time: 1
             },
           }
         )
@@ -420,6 +421,7 @@ function createDepRouter(client) {
               name: 1,
               content: 1,
               year: 1,
+              start_time: 1,
             },
           }
         )
@@ -446,6 +448,7 @@ function createDepRouter(client) {
                 content: 1,
                 cls: 1,
                 year: 1,
+                start_time: 1,
               },
             }
           )

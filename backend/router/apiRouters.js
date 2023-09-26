@@ -1887,7 +1887,13 @@ function createAPIRouter(client, wss) {
   router.post("/addOrEditActivities", checkIfUserLoginAPI, async (req, res) => {
     try {
       const user = req.session.user;
-      const data = req.body; // data = {atv_id: '19181011' (activity's id); name: 'Hoat dong hay nha'; content: 'Di du thu noi'; 'level': 'khoa'; ; cls_id:'KTPM'}
+      const data = req.body; // data = {atv_id: '19181011' (activity's id);
+      // name: 'Hoat dong hay nha'; 
+      // content: 'Di du thu noi';
+      // 'level': 'khoa';
+      // cls_id:'KTPM';
+      // start_date: '2020-05-18';
+      // start_hour: '14:10:30'}
 
       if (user.pow[3]) {
         // get curr school year
@@ -1913,6 +1919,7 @@ function createAPIRouter(client, wss) {
                     level: "lop",
                     cls: data.cls_id,
                     year: school_year.year,
+                    start_time: new Date([data.start_date, data.start_hour])
                   },
                 },
                 {
@@ -1920,6 +1927,9 @@ function createAPIRouter(client, wss) {
                 }
               );
 
+            // check other databases if this activities in thoese collection remove it
+            await client.db(name_global_databases).collection('activities').deleteOne({ _id: data.atv_id }); // school
+            await client.db(user.dep).collection('activities').deleteOne({ _id: data.atv_id }); // department
             break;
 
           case "khoa":
@@ -1937,6 +1947,7 @@ function createAPIRouter(client, wss) {
                     content: data.content,
                     level: "khoa",
                     year: school_year.year,
+                    start_time: new Date([data.start_date, data.start_hour])
                   },
                 },
                 {
@@ -1944,6 +1955,9 @@ function createAPIRouter(client, wss) {
                 }
               );
 
+            // check other databases if this activities in thoese collection remove it
+            await client.db(name_global_databases).collection('activities').deleteOne({ _id: data.atv_id }); // school
+            await client.db(user.dep).collection(data.cls_id + '_activities').deleteOne({ _id: data.atv_id }); // class
             break;
 
           case "truong":
@@ -1961,6 +1975,7 @@ function createAPIRouter(client, wss) {
                     content: data.content,
                     level: "truong",
                     year: school_year.year,
+                    start_time: new Date([data.start_date, data.start_hour]),
                   },
                 },
                 {
@@ -1968,11 +1983,15 @@ function createAPIRouter(client, wss) {
                 }
               );
 
+            // check other databases if this activities in thoese collection remove it
+            await client.db(user.dep).collection('activities').deleteOne({ _id: data.atv_id }); // department
+            await client.db(user.dep).collection(data.cls_id + '_activities').deleteOne({ _id: data.atv_id }); // class
             break;
         }
+
         return res.status(200).json({ message: "Success" });
       } else if (user.pow[0]) {
-        
+
       } else {
         return res.sendStatus(403);
       }
@@ -1991,6 +2010,7 @@ function createAPIRouter(client, wss) {
     try {
       const user = req.session.user;
       const data = req.body; // data = {year: '2022-2023', semester: '1'}
+      const curr_year = "HK" + data.semester + "_" + data.year;
       if (user.pow[3]) {
         // find all activities in this year:
         // get all activities of school
@@ -1999,7 +2019,7 @@ function createAPIRouter(client, wss) {
           .collection("activities")
           .find(
             {
-              year: "HK" + data.semester + "_" + data.year,
+              year: curr_year,
             },
             {
               projection: {
@@ -2017,7 +2037,7 @@ function createAPIRouter(client, wss) {
           .collection("activities")
           .find(
             {
-              year: "HK" + data.semester + "_" + data.year,
+              year: curr_year,
             },
             {
               projection: {
@@ -2044,7 +2064,7 @@ function createAPIRouter(client, wss) {
             .collection(collection.name)
             .find(
               {
-                year: "HK" + data.semester + "_" + data.year,
+                year: curr_year,
               },
               {
                 projection: {
@@ -2064,15 +2084,12 @@ function createAPIRouter(client, wss) {
             // Bạn có thể làm gì đó với kết quả ở đây.
             const cls_atv = [].concat(...results); // Kết hợp kết quả từ các truy vấn vào một mảng duy nhất
 
-            console.log(school_atv, dep_atv, cls_atv);
             const final = {
               school_atv: school_atv,
               dep_atv: dep_atv,
               cls_atv: cls_atv,
             };
-
-            res.writeHead(200, { "Content-Type": "applicaiton/json" });
-            return res.end(JSON.stringify(final));
+            return res.status(200).json(final);
           })
           .catch((error) => {
             // Xử lý lỗi nếu có
@@ -2097,20 +2114,11 @@ function createAPIRouter(client, wss) {
         const cls_act = await client
           .db(user.dep)
           .collection(data.cls + "_activities")
-          .find(
-            {},
-            {
-              projection: {
-                name: 1,
-                content: 1,
-                year: 1,
-              },
-            }
-          )
+          .find({})
           .toArray();
 
-        res.writeHead(200, { "Content-Type": "applicaiton/json" });
-        return res.end(JSON.stringify(cls_act));
+        return res.status(200).json(cls_act);
+
       } else {
         return res.sendStatus(403);
       }
