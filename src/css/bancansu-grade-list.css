@@ -34,17 +34,17 @@
   position: relative;
   /* padding: 1rem; */
 }
-.year_full{
+.year_full {
   display: flex;
   padding-bottom: 1rem;
 }
 .hk{
-  width: 45%;
+  width: 38%;
   display: flex;
   align-items: center;
 }
 .hk span{
-  width: 25%;
+  width: 30%;
 }
 .danh_sach_bang_diem {
   margin-top: 2rem;
@@ -53,7 +53,7 @@
   font-size: 1.6rem;
   border-radius: 0.8rem;
 }
-.danh_sach_bang_diem .control{
+.danh_sach_bang_diem .control {
   display: flex;
   justify-content: space-between;
 }
@@ -76,36 +76,38 @@
   background-color: var(--mauvang-ne);
 }
 
-.new_update{
+.new_update {
   background-color: var(--mauvang-ne);
 }
 /* css table */
-table, th, td {
+table,
+th,
+td {
   border: 1px solid var(--black-color);
   border-collapse: collapse;
 }
-th{
+th {
   font-size: 2rem;
 }
-td{
-font-size: 1.6rem;
-text-align: center;
+td {
+  font-size: 1.6rem;
+  text-align: center;
 }
-th, td{
+th,
+td {
   padding: 1rem;
 }
-table tr td:nth-child(4){
+table tr td:nth-child(4) {
   text-transform: uppercase;
   text-align: center;
 }
-table tr td:nth-child(7){
+table tr td:nth-child(7) {
   text-align: center;
 }
-table tr td:nth-child(9){
-  
+table tr td:nth-child(9) {
   padding: 0;
 }
-table tr td:nth-child(9) a{
+table tr td:nth-child(9) a {
   text-decoration: none;
   color: var(--login-a);
   cursor: pointer;
@@ -113,21 +115,39 @@ table tr td:nth-child(9) a{
 .button-35-a{
   position: absolute!important;
     top: 10%;
-    right: 10%;
+    right: 20%;
 }
 
 @media screen and (max-width: 600px) {
-  .year_full{
-    display: block;
-    padding: 0 1rem;
+  .year_full {
+    flex-direction: column;
   }
-  .hk{
+  .year_full:first-child {
+    flex-direction: row;
+  }
+  .button-35-a {
+    position: revert !important;
+    width: 100%;
+
+    margin: 1rem !important;
+  }
+  .--bomon {
+    width: 80%;
+  }
+  .--class {
     width: 100%;
   }
-  .danh_sach_bang_diem{
-    overflow: auto;
+  .hk span {
+    width: 20%;
+  }
+  .hk {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .hocky {
+  }
+  .selectbox--hocky {
+  }
+  .button-35 {
   }
 }
-
-
-

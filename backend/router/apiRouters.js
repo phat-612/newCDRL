@@ -2088,17 +2088,14 @@ function createAPIRouter(client, wss) {
             await client.db(user.dep).collection("activities").deleteOne({ _id: data.atv_id }); // department
 
             // create index for new table has just created
-            await client
-              .db(user.dep)
-              .collection(data.cls_id + "_activities")
-              .createIndexes(
-                {
-                  year: 1,
-                },
-                {
-                  name: "_year",
-                }
-              );
+            await await client.db(user.dep).collection(data.cls_id + "_activities").createIndex(
+              {
+                year: 1,
+              },
+              {
+                name: "_year",
+              }
+            );
 
             break;
           case "khoa":
@@ -2135,7 +2132,7 @@ function createAPIRouter(client, wss) {
               .deleteOne({ _id: data.atv_id }); // class
 
             // create index for new table has just created
-            await client.db(user.dep).collection("activities").createIndexes(
+            await client.db(user.dep).collection("activities").createIndex(
               {
                 year: 1,
               },
@@ -2175,16 +2172,8 @@ function createAPIRouter(client, wss) {
               .collection(data.cls_id + "_activities")
               .deleteOne({ _id: data.atv_id }); // class
 
-            // create index for new table has just created
-            await client.db(name_global_databases).collection("activities").createIndexes(
-              {
-                year: 1,
-              },
-              {
-                name: "_year",
-              }
-            );
 
+            // school database do not need create index because it already have it
             break;
         }
         return res.status(200).json({ message: "Success" });
