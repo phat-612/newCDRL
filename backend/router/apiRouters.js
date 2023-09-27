@@ -1891,8 +1891,6 @@ function createAPIRouter(client, wss) {
       if (user.pow[0]) {
         switch (data.level) {
           case "Lớp":
-            // save activity in 'Class name' + _activities collection in 'Department name' database
-
             await client
               .db(user.dep)
               .collection(`${user.cls[0]}_activities`)
@@ -1902,56 +1900,58 @@ function createAPIRouter(client, wss) {
                 },
                 {
                   $set: {
-                    name: data.name,
-                    content: data.content,
-                    level: "lop",
-                    cls: data.cls_id,
-                    year: school_year.year,
-                    start_time: new Date([data.start_date, data.start_hour]),
+                    [`student_list.${user._id}`]: false,
                   },
                 },
                 {
                   upsert: true,
                 }
               );
-
-            // check other databases if this activities in thoese collection remove it
-            await client
-              .db(name_global_databases)
-              .collection("activities")
-              .deleteOne({ _id: data.atv_id }); // school
-            await client.db(user.dep).collection("activities").deleteOne({ _id: data.atv_id }); // department
-
-            // create index for new table has just created
             await client
               .db(user.dep)
-              .collection(data.cls_id + "_activities")
-              .createIndexes(
+              .collection(`${user.cls[0]}_activities`)
+              .updateOne(
                 {
-                  year: 1,
+                  _id: data.id,
                 },
                 {
-                  name: "_year",
+                  $push: {
+                    bonus_list: user._id,
+                  },
+                },
+                {
+                  upsert: true,
                 }
               );
-
             break;
-          case "khoa":
+          case "Khoa":
             // save activity in activities collection in 'Dep name' database
             await client
               .db(user.dep)
               .collection("activities")
               .updateOne(
                 {
-                  _id: data.atv_id,
+                  _id: data.id,
                 },
                 {
                   $set: {
-                    name: data.name,
-                    content: data.content,
-                    level: "khoa",
-                    year: school_year.year,
-                    start_time: new Date([data.start_date, data.start_hour]),
+                    [`student_list.${user._id}`]: false,
+                  },
+                },
+                {
+                  upsert: true,
+                }
+              );
+            await client
+              .db(user.dep)
+              .collection("activities")
+              .updateOne(
+                {
+                  _id: data.id,
+                },
+                {
+                  $push: {
+                    bonus_list: user._id,
                   },
                 },
                 {
@@ -1959,66 +1959,40 @@ function createAPIRouter(client, wss) {
                 }
               );
 
-            // check other databases if this activities in thoese collection remove it
-            await client
-              .db(name_global_databases)
-              .collection("activities")
-              .deleteOne({ _id: data.atv_id }); // school
-            await client
-              .db(user.dep)
-              .collection(data.cls_id + "_activities")
-              .deleteOne({ _id: data.atv_id }); // class
-
-            // create index for new table has just created
-            await client.db(user.dep).collection("activities").createIndexes(
-              {
-                year: 1,
-              },
-              {
-                name: "_year",
-              }
-            );
-
             break;
-          case "truong":
-            // save activity in activities collection in global database
+          case "Trường":
             await client
               .db(name_global_databases)
               .collection("activities")
               .updateOne(
                 {
-                  _id: data.atv_id,
+                  _id: data.id,
                 },
                 {
                   $set: {
-                    name: data.name,
-                    content: data.content,
-                    level: "truong",
-                    year: school_year.year,
-                    start_time: new Date([data.start_date, data.start_hour]),
+                    [`student_list.${user._id}`]: false,
                   },
                 },
                 {
                   upsert: true,
                 }
               );
-
-            // check other databases if this activities in thoese collection remove it
-            await client.db(user.dep).collection("activities").deleteOne({ _id: data.atv_id }); // department
             await client
-              .db(user.dep)
-              .collection(data.cls_id + "_activities")
-              .deleteOne({ _id: data.atv_id }); // class
-
-            // create index for new table has just created
-            await client.db(name_global_databases).collection("activities").createIndexes(
-              {
-                year: 1,
-              },
-              {
-                name: "_year",
-              }
-            );
+              .db(name_global_databases)
+              .collection("activities")
+              .updateOne(
+                {
+                  _id: data.id,
+                },
+                {
+                  $push: {
+                    bonus_list: user._id,
+                  },
+                },
+                {
+                  upsert: true,
+                }
+              );
 
             break;
         }
@@ -2031,7 +2005,7 @@ function createAPIRouter(client, wss) {
       // student_list: {}, // change later to list of student with value is boolean (true for joining and false for not joining)
       // bonus_list: [], // list of student's id that have bonus.
     } catch (err) {
-      console.log("SYSTEM | ADD_ACTIVITIES | ERROR | ", err);
+      console.log("SYSTEM | CHECK_IN_ACTIVITIES | ERROR | ", err);
       return res.sendStatus(500);
     }
   });
@@ -2088,14 +2062,17 @@ function createAPIRouter(client, wss) {
             await client.db(user.dep).collection("activities").deleteOne({ _id: data.atv_id }); // department
 
             // create index for new table has just created
-            await await client.db(user.dep).collection(data.cls_id + "_activities").createIndex(
-              {
-                year: 1,
-              },
-              {
-                name: "_year",
-              }
-            );
+            await await client
+              .db(user.dep)
+              .collection(data.cls_id + "_activities")
+              .createIndex(
+                {
+                  year: 1,
+                },
+                {
+                  name: "_year",
+                }
+              );
 
             break;
           case "khoa":
@@ -2171,7 +2148,6 @@ function createAPIRouter(client, wss) {
               .db(user.dep)
               .collection(data.cls_id + "_activities")
               .deleteOne({ _id: data.atv_id }); // class
-
 
             // school database do not need create index because it already have it
             break;
