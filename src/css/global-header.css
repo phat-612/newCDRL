@@ -372,7 +372,17 @@ td .select select option {
   transition: 0.25s all ease;
   pointer-events: none;
 }
-
+.select::after {
+  font-size: 1.2rem;
+  /* color: #000; */
+  content: "\25BC";
+  position: absolute;
+  top: 33%;
+  right: 3%;
+  background-color: inherit;
+  transition: 0.25s all ease;
+  pointer-events: none;
+}
 .select:hover::after {
   color: var(--checkbox-active);
 }
@@ -511,6 +521,17 @@ textarea {
 
   .avatar:hover .setting {
     display: none;
+  }
+  .select::after {
+    font-size: 1.2rem;
+    /* color: #000; */
+    content: "";
+    position: absolute;
+    top: 33%;
+    right: 3%;
+    background-color: inherit;
+    transition: 0.25s all ease;
+    pointer-events: none;
   }
 }
 

@@ -281,6 +281,7 @@
   transform: translate(-50%, -30%);
   width: 5rem;
   height: 5rem;
+  border: 10px solid var(--html-color);;
 }
 
 .a_darktheme p {
@@ -308,7 +309,7 @@
     position: fixed;
     top: auto;
     right: 50%;
-    bottom: 5rem;
+    bottom: 5.6rem;
     margin: 0 !important;
   }
 }

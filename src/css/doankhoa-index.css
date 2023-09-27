@@ -57,3 +57,21 @@ a:any-link{
 /* sub-box */
 
 
+@media screen and (max-width: 600px) {
+    .group_btn{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+    }
+    .group_btn a{
+        width: 47%;
+    }
+    .group_btn button{
+        width: 100%;
+    }
+
+
+}
+
+

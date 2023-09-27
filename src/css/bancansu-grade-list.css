@@ -28,6 +28,7 @@
   /* padding: 1.5rem; */
 }
 
+
 .content .hk_nk {
   font-size: 2rem;
   position: relative;
@@ -38,12 +39,12 @@
   padding-bottom: 1rem;
 }
 .hk{
-  width: 38%;
+  width: 45%;
   display: flex;
   align-items: center;
 }
 .hk span{
-  width: 30%;
+  width: 25%;
 }
 .danh_sach_bang_diem {
   margin-top: 2rem;
@@ -112,7 +113,20 @@ table tr td:nth-child(9) a{
 .button-35-a{
   position: absolute!important;
     top: 10%;
-    right: 20%;
+    right: 10%;
+}
+
+@media screen and (max-width: 600px) {
+  .year_full{
+    display: block;
+    padding: 0 1rem;
+  }
+  .hk{
+    width: 100%;
+  }
+  .danh_sach_bang_diem{
+    overflow: auto;
+  }
 }
 
 
