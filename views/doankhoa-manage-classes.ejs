@@ -14,81 +14,67 @@
       <div class="container">
         <%- include(menu) %>
 
-        <div class="box-table">
-          <div class="manager">
-            <div class="content content_top">
-              <h2>QUẢN LÍ LỚP</h2>
-              <div class="group_btn">
-                <!-- Button -->
-                <div class="content container__button">
-                  <button class="button-35" id="add__class">Thêm Lớp</button>
-                  <button class="button-35" id="delete__class">Xoá Lớp</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Table -->
-          <div class="content container__table">
-            <table>
-              <thead>
-                <tr>
-                  <th style="width: 5%">
-                    <div class="checkbox-wrapper-4">
-                      <input
-                        type="checkbox"
-                        id="all__row"
-                        class="inp-cbx all-cbx"
-                        value="2" />
-                      <label for="all__row" class="cbx"
-                        ><span> <svg height="10px" width="12px"></svg></span>
-                      </label>
-                    </div>
-                  </th>
-                  <th style="width: 5%">STT</th>
-                  <th style="width: 15%">Tên Lớp</th>
-                  <th>Bộ Môn</th>
-                  <th style="width: 10%">Khoa</th>
-                  <th style="width: 25%">Phân Công</th>
-                  <th style="width: 13%">Cập Nhập</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% let numbers = 0; %> <% for (let i = 0; i < branchs.length;
-                i++) {%> <% for (let j = 0; j < classes[branchs[i]._id].length;
-                j++) {%>
-                <tr>
-                  <td>
-                    <div class="checkbox-wrapper-4">
-                      <input
-                        type="checkbox"
-                        id="row__<%= numbers %>"
-                        class="inp-cbx normal-cbx"
-                        value="<%= classes[branchs[i]._id][j] %>" />
-                      <label for="row__<%= numbers %>" class="cbx"
-                        ><span> <svg height="10px" width="12px"></svg></span>
-                      </label>
-                    </div>
-                  </td>
-                  <td class="nums" style="width: 3%"><%= numbers + 1 %></td>
-                  <td class="cls_name"><%= classes[branchs[i]._id][j] %></td>
-                  <td class="b_name" style="width: 20%">
-                    <%= branchs[i].name %>
-                  </td>
-                  <td class="d_name" style="width: 10%"><%= dep_name %></td>
-                  <td class="t_name" id="<%= class_teachers[numbers]._id %>">
-                    <%= class_teachers[numbers].last_name + ' ' +
-                    class_teachers[numbers].first_name %>
-                  </td>
-                  <td>
-                    <a id="edit__class" href="#">Sửa</a>
-                  </td>
-                </tr>
-                <% numbers += 1; %> <% } %> <% } %>
-              </tbody>
-            </table>
-          </div>
+      <div class="box-table">
+        <!-- Button -->
+        <div class="content container__button">
+          <button class="button-35" id="add__class">Thêm Lớp</button>
+          <button class="button-35" id="delete__class">Xoá Lớp</button>
         </div>
+
+        <!-- Table -->
+        <div class="content container__table">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 5%;">
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="all__row" class="inp-cbx all-cbx" value="2" />
+                    <label for="all__row" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+                  </div>
+                </th>
+                <th style="width: 5%;">STT</th>
+                <th style="width: 15%;">Tên Lớp</th>
+                <th>Bộ Môn</th>
+                <th style="width: 10%;">Khoa</th>
+                <th style="width: 25%;">Phân Công</th>
+                <th style="width: 13%;">Cập Nhập</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% let numbers = 0; %>
+              <% for (let i = 0; i < curr_load_branch; i++) {%>
+              <% for (let j = 0; j < classes[branchs[i]._id].length; j++) {%>
+              <tr>
+                <td>
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="row__<%= numbers %>" class="inp-cbx normal-cbx" value="<%= classes[branchs[i]._id][j] %>" />
+                    <label for="row__<%= numbers %>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+                  </div>
+                </td>
+                <td class="nums" style="width: 3%;"><%= numbers + 1 %></td>
+                <td class="cls_name"><%= classes[branchs[i]._id][j] %></td>
+                <td class="b_name" style="width: 20%;"><%= branchs[i].name %></td>
+                <td class="d_name" style="width: 10%;"><%= dep_name %></td>
+                <td class="t_name" id="<%= class_teachers[numbers]._id %>"><%= class_teachers[numbers].last_name + ' ' + class_teachers[numbers].first_name %></td>
+                <td>
+                  <a id="edit__class" href="#">Sửa</a>
+                </td>
+              </tr>
+              <% numbers += 1; %>
+              <% } %>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="loader-parent">
+        <div class="loader">
+          <div class="square-1 square"></div>
+          <div class="square-2 square"></div>
+        </div>
+      </div>
 
         <div class="modal edit">
           <div class="modal_wrap edit">
@@ -215,20 +201,28 @@
                   </div>
                 </div>
 
-                <div>
-                  <main id="button-main">
-                    <div><button class="button-35 exist_btn">Hủy</button></div>
-                    <div><button class="button-35 save_btn">Xong</button></div>
-                  </main>
-                </div>
+              <div>
+                <main id="button-main">
+                  <div><button class="button-35 exist_btn">Hủy</button></div>
+                  <div><button class="button-35 save_btn">Xong</button></div>
+                </main>
               </div>
             </div>
           </div>
         </div>
       </div>
+
     </div>
-    <%- include(footer) %>
-  </body>
+  </div>
+  <%- include(footer) %>
+</body>
+<script>
+  const branchs = <%- JSON.stringify(branchs) %>;
+  const dep_name = <%- JSON.stringify(dep_name) %>;
+
+
+  let curr_load_branch = <%- JSON.stringify(curr_load_branch) %>;
+</script>
 
   <script src="/src/JS/doankhoa-manage-classes.js"></script>
 </html>

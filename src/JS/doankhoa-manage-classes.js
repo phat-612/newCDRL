@@ -91,7 +91,7 @@ $(".save_btn").click(async function () {
     // new name, branch, teacher
     const curr_branchs = $(this).parent().parent().parent().parent().find('.select_branch :selected');
     const curr_teacher = $(this).parent().parent().parent().parent().find('.select_teacher :selected');
-    
+
     console.log(curr_branchs.text(), curr_teacher.text());
     // disable curr button
     $(this).prop('disabled', true);
@@ -244,5 +244,19 @@ $("#delete__class").click(async function () {
     }
   } else {
     notify('!', 'Không có dữ liệu được đánh dấu');
+  }
+});
+
+// Scroll to the end of page 
+$(window).scroll(function () {
+  if ($(window).scrollTop() + $(window).height() > $(document).height() - 10) {
+    if (curr_load_branch < branchs.length) {
+      // show loading animation
+      $('.loader-parent').css("display","flex");
+      $('.loader-parent').show();
+      console.log("near bottom!");
+
+      
+    }
   }
 });
