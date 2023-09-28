@@ -74,8 +74,10 @@ function createDepRouter(client) {
         }
       )
       .toArray();
+
+    let curr_load_branch;
     // get all classes of branchs:
-    let classes = {}; // classes = {KTPM: [KTPM0121, KTPM0108, ...], CNTT: {CNTT0109, CNTT0209, ...}, ...}
+    let classes = {}; // classes = {KTPM: [KTPM0121, KTPM0108, ...], CNTT: [CNTT0109, CNTT0209, ...], ...}
     let class_teachers = []; // class_teachers = [18102003, 19112003, ...]
     for (let i = 0; i < branchs.length; i++) {
       let dummy = await client
@@ -95,9 +97,18 @@ function createDepRouter(client) {
 
       classes[branchs[i]._id] = dummy.map((cls) => cls._id);
       class_teachers.push(...dummy.map((cls) => cls.cvht));
+
+      // set current load branch to i
+      curr_load_branch = i+1;
+      // finish load one brach then check does number of classes over 30.
+      if (class_teachers.length >= 30) { 
+        break;
+      }
+       
     }
-    // console.log(class_teachers);
-    // get all teacher's name in current dep
+    console.log(class_teachers);
+    console.log(classes);
+    // get all teacher's name in current department
     const teachers = await client
       .db(name_global_databases)
       .collection("user_info")
@@ -151,6 +162,7 @@ function createDepRouter(client) {
       teachers: teachers.map((teacher) => teacher.last_name + " " + teacher.first_name),
       teachers_id: teachers.map((teacher) => teacher._id),
       class_teachers: class_teachers,
+      curr_load_branch: curr_load_branch,
     });
   });
 
@@ -398,7 +410,9 @@ function createDepRouter(client) {
         .db(name_global_databases)
         .collection("activities")
         .find(
-          {},
+          {
+            year: school_year.year
+          },
           {
             projection: {
               name: 1,
@@ -408,6 +422,7 @@ function createDepRouter(client) {
             },
           }
         )
+        .limit(10)
         .toArray();
 
       // get all activities of dep
@@ -415,7 +430,9 @@ function createDepRouter(client) {
         .db(user.dep)
         .collection("activities")
         .find(
-          {},
+          {
+            year: school_year.year
+          },
           {
             projection: {
               name: 1,
@@ -425,6 +442,7 @@ function createDepRouter(client) {
             },
           }
         )
+        .limit(10)
         .toArray();
 
       // get all activities of class of department
@@ -441,7 +459,9 @@ function createDepRouter(client) {
           .db(user.dep)
           .collection(collection.name)
           .find(
-            {},
+            {
+              year: school_year.year
+            },
             {
               projection: {
                 name: 1,
@@ -452,6 +472,7 @@ function createDepRouter(client) {
               },
             }
           )
+          .limit(10)
           .toArray();
         return dummy;
       });

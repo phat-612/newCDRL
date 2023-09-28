@@ -175,10 +175,11 @@
             <div class="selectbox --bomon" id="select_bm">
               <div class="select">
                 <select>
+                  <option value="--" selected="selected">
                   <% for (let i=0; i < branch.length; i++) {%>
                   <% if (branch[i]._id==cls[0].branch) {%>
                   <%curr_index=i%>
-                  <option value="<%= branch[i]._id %>" selected="selected">
+                  <option value="<%= branch[i]._id %>">
                     <%= branch[i].name %>
                   </option>
                   <% } else { %>
@@ -196,9 +197,10 @@
             <div class="selectbox --class" id="select_cls">
               <div class="select">
                 <select>
+                  <option value="--" selected="selected">
                   <% for (let i=0; i < cls.length; i++) {%>
                   <% if (cls[i].branch==branch[curr_index]._id) {%>
-                  <option value="<%= cls[i]._id %>" selected="selected">
+                  <option value="<%= cls[i]._id %>">
                     <%= cls[i]._id %>
                   </option>
                   <% } %>

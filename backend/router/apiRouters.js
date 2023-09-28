@@ -2604,6 +2604,82 @@ function createAPIRouter(client, wss) {
     }
   });
 
+  // api load classes
+  router.post("/loadClasses", checkIfUserLoginAPI, async (req, res) => {
+    try {
+      const user = req.session.user;
+      const data = req.body; // data = {curr_load_branch: 1 (next index to load), branchs: [KTPM, CNTT, ...] (all branch in department)}
+
+      // must be department to use this api
+      if (user.pow[9]) {
+        // get all classes of not load branchs:
+        let classes = {}; // classes = {KTPM: [KTPM0121, KTPM0108, ...], CNTT: [CNTT0109, CNTT0209, ...], ...}
+        let class_teachers = []; // class_teachers = [18102003, 19112003, ...]
+
+
+        for (let i = curr_load_branch; i < data.branchs.length; i++) {
+          let dummy = await client
+            .db(name_global_databases)
+            .collection("classes")
+            .find(
+              {
+                branch: data.branchs[i]._id,
+              }, // find all data
+              {
+                projection: {
+                  cvht: 1,
+                },
+              }
+            )
+            .toArray();
+
+          classes[data.branchs[i]._id] = dummy.map((cls) => cls._id);
+          class_teachers.push(...dummy.map((cls) => cls.cvht));
+
+          // finish load one brach then check does number of classes over 30.  
+          if (class_teachers.length >= 30) {
+            data.curr_load_branch = i + 1;
+            break;
+          }
+        }
+
+        // get all teacher's name of classes
+        for (let i = 0; i < class_teachers.length; i++) {
+          // replace current teacher's _id with teacher's name
+          class_teachers[i] = await client
+            .db(name_global_databases)
+            .collection("user_info")
+            .findOne(
+              {
+                _id: class_teachers[i],
+                "power.1": { $exists: true },
+                "power.4": { $exists: true },
+              }, // user is teacher
+              {
+                projection: {
+                  first_name: 1,
+                  last_name: 1,
+                },
+              }
+            );
+        }
+
+        return res.status(200).json({
+          classes: classes,
+          class_teachers: class_teachers,
+          curr_load_branch: data.curr_load_branch,
+        });
+      } else {
+        return res.sendStatus(403); // back to home
+      }
+
+    } catch (err) {
+      console.log("SYSTEM | DELETE_CLASS | ERROR | ", err);
+      return res.sendStatus(500);
+    }
+  });
+
+
   return router;
 }
 
