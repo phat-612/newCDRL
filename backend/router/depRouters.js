@@ -106,8 +106,6 @@ function createDepRouter(client) {
       }
        
     }
-    console.log(class_teachers);
-    console.log(classes);
     // get all teacher's name in current department
     const teachers = await client
       .db(name_global_databases)
