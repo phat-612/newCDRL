@@ -498,49 +498,13 @@ textarea {
 
 
 
-/* responsive */
-@media screen and (max-width: 600px) {
-  .header {
-    display: flex;
-    top: 0;
-    left: 0;
-    right: 0;
-  }
 
-  .right-header>a {
-    display: none;
-  }
-
-  .avatar_wrap>p {
-    display: none;
-  }
-
-  .setting {
-    right: -13%;
-  }
-
-  .avatar:hover .setting {
-    display: none;
-  }
-  .select::after {
-    font-size: 1.2rem;
-    /* color: #000; */
-    content: "";
-    position: absolute;
-    top: 33%;
-    right: 3%;
-    background-color: inherit;
-    transition: 0.25s all ease;
-    pointer-events: none;
-  }
-}
 
 /*------ Settings ------*/
 .theme_btn {
   transform: translateX(-50px);
   position: absolute;
   right: 0;
-  --color: #38329b;
   --size: 30px;
   display: flex;
   justify-content: center;
@@ -548,7 +512,7 @@ textarea {
   cursor: pointer;
   font-size: var(--size);
   user-select: none;
-  fill: var(--color);
+  fill: var(--white-color);
   width: auto;
 }
 
@@ -596,7 +560,51 @@ textarea {
 
 
 
+/* responsive */
+@media screen and (max-width: 600px) {
+  .header {
+    display: flex;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
 
+  .content--button,#button-main{
+        margin: 0;
+        gap: 20px;
+        justify-content: center;
+    }
+    .content--button .button-35,#button-main .button-35{
+        padding: 2rem 4.2rem;
+    }
+
+  .right-header>a {
+    display: none;
+  }
+
+  .avatar_wrap>p {
+    display: none;
+  }
+
+  .setting {
+    right: -13%;
+  }
+
+  .avatar:hover .setting {
+    display: none;
+  }
+  .select::after {
+    font-size: 1.2rem;
+    /* color: #000; */
+    content: "";
+    position: absolute;
+    top: 33%;
+    right: 3%;
+    background-color: inherit;
+    transition: 0.25s all ease;
+    pointer-events: none;
+  }
+}
 @media screen and (max-width: 600px) {
   .container__table {
     overflow: auto;
@@ -635,10 +643,10 @@ textarea {
   .button-35{
     margin: 1rem 0 0 0 ;
   }
-  #button-main{
+  /* #button-main{
     margin: 2rem 0px;
     flex-direction: column;
-  }
+  } */
   #button-main div{
     width: 100%;
   }
@@ -652,7 +660,10 @@ textarea {
     display: block;
   }
 
-
+  .year_full{
+    padding: 0 0.5rem;
+    box-sizing: border-box;
+  }
   .content.title{
     position: unset !important;
     padding: 0;

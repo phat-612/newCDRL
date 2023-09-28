@@ -1,5 +1,7 @@
 @media screen and (max-width: 600px) {
     .content--button {
+        display: flex !important;
+        gap: 2;
         margin: 0;
     }
     .button-35 {
@@ -26,5 +28,11 @@
     .content{
         margin: 0;
     }
+     .exist_btn{
+        padding: 2rem 4.2rem !important;
+     }
+     .save_btn{
+        padding: 2rem 4.2rem !important;
+     }
     
 }

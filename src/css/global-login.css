@@ -89,11 +89,6 @@
 .quen_mk {
   float: right;
 }
-@media screen and (max-width: 600px) {
-  .login-box {
-    width: 95%;
-  }
-}
 
 .eye {
   position: absolute;
@@ -102,4 +97,45 @@
   font-size: 15px;
   cursor: pointer;
   display: none;
+}
+
+
+
+@media screen and (max-width: 600px) {
+  .login-box {
+    width: 90%;
+    padding: 2rem;
+  }
+
+  .login-box .user-box input {
+    font-size: 1.4rem;
+    margin-bottom: 2rem;
+  }
+
+  .login-box .user-box label {
+    font-size: 1.4rem;
+    padding: 0.5rem 0;
+  }
+
+  .login-box form a {
+    font-size: 1.4rem;
+    margin-top: 3rem;
+    padding: 0.8rem 1.8rem;
+  }
+
+  .login-box form a.quen_mk {
+    font-size: 1rem;
+    letter-spacing: 0.2rem;
+  }
+
+  .quen_mk {
+    float: none;
+    margin-top: 2rem;
+  }
+
+  .eye {
+    display: block;
+    font-size: 12px;
+    top: 30%;
+  }
 }

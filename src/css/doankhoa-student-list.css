@@ -257,5 +257,8 @@ tr td:nth-child(4) {
   .modal_content> :nth-child(n+4){
     background-color: unset;
   }
+  .container__button {
+    justify-content: center;
+  }
 
 }

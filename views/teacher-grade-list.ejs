@@ -18,57 +18,72 @@
     <% let cy = curr_year.split('_'); %>
     <div class="container">
       <div class="content">
-        <div class="hk_nk">
-
-          <span>Lớp</span>
-          <div class="selectbox lop">
-            <div class="select">
-              <select>
-                <% for (let i = 0; i < cls.length; i++) {%>
-
-                  <% if (i == 0) {%>
-                    <option value="<%= cls[i] %>" selected="selected"><%= cls[i] %> </option>
-                    <%} else{%>
-                    <option value="<%= cls[i] %>"><%= cls[i] %></option>
-                    <% } %>
-
-                  <% } %>
-              </select>
+        <div class="manager">
+          <div class="content content_top">
+            <h2>DANH SÁCH BẢNG ĐIỂM</h2>
+            <div class="group_btn">
+              <div class="hk_nk">
+                <div class="first_child">
+                  <span>Lớp</span>
+                  <div class="selectbox lop">
+                    <div class="select">
+                      <select>
+                        <% for (let i = 0; i < cls.length; i++) {%>
+      
+                          <% if (i == 0) {%>
+                            <option value="<%= cls[i] %>" selected="selected"><%= cls[i] %> </option>
+                            <%} else{%>
+                            <option value="<%= cls[i] %>"><%= cls[i] %></option>
+                            <% } %>
+      
+                          <% } %>
+                      </select>
+                    </div>
+                  </div>
+      
+      
+                  <span>Học kỳ</span>
+                  <div class="selectbox hoc_ky">
+                    <div class="select">
+                      <select>
+                        <% for (let i = 1; i <= years[cy[1]].length; i++) {%>
+                          <% if (i == parseInt(cy[0].slice(2))) {%>
+                            <option value="<%= i %>" selected="selected"><%= i %></option>
+                            <%global_year = `HK${i}_`%>
+                          <% } else { %>
+                            <option value="<%= i %>"><%= i %></option>
+                          <% } %>
+                        <% } %>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                
+      
+                <span>Niên khóa</span>
+                <div class="selectbox nien_khoa">
+                  <div class="select">
+                    <select>
+                      <% for (const key of Object.keys(years)) {%>
+                        <% if (key == cy[1]) {%>
+                          <option selected="selected"><%= key %></option>
+                          <%global_year += key%>
+      
+                        <% } else { %>
+                          <option><%= key %></option>
+                        <% } %>
+                      <% } %>
+                    </select>
+                  </div>
+                </div>
+      
+                <div class="load_list_btn_container">
+                  <button class="button-35 load_list_btn">Chọn</button>
+                </div>
+      
+              </div>
             </div>
           </div>
-
-          <span>Học kỳ</span>
-          <div class="selectbox hoc_ky">
-            <div class="select">
-              <select>
-                <% for (let i = 1; i <= years[cy[1]].length; i++) {%>
-                  <% if (i == parseInt(cy[0].slice(2))) {%>
-                    <option value="<%= i %>" selected="selected"><%= i %></option>
-                    <%global_year = `HK${i}_`%>
-                  <% } else { %>
-                    <option value="<%= i %>"><%= i %></option>
-                  <% } %>
-                <% } %>
-              </select>
-            </div>
-          </div>
-          <span>Niên khóa</span>
-          <div class="selectbox nien_khoa">
-            <div class="select">
-              <select>
-                <% for (const key of Object.keys(years)) {%>
-                  <% if (key == cy[1]) {%>
-                    <option selected="selected"><%= key %></option>
-                    <%global_year += key%>
-
-                  <% } else { %>
-                    <option><%= key %></option>
-                  <% } %>
-                <% } %>
-              </select>
-            </div>
-          </div>
-          <button class="button-35 load_list_btn">Chọn</button>
         </div>
         <div class="danh_sach_bang_diem">
           <div class="control">

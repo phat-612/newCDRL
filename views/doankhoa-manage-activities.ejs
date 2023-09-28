@@ -10,255 +10,289 @@
 </head>
 
 <body>
-  
+
   <div class="main">
     <%- include(header) %>
-    <%- include(thongbao) %>
-    <% let cy=curr_year.split('_'); %>
-    <%let global_year = ""%>
+      <%- include(thongbao) %>
+        <% let cy=curr_year.split('_'); %>
+          <%let global_year="" %>
 
-    <div class="container">
-      <%- include(menu) %>
-      <div class="content">
+            <div class="container">
+              <%- include(menu) %>
+                <div class="content">
 
-        <div class="hk_nk">
-          <div class="year_full">
-            <div class="hk">
-              <span>Học kỳ</span>
-              <div class="selectbox selectbox--hocky" id="select_hk">
-                <div class="select">
-                  <select>
-                    <% for (let i=1; i <=years[cy[1]].length; i++) {%>
-                    <% if (i==parseInt(cy[0].slice(2))) {%>
-                    <option value="<%= i %>" selected="selected">
-                      <%= i %>
-                    </option>
-                    <%global_year = `HK${i}_`%>
+                  <div class="hk_nk">
+                    <div class="year_full">
+                      <div class="hk">
+                        <span>Học kỳ</span>
+                        <div class="selectbox selectbox--hocky" id="select_hk">
+                          <div class="select">
+                            <select>
+                              <% for (let i=1; i <=years[cy[1]].length; i++) {%>
+                                <% if (i==parseInt(cy[0].slice(2))) {%>
+                                  <option value="<%= i %>" selected="selected">
+                                    <%= i %>
+                                  </option>
+                                  <%global_year=`HK${i}_`%>
 
-                    <% } else { %>
-                    <option value="<%= i %>">
-                      <%= i %>
-                    </option>
-                    <% } %>
-                    <% } %>
-                  </select>
+                                    <% } else { %>
+                                      <option value="<%= i %>">
+                                        <%= i %>
+                                      </option>
+                                      <% } %>
+                                        <% } %>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="hk">
+                        <span>Niên khóa</span>
+                        <div class="selectbox nien_khoa" id="select_sm">
+                          <div class="select">
+                            <select>
+                              <% for (const key of Object.keys(years)) {%>
+                                <% if (key==cy[1]) {%>
+                                  <option selected="selected" value="<%= key %>">
+                                    <%= key %>
+                                  </option>
+                                  <%global_year +=key%>
+                                    <% } else { %>
+                                      <option>
+                                        <%= key %>
+                                      </option>
+                                      <% } %>
+                                        <% } %>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="btn_choice">
+                      <button class="button-35 button-35-a" id="year_choice">Chọn</button>
+
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="activity-board">
+                    <h2>THAO TÁC</h2>
+
+                    <div class="control">
+                      <button class="button-35 " id="add__activity">Thêm hoạt động</button>
+                      <button class="button-35 " id="delete__activity">Xoá hoạt động</button>
+                    </div>
+                  </div>
+
+                  <!-- table -->
+                  <div class="activity-board activity_school">
+                    <h2>HOẠT ĐỘNG CẤP TRƯỜNG TRỞ LÊN</h2>
+                    <table class="table" id="school_tb">
+                      <thead>
+                        <tr>
+                          <th style="width: 1%">
+                            <div class="checkbox-wrapper-4">
+                              <input type="checkbox" id="row__0" class="inp-cbx all-cbx" />
+                              <label for="row__0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                              </label>
+                          </th>
+                          <th style="width: 2%;">STT</th>
+                          <th style="width: 40%;">Hoạt động</th>
+                          <th style="width: 10%;">Thời gian</th>
+                          <th style="width: 10%;">Đánh giá</th>
+                          <th style="width: 10%;">Cập nhật</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% for (let i=0; i < school_atv.length; i++) { %>
+                          <tr class="atv_box">
+                            <td>
+                              <div class="checkbox-wrapper-4">
+                                <input type="checkbox" id="row__0__<%= i %>" class="inp-cbx"
+                                  value="<%= school_atv[i]._id %>" />
+                                <label for="row__0__<%= i %>" class="cbx"><span> <svg height="10px"
+                                      width="12px"></svg></span>
+                                </label>
+                            </td>
+                            <td class="index">
+                              <%= i + 1 %>
+                            </td>
+                            <td class="a_name">
+                              <%= school_atv[i].name %>
+                            </td>
+                            <td class="school_year">
+                              <%= school_atv[i].year.split("_")[0] + " " + school_atv[i].year.split("_")[1] %>
+                            </td>
+                            <td><a href="/doankhoa/quanlihoatdong/Truong/<%= school_atv[i]._id %>">Chi tiết</a></td>
+                            <td><a class="more_list" id="school_edit" href="#">Sửa</a></td>
+                          </tr>
+                          <tr class="copy_box">
+
+                            <td colspan="2"> COPY </td>
+                            <td colspan="6"><a href="/dangkyhoatdong?id=<%= school_atv[i]._id %>&level=truong"
+                                target="_blank">Link đăng kí và điểm danh hoạt động</a></td>
+                          </tr>
+                          <% } %>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div class="activity-board activity_dep">
+                    <h2>HOẠT ĐỘNG CẤP KHOA</h2>
+                    <table class="table" id="dep_tb">
+                      <thead>
+                        <tr>
+                          <th style="width: 1%">
+                            <div class="checkbox-wrapper-4">
+                              <input type="checkbox" id="row__1" class="inp-cbx all-cbx" />
+                              <label for="row__1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                              </label>
+                          </th>
+                          <th style="width: 2%;">STT</th>
+                          <th style="width: 40%;">Hoạt động</th>
+                          <th style="width: 10%;">Thời gian</th>
+                          <th style="width: 10%;">Đánh giá</th>
+                          <th style="width: 10%;">Cập nhật</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% for (let i=0; i < dep_atv.length; i++) { %>
+                          <tr class="atv_box">
+                            <td>
+                              <div class="checkbox-wrapper-4">
+                                <input type="checkbox" id="row__1__<%= i %>" class="inp-cbx"
+                                  value="<%= dep_atv[i]._id %>" />
+                                <label for="row__1__<%= i %>" class="cbx"><span> <svg height="10px"
+                                      width="12px"></svg></span>
+                                </label>
+                            </td>
+                            <td class="index">
+                              <%= i + 1 %>
+                            </td>
+                            <td class="a_name">
+                              <%= dep_atv[i].name %>
+                            </td>
+                            <td class="school_year">
+                              <%= dep_atv[i].year.split("_")[0] + " " + dep_atv[i].year.split("_")[1] %>
+                            </td>
+                            <td><a href="/doankhoa/quanlihoatdong/Khoa/<%= dep_atv[i]._id %>">Chi tiết</a></td>
+                            <td><a class="more_list" id="dep_edit" href="#">Sửa</a></td>
+                          </tr>
+                          <tr class="copy_box">
+                            <!-- fill link google forn here NTHL xấu trai -->
+                            <td colspan="2"> COPY </td>
+                            <td colspan="6"><a href="/dangkyhoatdong?id=<%= dep_atv[i]._id %>&level=khoa"
+                                target="_blank">Link đăng kí và điểm danh hoạt động</a></td>
+                          </tr>
+                          <% } %>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div class="year_full" id="year_full2">
+                    <%let curr_index=0%>
+                      <div class="hk">
+                        <span>Bộ môn</span>
+                        <div class="selectbox --bomon" id="select_bm">
+                          <div class="select">
+                            <select>
+                              <% for (let i=0; i < branch.length; i++) {%>
+                                <% if (branch[i]._id==cls[0].branch) {%>
+                                  <%curr_index=i%>
+                                    <option value="<%= branch[i]._id %>" selected="selected">
+                                      <%= branch[i].name %>
+                                    </option>
+                                    <% } else { %>
+                                      <option value="<%= branch[i]._id %>">
+                                        <%= branch[i].name %>
+                                      </option>
+                                      <% } %>
+                                        <% } %>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="hk">
+                        <span>Lớp</span>
+                        <div class="selectbox --class" id="select_cls">
+                          <div class="select">
+                            <select>
+                              <% for (let i=0; i < cls.length; i++) {%>
+                                <% if (cls[i].branch==branch[curr_index]._id) {%>
+                                  <option value="<%= cls[i]._id %>" selected="selected">
+                                    <%= cls[i]._id %>
+                                  </option>
+                                  <% } %>
+                                    <% } %>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <button class="button-35 button-35-a" id="subject_choice">Chọn</button>
+                  </div>
+                  <div class="activity-board activity_class">
+                    <h2>HOẠT ĐỘNG CẤP LỚP</h2>
+                    <div>
+                      <table class="table" id="cls_tb">
+                        <thead>
+                          <tr>
+                            <th style="width: 1%">
+                              <!-- set id của input == for của label -->
+                              <!-- thêm class "new_update" cho td có cập nhật điểm mới chưa được chấm -->
+                              <!-- <span class="dau_sao">*</span> đứng phía sau tên (ai không tự đánh giá) -->
+                              <div class="checkbox-wrapper-4">
+                                <input type="checkbox" id="row__2" class="inp-cbx all-cbx" />
+                                <label for="row__2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                                </label>
+                            </th>
+                            <th style="width: 2%;">STT</th>
+                            <th style="width: 30%;">Hoạt động</th>
+                            <th style="width: 10%;">Lớp</th>
+                            <th style="width: 10%;">Thời gian</th>
+                            <th style="width: 10%;">Đánh giá</th>
+                            <th style="width: 10%;">Cập nhật</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% for (let i=0; i < cls_atv.length; i++) { %>
+                            <tr class="atv_box">
+                              <td>
+                                <div class="checkbox-wrapper-4">
+                                  <input type="checkbox" id="row__2__<%= i %>" class="inp-cbx"
+                                    value="<%= cls_atv[i]._id %>" />
+                                  <label for="row__2__<%= i %>" class="cbx"><span> <svg height="10px"
+                                        width="12px"></svg></span>
+                                  </label>
+                              </td>
+                              <td class="index">
+                                <%= i + 1 %>
+                              </td>
+                              <td class="a_name">
+                                <%= cls_atv[i].name %>
+                              </td>
+                              <td class="c_name">
+                                <%= cls_atv[i].cls %>
+                              </td>
+                              <td class="school_year">
+                                <%= cls_atv[i].year.split("_")[0] + " " + cls_atv[i].year.split("_")[1] %>
+                              </td>
+                              <td><a href="/doankhoa/quanlihoatdong/<%= cls_atv[i].cls %>/<%= cls_atv[i]._id %>">Chi
+                                  tiết</a></td>
+                              <td><a class="more_list" id="cls_edit" href="#">Sửa</a></td>
+                            </tr>
+                            <tr class="copy_box">
+                              <!-- fill link google forn here NTHL xấu trai -->
+                              <td colspan="2"> COPY </td>
+                              <td colspan="6"><a href="/dangkyhoatdong?id=<%= cls_atv[i]._id %>&level=lop"
+                                  target="_blank">Link đăng kí và điểm danh hoạt động</a></td>
+                            </tr>
+                            <% } %>
+                        </tbody>
+                      </table>
+                    </div>
+
+                  </div>
                 </div>
-              </div>
             </div>
-            <div class="hk">
-              <span>Niên khóa</span>
-              <div class="selectbox nien_khoa" id="select_sm">
-                <div class="select">
-                  <select>
-                    <% for (const key of Object.keys(years)) {%>
-                    <% if (key==cy[1]) {%>
-                    <option selected="selected" value="<%= key %>">
-                      <%= key %>
-                    </option>
-                    <%global_year += key%>
-                    <% } else { %>
-                    <option>
-                      <%= key %>
-                    </option>
-                    <% } %>
-                    <% } %>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <button class="button-35 button-35-a" id="year_choice">Chọn</button>
-          </div>
-
-        </div>
-
-        <div class="activity-board">
-          <h2>THAO TÁC</h2>
-
-          <div class="control">
-            <button class="button-35 " id="add__activity">Thêm hoạt động</button>
-            <button class="button-35 " id="delete__activity">Xoá hoạt động</button>
-          </div>
-        </div>
-
-        <!-- table -->
-        <div class="activity-board activity_school">
-          <h2>HOẠT ĐỘNG CẤP TRƯỜNG TRỞ LÊN</h2>
-          <table class="table" id="school_tb">
-            <thead>
-              <tr>
-                <th style="width: 1%">
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__0" class="inp-cbx all-cbx" />
-                    <label for="row__0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                </th>
-                <th style="width: 2%;">STT</th>
-                <th style="width: 40%;">Hoạt động</th>
-                <th style="width: 10%;">Thời gian</th>
-                <th style="width: 10%;">Đánh giá</th>
-                <th style="width: 10%;">Cập nhật</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% for (let i = 0; i < school_atv.length; i++) { %>
-              <tr class="atv_box">
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__0__<%= i %>" class="inp-cbx" value="<%= school_atv[i]._id %>" />
-                    <label for="row__0__<%= i %>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                </td>
-                <td class="index"><%= i + 1 %></td>
-                <td class="a_name"><%= school_atv[i].name %></td>
-                <td class="school_year"><%= school_atv[i].year.split("_")[0] + " " + school_atv[i].year.split("_")[1] %></td>
-                <td><a href="/doankhoa/quanlihoatdong/Truong/<%= school_atv[i]._id %>">Chi tiết</a></td>
-                <td><a class="more_list" id="school_edit" href="#">Sửa</a></td>
-              </tr>
-              <tr class="copy_box">
-                <!-- fill link google forn here NTHL xấu trai -->
-                <td colspan="2"> COPY </td>
-                <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
-              </tr>
-              <% } %>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="activity-board activity_dep">
-          <h2>HOẠT ĐỘNG CẤP KHOA</h2>
-          <table class="table" id="dep_tb">
-            <thead>
-              <tr>
-                <th style="width: 1%">
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__1" class="inp-cbx all-cbx" />
-                    <label for="row__1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                </th>
-                <th style="width: 2%;">STT</th>
-                <th style="width: 40%;">Hoạt động</th>
-                <th style="width: 10%;">Thời gian</th>
-                <th style="width: 10%;">Đánh giá</th>
-                <th style="width: 10%;">Cập nhật</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% for (let i = 0; i < dep_atv.length; i++) { %>
-              <tr class="atv_box">
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__1__<%= i %>" class="inp-cbx" value="<%= dep_atv[i]._id %>" />
-                    <label for="row__1__<%= i %>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                </td>
-                <td class="index"><%= i + 1 %></td>
-                <td class="a_name"><%= dep_atv[i].name %></td>
-                <td class="school_year"><%= dep_atv[i].year.split("_")[0] + " " + dep_atv[i].year.split("_")[1] %></td>
-                <td><a href="/doankhoa/quanlihoatdong/Khoa/<%= dep_atv[i]._id %>">Chi tiết</a></td>
-                <td><a class="more_list" id="dep_edit" href="#">Sửa</a></td>
-              </tr>
-              <tr class="copy_box">
-                <!-- fill link google forn here NTHL xấu trai -->
-                <td colspan="2"> COPY </td>
-                <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
-              </tr>
-              <% } %>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="year_full" id="year_full2">
-          <%let curr_index=0%>
-          <div class="hk">
-            <span>Bộ môn</span>
-            <div class="selectbox --bomon" id="select_bm">
-              <div class="select">
-                <select>
-                  <% for (let i=0; i < branch.length; i++) {%>
-                  <% if (branch[i]._id==cls[0].branch) {%>
-                  <%curr_index=i%>
-                  <option value="<%= branch[i]._id %>" selected="selected">
-                    <%= branch[i].name %>
-                  </option>
-                  <% } else { %>
-                  <option value="<%= branch[i]._id %>">
-                    <%= branch[i].name %>
-                  </option>
-                  <% } %>
-                  <% } %>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div class="hk">
-            <span>Lớp</span>
-            <div class="selectbox --class" id="select_cls">
-              <div class="select">
-                <select>
-                  <% for (let i=0; i < cls.length; i++) {%>
-                  <% if (cls[i].branch==branch[curr_index]._id) {%>
-                  <option value="<%= cls[i]._id %>" selected="selected">
-                    <%= cls[i]._id %>
-                  </option>
-                  <% } %>
-                  <% } %>
-                </select>
-              </div>
-            </div>
-          </div>
-          <button class="button-35 button-35-a" id="subject_choice">Chọn</button>
-        </div>
-        <div class="activity-board activity_class">
-          <h2>HOẠT ĐỘNG CẤP LỚP</h2>
-          <table class="table" id="cls_tb">
-            <thead>
-              <tr>
-                <th style="width: 1%">
-                  <!-- set id của input == for của label -->
-                  <!-- thêm class "new_update" cho td có cập nhật điểm mới chưa được chấm -->
-                  <!-- <span class="dau_sao">*</span> đứng phía sau tên (ai không tự đánh giá) -->
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__2" class="inp-cbx all-cbx" />
-                    <label for="row__2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                </th>
-                <th style="width: 2%;">STT</th>
-                <th style="width: 30%;">Hoạt động</th>
-                <th style="width: 10%;">Lớp</th>
-                <th style="width: 10%;">Thời gian</th>
-                <th style="width: 10%;">Đánh giá</th>
-                <th style="width: 10%;">Cập nhật</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% for (let i = 0; i < cls_atv.length; i++) { %>
-              <tr class="atv_box">
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__2__<%= i %>" class="inp-cbx" value="<%= cls_atv[i]._id %>" />
-                    <label for="row__2__<%= i %>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                </td>
-                <td class="index"><%= i + 1 %></td>
-                <td class="a_name"><%= cls_atv[i].name %></td>
-                <td class="c_name"><%= cls_atv[i].cls %></td>
-                <td class="school_year"><%= cls_atv[i].year.split("_")[0] + " " + cls_atv[i].year.split("_")[1] %></td>
-                <td><a href="/doankhoa/quanlihoatdong/<%= cls_atv[i].cls %>/<%= cls_atv[i]._id %>">Chi tiết</a></td>
-                <td><a class="more_list" id="cls_edit" href="#">Sửa</a></td>
-              </tr>
-              <tr class="copy_box">
-                <!-- fill link google forn here NTHL xấu trai -->
-                <td colspan="2"> COPY </td>
-                <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
-              </tr>
-              <% } %>
-            </tbody>
-          </table>
-
-        </div>
-      </div>
-    </div>
   </div>
   <%- include(footer) %>
 </body>
@@ -275,15 +309,20 @@
         </div>
         <div class="content">
           <h3 class="sub-title descrip">Nội Dung Hoạt Động</h3>
-          <textarea name="" id="activities_content" cols="30" rows="10" placeholder="Nhập nội dung hoạt động"></textarea>
+          <textarea name="" id="activities_content" cols="30" rows="10"
+            placeholder="Nhập nội dung hoạt động"></textarea>
         </div>
         <div class="content">
           <h3 class="sub-title descrip">Thời Gian Diễn Ra</h3>
           <div class="choise_date">
-            <div class="">Giờ: </div>
-            <input class="act-time" id="edit-act-time" type="time" value="" />
-            <div class="">Ngày: </div>
-            <input class="act-date" id="edit-act-date" type="date" value="" />
+            <div class="">
+              <label for="edit-act-time">Giờ:</label>
+              <input class="act-time" id="edit-act-time" type="time" value="" />
+            </div>
+            <div class="">
+              <label for="edit-act-date">Ngày: </label>
+              <input class="act-date" id="edit-act-date" type="date" value="" />
+            </div>
           </div>
         </div>
         <div class="select_year">
@@ -300,9 +339,11 @@
               <div class="select" id="select_lop2">
                 <label class="model-lb" for="select-level">Lớp</label>
                 <select id="select-class2" class="select_class">
-                  <% for (let i = 0; i < cls.length; i++) {%>
-                  <option value="<%= cls[i]._id %>"><%= cls[i]._id %></option>
-                  <% } %>
+                  <% for (let i=0; i < cls.length; i++) {%>
+                    <option value="<%= cls[i]._id %>">
+                      <%= cls[i]._id %>
+                    </option>
+                    <% } %>
                 </select>
               </div>
             </main>
@@ -332,15 +373,20 @@
         </div>
         <div class="content">
           <h3 class="sub-title descrip">Nội Dung Hoạt Động</h3>
-          <textarea class="activities_content" id="activities_content" cols="30" rows="10" placeholder="Nhập nội dung hoạt động"></textarea>
+          <textarea class="activities_content" id="activities_content" cols="30" rows="10"
+            placeholder="Nhập nội dung hoạt động"></textarea>
         </div>
         <div class="content">
           <h3 class="sub-title descrip">Thời Gian Diễn Ra</h3>
           <div class="choise_date">
-            <div class="">Giờ: </div>
-            <input class="act-time" id="add-act-time" type="time" value="" />
-            <div class="">Ngày: </div>
-            <input class="act-date" id="add-act-date" type="date" value="" />
+            <div class="">
+              <label for="edit-act-time">Giờ:</label>
+              <input class="act-time" id="edit-act-time" type="time" value="" />
+            </div>
+            <div class="">
+              <label for="edit-act-date">Ngày: </label>
+              <input class="act-date" id="edit-act-date" type="date" value="" />
+            </div>
           </div>
         </div>
         <div class="select_year">
@@ -357,9 +403,11 @@
               <div class="select" id="select_lop1">
                 <label class="model-lb" for="select-level">Lớp</label>
                 <select id="select-class1" class="select_class">
-                  <% for (let i = 0; i < cls.length; i++) {%>
-                  <option value="<%= cls[i]._id %>"><%= cls[i]._id %></option>
-                  <% } %>
+                  <% for (let i=0; i < cls.length; i++) {%>
+                    <option value="<%= cls[i]._id %>">
+                      <%= cls[i]._id %>
+                    </option>
+                    <% } %>
                 </select>
               </div>
             </main>
@@ -376,17 +424,17 @@
   </div>
 </div>
 <script>
-  const branch_list = <%-JSON.stringify(branch) %>;
-  const class_list = <%-JSON.stringify(cls) %>;
-  const year_cur = <%-JSON.stringify(curr_year) %>;
+  const branch_list = <% -JSON.stringify(branch) %>;
+  const class_list = <% -JSON.stringify(cls) %>;
+  const year_cur = <% -JSON.stringify(curr_year) %>;
 
-  const school_content = <%- JSON.stringify(school_atv.map((avt) => avt.content)) %>;
-  const dep_content = <%- JSON.stringify(dep_atv.map((avt) => avt.content)) %>;
-  const cls_content = <%- JSON.stringify(cls_atv.map((avt) => avt.content)) %>;
+  const school_content = <% - JSON.stringify(school_atv.map((avt) => avt.content)) %>;
+  const dep_content = <% - JSON.stringify(dep_atv.map((avt) => avt.content)) %>;
+  const cls_content = <% - JSON.stringify(cls_atv.map((avt) => avt.content)) %>;
 
-  const school_st = <%- JSON.stringify(school_atv.map((avt) => avt.start_time)) %>;
-  const dep_st = <%- JSON.stringify(dep_atv.map((avt) => avt.start_time)) %>;
-  const cls_st = <%- JSON.stringify(cls_atv.map((avt) => avt.start_time)) %>;
+  const school_st = <% - JSON.stringify(school_atv.map((avt) => avt.start_time)) %>;
+  const dep_st = <% - JSON.stringify(dep_atv.map((avt) => avt.start_time)) %>;
+  const cls_st = <% - JSON.stringify(cls_atv.map((avt) => avt.start_time)) %>;
 </script>
 <!-- <script src="/src/JS/bancansu-manage-activities.js"></script> -->
 <script src="/src/JS/doankhoa-manage-activities.js"></script>

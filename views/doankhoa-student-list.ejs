@@ -16,27 +16,37 @@
     <%- include(menu) %>
 
       <div class="content">
-        <div class="control_btn">
-          <div class="class_select">
-            <span class="lop">Lớp:</span>
-            <div class="selectbox hoc_ky">
-              <div class="select">
-                <select class="js_lop">
-                  <option value="0">Lớp</option>
-                  <% for (let i = 0; i < classes.length; i++) {%>
-                    <option value="<%= classes[i] %>"><%= classes[i] %></option>
-                  <% } %>
-                </select>
+
+        <div class="manager">
+          <div class="content content_top">
+            <h2>DANH SÁCH SINH VIÊN </h2>
+            <div class="group_btn">
+              <!-- Button -->
+              <div class="content container__button">
+                <div class="control_btn">
+                  <div class="class_select">
+                    <span class="lop">Lớp:</span>
+                    <div class="selectbox hoc_ky">
+                      <div class="select">
+                        <select class="js_lop">
+                          <option value="0">Lớp</option>
+                          <% for (let i = 0; i < classes.length; i++) {%>
+                            <option value="<%= classes[i] %>"><%= classes[i] %></option>
+                          <% } %>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <button class="js_get_template button-35">File tạo danh sách SV</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          
-          <div>
-            <button class="js_get_template button-35">File tạo danh sách SV</button>
-          </div>
-         
-
         </div>
+        
         
 
         <div class="chitiet">

@@ -196,13 +196,13 @@ label {
   /* .button-35{
     margin: 1rem 0 0 auto !important;
   } */
-  #button-main{
+  /* #button-main{
     margin: 2rem 0px;
     flex-direction: column;
   }
   #button-main div{
     width: 100%;
-  }
+  } */
   #button-main div .button-35{
     width: 100%;
   }

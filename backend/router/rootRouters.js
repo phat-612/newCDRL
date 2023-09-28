@@ -19,7 +19,11 @@ function createRootRouter(client) {
           .findOne({ _id: user.cls[0] }, { projection: { _id: 0, years: 1 } });
         let schoolYearsToSearch = [];
         if (schoolYear_all.years[schoolYear.year.slice(4)]) {
-          for (let i = 0; i < schoolYear_all.years[schoolYear.year.slice(4)].length; i++) {
+          for (
+            let i = 0;
+            i < schoolYear_all.years[schoolYear.year.slice(4)].length;
+            i++
+          ) {
             schoolYearsToSearch.push(`HK${i + 1}_` + schoolYear.year.slice(4));
           }
           const studentTotalScores = await Promise.all(
@@ -27,7 +31,9 @@ function createRootRouter(client) {
               let studentTotalScore = null;
 
               // Tìm trong bảng '_dep_table' trước
-              const depCollection = client.db(user.dep).collection("_dep_table");
+              const depCollection = client
+                .db(user.dep)
+                .collection("_dep_table");
               const depDocument = await depCollection.findOne(
                 { mssv: user._id, school_year: year },
                 { projection: { _id: 0, total: 1 } }
@@ -37,7 +43,9 @@ function createRootRouter(client) {
                 studentTotalScore = depDocument.total;
               } else {
                 // Nếu không tìm thấy, tìm trong bảng '_std_table'
-                const stdCollection = client.db(user.dep).collection(user.cls[0] + "_std_table");
+                const stdCollection = client
+                  .db(user.dep)
+                  .collection(user.cls[0] + "_std_table");
                 const stdDocument = await stdCollection.findOne(
                   { mssv: user._id, school_year: year },
                   { projection: { _id: 0, total: 1 } }
@@ -47,7 +55,9 @@ function createRootRouter(client) {
                   studentTotalScore = stdDocument.total;
                 } else {
                   // Nếu không tìm thấy, tìm trong bảng '_stf_table'
-                  const stfCollection = client.db(user.dep).collection("_stf_table");
+                  const stfCollection = client
+                    .db(user.dep)
+                    .collection("_stf_table");
                   const stfDocument = await stfCollection.findOne(
                     { mssv: user._id, school_year: year },
                     { projection: { _id: 0, total: 1 } }
@@ -241,48 +251,54 @@ function createRootRouter(client) {
       const query = req.query;
       const user = req.session.user;
       let activitie_info;
-
-      if (query.id) {
-        const school_i = await client.db(name_global_databases).collection("activities").findOne({
-          _id: query.id,
-        });
-        if (school_i) {
-          activitie_info = school_i;
-        } else {
-          const dep_i = await client.db(user.dep).collection("activities").findOne({
-            _id: query.id,
-          });
-          if (dep_i) {
-            activitie_info = dep_i;
-          } else {
-            let cls_i;
+      // console.log(user);
+      if (query.id && query.level) {
+        switch (query.level) {
+          case "lop":
             if (user.pow[0]) {
-              cls_i = await client.db(user.dep).collection(`${user.cls[0]}_activities`).findOne({
-                _id: query.id,
-              });
-              activitie_info = cls_i;
-  
+              activitie_info = await client
+                .db(user.dep)
+                .collection(`${user.cls[0]}_activities`)
+                .findOne({
+                  _id: query.id,
+                });
             } else {
-              const collections = await client.db(user.dep).listCollections().toArray();
+              const collections = await client
+                .db(user.dep)
+                .listCollections()
+                .toArray();
               // Filter collections ending with '_activities'
-              const activityCollections = await collections.filter((collection) =>
-                collection.name.endsWith("_activities")
+              const activityCollections = await collections.filter(
+                (collection) => collection.name.endsWith("_activities")
               );
               // Loop through activity collections and retrieve all documents
               for (const activityCollection of activityCollections) {
-                cls_i = await client
+                activitie_info = await client
                   .db(user.dep)
                   .collection(activityCollection.name)
                   .findOne({
                     _id: query.id,
                   });
-                if (cls_i) {
-                  activitie_info = cls_i;
+                if (activitie_info) {
                   break; // Thoát khỏi vòng lặp khi tìm thấy kết quả
                 }
               }
             }
-          }
+            break;
+          case "khoa":
+            activitie_info = await client
+              .db(user.dep)
+              .collection("activities")
+              .findOne({
+                _id: query.id,
+              });
+          case "truong":
+            activitie_info = await client
+              .db(name_global_databases)
+              .collection("activities")
+              .findOne({
+                _id: query.id,
+              });
         }
         if (!activitie_info) {
           return res.status(404).send("Not Found");
@@ -290,6 +306,18 @@ function createRootRouter(client) {
         activitie_info.join = false;
         activitie_info.diemdanh = false;
         if (activitie_info.student_list) {
+          const list_student = activitie_info.student;
+          let info_student = [];
+          for (let i = 0; i < list_student.length; i++) {
+            info_student.push(
+              await client
+                .db(name_global_databases)
+                .collection("user_info")
+                .findOne({
+                  _id: list_student[i],
+                }) // khò khò
+            );
+          }
           if (user._id in activitie_info.student_list) {
             activitie_info.join = true;
           }
@@ -297,6 +325,7 @@ function createRootRouter(client) {
             activitie_info.diemdanh = true;
           }
         }
+        // console.log(activitie_info);
         return res.render("sinhvien-activeregistration", {
           header: "global-header",
           thongbao: "global-notifications",

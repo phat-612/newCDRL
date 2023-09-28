@@ -1,123 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/src/css/doankhoa-manage-departments.css" />
+    <link
+      rel="stylesheet"
+      href="/src/css/doankhoa-manage-departments-res.css" />
+    <title>Quản Lí Bộ Môn</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="/src/css/doankhoa-manage-departments.css" />
-  <link rel="stylesheet" href="/src/css/doankhoa-manage-departments-res.css" />
-  <title>Quản Lí Bộ Môn</title>
-</head>
+  <body>
+    <div class="main">
+      <%- include(header) %> <%- include(thongbao) %>
+      <div class="container">
+        <%- include(menu) %>
 
-<body>
-  <div class="main">
-    <%- include(header) %>
-    <%- include(thongbao) %>
-    <div class="container">
-    <%- include(menu) %>
+        <div class="box-table">
 
-      <div class="box-table">
+          <div class="manager">
+            <div class="content content_top">
+              <h2>QUẢN LÍ BỘ MÔN</h2>
+              <div class="group_btn">
+                <!-- Button -->
+                <div class="content container__button">
+                  <button class="button-35" id="add__subject">
+                    Thêm Bộ Môn
+                  </button>
+                  <button class="button-35" id="delete__subject">
+                    Xoá Bộ Môn
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
 
-        <!-- Button -->
-        <div class="content container__button">
-          <button class="button-35" id="add__subject">Thêm Bộ Môn</button>
-          <button class="button-35" id="delete__subject">Xoá Bộ Môn</button>
+          <!-- Table -->
+          <div class="content container__table">
+            <table>
+              <thead>
+                <tr>
+                  <th>
+                    <div class="checkbox-wrapper-4">
+                      <input
+                        type="checkbox"
+                        id="row--all"
+                        class="inp-cbx all-cbx"
+                        value="2" />
+                      <label for="row--all" class="cbx"
+                        ><span> <svg height="10px" width="12px"></svg></span>
+                      </label>
+                    </div>
+                  </th>
+                  <th>STT</th>
+                  <th style="width: 40%">Tên Bộ Môn</th>
+                  <th style="width: 35%">Khoa</th>
+                  <th>Cập Nhập</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% for (let i = 0; i < branchs.length; i++) {%>
+                <tr>
+                  <td>
+                    <div class="checkbox-wrapper-4">
+                      <input
+                        type="checkbox"
+                        id="row--<%- i %>"
+                        class="inp-cbx"
+                        value="<%= branchs[i].name %>" />
+                      <label for="row--<%- i %>" class="cbx"
+                        ><span> <svg height="10px" width="12px"></svg></span>
+                      </label>
+                    </div>
+                  </td>
+                  <td class="nums"><%= i + 1 %></td>
+                  <td class="b_name"><%= branchs[i].name %></td>
+                  <td class="dep_name"><%= dep %></td>
+                  <td>
+                    <a id="edit__subject">Sửa</a>
+                  </td>
+                </tr>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        <!-- Table -->
-        <div class="content container__table">
-          <table>
-            <thead>
-              <tr>
-                <th>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row--all" class="inp-cbx all-cbx" value="2" />
-                    <label for="row--all" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                  </div>
-                </th>
-                <th>STT</th>
-                <th style="width: 40%;">Tên Bộ Môn</th>
-                <th style="width: 35%;">Khoa</th>
-                <th>Cập Nhập</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% for (let i = 0; i < branchs.length; i++) {%>
-              <tr>
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row--<%- i %>" class="inp-cbx" value="<%= branchs[i].name %>" />
-                    <label for="row--<%- i %>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                  </div>
-                </td>
-                <td class="nums"><%= i + 1 %></td>
-                <td class="b_name"><%= branchs[i].name %></td>
-                <td class="dep_name"><%= dep %></td>
-                <td>
-                  <a id="edit__subject">Sửa</a>
-                </td>
-              </tr>
-              <% } %>
-            </tbody>
-          </table>
+        <div class="modal edit">
+          <div class="modal_wrap edit">
+            <div class="modal_main">
+              <h2 class="content__title">SỬA BỘ MÔN</h2>
+              <div class="content content--department">
+                <h3 class="content__department">Đoàn Khoa: <%= dep %></h3>
+              </div>
+              <div class="content content--subject">
+                <label for="subject--name" class="content__subject input--label"
+                  >Tên Bộ Môn</label
+                >
+                <input
+                  type="text"
+                  class="content__subject subject--input bname_input"
+                  id="subject--name"
+                  placeholder="Nhập tên bộ môn" />
+              </div>
+
+              <div class="content content--button">
+                <div><button class="button-35 exist_btn">Hủy</button></div>
+                <div><button class="button-35 save_btn">Lưu</button></div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div class="modal edit">
-        <div class="modal_wrap edit">
-          <div class="modal_main">
+        <div class="modal add">
+          <div class="modal_wrap add">
+            <div class="modal_main">
+              <h2 class="content__title">THÊM BỘ MÔN</h2>
+              <div class="content content--department">
+                <h3 class="content__department">Đoàn Khoa: <%= dep %></h3>
+              </div>
+              <div class="content content--subject">
+                <label for="subject--name" class="content__subject input--label"
+                  >Tên Bộ Môn</label
+                >
+                <input
+                  type="text"
+                  class="content__subject subject--input bname_input"
+                  id="subject--name"
+                  placeholder="Nhập tên bộ môn" />
+              </div>
 
-            <h2 class="content__title">SỬA BỘ MÔN</h2>
-            <div class="content content--department">
-              <h3 class="content__department">Đoàn Khoa: <%= dep %></h3>
+              <div class="content content--button">
+                <div><button class="button-35 exist_btn">Hủy</button></div>
+                <div><button class="button-35 save_btn">Lưu</button></div>
+              </div>
             </div>
-            <div class="content content--subject">
-              <label for="subject--name" class="content__subject input--label">Tên Bộ Môn</label>
-              <input type="text" class="content__subject subject--input bname_input" id="subject--name" placeholder="Nhập tên bộ môn">
-            </div>
-
-            
-
-            <div class="content content--button">
-              <div><button class="button-35 exist_btn">Hủy</button></div>
-              <div><button class="button-35 save_btn">Lưu</button></div>
-            </div>
-
           </div>
         </div>
       </div>
-
-      <div class="modal add">
-        <div class="modal_wrap add">
-          <div class="modal_main">
-
-            <h2 class="content__title">THÊM BỘ MÔN</h2>
-            <div class="content content--department">
-              <h3 class="content__department">Đoàn Khoa: <%= dep %></h3>
-            </div>
-            <div class="content content--subject">
-              <label for="subject--name" class="content__subject input--label">Tên Bộ Môn</label>
-              <input type="text" class="content__subject subject--input bname_input" id="subject--name" placeholder="Nhập tên bộ môn">
-            </div>
-
-            
-
-            <div class="content content--button">
-              <div><button class="button-35 exist_btn">Hủy</button></div>
-              <div><button class="button-35 save_btn">Lưu</button></div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
     </div>
-  </div>
-  <%- include(footer) %>
-</body>
+    <%- include(footer) %>
+  </body>
 
-<script src="/src/JS/doankhoa-manage-departments.js"></script>
-
+  <script src="/src/JS/doankhoa-manage-departments.js"></script>
 </html>

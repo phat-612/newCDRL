@@ -1,12 +1,32 @@
-@media screen and (max-width:600px) {
-    .table_container {
-        overflow: auto;
-    }
+@media screen and (max-width: 600px) {
+  .table_container {
+    overflow: auto;
+  }
 
-    table tr td:nth-child(9) {
-        padding: 24px;
-    }
-    .button-35{
-        font-size: 1.5rem !important;
-    }
+  table tr td:nth-child(9) {
+    padding: 24px;
+  }
+  .button-35 {
+    font-size: 1.5rem !important;
+  }
+  .content .hk_nk {
+    display: flex;
+    flex-direction: column;
+  }
+  .load_list_btn {
+    width: 15rem;
+    height: 5rem;
+  }
+  .load_list_btn_container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  .first_child{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+
+  }
 }

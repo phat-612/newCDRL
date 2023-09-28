@@ -1,12 +1,69 @@
 @media screen and (max-width: 600px) {
+    .main{
+        margin-bottom: 120px;
+    }
     .year_full{
         flex-direction: column;
         width: 100%;
+        gap: 0!important;
     }
-    .button-35{
+    .btn_choice{
+        margin: 0 auto;
+    }
+    #year_choice{
+        padding: 1.5rem 4rem;
+        margin-top: 2rem;
+    }
+    .modal .button-35{
         margin: 0 !important;
     }
     .hk{
         justify-content: space-between;
+    }
+    .control{
+        display: flex;
+        justify-content: space-around;
+    }
+    .activity_class div{
+        overflow: auto;
+    }
+    .modal_main{
+        padding: 1rem;
+    }
+    .modal_wrap .title-box{
+        width: 100%;
+    padding: 1rem;
+    text-align: center;
+    box-sizing: border-box;
+    position: unset;
+    }
+    .subtitle,.sub-title{
+        margin-bottom: 1rem;
+    }
+    .subject--input{
+        width: 100%!important;
+    }
+    textarea{
+        height: 100px;
+        box-sizing: border-box;
+        width: 100%;
+        margin: 0;
+    }
+    .choise_date{
+        display: flex!important;
+        justify-content: space-around;
+    }
+    .modal #select-main{
+        display: block;
+    }
+    .modal .select{
+        display: flex!important;
+        margin-bottom: 1rem;
+    }
+    .modal .model-lb{
+        width: 80px;
+    }
+    .modal #button-main{
+        margin-top: 2rem!important;
     }
   }

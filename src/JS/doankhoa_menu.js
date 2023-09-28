@@ -13,10 +13,9 @@ $("summary").click(function () {
 });
 
 const cur_link = window.location.href
-const menu_item = $(".menu .footer_item")
+const menu_item = $(".menu a")
 for (const item of menu_item) {
   if (cur_link === item.href) {
-
     item.style.color = 'red'
   }
 }

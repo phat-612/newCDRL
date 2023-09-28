@@ -21,96 +21,103 @@
     <div class="container">
       <%- include(menu) %>
       <div class="content">
-
-        <div class="hk_nk">
-          <div class="year_full">
-            <div class="hk">
-              <span class="hocky">Học kỳ</span>
-              <div class="selectbox selectbox--hocky">
-                <div class="select">
-                  <select>
-                    <% for (let i=1; i <=years[cy[1]].length; i++) {%>
-                    <% if (i==parseInt(cy[0].slice(2))) {%>
-                    <option value="<%= i %>" selected="selected">
-                      <%= i %>
-                    </option>
-                    <%global_year = `HK${i}_`%>
-
-                    <% } else { %>
-                    <option value="<%= i %>">
-                      <%= i %>
-                    </option>
-                    <% } %>
-                    <% } %>
-                  </select>
+ 
+        <div class="manager">
+          <div class="content content_top">
+            <h2>DANH SÁCH BẢNG ĐIỂM </h2>
+            <div class="group_btn">
+              <div class="hk_nk">
+                <div class="year_full">
+                  <div class="hk">
+                    <span class="hocky">Học kỳ</span>
+                    <div class="selectbox selectbox--hocky">
+                      <div class="select">
+                        <select>
+                          <% for (let i=1; i <=years[cy[1]].length; i++) {%>
+                          <% if (i==parseInt(cy[0].slice(2))) {%>
+                          <option value="<%= i %>" selected="selected">
+                            <%= i %>
+                          </option>
+                          <%global_year = `HK${i}_`%>
+      
+                          <% } else { %>
+                          <option value="<%= i %>">
+                            <%= i %>
+                          </option>
+                          <% } %>
+                          <% } %>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="hk">
+                    <span>Niên khóa</span>
+                    <div class="selectbox nien_khoa">
+                      <div class="select">
+                        <select>
+                          <% for (const key of Object.keys(years)) {%>
+                          <% if (key==cy[1]) {%>
+                          <option selected="selected">
+                            
+                            <%= key %>
+                          </option>
+                          <%global_year += key%>
+                          <% } else { %>
+                          <option>
+                            <%= key %>
+                          </option>
+                          <% } %>
+                          <% } %>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="year_full">
+                  <div class="hk">
+                    <span>Bộ môn</span>
+                    <div class="selectbox --bomon">
+                      <div class="select">
+                        <select>
+                          <%let curr_index=0%>
+                          <% for (let i=0; i < branch.length; i++) {%>
+                          <% if (branch[i]._id==cls[0].branch) {%>
+                          <%curr_index=i%>
+                          <option value="<%= branch[i]._id %>" selected="selected">
+                            <%= branch[i].name %>
+                          </option>
+                          <% } else { %>
+                          <option value="<%= branch[i]._id %>">
+                            <%= branch[i].name %>
+                          </option>
+                          <% } %>
+                          <% } %>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="hk">
+                    <span>Lớp</span>
+                    <div class="selectbox --class">
+                      <div class="select">
+                        <select>
+                          <% for (let i=0; i < cls.length; i++) {%>
+                            <% if (cls[i].branch==branch[curr_index]._id) {%>
+                              <option value="<%= i %>" selected="selected">
+                                <%= cls[i]._id %>
+                              </option>
+                            <% } %>
+                          <% } %>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  
+                    <button class="button-35 button-35-a">Chọn</button>
+                  
                 </div>
               </div>
             </div>
-            <div class="hk">
-              <span>Niên khóa</span>
-              <div class="selectbox nien_khoa">
-                <div class="select">
-                  <select>
-                    <% for (const key of Object.keys(years)) {%>
-                    <% if (key==cy[1]) {%>
-                    <option selected="selected">
-                      
-                      <%= key %>
-                    </option>
-                    <%global_year += key%>
-                    <% } else { %>
-                    <option>
-                      <%= key %>
-                    </option>
-                    <% } %>
-                    <% } %>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="year_full">
-            <div class="hk">
-              <span>Bộ môn</span>
-              <div class="selectbox --bomon">
-                <div class="select">
-                  <select>
-                    <%let curr_index=0%>
-                    <% for (let i=0; i < branch.length; i++) {%>
-                    <% if (branch[i]._id==cls[0].branch) {%>
-                    <%curr_index=i%>
-                    <option value="<%= branch[i]._id %>" selected="selected">
-                      <%= branch[i].name %>
-                    </option>
-                    <% } else { %>
-                    <option value="<%= branch[i]._id %>">
-                      <%= branch[i].name %>
-                    </option>
-                    <% } %>
-                    <% } %>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="hk">
-              <span>Lớp</span>
-              <div class="selectbox --class">
-                <div class="select">
-                  <select>
-                    <% for (let i=0; i < cls.length; i++) {%>
-                      <% if (cls[i].branch==branch[curr_index]._id) {%>
-                        <option value="<%= i %>" selected="selected">
-                          <%= cls[i]._id %>
-                        </option>
-                      <% } %>
-                    <% } %>
-                  </select>
-                </div>
-              </div>
-            </div>
-            
-              <button class="button-35 button-35-a">Chọn</button>
-            
           </div>
         </div>
 
