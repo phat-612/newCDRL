@@ -2,7 +2,9 @@ const currentUrl = window.location.href;
 const currentURLbase = window.location.protocol + "//" + window.location.host;
 const currentURLsub = currentUrl.replace(currentURLbase, "");
 function connectWebSocket() {
-  const wss = new WebSocket("wss://localhost:8181/howtosavealife?");
+  const wss = new WebSocket(
+    `${currentURLbase.replace("https", "wss").replace("http", "ws")}/howtosavealife?`
+  );
   wss.onopen = function () {
     wss.send("ok ko e?");
   };
@@ -44,8 +46,8 @@ function setLight() {
   rootStyle.setProperty("--modal-color", "rgb(233 233 233 / 60%)");
   rootStyle.setProperty("--input-hover", "#d9d9d982");
   rootStyle.setProperty("--btn-delete", "#f0f0f0");
-  rootStyle.setProperty("--no-img", "#d4d1d1"); 
-  rootStyle.setProperty("--modal_img_btn", "#aeaeae"); 
+  rootStyle.setProperty("--no-img", "#d4d1d1");
+  rootStyle.setProperty("--modal_img_btn", "#aeaeae");
   // rootStyle.setProperty("--checkbox-active", "rgb(143, 213, 229)");
   // rootStyle.setProperty("--tr-hover", "rgb(247 234 255)");
   // rootStyle.setProperty("--table-header", "rgb(206, 206, 206)");
@@ -82,14 +84,14 @@ function setDark() {
   rootStyle.setProperty("--tb-white", "#202324");
   rootStyle.setProperty("--tr-hover", "#1e2022");
   rootStyle.setProperty("--button-color", "#313537");
-    rootStyle.setProperty("--mauvang-ne", "#777804");
+  rootStyle.setProperty("--mauvang-ne", "#777804");
   rootStyle.setProperty("--primColor", "#2c2f31");
-    rootStyle.setProperty("--secoColor", "#70685c");
+  rootStyle.setProperty("--secoColor", "#70685c");
   rootStyle.setProperty("--modal-color", "rgb(12 12 12 / 60%)");
   rootStyle.setProperty("--input-hover", "#4d484882");
   rootStyle.setProperty("--btn-delete", "#50575b");
-  rootStyle.setProperty("--no-img", "#313537"); 
-  rootStyle.setProperty("--modal_img_btn", "#464c4f"); 
+  rootStyle.setProperty("--no-img", "#313537");
+  rootStyle.setProperty("--modal_img_btn", "#464c4f");
 
   // rootStyle.setProperty("--checkbox-active", "rgb(143, 213, 229)");
   // rootStyle.setProperty("--tr-hover", "rgb(247 234 255)");
@@ -123,10 +125,7 @@ if (themes) {
     setLight();
   }
 } else {
-  if (
-    window.matchMedia &&
-    window.matchMedia("(prefers-color-scheme: dark)").matches
-  ) {
+  if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
     localStorage.setItem("theme", "dark");
     theme_btn.checked = true;
     setDark();

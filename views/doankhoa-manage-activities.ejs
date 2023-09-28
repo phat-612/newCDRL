@@ -272,7 +272,8 @@
               <tr class="copy_box">
                 <!-- fill link google forn here NTHL xấu trai -->
                 <td colspan="2"> COPY </td>
-                <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
+                <td colspan="6"><a href="/dangkyhoatdong?id=<%= cls_atv[i]._id %>&level=lop"
+                  target="_blank">Link đăng kí và điểm danh hoạt động</a></td>
               </tr>
               <% } %>
             </tbody>
@@ -412,17 +413,17 @@
   </div>
 </div>
 <script>
-  const branch_list = <% -JSON.stringify(branch) %>;
-  const class_list = <% -JSON.stringify(cls) %>;
-  const year_cur = <% -JSON.stringify(curr_year) %>;
+  const branch_list = <%-JSON.stringify(branch) %>;
+  const class_list = <%-JSON.stringify(cls) %>;
+  const year_cur = <%-JSON.stringify(curr_year) %>;
 
-  const school_content = <% - JSON.stringify(school_atv.map((avt) => avt.content)) %>;
-  const dep_content = <% - JSON.stringify(dep_atv.map((avt) => avt.content)) %>;
-  const cls_content = <% - JSON.stringify(cls_atv.map((avt) => avt.content)) %>;
+  const school_content = <%- JSON.stringify(school_atv.map((avt) => avt.content)) %>;
+  const dep_content = <%- JSON.stringify(dep_atv.map((avt) => avt.content)) %>;
+  const cls_content = <%- JSON.stringify(cls_atv.map((avt) => avt.content)) %>;
 
-  const school_st = <% - JSON.stringify(school_atv.map((avt) => avt.start_time)) %>;
-  const dep_st = <% - JSON.stringify(dep_atv.map((avt) => avt.start_time)) %>;
-  const cls_st = <% - JSON.stringify(cls_atv.map((avt) => avt.start_time)) %>;
+  const school_st = <%- JSON.stringify(school_atv.map((avt) => avt.start_time)) %>;
+  const dep_st = <%- JSON.stringify(dep_atv.map((avt) => avt.start_time)) %>;
+  const cls_st = <%- JSON.stringify(cls_atv.map((avt) => avt.start_time)) %>;
 </script>
 <!-- <script src="/src/JS/bancansu-manage-activities.js"></script> -->
 <script src="/src/JS/doankhoa-manage-activities.js"></script>
