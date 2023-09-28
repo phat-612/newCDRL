@@ -119,12 +119,13 @@ table tr td:nth-child(9) a {
 }
 
 @media screen and (max-width: 600px) {
+  .hk_nk{
+    padding: 0 0.5rem;
+  }
   .year_full {
     flex-direction: column;
   }
-  .year_full:first-child {
-    flex-direction: row;
-  }
+
   .button-35-a {
     position: revert !important;
     width: 100%;
@@ -138,7 +139,7 @@ table tr td:nth-child(9) a {
     width: 100%;
   }
   .hk span {
-    width: 20%;
+    width: 25%;
   }
   .hk {
     width: 100%;
