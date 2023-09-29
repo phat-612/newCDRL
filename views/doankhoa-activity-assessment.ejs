@@ -4,96 +4,98 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="/src/css/bancansu-activity-assessment.css" />
+  <link rel="stylesheet" href="/src/css/doankhoa-activeregistration.css" />
   <title>Đánh Giá Hoạt Động Rèn Luyện</title>
 </head>
 
 <body>
   <div class="main">
     <%- include(header) %>
-    <%- include(thongbao) %>
-    <%- include(menu) %>
-    <div class="container">
-      <div class="content">
-        <div class="activity">
-          <h2 class="activity-elements title">THÔNG TIN HOẠT ĐỘNG</h2>
-          <div class="information">
-            <h3 class="activity-elements name" id="activity-name"><span><%= curr_act.name %></span> - <span>
-                <% if (curr_act.level == 'Trường')  { %>
-                Cấp Trường
-                <% } else if (curr_act.level == 'Khoa')  { %>
-                Cấp Khoa
-                <% } else { %>
-                Cấp Lớp
-                <% } %>
-              </span>
-            </h3>
-            <!-- <h3 class="activity-elements level" id="activity-level"><abbr title="Cấp độ hoạt động" style="text-decoration: none;">Cấp Khoa</abbr></h3> -->
-            <!-- Format Date() variable into Viet Nam reading struture -->
-            <% const hours = curr_act.start_time.getHours(); %>
-            <% const minutes = curr_act.start_time.getMinutes(); %>
-            <% const day = curr_act.start_time.getDate(); %>
-            <% const month = curr_act.start_time.getMonth() + 1; %>
-            <% const year = curr_act.start_time.getFullYear(); %>
-            <% const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`; %>
-            <% const formattedDate = `${formattedTime} Ngày ${day} tháng ${month} năm ${year}`; %>
-            <!-- ----------------------------------------------------- -->
-            <p class="activity-elements description" id="activity-start-date"><abbr title="Thời gian diễn ra" style="text-decoration: none;"><%= formattedDate %></abbr></p>
-            <p class="activity-elements description" id="activity-description"><abbr title="Mô tả hoạt động" style="text-decoration: none;"><%= curr_act.content %></abbr></p>
-          </div>
-        </div>
-        <% if (curr_act.student_list) {%>
-        <div class="evaluation">
-          <div class="information">
+      <%- include(thongbao) %>
+        <%- include(menu) %>
+          <div class="container">
+            <div class="content">
+              <div class="activity-board">
+                <h2>
+                  <%=curr_act.name.toUpperCase()%>
+                </h2>
+                <section class="activity_body">
+                  <div class="activity_body_details">
+                    <!-- Format Date() variable into Viet Nam reading struture -->
+                    <% const hours=curr_act.start_time.getHours(); %>
+                      <% const minutes=curr_act.start_time.getMinutes(); %>
+                        <% const day=curr_act.start_time.getDate(); %>
+                          <% const month=curr_act.start_time.getMonth() + 1; %>
+                            <% const year=curr_act.start_time.getFullYear(); %>
+                              <% const formattedTime=`${hours.toString().padStart(2, '0'
+                                )}:${minutes.toString().padStart(2, '0' )}`; %>
+                                <% const formattedDate=`${formattedTime} Ngày ${day} tháng ${month} năm ${year}`; %>
+                                  <!-- ----------------------------------------------------- -->
+                                  <p>Cấp độ: <span>
+                                      <%=curr_act.level%>
+                                    </span></p>
+                                  <p>Thời gian diễn ra: <span>
+                                      <%=formattedDate%>
+                                    </span></p>
+                                  <p>Chi tiết: <%=curr_act.content%>
+                                  </p>
+                  </div>
 
-            <h3 class="activity-elements name" id="activity-name">DANH SÁCH SINH VIÊN THAM GIA HOẠT ĐỘNG</h3>
-            <table class="table">
-              <thead>
-                <tr>
-                  <th style="width: 5%">STT</th>
-                  <th style="width: 10%;">MSSV</th>
-                  <th style="width: 20%">Họ Và Tên</th>
-                  <th style="width: 5%">Tham Gia</th>
-                  <th style="width: 5%">Khen Thưởng</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>2101364</td>
-                  <td>Nguyễn Lê Tấn Đạt</td>
-                  <td>
-                    <div class="checkbox-wrapper-4">
-                      <input type="checkbox" id="row0-1" class="inp-cbx" value="2" />
-                      <label for="row0-1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                      </label>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="checkbox-wrapper-4">
-                      <input type="checkbox" id="row0-2" class="inp-cbx" value="2" />
-                      <label for="row0-2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                      </label>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                </section>
+              </div>
+
+              <div class="activity-board">
+                <h2>DANH SÁCH SINH VIÊN ĐÃ ĐĂNG KÝ</h2>
+                <%if (curr_act.student_list){%>
+                  <table class="table" id="school_tb">
+                    <thead>
+                      <tr>
+                        <th style="width: 1%">
+                          <div class="checkbox-wrapper-4">
+                            <input type="checkbox" id="row__0" class="inp-cbx all-cbx" />
+                            <label for="row__0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                            </label>
+                          </div>
+                        </th>
+                        <th style="width: 2%">MSSV</th>
+                        <th style="width: 40%">Họ Và Tên</th>
+                        <th style="width: 10%">Lớp</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <%const data_student=curr_act.info_student%>
+                        <% for (let i=0; i < data_student.length; i++) {%>
+
+                          <tr class="atv_box">
+                            <td>
+                              <div class="checkbox-wrapper-4">
+                                <input type="checkbox" id="row__0__0" class="inp-cbx" value="18101911" />
+                                <label for="row__0__0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                                </label>
+                              </div>
+                            </td>
+                            <td>
+                              <%=data_student[i]._id%>
+                            </td>
+                            <td class="a_name">
+                              <%=`${data_student[i].last_name} ${data_student[i].first_name}`%>
+                            </td>
+                            <td class="class_student">
+                              <%=data_student[i].class[0]%>
+                            </td>
+                          </tr>
+
+                          <%}%>
+                    </tbody>
+                  </table>
+                  <%} else {%>
+                    <p>Không có học sinh nào!</p>
+                    <%}%>
+              </div>
+              <!--ghi danh -->
+            </div>
           </div>
-        </div>
-        <% } else { %>
-        <div class="evaluation">
-          <div class="information">
-            <h3 class="activity-elements name" id="activity-name">DANH SÁCH SINH VIÊN THAM GIA HOẠT ĐỘNG</h3>
-            <!-- <h3 class="activity-elements level" id="activity-level"><abbr title="Cấp độ hoạt động" style="text-decoration: none;">Cấp Khoa</abbr></h3> -->
-            <p class="activity-elements description" id="activity-description"><abbr title="Mô tả hoạt động" style="text-decoration: none;">Không có sinh viên tham gia hoạt động này</abbr></p>
-          </div>
-        </div>
-        <%}%>
-      </div>
-    </div>
-  </div>
-  <%- include(footer) %>
+          <%- include(footer) %>
 </body>
 
 </html>

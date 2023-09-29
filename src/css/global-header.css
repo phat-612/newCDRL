@@ -741,4 +741,11 @@ textarea {
     rotate: 90deg;
   }
 }
+
+.hk_nk{
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+}
 /* ----------------------------------- */
