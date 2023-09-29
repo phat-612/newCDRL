@@ -195,7 +195,7 @@
             <div class="selectbox --bomon" id="select_bm">
               <div class="select">
                 <select>
-                  <option value="--" selected="selected">
+                  <option value="--" selected="selected">Chọn bộ môn</option>
                   <% for (let i=0; i < branch.length; i++) {%>
                   <% if (branch[i]._id==cls[0].branch) {%>
                   <%curr_index=i%>
@@ -217,7 +217,7 @@
             <div class="selectbox --class" id="select_cls">
               <div class="select">
                 <select>
-                  <option value="--" selected="selected">
+                  <option value="--" selected="selected">Chọn lớp</option>
                   <% for (let i=0; i < cls.length; i++) {%>
                   <% if (cls[i].branch==branch[curr_index]._id) {%>
                   <option value="<%= cls[i]._id %>">
