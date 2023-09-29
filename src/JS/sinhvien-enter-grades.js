@@ -116,13 +116,12 @@ function handleDrop(event) {
   let files = event.originalEvent.dataTransfer.files;
 
   if (validateFile(files[0])) {
-
     event.preventDefault();
     $(this).removeClass("dragover");
     const file = files[0];
     displayImage.call($(this), file);
 
-    $(this).find(".upload-input").prop('files', files);
+    $(this).find(".upload-input").prop("files", files);
   }
 }
 
@@ -163,16 +162,18 @@ $(document).mouseup(function (e) {
   }
 });
 // tính điểm ------------------------------------------------------------------------------------------------------------------------------------------------------------
-async function autoCheck(){
+async function autoCheck() {
   const response = await fetch("/api/getStudentInfoMark");
   let infoMark = await response.json();
-  if (infoMark["dang_vien"]){
+  if (infoMark["dang_vien"]) {
     $("#morning12").prop('checked', true);
-    $("#morning12").trigger('change');
+    // $("#morning12").trigger('change');
+    document.querySelector("#morning12").dispatchEvent(new Event("change"));
   }
-  if (infoMark["cham_diem"] || infoMark["lap_hoat_dong"]){
+  if (infoMark["cham_diem"] || infoMark["lap_hoat_dong"]) {
     $("#mySelect14").val('3');
-    $("#mySelect14").trigger('change');
+    // $("#mySelect14").trigger('change');
+    document.querySelector("#mySelect14").dispatchEvent(new Event("change"));
   }
   console.log(infoMark);
 }
@@ -402,7 +403,7 @@ async function uploadImage() {
       let renamedFile = new File([files[i]], newName, { type: files[i].type });
       formData.append("files[]", renamedFile);
       formData.append("descripts[]", descripts[i]);
-    };
+    }
 
     const response = await fetch("/api/uploadFile", {
       method: "POST",
@@ -481,7 +482,10 @@ async function mark(img_ids) {
 
 // Save table infomation --------------------------------------------------------------------------------------------------------------------------------------------------
 $(document).on("click", ".save-btn", async function () {
-  notify("!", "Đang upload phiếu điểm... (Vui lòng không thoát khỏi trang lúc này!)");
+  notify(
+    "!",
+    "Đang upload phiếu điểm... (Vui lòng không thoát khỏi trang lúc này!)"
+  );
   uploadImage();
 });
 

@@ -189,6 +189,7 @@ function createDepRouter(client) {
             { projection: { _id: 1, branch: 1 } }
           )
           .toArray();
+        console.log(classlist)
         const years = await client
           .db(name_global_databases)
           .collection("classes")
@@ -204,6 +205,7 @@ function createDepRouter(client) {
           )
           .toArray();
         student_list = sortStudentName(student_list);
+        console.log(student_list);
         // get all branch of department:
 
         // get all student total score from themself:

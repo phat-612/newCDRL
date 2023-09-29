@@ -512,7 +512,7 @@ textarea {
   cursor: pointer;
   font-size: var(--size);
   user-select: none;
-  fill: var(--white-color);
+  fill: var(--black-color);
   width: auto;
 }
 
@@ -568,7 +568,10 @@ textarea {
     left: 0;
     right: 0;
   }
+  .theme_btn{
+    fill: var(--white-color);
 
+  }
   .content--button,#button-main{
         margin: 0;
         gap: 20px;
