@@ -248,15 +248,68 @@ $("#delete__class").click(async function () {
 });
 
 // Scroll to the end of page 
-$(window).scroll(function () {
+$(window).scroll(async function () {
   if ($(window).scrollTop() + $(window).height() > $(document).height() - 10) {
     if (curr_load_branch < branchs.length) {
       // show loading animation
-      $('.loader-parent').css("display","flex");
+      $('.loader-parent').css("display", "flex");
       $('.loader-parent').show();
-      console.log("near bottom!");
 
-      
+      // send request and create 
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          curr_load_branch: curr_load_branch,
+          branchs: branchs
+        })
+      };
+
+      const response = await fetch('/api/loadClasses', requestOptions);
+      if (response.ok) {
+        // hide loading animation
+        $('.loader-parent').hide();
+
+        // append new loading classes
+        response.json().then(function (result) {
+          let numbers = $('table tbody tr').length; // start at next position
+          for (let i = curr_load_branch; i < result.new_curr_load_branch; i++) {
+            for (let j = 0; j < result.classes[branchs[i]._id].length; j++) {
+              $('#tb-body').append(`
+              <tr>
+                <td>
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="row__${numbers}" class="inp-cbx normal-cbx" value="${result.classes[branchs[i]._id][j]}" />
+                    <label for="row__${numbers}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+                  </div>
+                </td>
+                <td class="nums" style="width: 3%;">${numbers + 1}</td>
+                <td class="cls_name">${result.classes[branchs[i]._id][j]}</td>
+                <td class="b_name" style="width: 20%;">${branchs[i].name}</td>
+                <td class="d_name" style="width: 10%;">${dep_name}</td>
+                <td class="t_name" id="${result.class_teachers[numbers]._id}">${result.class_teachers[numbers].last_name + ' ' + result.class_teachers[numbers].first_name}</td>
+                <td>
+                  <a id="edit__class" href="#">Sửa</a>
+                </td>
+              </tr>
+              `)
+              numbers += 1;
+            }
+          }
+          // change current load branch to new one
+          curr_load_branch = result.new_curr_load_branch;
+        });
+
+
+      }
+      else if (response.status == 500) {
+        // Error occurred during upload
+        notify('x', 'Có lỗi xảy ra!');
+      }
+
     }
   }
 });

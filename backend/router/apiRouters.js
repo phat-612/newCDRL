@@ -2615,9 +2615,9 @@ function createAPIRouter(client, wss) {
         // get all classes of not load branchs:
         let classes = {}; // classes = {KTPM: [KTPM0121, KTPM0108, ...], CNTT: [CNTT0109, CNTT0209, ...], ...}
         let class_teachers = []; // class_teachers = [18102003, 19112003, ...]
+        let new_curr_load_branch; // next final branch loaded
 
-
-        for (let i = curr_load_branch; i < data.branchs.length; i++) {
+        for (let i = data.curr_load_branch; i < data.branchs.length; i++) {
           let dummy = await client
             .db(name_global_databases)
             .collection("classes")
@@ -2636,9 +2636,9 @@ function createAPIRouter(client, wss) {
           classes[data.branchs[i]._id] = dummy.map((cls) => cls._id);
           class_teachers.push(...dummy.map((cls) => cls.cvht));
 
+          new_curr_load_branch = i + 1;
           // finish load one brach then check does number of classes over 30.  
           if (class_teachers.length >= 30) {
-            data.curr_load_branch = i + 1;
             break;
           }
         }
@@ -2667,7 +2667,7 @@ function createAPIRouter(client, wss) {
         return res.status(200).json({
           classes: classes,
           class_teachers: class_teachers,
-          curr_load_branch: data.curr_load_branch,
+          new_curr_load_branch: new_curr_load_branch,
         });
       } else {
         return res.sendStatus(403); // back to home

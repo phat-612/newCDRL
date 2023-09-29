@@ -90,6 +90,11 @@ $(document).on("drop", ".modal_wrap_img_item", handleDrop);
 $(document).on("click", ".up-img-btn", handleUploadButtonClick);
 $(document).on("change", ".upload-input", handleUploadInputChange);
 $(document).on("click", ".activeregistration_btn", handleCheckinButtonClick);
+$(document).on("click", ".save-btn", handleCheckinwithImgButtonClick);
+
+async function handleCheckinwithImgButtonClick(event) {
+  console.log("Checkin");
+}
 
 async function handleCheckinButtonClick(event) {
   let id = $(this).attr("id");
