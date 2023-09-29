@@ -36,7 +36,7 @@ Hệ thống Đánh giá Điểm rèn luyện Sinh viên CTUET là một ứng d
 2. Cài đặt các dependencies bằng cách chạy lệnh `npm install`.
 3. Cấu hình cơ sở dữ liệu theo tài liệu hướng dẫn.
 4. Chạy ứng dụng bằng lệnh `node .\backend\server.js`.
-5. Truy cập ứng dụng qua địa chỉ `http://localhost:8181`.
+5. Truy cập ứng dụng qua địa chỉ `http://localhost`.
 
 ## Cấu trúc dự án
 - **.certificate/**: Thư mục chứa các chứng chỉ hoặc tệp liên quan đến chứng chỉ cho dự án.

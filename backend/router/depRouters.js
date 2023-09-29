@@ -99,12 +99,12 @@ function createDepRouter(client) {
       class_teachers.push(...dummy.map((cls) => cls.cvht));
 
       // set current load branch to i
-      curr_load_branch = i+1;
+      curr_load_branch = i + 1;
       // finish load one brach then check does number of classes over 30.
-      if (class_teachers.length >= 30) { 
+      if (class_teachers.length >= 30) {
         break;
       }
-       
+
     }
     // get all teacher's name in current department
     const teachers = await client

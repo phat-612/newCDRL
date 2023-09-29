@@ -20,7 +20,7 @@ $(document).ready(() => {
   }
   // chon lop
   async function getStudentList() {
-    console.log('goi len sv');
+    // console.log('goi len sv');
     try {
       let postData = JSON.stringify({
         class: cls
@@ -41,6 +41,7 @@ $(document).ready(() => {
       console.log(error);
     }
   }
+
   async function loadStudents(students) {
     $('.js_tbody').empty()
     if (dataStudents.hasOwnProperty(cls)) {
