@@ -11,6 +11,7 @@
     z-index: 1;
     margin-left: 40px;
     position: fixed;
+    top: 1%;
 
   }
   summary {
@@ -20,8 +21,7 @@
     padding: 12px 10px;
     width: 23px;
     height: 17px;
-    background-color: var(--primColor);
-    border: 2px solid var(--secoColor);
+   
     border-radius: var(--cornerRad);
     color: var(--black-color);
     cursor: pointer;
@@ -34,6 +34,7 @@
     left: 50%;
     transform: translate(-50%,-50%);
     color: var(--black-color);
+    font-size: 30px;
   }
   summary::before,
   summary::after {

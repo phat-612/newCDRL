@@ -20,6 +20,9 @@
     .hk{
         justify-content: space-between;
     }
+    .table_wrap{
+        overflow: auto;
+    }
     .control{
         display: flex;
         justify-content: space-around;
