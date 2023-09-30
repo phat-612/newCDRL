@@ -309,7 +309,6 @@ $(window).scroll(async function () {
         // Error occurred during upload
         notify('x', 'Có lỗi xảy ra!');
       }
-
     }
   }
 });

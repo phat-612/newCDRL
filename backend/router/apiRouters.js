@@ -1508,7 +1508,7 @@ function createAPIRouter(client, wss) {
   router.post("/getStudentList", checkIfUserLoginAPI, async (req, res) => {
     const user = req.session.user;
 
-    const data = req.body;
+    const data = req.body; // data = {class: KTPM0121 (class id), skip: 1 // time load befour}
     let reqClass = data.class;
     // if (!reqClass) {
     //   reqClass = user.cls[0];
@@ -1523,6 +1523,8 @@ function createAPIRouter(client, wss) {
               { class: reqClass, "power.0": { $exists: true } },
               { projection: { first_name: 1, last_name: 1, power: 1 } }
             )
+            .limit(30)
+            .skip(30*data.skip)
             .toArray()
         );
         const transformedData = student_list.map((item) => {
@@ -1557,6 +1559,7 @@ function createAPIRouter(client, wss) {
       return res.sendStatus(404);
     }
   });
+  
   router.get("/getStudentInfoMark", checkIfUserLoginAPI, async (req, res) => {
     const user = req.session.user;
     let result = {

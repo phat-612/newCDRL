@@ -1,3 +1,5 @@
+// const { data } = require("node-persist");
+
 $(document).ready(() => {
   const inpMssv = $("#md_mssv")
   const inpHo = $("#md_ho")
@@ -18,12 +20,28 @@ $(document).ready(() => {
   let dataStudents = {
     0: {},
   }
+
+  // time load now structure like
+  let skip = {
+  };
   // chon lop
   async function getStudentList() {
     // console.log('goi len sv');
+    // update skip time for student list
+    if (skip[cls]) {
+      skip[cls] += 1;
+    } else {
+      skip[cls] = 0;
+    }
+
     try {
+      // show loading animation
+      $('.loader-parent').css("display", "flex");
+      $('.loader-parent').show();
+
       let postData = JSON.stringify({
-        class: cls
+        class: cls,
+        skip: skip[cls]
       });
       const requestOptions = {
         method: 'POST',
@@ -35,15 +53,22 @@ $(document).ready(() => {
       const response = await fetch('/api/getStudentList', requestOptions);
       if (response.ok) {
         const students = await response.json();
-        dataStudents[cls] = students;
+        if (dataStudents[cls]) {
+          dataStudents[cls].push([...students]); // if it is old one 
+        } else {
+          dataStudents[cls] = students; // if this is new one
+        }
       }
     } catch (error) {
       console.log(error);
     }
   }
 
-  async function loadStudents(students) {
-    $('.js_tbody').empty()
+  async function loadStudents(students, new_one) {
+    if (new_one) {
+      $('.js_tbody').empty()
+    }
+
     if (dataStudents.hasOwnProperty(cls)) {
       if (students.length != 0) {
         let htmls = [];
@@ -72,13 +97,13 @@ $(document).ready(() => {
           <td>${students[i].lap_hoat_dong ? 'X' : ''}</td>
           <td><a href="#">Chỉnh sửa</a></td>
         </tr>
-      `)
+        `)
         }
-        $('.js_tbody').append(htmls.join(''))
+        $('.js_tbody').append(htmls.join(''));
         $('tr a').on('click', (event) => {
           editStudent(event);
           $(".modal.add").show();
-        })
+        });
       }
       else {
         $('.js_tbody').empty()
@@ -86,9 +111,11 @@ $(document).ready(() => {
       handleCheckboxChange()
     } else {
       await getStudentList()
-      loadStudents(dataStudents[cls])
     }
+    loadStudents(dataStudents[cls], true);
+    $('.loader-parent').hide();
   }
+
   function sortStudentName(std_list) {
     std_list.sort((a, b) => {
       const lastFirstNameWordA = a.first_name.split(' ').pop();
@@ -159,11 +186,13 @@ $(document).ready(() => {
     inpLbhd.prop('checked', studentInfo.lap_hoat_dong);
     $('.js_md_add').text('Cập nhật');
   }
+
   $('.js_lop').on('change', async (event) => {
     cls = event.target.value;
     $("#row0")[0].checked = false;
-    loadStudents(dataStudents[cls])
-  })
+    loadStudents(dataStudents[cls], true);
+  });
+
   $("#add-student").click(function () {
     $(".modal.add").show();
   });
@@ -221,7 +250,7 @@ $(document).ready(() => {
             lap_hoat_dong: inpLbhd.prop('checked'),
           })
           dataStudents[cls] = sortStudentName(dataStudents[cls])
-          loadStudents(dataStudents[cls])
+          loadStudents(dataStudents[cls], true)
           notify('n', 'Thêm sinh viên thành công')
           const blobUrl = URL.createObjectURL(await response.blob());
           // Tạo một thẻ <a> ẩn để tải xuống và nhấn vào nó
@@ -251,7 +280,7 @@ $(document).ready(() => {
             }
           })
           console.log(dataStudents[cls]);
-          loadStudents(dataStudents[cls])
+          loadStudents(dataStudents[cls], true)
           notify('n', 'Cập nhật sinh viên thành công')
         }
       } else {
@@ -300,10 +329,11 @@ $(document).ready(() => {
   });
   // up file
   $(".btn_upload").on("click", async () => {
-    if ($('.js_lop').val()!== '0') {cd 
+    if ($('.js_lop').val() !== '0') {
+      cd
       quest("Câu hỏi").then(async (result) => {
-        if(result) {
-  
+        if (result) {
+
           if (selectedFile) {
             const formData = new FormData();
             formData.append('file', selectedFile);
@@ -316,7 +346,7 @@ $(document).ready(() => {
               });
               if (response.ok) {
                 await getStudentList()
-                loadStudents(dataStudents[cls])
+                loadStudents(dataStudents[cls], true)
                 notify('n', 'Thêm sinh viên thành công')
                 const blobUrl = URL.createObjectURL(await response.blob());
                 // // Tạo một thẻ <a> ẩn để tải xuống và nhấn vào nó
@@ -328,7 +358,7 @@ $(document).ready(() => {
                 // downloadLink.click();
                 // // Giải phóng URL tạm thời sau khi tải xuống hoàn thành
                 URL.revokeObjectURL(blobUrl);
-      
+
               }
               else if (response.status == 404) {
                 notify('!', 'File không có đủ dữ liệu !')
@@ -345,7 +375,7 @@ $(document).ready(() => {
           }
           else {
             notify('!', 'Bạn chưa chọn file để tải lên !')
-      
+
           }
         }
         else {
@@ -361,7 +391,7 @@ $(document).ready(() => {
               });
               if (response.ok) {
                 await getStudentList()
-                loadStudents(dataStudents[cls])
+                loadStudents(dataStudents[cls], true)
                 notify('n', 'Thêm sinh viên thành công')
                 const blobUrl = URL.createObjectURL(await response.blob());
                 // // Tạo một thẻ <a> ẩn để tải xuống và nhấn vào nó
@@ -373,7 +403,7 @@ $(document).ready(() => {
                 // downloadLink.click();
                 // // Giải phóng URL tạm thời sau khi tải xuống hoàn thành
                 URL.revokeObjectURL(blobUrl);
-      
+
               } else {
                 notify('!', 'Thêm sinh viên thất bại ')
               }
@@ -383,20 +413,20 @@ $(document).ready(() => {
           }
           else {
             notify('!', 'Bạn chưa chọn file để tải lên !')
-      
+
           }
         }
-          // true nếu nhấn OK, false nếu nhấn Not
-  
-  
-        
+        // true nếu nhấn OK, false nếu nhấn Not
+
+
+
       });
     }
     else {
       notify('!', 'Bạn chưa chọn lớp!')
 
     }
-    
+
   })
   // delete students
   $('#delete-student').on('click', async () => {
@@ -421,9 +451,9 @@ $(document).ready(() => {
         };
         const response = await fetch('/api/deleteAccount', requestOptions);
         if (response.ok) {
-          dataStudents[cls] = dataStudents[cls].filter(item => !dataDelete.includes(item['_id']))
-          loadStudents(dataStudents[cls])
-          notify('n', 'Xóa sinh viên thành công')
+          dataStudents[cls] = dataStudents[cls].filter(item => !dataDelete.includes(item['_id']));
+          loadStudents(dataStudents[cls], true);
+          notify('n', 'Xóa sinh viên thành công');
         } else {
           notify('!', 'Xóa sinh viên thất bại')
         }
@@ -463,4 +493,14 @@ $(document).ready(() => {
       console.log(error);
     }
   });
+
+});
+
+// Scroll to the end of page 
+$(window).scroll(async function () {
+  if ($(window).scrollTop() + $(window).height() > $(document).height() - 10) {
+    if (dataStudents[cls].length % 30 != 0) { // check if class have more student or not
+      loadStudents(dataStudents[cls], false);
+    }
+  }
 });
