@@ -60,11 +60,16 @@
     text-align: center;
   }
 
-  th, td {
+  th,
+  td {
     padding: 1rem;
     font-size: 1.5rem;
   }
 
   .mark-box {
     margin-bottom: 2rem;
+  }
+
+  .content_top .group_btn {
+    text-align: center;
   }

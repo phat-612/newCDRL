@@ -443,9 +443,9 @@ td a:hover {
   font-weight: 600;
 }
 
-.content_top {
+/* .content_top {
   text-align: center;
-}
+} */
 
 .content_top h2 {
   border-bottom: 1px solid;
@@ -455,6 +455,7 @@ td a:hover {
   border-radius: 0.8rem;
   color: #ffffff;
   padding: 1rem;
+  text-align: center;
 }
 
 

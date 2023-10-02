@@ -59,3 +59,7 @@ th, td {
 .mark-box {
   margin-bottom: 2rem;
 }
+
+.content_top .group_btn {
+  text-align: center;
+}

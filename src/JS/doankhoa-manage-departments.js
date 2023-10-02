@@ -148,7 +148,7 @@ $(".save_btn").click(async function () {
             </td>
             <td class="nums">${length + 1}</td>
             <td class="b_name">${new_name}</td>
-            <td class="dep_name">${$('table tbody .dep_name').first().text()}</td>
+            <td class="dep_name">${dep_name}</td>
             <td>
               <a id="edit__subject" href="#">Sửa</a>
             </td>
@@ -172,6 +172,7 @@ $(".save_btn").click(async function () {
       notify('x', 'Có lỗi xảy ra!');
     }
   } else {
+    $(this).prop('disabled', false);
     notify('!', 'Hãy nhập đầy đủ thông tin!');
   }
 });

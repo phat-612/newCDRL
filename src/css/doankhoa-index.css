@@ -36,6 +36,11 @@ body {
     display: inline-block;
     font-size: 1.8rem;
 }
+
+.content_top .group_btn {
+    text-align: center;
+}
+
 a:any-link{
     text-decoration: none;
 }
