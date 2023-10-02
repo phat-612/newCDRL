@@ -154,7 +154,7 @@ $(".save_btn").click(async function () {
             <td class="nums" style="width: 3%;">${length + 1}</td>
             <td class="cls_name">${new_id}</td>
             <td class="b_name" style="width: 20%;">${curr_branchs.text()}</td>
-            <td style="width: 10%;">${$('.d_name').first().text()}</td>
+            <td class="d_name" style="width: 10%;">${dep_name}</td>
             <td class="t_name" id="${curr_teacher.val()}">${curr_teacher.text()}</td>
             <td>
               <a id="edit__class" href="#">Sửa</a>

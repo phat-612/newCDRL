@@ -169,6 +169,7 @@ $(".save_btn").click(async function () {
       }
     }
   } else {
+    $(this).prop("disabled", false);
     notify("!", "Hãy nhập đầy đủ thông tin!");
   }
 });
@@ -227,6 +228,8 @@ $("#delete__teacher").click(async function () {
       $(this).prop("disabled", false);
     }
   } else {
+    // able curr button
+    $(this).prop("disabled", false);
     notify("!", "Không có cố vấn được đánh dấu");
   }
 });
