@@ -24,6 +24,7 @@ $(document).ready(() => {
   // time load now structure like
   let skip = {
   };
+
   // chon lop
   async function getStudentList() {
     // console.log('goi len sv');
@@ -64,15 +65,16 @@ $(document).ready(() => {
     }
   }
 
-  async function loadStudents(students, new_one) {
+  async function loadStudents(students, new_one){
     if (new_one) {
-      $('.js_tbody').empty()
+      $('.js_tbody').empty();
     }
 
+    console.log(dataStudents, cls); 
     if (dataStudents.hasOwnProperty(cls)) {
-      if (students.length != 0) {
+      if (students.length - (30 * skip) != 0) {
         let htmls = [];
-        for (let i = 0; i < students.length; i++) {
+        for (let i = (30 * skip); i < students.length; i++) {
           htmls.push(`
         <tr>
           <td>
@@ -108,11 +110,11 @@ $(document).ready(() => {
       else {
         $('.js_tbody').empty()
       }
-      handleCheckboxChange()
+      handleCheckboxChange();
     } else {
-      await getStudentList()
+      await getStudentList();
+      loadStudents(dataStudents[cls], true);
     }
-    loadStudents(dataStudents[cls], true);
     $('.loader-parent').hide();
   }
 
@@ -330,7 +332,6 @@ $(document).ready(() => {
   // up file
   $(".btn_upload").on("click", async () => {
     if ($('.js_lop').val() !== '0') {
-      cd
       quest("Câu hỏi").then(async (result) => {
         if (result) {
 
@@ -493,14 +494,15 @@ $(document).ready(() => {
       console.log(error);
     }
   });
-
-});
-
-// Scroll to the end of page 
-$(window).scroll(async function () {
-  if ($(window).scrollTop() + $(window).height() > $(document).height() - 10) {
-    if (dataStudents[cls].length % 30 != 0) { // check if class have more student or not
-      loadStudents(dataStudents[cls], false);
+  
+  // Scroll to the end of page 
+  $(window).scroll(async function () {
+    if ($(window).scrollTop() + $(window).height() > $(document).height() - 10) {
+      console.log(dataStudents);
+      if (dataStudents[cls].length % 30 != 0) { // check if class have more student or not
+        loadStudents(dataStudents[cls], false);
+      }
     }
-  }
+  });
 });
+
