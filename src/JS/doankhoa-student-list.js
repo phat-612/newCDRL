@@ -25,11 +25,12 @@ $(document).ready(() => {
   let skip = {
   };
 
+  let loading = false;
   // chon lop
   async function getStudentList() {
     // console.log('goi len sv');
     // update skip time for student list
-    if (skip[cls]) {
+    if (skip[cls] || skip[cls] == 0) {
       skip[cls] += 1;
     } else {
       skip[cls] = 0;
@@ -54,28 +55,32 @@ $(document).ready(() => {
       const response = await fetch('/api/getStudentList', requestOptions);
       if (response.ok) {
         const students = await response.json();
+        console.log(students.length);
+
+        if (students.length == 0) {
+          skip[cls] = -1;
+          return false;
+        }
+
         if (dataStudents[cls]) {
-          dataStudents[cls].push([...students]); // if it is old one 
+          dataStudents[cls] = dataStudents[cls].concat(students); // if it is old one 
         } else {
           dataStudents[cls] = students; // if this is new one
         }
+
+        return dataStudents[cls]; // for promise
       }
     } catch (error) {
       console.log(error);
+      return false;
     }
   }
 
-  async function loadStudents(students, new_one){
-    if (new_one) {
-      $('.js_tbody').empty();
-    }
-
-    console.log(dataStudents, cls); 
-    if (dataStudents.hasOwnProperty(cls)) {
-      if (students.length - (30 * skip) != 0) {
-        let htmls = [];
-        for (let i = (30 * skip); i < students.length; i++) {
-          htmls.push(`
+  async function renderTable(students) {
+    if (students.length - 30 * (skip[cls]) != 0) {
+      let htmls = [];
+      for (let i = 30 * (skip[cls]); i < students.length; i++) {
+        htmls.push(`
         <tr>
           <td>
             <div class="checkbox-wrapper-4">
@@ -100,20 +105,37 @@ $(document).ready(() => {
           <td><a href="#">Chỉnh sửa</a></td>
         </tr>
         `)
-        }
-        $('.js_tbody').append(htmls.join(''));
-        $('tr a').on('click', (event) => {
-          editStudent(event);
-          $(".modal.add").show();
-        });
       }
-      else {
-        $('.js_tbody').empty()
-      }
-      handleCheckboxChange();
+      $('.js_tbody').append(htmls.join(''));
+      $('tr a').on('click', (event) => {
+        editStudent(event);
+        $(".modal.add").show();
+      });
+    }
+    else {
+      $('.js_tbody').empty()
+    }
+    handleCheckboxChange();
+    loading = false;
+  }
+
+  async function loadStudents(new_one) {
+    if (new_one) {
+      $('.js_tbody').empty();
+    }
+
+    if (dataStudents.hasOwnProperty(cls)) {
+      await getStudentList().then((students) => {
+        renderTable(students);
+      }, (err) => {
+        console.log(err);
+      });
     } else {
-      await getStudentList();
-      loadStudents(dataStudents[cls], true);
+      await getStudentList().then((students) => {
+        renderTable(students);
+      }, (err) => {
+        console.log(err);
+      });
     }
     $('.loader-parent').hide();
   }
@@ -192,7 +214,7 @@ $(document).ready(() => {
   $('.js_lop').on('change', async (event) => {
     cls = event.target.value;
     $("#row0")[0].checked = false;
-    loadStudents(dataStudents[cls], true);
+    loadStudents(true);
   });
 
   $("#add-student").click(function () {
@@ -252,8 +274,8 @@ $(document).ready(() => {
             lap_hoat_dong: inpLbhd.prop('checked'),
           })
           dataStudents[cls] = sortStudentName(dataStudents[cls])
-          loadStudents(dataStudents[cls], true)
-          notify('n', 'Thêm sinh viên thành công')
+          loadStudents(true);
+          notify('n', 'Thêm sinh viên thành công');
           const blobUrl = URL.createObjectURL(await response.blob());
           // Tạo một thẻ <a> ẩn để tải xuống và nhấn vào nó
           // const downloadLink = document.createElement('a');
@@ -281,8 +303,8 @@ $(document).ready(() => {
               return student
             }
           })
-          console.log(dataStudents[cls]);
-          loadStudents(dataStudents[cls], true)
+          // console.log(dataStudents[cls]);
+          loadStudents(true);
           notify('n', 'Cập nhật sinh viên thành công')
         }
       } else {
@@ -346,8 +368,10 @@ $(document).ready(() => {
                 body: formData,
               });
               if (response.ok) {
+                console.log('hihi3');
+
                 await getStudentList()
-                loadStudents(dataStudents[cls], true)
+                loadStudents(true);
                 notify('n', 'Thêm sinh viên thành công')
                 const blobUrl = URL.createObjectURL(await response.blob());
                 // // Tạo một thẻ <a> ẩn để tải xuống và nhấn vào nó
@@ -391,8 +415,9 @@ $(document).ready(() => {
                 body: formData,
               });
               if (response.ok) {
+                console.log('hihi4');
                 await getStudentList()
-                loadStudents(dataStudents[cls], true)
+                loadStudents(true);
                 notify('n', 'Thêm sinh viên thành công')
                 const blobUrl = URL.createObjectURL(await response.blob());
                 // // Tạo một thẻ <a> ẩn để tải xuống và nhấn vào nó
@@ -453,7 +478,7 @@ $(document).ready(() => {
         const response = await fetch('/api/deleteAccount', requestOptions);
         if (response.ok) {
           dataStudents[cls] = dataStudents[cls].filter(item => !dataDelete.includes(item['_id']));
-          loadStudents(dataStudents[cls], true);
+          loadStudents(true);
           notify('n', 'Xóa sinh viên thành công');
         } else {
           notify('!', 'Xóa sinh viên thất bại')
@@ -494,14 +519,12 @@ $(document).ready(() => {
       console.log(error);
     }
   });
-  
+
   // Scroll to the end of page 
   $(window).scroll(async function () {
-    if ($(window).scrollTop() + $(window).height() > $(document).height() - 10) {
-      console.log(dataStudents);
-      if (dataStudents[cls].length % 30 != 0) { // check if class have more student or not
-        loadStudents(dataStudents[cls], false);
-      }
+    if (($(window).scrollTop() + $(window).height() > $(document).height() - 10) && skip[cls] != -1 && !loading) {
+      loading = true;
+      loadStudents(false);
     }
   });
 });
