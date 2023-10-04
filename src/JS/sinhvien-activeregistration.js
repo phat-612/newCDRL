@@ -87,18 +87,18 @@ $(document).on("click", ".drop_img ", function () {
 $(document).on("dragover", ".modal_wrap_img_item", handleDragOver);
 $(document).on("dragleave", ".modal_wrap_img_item", handleDragLeave);
 $(document).on("drop", ".modal_wrap_img_item", handleDrop);
-$(document).on("click", ".up-img-btn", handleUploadButtonClick);
+$(document).on("click", ".post-btn", handleUploadButtonClick);
 $(document).on("change", ".upload-input", handleUploadInputChange);
 $(document).on("click", ".activeregistration_btn", handleCheckinButtonClick);
 $(document).on("click", ".save-btn", handleCheckinwithImgButtonClick);
-
 async function handleCheckinwithImgButtonClick(event) {
   console.log("Checkin");
+  uploadImage();
 }
 
 async function handleCheckinButtonClick(event) {
   let id = $(this).attr("id");
-  let level = $("p:contains('Cấp độ:')").find("span").text();
+  let level = $("p:contains('Cấp độ:')").find("span").text().trim();
   try {
     let postData = JSON.stringify({
       id: id,
@@ -113,12 +113,15 @@ async function handleCheckinButtonClick(event) {
     };
     const response = await fetch("/api/CheckinActivities", requestOptions);
     if (response.ok) {
+      const jsonData = await response.json();
+      const nameuser = $(".activity_body_studentname").find("h1").text().trim();
+
       let spanElement = $("p:contains('Trạng thái:')").find("span");
       //   spanElement.removeClass("attendance");
       //   spanElement.addClass("activity_body_alert");
       spanElement.text("Chưa điểm danh");
       $(".activeregistration_btn").remove();
-      var newHTML = `
+      const newHTML = `
     <button class="button-35 up-btn post-btn">
       Tải ảnh
     </button>
@@ -126,7 +129,49 @@ async function handleCheckinButtonClick(event) {
       Điểm Danh
     </button>`;
 
+      const newUser = `<tr class="atv_box">
+<td>
+  <div class="checkbox-wrapper-4">
+    <input type="checkbox" id="row__0__0" class="inp-cbx" value="18101911" />
+    <label for="row__0__0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+    </label>
+  </div>
+</td>
+<td>
+  ${jsonData.id}
+</td>
+<td class="a_name">
+${nameuser}
+</td>
+<td class="class_student">
+  ${jsonData.cls}
+</td>
+</tr>`;
+
+      const tableemty = `<table class="table" id="school_tb">
+<thead>
+  <tr>
+    <th style="width: 1%">
+      <div class="checkbox-wrapper-4">
+        <input type="checkbox" id="row__0" class="inp-cbx all-cbx" />
+        <label for="row__0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+        </label>
+      </div>
+    </th>
+    <th style="width: 2%">MSSV</th>
+    <th style="width: 40%">Họ Và Tên</th>
+    <th style="width: 10%">Lớp</th>
+  </tr>
+</thead>
+<tbody>
+</tbody>
+</table>`;
       $(".activity_body").append(newHTML);
+      if ($("#school_tb").length <= 0) {
+        $("p:contains('Không có học sinh nào!')").remove();
+        $(".dsdangky").append(tableemty);
+      }
+      $("#school_tb tbody").append(newUser);
 
       notify("n", "Ghi danh thành công!");
     } else if (response.status == 403) {
@@ -183,6 +228,96 @@ function displayImage(file) {
   }.bind($(this));
   reader.readAsDataURL(file);
   $(this).find(".up-img-btn i").hide();
+}
+function generateUUID() {
+  // Hàm tạo chuỗi UUID
+  // Tham khảo: https://stackoverflow.com/a/2117523/13347726
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+    var r = (Math.random() * 16) | 0,
+      v = c === "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+async function uploadImage() {
+  try {
+    // get files and descripts
+    let files = [];
+    let descripts = [];
+    $(".modal_wrap_img").each(function () {
+      let curr_file = $(this).find(".upload-input")[0].files[0];
+      if (curr_file) {
+        files.push(curr_file);
+        descripts.push($(this).find(".up-img-description").val());
+      }
+    });
+
+    let formData = new FormData();
+    if (files.length == 0) {
+      notify("x", "Hãy tải ảnh chứng minh bạn đã tham gia!");
+    } else {
+      for (let i = 0; i < files.length; i++) {
+        let extension = files[i].name.substring(files[i].name.lastIndexOf("."));
+        let newName = `${i} ` + generateUUID() + extension;
+        let renamedFile = new File([files[i]], newName, { type: files[i].type });
+        formData.append("files[]", renamedFile);
+        formData.append("descripts[]", descripts[i]);
+      }
+
+      const response = await fetch("/api/uploadFile", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        mark(await response.json());
+      } else if (response.status == 400) {
+        // Error occurred during upload
+        notify("x", "Sai định dạng file!.");
+        console.error("Error uploading files.");
+      }
+    }
+  } catch (error) {
+    // Error occurred during the request
+    console.error("Error uploading files.", error);
+  }
+}
+
+async function mark(img_ids) {
+  try {
+    let id = $(".save-btn").attr("id");
+    let level = $("p:contains('Cấp độ:')").find("span").text().trim();
+    let postData = JSON.stringify({
+      id: id,
+      level: level,
+      img_ids: img_ids,
+    });
+
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: postData,
+    };
+
+    const response = await fetch("/api/muster", requestOptions);
+    if (response.ok) {
+      notify("n", "Đã điểm danh thành công!");
+      let spanElement = $("p:contains('Trạng thái:')").find("span");
+      spanElement.removeClass("attendance");
+      spanElement.addClass("activity_body_alert");
+      spanElement.text("Đã điểm danh");
+      $(".post-btn").remove();
+      $(".save-btn").remove();
+      $(".activity_body_studentname h1").text("Cảm ơn bạn đã tham gia hoạt động!");
+    } else if (response.status == 500) {
+      // Error occurred during upload
+      notify("x", "Có lỗi xảy ra!");
+    }
+  } catch (error) {
+    console.log(error);
+    notify("x", "Có lỗi xảy ra!");
+  }
 }
 
 $(document).mouseup(function (e) {

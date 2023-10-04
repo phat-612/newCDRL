@@ -55,25 +55,28 @@
     }
 
 
-    .menu {
-        top: 83%;
+    .menu1 {
+        top: 75%;
         right: 83%;
     }
+    .menu1.open{
+        opacity: 1;
+    }
 
-    .menu.open .button:first-of-type {
+    .menu1.open .hope_star:first-of-type {
         color: red;
         bottom: -7rem;
         right: -3rem;
     }
 
-    .menu.open .button:nth-of-type(2) {
+    .menu1.open .hope_star:nth-of-type(2) {
         color: yellow;
         bottom: 0rem;
         right: -8rem;
         transition-delay: 0.05s;
     }
 
-    .menu.open .button:last-of-type {
+    .menu1.open .hope_star:last-of-type {
         color: green;
         bottom: 7rem;
         right: -3rem;
@@ -84,6 +87,34 @@
     }
     .tr-title td:first-child{
         border: 1px solid #aeaeae;
+    }
+
+    .foot_modal .modal_wrap{
+        background-color: var(--primColor);
+        height: auto!important;
+        width: 100%;
+        position: absolute;
+        /* top: auto; */
+        left: auto;
+    }
+    .foot_modal .modal_wrap {
+        position: relative;
+        bottom: 0;
+        top: unset;
+        left: 50%;
+        position: absolute;
+        max-width: 90rem;
+        width: 100%;
+        height: fit-content;
+        transform: translate(-50%, -50%);
+        background-color: rgb(255, 255, 255);
+        padding-bottom: 50px;
+    }
+    .complete_img{
+        gap: 20px;
+    }
+    .button-35{
+        margin: 0 !important;
     }
 
 }

@@ -1524,7 +1524,7 @@ function createAPIRouter(client, wss) {
               { projection: { first_name: 1, last_name: 1, power: 1 } }
             )
             .limit(30)
-            .skip(30*data.skip)
+            .skip(30 * data.skip)
             .toArray()
         );
         const transformedData = student_list.map((item) => {
@@ -1559,7 +1559,7 @@ function createAPIRouter(client, wss) {
       return res.sendStatus(404);
     }
   });
-  
+
   router.get("/getStudentInfoMark", checkIfUserLoginAPI, async (req, res) => {
     const user = req.session.user;
     let result = {
@@ -1905,28 +1905,15 @@ function createAPIRouter(client, wss) {
                   $set: {
                     [`student_list.${user._id}`]: false,
                   },
+                  // $push: {
+                  //   bonus_list: user._id,
+                  // },
                 },
                 {
                   upsert: true,
                 }
               );
-            await client
-              .db(user.dep)
-              .collection(`${user.cls[0]}_activities`)
-              .updateOne(
-                {
-                  _id: data.id,
-                },
-                {
-                  $push: {
-                    bonus_list: user._id,
-                  },
-                },
-                {
-                  upsert: true,
-                }
-              );
-            break;
+            return res.status(200).json({ id: user._id, cls: user.cls });
           case "Khoa":
             // save activity in activities collection in 'Dep name' database
             await client
@@ -1940,29 +1927,15 @@ function createAPIRouter(client, wss) {
                   $set: {
                     [`student_list.${user._id}`]: false,
                   },
+                  // $push: {
+                  //   bonus_list: user._id,
+                  // },
                 },
                 {
                   upsert: true,
                 }
               );
-            await client
-              .db(user.dep)
-              .collection("activities")
-              .updateOne(
-                {
-                  _id: data.id,
-                },
-                {
-                  $push: {
-                    bonus_list: user._id,
-                  },
-                },
-                {
-                  upsert: true,
-                }
-              );
-
-            break;
+            return res.status(200).json({ id: user._id, cls: user.cls });
           case "Trường":
             await client
               .db(name_global_databases)
@@ -1975,11 +1948,81 @@ function createAPIRouter(client, wss) {
                   $set: {
                     [`student_list.${user._id}`]: false,
                   },
+                  // $push: {
+                  //   bonus_list: user._id,
+                  // },
                 },
                 {
                   upsert: true,
                 }
               );
+            return res.status(200).json({ id: user._id, cls: user.cls });
+        }
+        return res.status(404).json({ message: "Thông tin xác thực sai!" });
+      } else {
+        return res.sendStatus(403);
+      }
+
+      // use later to update student joining inside activities database
+      // student_list: {}, // change later to list of student with value is boolean (true for joining and false for not joining)
+      // bonus_list: [], // list of student's id that have bonus.
+    } catch (err) {
+      console.log("SYSTEM | CHECK_IN_ACTIVITIES | ERROR | ", err);
+      return res.sendStatus(500);
+    }
+  });
+
+  // api 出席 gakusei to activity
+  router.post("/muster", checkIfUserLoginAPI, async (req, res) => {
+    try {
+      const user = req.session.user;
+      const data = req.body; // data = {id: '19181011' (activity's id), level: (Lớp/Khoa/Trường);
+      if (user.pow[0]) {
+        switch (data.level) {
+          case "Lớp":
+            await client
+              .db(user.dep)
+              .collection(`${user.cls[0]}_activities`)
+              .updateOne(
+                {
+                  _id: data.id,
+                },
+                {
+                  $set: {
+                    [`student_list.${user._id}`]: true,
+                  },
+                  // $push: {
+                  //   bonus_list: user._id,
+                  // },
+                },
+                {
+                  upsert: true,
+                }
+              );
+            return res.status(200).json({ id: user._id, cls: user.cls });
+          case "Khoa":
+            // save activity in activities collection in 'Dep name' database
+            await client
+              .db(user.dep)
+              .collection("activities")
+              .updateOne(
+                {
+                  _id: data.id,
+                },
+                {
+                  $set: {
+                    [`student_list.${user._id}`]: true,
+                  },
+                  // $push: {
+                  //   bonus_list: user._id,
+                  // },
+                },
+                {
+                  upsert: true,
+                }
+              );
+            return res.status(200).json({ id: user._id, cls: user.cls });
+          case "Trường":
             await client
               .db(name_global_databases)
               .collection("activities")
@@ -1988,18 +2031,20 @@ function createAPIRouter(client, wss) {
                   _id: data.id,
                 },
                 {
-                  $push: {
-                    bonus_list: user._id,
+                  $set: {
+                    [`student_list.${user._id}`]: true,
                   },
+                  // $push: {
+                  //   bonus_list: user._id,
+                  // },
                 },
                 {
                   upsert: true,
                 }
               );
-
-            break;
+            return res.status(200).json({ id: user._id, cls: user.cls });
         }
-        return res.status(200).json({ message: "Success" });
+        return res.status(404).json({ message: "Thông tin xác thực sai!" });
       } else {
         return res.sendStatus(403);
       }
@@ -2640,7 +2685,7 @@ function createAPIRouter(client, wss) {
           class_teachers.push(...dummy.map((cls) => cls.cvht));
 
           new_curr_load_branch = i + 1;
-          // finish load one brach then check does number of classes over 30.  
+          // finish load one brach then check does number of classes over 30.
           if (class_teachers.length >= 30) {
             break;
           }
@@ -2675,13 +2720,11 @@ function createAPIRouter(client, wss) {
       } else {
         return res.sendStatus(403); // back to home
       }
-
     } catch (err) {
       console.log("SYSTEM | DELETE_CLASS | ERROR | ", err);
       return res.sendStatus(500);
     }
   });
-
 
   return router;
 }

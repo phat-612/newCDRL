@@ -16,7 +16,7 @@
     </div>
 </body>
 
-<div class="foot_modal ">
+<div class="foot_modal">
   
 
     <div class="modal_wrap">
@@ -60,50 +60,38 @@
 
 <!-- sinh vien  -->
 <%} else if(!iskhoa && isST && !isbancansu && !isgiaovien ) {%>
-  <body>
-  
-      <div class="footer">
-          <div class="footer_wrap">
-              <a class="a_home" href="/"><i class="fa-solid fa-house"></i> </a>
-              <a class="a_menu"><i class="fa-solid fa-bars"></i></a>
-          </div>
-          <a class="a_darktheme" href="/nhapdiemdanhgia"><i class="fa-solid fa-square-pen"></i> </a>
-  
-      </div>
-  </body>
-  
-  <div class="foot_modal modal">
+    <body>
+
+        <div class="footer">
+            <div class="footer_wrap">
+                <a class="a_home" href="/"><i class="fa-solid fa-house"></i> </a>
+                <a class="a_menu"><i class="fa-solid fa-bars"></i></a>
+            </div>
+            <a class="a_darktheme"><i class="fa-solid fa-square-pen"></i> </a>
     
-  
-      <div class="modal_wrap">
-          <div class="close_menu"><i class="fas fa-xmark"></i></div>
-         
-            <nav class="menu">
-  
-              <a href="/doankhoa/quanlibomon" class="footer_item">Bộ Môn</a>
-              <div class="footer_item footer_item_more">
-                <span>Lớp <i class="fa-solid fa-chevron-down"></i></span>
-                <nav class="lop_item">
-                  <div class="footer_item lop_item_more"><a href="/doankhoa/quanlilop">Danh sách lớp</a></div>
-                  <div class="footer_item lop_item_more"><a href="/doankhoa/quanlicv">Danh sách cố vấn</a></div>
-                </nav>
-              </div>
-              <div class="footer_item footer_item_more">
-                <span> <i class="fa-solid fa-chevron-down"></i></span>
-                <nav class="lop_item">
-                  <div class="footer_item lop_item_more"><a href="/doankhoa/danhsachsinhvien">Danh sách sinh viên</a></div>
-                  <div class="footer_item lop_item_more"><a href="/doankhoa/danhsachbangdiem">Điểm rèn luyện</a></div>
-                </nav>
-              </div>
-              <a href="/doankhoa/quanlihoatdongkhoa" class="menu_item">Hoạt Động</a>
-              <a href="/doankhoa/thoihan" class="menu_item">Thời Hạn</a>
-              <div class="menu_item_null">haha</div>
-            </nav>
-           
-          
-      </div>
+        </div>
+    </body>
+    
+    <div class="foot_modal">
       
-  </div>
+    
+        <div class="modal_wrap">
+            <div class="close_menu"><i class="fas fa-xmark"></i></div>
+           
+              <nav class="menu">
+                <div class="menu_item_null">xem cái gì</div>
+    
+                <a href="/profile" class="footer_item">Thông Tin Cá Nhân</a>
+                <a href="/profile">Thông tin người dùng</a></div>
+                <a href="/profile/change_pass">Đổi mật khẩu</a></div>
+                <a href="/api/logout">Đăng xuất</a></div>
+              </nav>
+             
+            
+        </div>
+        
+    </div>
+
 <%} else if(!iskhoa && !isST && isbancansu && !isgiaovien ) { %>
   <!-- Thêm else if cho các trường hợp còn lại -->
   <body>

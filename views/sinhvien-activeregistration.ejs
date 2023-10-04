@@ -1,168 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/src/css/sinhvien-activeregistration.css" />
+    <title><%=activitie_info.name%></title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="/src/css/sinhvien-activeregistration.css" />
-  <title>
-    <%=activitie_info.name%>
-  </title>
-</head>
+  <body>
+    <div class="main">
+      <%- include(header) %> <%- include(thongbao) %>
+      <div class="container">
+        <div class="content">
+          <div class="activity-board">
+            <h2><%=activitie_info.name.toUpperCase()%></h2>
+            <section class="activity_body">
+              <div class="activity_body_details">
+                <!-- Format Date() variable into Viet Nam reading struture -->
+                <% const hours=activitie_info.start_time.getHours(); %> <% const
+                minutes=activitie_info.start_time.getMinutes(); %> <% const
+                day=activitie_info.start_time.getDate(); %> <% const
+                month=activitie_info.start_time.getMonth() + 1; %> <% const
+                year=activitie_info.start_time.getFullYear(); %> <% const
+                formattedTime=`${hours.toString().padStart(2, '0'
+                )}:${minutes.toString().padStart(2, '0' )}`; %> <% const
+                formattedDate=`${formattedTime} Ngày ${day} tháng ${month} năm ${year}`; %>
+                <!-- ----------------------------------------------------- -->
+                <p>Cấp độ: <span> <%=activitie_info.level%> </span></p>
+                <p>Thời gian diễn ra: <span> <%=formattedDate%> </span></p>
+                <p>Chi tiết: <%=activitie_info.content%></p>
+                <%if (isST){%> <%if (!activitie_info.join){%>
+                <p>Trạng thái: <span class="attendance">Chưa ghi danh</span></p>
+                <%} else if (activitie_info.diemdanh){%>
+                <p>
+                  Trạng thái:
+                  <span class="activity_body_alert">Đã điểm danh</span>
+                </p>
+                <%} else if (activitie_info.join) {%>
+                <p>Trạng thái: <span class="attendance">Chưa điểm danh</span></p>
 
-<body>
-  <div class="main">
-    <%- include(header) %> <%- include(thongbao) %>
-        <div class="container">
-          <div class="content">
-            <div class="activity-board">
-              <h2>
-                <%=activitie_info.name.toUpperCase()%>
-              </h2>
-              <section class="activity_body">
-                <div class="activity_body_details">
-                  <!-- Format Date() variable into Viet Nam reading struture -->
-                  <% const hours=activitie_info.start_time.getHours(); %>
-                    <% const minutes=activitie_info.start_time.getMinutes(); %>
-                      <% const day=activitie_info.start_time.getDate(); %>
-                        <% const month=activitie_info.start_time.getMonth() + 1; %>
-                          <% const year=activitie_info.start_time.getFullYear(); %>
-                            <% const formattedTime=`${hours.toString().padStart(2, '0'
-                              )}:${minutes.toString().padStart(2, '0' )}`; %>
-                              <% const formattedDate=`${formattedTime} Ngày ${day} tháng ${month} năm ${year}`; %>
-                                <!-- ----------------------------------------------------- -->
-                                <p>Cấp độ: <span>
-                                  <%=activitie_info.level%>
-                                </span></p>
-                                <p>Thời gian diễn ra: <span>
-                                  <%=formattedDate%>
-                                </span></p>
-                                <p>Chi tiết: <%=activitie_info.content%>
-                                </p>
-                                
-                                <%if (isST){%>
-                                  <%if (!activitie_info.join){%>
-                                    <p>Trạng thái: <span class="attendance">Chưa ghi danh</span></p>
-                                    <%} else if (activitie_info.join){%>
-                                      <p>Trạng thái: <span class="attendance">Chưa điểm danh</span></p>
-                                      <%} else if (activitie_info.diemdanh) {%>
-                                        <p>
-                                          Trạng thái:
-                                          <span class="activity_body_alert">Đã điểm danh</span>
-                                        </p>
-                                        <%}%>
-                                          <%}%>
+                <%}%> <%}%>
+              </div>
+              <%if (isST){%> <%if (!activitie_info.join){%>
+              <!--ghi danh -->
+              <div class="activity_body_studentname">
+                <h1><%=displayName%></h1>
+              </div>
+              <button class="button-35 button-35-a activeregistration_btn" id="<%=id_acti%>">
+                Ghi Danh
+              </button>
+              <!--diem danh -->
+              <%} else {%> <%if (!activitie_info.diemdanh){%>
+              <!-- sau khi ghi danh -->
+              <div class="activity_body_studentname">
+                <h1><%=displayName%></h1>
+              </div>
+
+              <button class="button-35 up-btn post-btn">Tải ảnh</button>
+              <button class="button-35 up-btn save-btn" id="<%=id_acti%>">Điểm Danh</button>
+              <%} else {%>
+                <div class="activity_body_studentname">
+                  <h1>Cảm ơn bạn đã tham gia hoạt động!</h1>
                 </div>
-                <%if (isST){%>
-                  <%if (!activitie_info.join){%>
-                    <!--ghi danh -->
-                    <div class="activity_body_studentname">
-                      <h1>
-                        <%=displayName%>
-                      </h1>
-                    </div>
-                    <button class="button-35 button-35-a activeregistration_btn" id="<%=id_acti%>">
-                      Ghi Danh
-                    </button>
-                    <!--diem danh -->
-                    <%} else {%>
-                      <!-- sau khi ghi danh -->
-                      <div class="activity_body_studentname">
-                        <h1>
-                          <%=displayName%>
-                        </h1>
-                      </div>
-                      <button class="button-35 up-btn post-btn">Tải ảnh</button>
-                      <button class="button-35 up-btn save-btn" id="<%=id_acti%>">Điểm Danh</button>
-                      <!--diem danh -->
-                      <%}%>
+              <!--diem danh -->
+              <%}%> <%}%>
 
-                        <!-- sau khi ghi danh -->
-                        <!-- <div class="activity_body_alert">
+              <!-- sau khi ghi danh -->
+              <!-- <div class="activity_body_alert">
                         <h1>
                             RẤT TIẾC HOẠT ĐỘNG ĐÃ KẾT THÚC 
                         </h1>
                     </div> -->
-              </section>
-              <%}%>
-            </div>
-
-            <div class="activity-board">
-              <h2>DANH SÁCH SINH VIÊN ĐÃ ĐĂNG KÝ</h2>
-              <%if (activitie_info.student_list){%>
-                <table class="table" id="school_tb">
-                  <thead>
-                    <tr>
-                      <th style="width: 1%">
-                        <div class="checkbox-wrapper-4">
-                          <input type="checkbox" id="row__0" class="inp-cbx all-cbx" />
-                          <label for="row__0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                          </label>
-                        </div>
-                      </th>
-                      <th style="width: 2%">MSSV</th>
-                      <th style="width: 40%">Họ Và Tên</th>
-                      <th style="width: 10%">Lớp</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <%const data_student=activitie_info.info_student%>
-                      <% for (let i=0; i < data_student.length; i++) {%>
-
-                        <tr class="atv_box">
-                          <td>
-                            <div class="checkbox-wrapper-4">
-                              <input type="checkbox" id="row__0__0" class="inp-cbx" value="18101911" />
-                              <label for="row__0__0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                              </label>
-                            </div>
-                          </td>
-                          <td>
-                            <%=data_student[i]._id%>
-                          </td>
-                          <td class="a_name">
-                            <%=`${data_student[i].last_name} ${data_student[i].first_name}`%>
-                          </td>
-                          <td class="class_student">
-                            <%=data_student[i].class[0]%>
-                          </td>
-                        </tr>
-
-                        <%}%>
-                  </tbody>
-                </table>
-                <%} else {%>
-                  <p>Không có học sinh nào!</p>
-                  <%}%>
-            </div>
-            <!--ghi danh -->
+            </section>
+            <%}%>
           </div>
-        </div>
-        <%- include(footer) %>
-  </div>
-  <script src="/src/JS/sinhvien-activeregistration.js"></script>
-</body>
 
-<div class="modal">
-  <div class="modal_wrap">
-    <!-- nút tắt dialog -->
-    <button class="close-dialog">
-      <i class="fa-solid fa-xmark"></i>
-    </button>
-    <!-- thêm hinh ảnh và mô tả hoạt động -->
-    <div class="modal_img"></div>
-    <div class="no-img">Số ảnh tối đa (<span>0</span>/5)</div>
-    <div class="modal_img_btn">
-      <button class="button-35 add-btn">Add</button>
-      <button class="button-35 done-btn done-btn2">Done</button>
+          <div class="activity-board dsdangky">
+            <h2>DANH SÁCH SINH VIÊN ĐÃ ĐĂNG KÝ</h2>
+            <%if (activitie_info.student_list){%>
+            <table class="table" id="school_tb">
+              <thead>
+                <tr>
+                  <th style="width: 1%">
+                    <div class="checkbox-wrapper-4">
+                      <input type="checkbox" id="row__0" class="inp-cbx all-cbx" />
+                      <label for="row__0" class="cbx"
+                        ><span> <svg height="10px" width="12px"></svg></span>
+                      </label>
+                    </div>
+                  </th>
+                  <th style="width: 2%">MSSV</th>
+                  <th style="width: 40%">Họ Và Tên</th>
+                  <th style="width: 10%">Lớp</th>
+                </tr>
+              </thead>
+              <tbody>
+                <%const data_student=activitie_info.info_student%> <% for (let i=0; i <
+                data_student.length; i++) {%>
+
+                <tr class="atv_box">
+                  <td>
+                    <div class="checkbox-wrapper-4">
+                      <input type="checkbox" id="row__0__0" class="inp-cbx" value="18101911" />
+                      <label for="row__0__0" class="cbx"
+                        ><span> <svg height="10px" width="12px"></svg></span>
+                      </label>
+                    </div>
+                  </td>
+                  <td><%=data_student[i]._id%></td>
+                  <td class="a_name">
+                    <%=`${data_student[i].last_name} ${data_student[i].first_name}`%>
+                  </td>
+                  <td class="class_student"><%=data_student[i].class[0]%></td>
+                </tr>
+
+                <%}%>
+              </tbody>
+            </table>
+            <%} else {%>
+            <h1>Không có học sinh nào!</h1>
+            <%}%>
+          </div>
+          <!--ghi danh -->
+        </div>
+      </div>
+      <%- include(footer) %>
+    </div>
+    <script src="/src/JS/sinhvien-activeregistration.js"></script>
+  </body>
+
+  <div class="modal">
+    <div class="modal_wrap">
+      <!-- nút tắt dialog -->
+      <button class="close-dialog">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <!-- thêm hinh ảnh và mô tả hoạt động -->
+      <div class="modal_img"></div>
+      <div class="no-img">Số ảnh tối đa (<span>0</span>/5)</div>
+      <div class="modal_img_btn">
+        <button class="button-35 add-btn">Add</button>
+        <button class="button-35 done-btn done-btn2">Done</button>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="menu" onclick="this.classList.toggle('open')">
-  <div class="button button_medium"><i class="fa-solid fa-star"></i></div>
-  <div class="button button_plus"><i class="fa-solid fa-star"></i></div>
-  <div class="button button_premium"><i class="fa-solid fa-star"></i></div>
-</div>
-
+  <div class="menu" onclick="this.classList.toggle('open')">
+    <div class="button button_medium"><i class="fa-solid fa-star"></i></div>
+    <div class="button button_plus"><i class="fa-solid fa-star"></i></div>
+    <div class="button button_premium"><i class="fa-solid fa-star"></i></div>
+  </div>
 </html>

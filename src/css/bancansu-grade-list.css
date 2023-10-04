@@ -32,19 +32,21 @@
 .content .hk_nk {
   font-size: 2rem;
   position: relative;
-  /* padding: 1rem; */
+  padding: 1rem;
+  gap: 70px;
+  justify-content: flex-start !important;
 }
 .year_full {
-  display: flex;
+  /* display: flex; */
   padding-bottom: 1rem;
 }
 .hk{
-  width: 38%;
   display: flex;
   align-items: center;
+  margin-bottom: 20px;
 }
 .hk span{
-  width: 30%;
+  width: 100px;
 }
 .danh_sach_bang_diem {
   margin-top: 2rem;
@@ -114,13 +116,25 @@ table tr td:nth-child(9) a {
 }
 .button-35-a{
   position: absolute!important;
-    top: 10%;
+    top: 20%;
     right: 20%;
 }
 
 @media screen and (max-width: 600px) {
-  .hk_nk{
+  .year_full{
+    display: block;
+    padding: 0 1rem;
+    width: 100%;
+  }
+  .hk{
+    width: 100%;
+  }
+  .danh_sach_bang_diem{
+    overflow: auto;
+  }
+  .content .hk_nk{
     padding: 0 0.5rem;
+    gap: 0;
   }
   .year_full {
     flex-direction: column;
