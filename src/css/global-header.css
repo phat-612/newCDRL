@@ -486,6 +486,7 @@ td a:hover {
 textarea {
   background-color: var(--input-hover);
   color: var(--black-color);
+  font-family: auto;
 }
 
 .modal {
