@@ -156,8 +156,9 @@ tr:hover {
 
 .modal_main {
   padding: 2.8rem;
-  height: 51rem;
+  height: 63rem;
   overflow: auto;
+
 }
 
 .title-box {
@@ -214,7 +215,8 @@ label {
   display: none;
 }
 
-.copy_box:hover {}
+.copy_box:hover {
+}
 
 .activity-board {
   text-align: center;
@@ -242,13 +244,17 @@ label {
   align-items: center;
 }
 
-.choise_date input{
+.choise_date input {
   background-color: var(--button-color);
-  padding: 5px;
-  font-family: "Roboto Mono", monospace;
+  padding: 5px 10px;
+  font-family: "Inter";
   color: var(--black-color);
   font-size: 1.8rem;
   border: none;
   outline: none;
   border-radius: 0.8rem;
+}
+.timechosse {
+  display: flex;
+  padding-left: 1rem;
 }

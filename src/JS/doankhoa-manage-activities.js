@@ -17,7 +17,7 @@ $(document).on("click", ".more_list", async function () {
   atv_id = curr_edit.find(".inp-cbx").val();
 
   // set default for activities' name input
-  $(".modal.edit #activities_title").val(curr_edit.find(".a_name").text());
+  $(".modal.edit #activities_title").val(curr_edit.find(".a_name").text().trim());
 
   $(".modal.edit").show();
 });
