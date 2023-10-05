@@ -112,12 +112,12 @@ async function checkIfUserLoginRoute(req, res, next) {
       res.locals.isbancansu = false;
       res.locals.isgiaovien = false;
       res.locals.isST = true;
-    } else if (user.pow[1] && user.pow[3]) {
+    } else if (user.pow[1] && user.pow[3] && !user.pow[4]) {
       res.locals.iskhoa = false;
       res.locals.isbancansu = true;
       res.locals.isgiaovien = false;
       res.locals.isST = false;
-    } else if (user.pow[1] && user.pow[3]) {
+    } else if (user.pow[1] && user.pow[3]&& user.pow[4]) {
       res.locals.iskhoa = false;
       res.locals.isbancansu = false;
       res.locals.isgiaovien = true;

@@ -122,7 +122,7 @@
                             <td class="school_year">
                               <%= school_atv[i].year.split("_")[0] + " " + school_atv[i].year.split("_")[1] %>
                             </td>
-                            <td><a href="/doankhoa/quanlihoatdong/Truong/<%= school_atv[i]._id %>" target="_blank">Chi tiết</a></td>
+                            <td><a href="/doankhoa/quanlihoatdong/Truong/<%= school_atv[i]._id %>" target="blank">Chi tiết</a></td>
                             <td><a class="more_list" id="school_edit" href="#">Sửa</a></td>
                           </tr>
                           <tr class="copy_box">
@@ -174,7 +174,7 @@
                             <td class="school_year">
                               <%= dep_atv[i].year.split("_")[0] + " " + dep_atv[i].year.split("_")[1] %>
                             </td>
-                            <td><a href="/doankhoa/quanlihoatdong/Khoa/<%= dep_atv[i]._id %>">Chi tiết</a></td>
+                            <td><a href="/doankhoa/quanlihoatdong/Khoa/<%= dep_atv[i]._id %>" target="blank">Chi tiết</a></td>
                             <td><a class="more_list" id="dep_edit" href="#">Sửa</a></td>
                           </tr>
                           <tr class="copy_box">
@@ -266,7 +266,7 @@
                 <td class="a_name"><%= cls_atv[i].name %></td>
                 <td class="c_name"><%= cls_atv[i].cls %></td>
                 <td class="school_year"><%= cls_atv[i].year.split("_")[0] + " " + cls_atv[i].year.split("_")[1] %></td>
-                <td><a href="/doankhoa/quanlihoatdong/<%= cls_atv[i].cls %>/<%= cls_atv[i]._id %>">Chi tiết</a></td>
+                <td><a href="/doankhoa/quanlihoatdong/<%= cls_atv[i].cls %>/<%= cls_atv[i]._id %>" target="blank">Chi tiết</a></td>
                 <td><a class="more_list" id="cls_edit" href="#">Sửa</a></td>
               </tr>
               <tr class="copy_box">

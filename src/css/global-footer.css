@@ -271,6 +271,7 @@
   }
 }
 .menu_item_null{
+  height: 5rem;
   color: transparent!important;
 }
 .a_darktheme {

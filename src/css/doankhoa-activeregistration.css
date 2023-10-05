@@ -805,3 +805,13 @@
   .no_attendance_yet{
     color: #5fff33;
   }
+  .status_container{
+    display: flex;
+    justify-content: space-between;
+  }
+  .status_container .selectbox{
+    display: flex;
+  }
+  .close_now{
+    margin-right: 1rem;
+  }

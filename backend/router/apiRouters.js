@@ -2095,6 +2095,7 @@ function createAPIRouter(client, wss) {
                     cls: data.cls_id,
                     year: school_year.year,
                     start_time: new Date([data.start_date, data.start_hour]),
+                    end: false,
                   },
                 },
                 {
@@ -2139,6 +2140,7 @@ function createAPIRouter(client, wss) {
                     level: "Khoa",
                     year: school_year.year,
                     start_time: new Date([data.start_date, data.start_hour]),
+                    end: false,
                   },
                 },
                 {
@@ -2183,6 +2185,7 @@ function createAPIRouter(client, wss) {
                     level: "Trường",
                     year: school_year.year,
                     start_time: new Date([data.start_date, data.start_hour]),
+                    end: false,
                   },
                 },
                 {
@@ -2332,6 +2335,66 @@ function createAPIRouter(client, wss) {
       }
     } catch (err) {
       console.log("SYSTEM | LOAD_CLASS_ACTIVITIES | ERROR | ", err);
+      return res.sendStatus(500);
+    }
+  });
+
+  // api end activities 
+  router.post("/updateActivitiesStatus", checkIfUserLoginAPI, async (req, res) => {
+    try {
+      const user = req.session.user;
+      const data = req.body; // data = {_id: 18102003 (activities' id), level: 'Truong', status: '1' (1: đang diễn ra, 0: đã kết thúc)}
+
+      // must be department to use this api
+      if (user.pow[3]) {
+        
+        if (data.level == 'Truong') {
+          // update status of current activity
+          await client
+              .db(name_global_databases)
+              .collection("activities")
+              .updateOne(
+                {
+                  _id: data._id,
+                },
+                {
+                  $set: { end: data.status == '1' ? true : false },
+                }
+              );
+        } else if (data.level == 'Khoa') {
+          // update status of current activity
+          await client
+              .db(user.dep)
+              .collection("activities")
+              .updateOne(
+                {
+                  _id: data._id,
+                },
+                {
+                  $set: { end: data.status == '1' ? true : false },
+                }
+              );
+        } else {
+          // update status of current activity
+          await client
+              .db(user.dep)
+              .collection(data.level + "_activities")
+              .updateOne(
+                {
+                  _id: data._id,
+                },
+                {
+                  $set: { end: data.status == '1' ? true : false },
+                }
+              );
+        }
+
+        return res.sendStatus(200); 
+      } else {
+        return res.sendStatus(403); // send user to 403 page
+      }
+    } catch (err) {
+      console.log("SYSTEM | DELETE_TEACHER | ERROR | ", err);
       return res.sendStatus(500);
     }
   });

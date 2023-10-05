@@ -39,6 +39,30 @@
                                     </span></p>
                                   <p>Chi tiết: <%=curr_act.content%>
                                   </p>
+                                  
+                    <!-- End activity -->
+                    <div class="status_container">
+                      <label for="">Trạng Thái:</label>
+            
+                      <div class="selectbox" style="padding-bottom: 0.3rem;">
+                        <% if (curr_act.end) { %>
+                        <label class="close_now" for="">Đã kết thúc</label>
+                          <div class="checkbox-wrapper-4">
+                            <input type="checkbox" id="morning1" class="inp-cbx" value="0"/>
+                            <label for="morning1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                            </label>
+                          </div>
+                          <% } else { %>
+                            <label class="close_now" for="">Đang diễn ra</label>
+                          <div class="checkbox-wrapper-4">
+                            <input type="checkbox" id="morning1" class="inp-cbx" value="1" checked/>
+                            <label for="morning1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                            </label>
+                          </div>
+                            <% } %>
+                      </div>
+                    </div>
+
                   </div>
 
                 </section>
@@ -97,5 +121,6 @@
           </div>
           <%- include(footer) %>
 </body>
+<script src="/src/JS/doankhoa-activity-assessment.js"></script>
 
 </html>

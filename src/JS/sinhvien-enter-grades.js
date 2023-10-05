@@ -266,28 +266,28 @@ function total_tier() {
     index_tier_4() +
     index_tier_5() +
     " điểm";
-  showUploadImg();
+  
 }
 
-const showUploadImg = () => {
-  const require_upload_img = [
-    index_tier_3(),
-    getSelectValue("mySelect11"),
-    getSelectValue("mySelect13"),
-    getSelectValue("mySelect14"),
-    getSelectValue("mySelect16"),
-  ];
-  if (
-    !require_upload_img.every((element) => element === 0 || element === "0")
-  ) {
-    if (!$(".post-btn").is(":visible")) {
-      notify("!", "Hãy upload ảnh chứng minh bạn tham gia sự kiện nhé!");
-    }
-    $(".post-btn").show();
-  } else {
-    $(".post-btn").hide();
-  }
-};
+// const showUploadImg = () => {
+//   const require_upload_img = [
+//     index_tier_3(),
+//     getSelectValue("mySelect11"),
+//     getSelectValue("mySelect13"),
+//     getSelectValue("mySelect14"),
+//     getSelectValue("mySelect16"),
+//   ];
+//   if (
+//     !require_upload_img.every((element) => element === 0 || element === "0")
+//   ) {
+//     if (!$(".post-btn").is(":visible")) {
+//       notify("!", "Hãy upload ảnh chứng minh bạn tham gia sự kiện nhé!");
+//     }
+//     $(".post-btn").show();
+//   } else {
+//     $(".post-btn").hide();
+//   }
+// };
 
 function handleCheckboxChange(event) {
   const checkbox = event.target;

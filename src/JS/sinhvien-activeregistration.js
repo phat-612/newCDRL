@@ -1,9 +1,12 @@
+console.log(timestart);
 function validateFile(file) {
   let allowedFormats = ["jpg", "jpeg", "png"]; // Allowed file formats
   let maxSize = 5485760; // MBit in bytes
   // Check file format
   const fileName = file.name;
-  const fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+  const fileExtension = fileName
+    .substring(fileName.lastIndexOf(".") + 1)
+    .toLowerCase();
   if (!allowedFormats.includes(fileExtension)) {
     // Invalid file format
     notify("x", "Sai định dạng file!");
@@ -117,9 +120,7 @@ async function handleCheckinButtonClick(event) {
       const nameuser = $(".activity_body_studentname").find("h1").text().trim();
 
       let spanElement = $("p:contains('Trạng thái:')").find("span");
-      //   spanElement.removeClass("attendance");
-      //   spanElement.addClass("activity_body_alert");
-      spanElement.text("Chưa điểm danh");
+
       $(".activeregistration_btn").remove();
       const newHTML = `
     <button class="button-35 up-btn post-btn">
@@ -166,7 +167,16 @@ ${nameuser}
 <tbody>
 </tbody>
 </table>`;
-      $(".activity_body").append(newHTML);
+      if (timestart < new Date()) {
+        $(".activity_body").append(newHTML);
+
+        spanElement.text("Chưa điểm danh");
+      } else {
+        spanElement.removeClass("attendance");
+        spanElement.addClass("activity_body_alert");
+        spanElement.text("Đã ghi danh");
+        $(".activity_body").append("<p>Chưa đến thời hạn điểm danh!</p>");
+      }
       if ($("#school_tb").length <= 0) {
         $("p:contains('Không có học sinh nào!')").remove();
         $(".dsdangky").append(tableemty);
@@ -258,7 +268,9 @@ async function uploadImage() {
       for (let i = 0; i < files.length; i++) {
         let extension = files[i].name.substring(files[i].name.lastIndexOf("."));
         let newName = `${i} ` + generateUUID() + extension;
-        let renamedFile = new File([files[i]], newName, { type: files[i].type });
+        let renamedFile = new File([files[i]], newName, {
+          type: files[i].type,
+        });
         formData.append("files[]", renamedFile);
         formData.append("descripts[]", descripts[i]);
       }
@@ -309,7 +321,9 @@ async function mark(img_ids) {
       spanElement.text("Đã điểm danh");
       $(".post-btn").remove();
       $(".save-btn").remove();
-      $(".activity_body_studentname h1").text("Cảm ơn bạn đã tham gia hoạt động!");
+      $(".activity_body_studentname h1").text(
+        "Cảm ơn bạn đã tham gia hoạt động!"
+      );
     } else if (response.status == 500) {
       // Error occurred during upload
       notify("x", "Có lỗi xảy ra!");
@@ -335,3 +349,10 @@ $(document).mouseup(function (e) {
     container.hide();
   }
 });
+
+setInterval(() => {
+  if (timestart > new Date() && $(".post-btn").length <= 0) {
+    console.log("Interval");
+    window.location.reload();
+  }
+}, 1000);

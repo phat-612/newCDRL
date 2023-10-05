@@ -17,7 +17,9 @@ $(document).on("click", ".more_list", async function () {
   atv_id = curr_edit.find(".inp-cbx").val();
 
   // set default for activities' name input
-  $(".modal.edit #activities_title").val(curr_edit.find(".a_name").text().trim());
+  $(".modal.edit #activities_title").val(
+    curr_edit.find(".a_name").text().trim()
+  );
 
   $(".modal.edit").show();
 });
@@ -27,9 +29,16 @@ $(document).on("click", "#school_edit", async function () {
   const curr_index = parseInt(curr_edit.find(".index").text()) - 1;
   const start_date = new Date(school_st[curr_index]);
   // Format the date in 'YYYY-MM-DD' format
-  const formattedDate = `${start_date.getFullYear()}-${(start_date.getMonth() + 1).toString().padStart(2, '0')}-${start_date.getDate().toString().padStart(2, '0')}`;
+  const formattedDate = `${start_date.getFullYear()}-${(
+    start_date.getMonth() + 1
+  )
+    .toString()
+    .padStart(2, "0")}-${start_date.getDate().toString().padStart(2, "0")}`;
   // Format the time in 'HH:MM' format
-  const formattedTime = `${start_date.getHours().toString().padStart(2, '0')}:${start_date.getMinutes().toString().padStart(2, '0')}`;
+  const formattedTime = `${start_date
+    .getHours()
+    .toString()
+    .padStart(2, "0")}:${start_date.getMinutes().toString().padStart(2, "0")}`;
   // set default for activities' content input
   $(".modal.edit #activities_content").val(school_content[curr_index]);
   // --------------------------------------------------------------------------------
@@ -48,13 +57,20 @@ $(document).on("click", "#dep_edit", async function () {
   const curr_index = parseInt(curr_edit.find(".index").text()) - 1;
   const start_date = new Date(dep_st[curr_index]);
   // Format the date in 'YYYY-MM-DD' format
-  const formattedDate = `${start_date.getFullYear()}-${(start_date.getMonth() + 1).toString().padStart(2, '0')}-${start_date.getDate().toString().padStart(2, '0')}`;
+  const formattedDate = `${start_date.getFullYear()}-${(
+    start_date.getMonth() + 1
+  )
+    .toString()
+    .padStart(2, "0")}-${start_date.getDate().toString().padStart(2, "0")}`;
   // Format the time in 'HH:MM' format
-  const formattedTime = `${start_date.getHours().toString().padStart(2, '0')}:${start_date.getMinutes().toString().padStart(2, '0')}`;
+  const formattedTime = `${start_date
+    .getHours()
+    .toString()
+    .padStart(2, "0")}:${start_date.getMinutes().toString().padStart(2, "0")}`;
   // set default for activities' content input
   $(".modal.edit #activities_content").val(dep_content[curr_index]);
   // --------------------------------------------------------------------------------
-  // set default for activities' start date input 
+  // set default for activities' start date input
   $("#edit-act-date").val(formattedDate);
   // set default for activities' start hour input
   $("#edit-act-time").val(formattedTime);
@@ -69,13 +85,20 @@ $(document).on("click", "#cls_edit", async function () {
   const curr_index = parseInt(curr_edit.find(".index").text()) - 1;
   const start_date = new Date(cls_st[curr_index]);
   // Format the date in 'YYYY-MM-DD' format
-  const formattedDate = `${start_date.getFullYear()}-${(start_date.getMonth() + 1).toString().padStart(2, '0')}-${start_date.getDate().toString().padStart(2, '0')}`;
+  const formattedDate = `${start_date.getFullYear()}-${(
+    start_date.getMonth() + 1
+  )
+    .toString()
+    .padStart(2, "0")}-${start_date.getDate().toString().padStart(2, "0")}`;
   // Format the time in 'HH:MM' format
-  const formattedTime = `${start_date.getHours().toString().padStart(2, '0')}:${start_date.getMinutes().toString().padStart(2, '0')}`;
+  const formattedTime = `${start_date
+    .getHours()
+    .toString()
+    .padStart(2, "0")}:${start_date.getMinutes().toString().padStart(2, "0")}`;
   // set default for activities' content input
   $(".modal.edit #activities_content").val(cls_content[curr_index]);
   // --------------------------------------------------------------------------------
-  // set default for activities' start date input 
+  // set default for activities' start date input
   $("#edit-act-date").val(formattedDate);
   // set default for activities' start hour input
   $("#edit-act-time").val(formattedTime);
@@ -204,20 +227,9 @@ $(".save_btn").click(async function () {
     .val();
 
   // get start hour and start date of activities
-  const start_hour = $(this)
-    .parent()
-    .parent()
-    .parent()
-    .find(".act-time")
-    .val();
+  const start_hour = $(this).parent().parent().parent().find(".act-time").val();
 
-  const start_date = $(this)
-    .parent()
-    .parent()
-    .parent()
-    .find(".act-date")
-    .val();
-
+  const start_date = $(this).parent().parent().parent().find(".act-date").val();
 
   if (atv_name && atv_content && start_hour && start_date) {
     // check if user enter info or not
@@ -252,7 +264,7 @@ $(".save_btn").click(async function () {
         level: level.val(),
         cls_id: cls_id.val(),
         start_hour: start_hour,
-        start_date: start_date
+        start_date: start_date,
       }),
     };
 
@@ -261,7 +273,7 @@ $(".save_btn").click(async function () {
       if (curr_edit) {
         const curr_index = parseInt(curr_edit.find(".index").text()) - 1;
         const curr_tb = curr_edit.parent().parent();
-        // remove current activities content in 
+        // remove current activities content in
         switch (level.val()) {
           case "lop":
             cls_content.splice(curr_index, 1);
@@ -275,13 +287,13 @@ $(".save_btn").click(async function () {
             school_content.splice(curr_index, 1);
             school_st.splice(curr_index, 1);
             break;
-        };
+        }
         // remove current edit if it is edit and it;s copy tr
         curr_edit.next().remove();
         curr_edit.remove();
         // reedit all rows' index;
-        let index = 0
-        curr_tb.find('.index').each(function () {
+        let index = 0;
+        curr_tb.find(".index").each(function () {
           index += 1;
           $(this).text(index);
         });
@@ -302,8 +314,10 @@ $(".save_btn").click(async function () {
               <td class="index">${cls_length + 1}</td>
               <td class="a_name">${atv_name}</td>
               <td class="c_name">${cls_id.val()}</td>
-              <td class="school_year">${year_cur.split("_")[0]} ${year_cur.split("_")[1]}</td>
-              <td><a href="/doankhoa/quanlihoatdong/${cls_id.val()}/${atv_id}">Chi tiết</a></td>
+              <td class="school_year">${year_cur.split("_")[0]} ${
+            year_cur.split("_")[1]
+          }</td>
+              <td><a href="/doankhoa/quanlihoatdong/${cls_id.val()}/${atv_id}" target="blank">Chi tiết</a></td>
               <td><a class="more_list" id="cls_edit" href="#">Sửa</a></td>
             </tr>
             <tr class="copy_box">
@@ -329,8 +343,10 @@ $(".save_btn").click(async function () {
               </td>
               <td class="index">${dep_length + 1}</td>
               <td class="a_name">${atv_name}</td>
-              <td class="school_year">${year_cur.split("_")[0]} ${year_cur.split("_")[1]}</td>
-              <td><a href="/doankhoa/quanlihoatdong/Khoa/${atv_id}">Chi tiết</a></td>
+              <td class="school_year">${year_cur.split("_")[0]} ${
+            year_cur.split("_")[1]
+          }</td>
+              <td><a href="/doankhoa/quanlihoatdong/Khoa/${atv_id}" target="blank">Chi tiết</a></td>
               <td><a class="more_list" id="dep_edit" href="#">Sửa</a></td>
             </tr>
             <tr class="copy_box">
@@ -355,8 +371,10 @@ $(".save_btn").click(async function () {
               </td>
               <td class="index">${school_length + 1}</td>
               <td class="a_name">${atv_name}</td>
-              <td class="school_year">${year_cur.split("_")[0]} ${year_cur.split("_")[1]}</td>
-              <td><a href="/doankhoa/quanlihoatdong/Truong/${atv_id}">Chi tiết</a></td>
+              <td class="school_year">${year_cur.split("_")[0]} ${
+            year_cur.split("_")[1]
+          }</td>
+              <td><a href="/doankhoa/quanlihoatdong/Truong/${atv_id}" target="blank">Chi tiết</a></td>
               <td><a class="more_list" id="school_edit" href="#">Sửa</a></td>
             </tr>
             <tr class="copy_box">
@@ -392,14 +410,13 @@ $(".save_btn").click(async function () {
 
 // year choise button:
 $("#year_choice").click(async function () {
-
   // disable this btn
   $(this).prop("disabled", true);
 
   // get year
-  const choise_semester = $('#select_hk').find("select :selected");
+  const choise_semester = $("#select_hk").find("select :selected");
   // get semester
-  const choise_year = $('#select_sm').find("select :selected");
+  const choise_year = $("#select_sm").find("select :selected");
 
   // send request to load new activities fix year input
   // request
@@ -410,14 +427,14 @@ $("#year_choice").click(async function () {
     },
     body: JSON.stringify({
       year: choise_year.val(),
-      semester: choise_semester.val()
+      semester: choise_semester.val(),
     }),
   };
 
   const response = await fetch("/api/loadYearActivities", requestOptions);
   if (response.ok) {
-    // clear all appeareance activities 
-    $('.atv_box').remove()
+    // clear all appeareance activities
+    $(".atv_box").remove();
     response.json().then(function (result) {
       //append activities to school's table ************************************************************
       const school_atv = result.school_atv;
@@ -428,14 +445,20 @@ $("#year_choice").click(async function () {
                 <tr class="atv_box">
                   <td>
                     <div class="checkbox-wrapper-4">
-                      <input type="checkbox" id="row__0__${i}" class="inp-cbx" value="${school_atv[i]._id}" />
+                      <input type="checkbox" id="row__0__${i}" class="inp-cbx" value="${
+          school_atv[i]._id
+        }" />
                       <label for="row__0__${i}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                       </label>
                   </td>
                   <td class="index">${i + 1}</td>
                   <td class="a_name">${school_atv[i].name}</td>
-                  <td class="school_year">${school_atv[i].year.split("_")[0]} ${school_atv[i].year.split("_")[1]}</td>
-                  <td><a href="/doankhoa/quanlihoatdong/Truong/${school_atv[i]._id}">Chi tiết</a></td>
+                  <td class="school_year">${school_atv[i].year.split("_")[0]} ${
+          school_atv[i].year.split("_")[1]
+        }</td>
+                  <td><a href="/doankhoa/quanlihoatdong/Truong/${
+                    school_atv[i]._id
+                  }">Chi tiết</a></td>
                   <td><a class="more_list" href="#">Sửa</a></td>
                 </tr>
                 <tr class="copy_box">
@@ -450,14 +473,20 @@ $("#year_choice").click(async function () {
               <tr class="atv_box">
                 <td>
                   <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__1__${i}" class="inp-cbx" value="${dep_atv[i]._id}" />
+                    <input type="checkbox" id="row__1__${i}" class="inp-cbx" value="${
+          dep_atv[i]._id
+        }" />
                     <label for="row__1__${i}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                     </label>
                 </td>
                 <td class="index">${i + 1}</td>
                 <td class="a_name">${dep_atv[i].name}</td>
-                <td class="school_year">${dep_atv[i].year.split("_")[0]} ${dep_atv[i].year.split("_")[1]}</td>
-                <td><a href="/doankhoa/quanlihoatdong/Khoa/${dep_atv[i]._id}">Chi tiết</a></td>
+                <td class="school_year">${dep_atv[i].year.split("_")[0]} ${
+          dep_atv[i].year.split("_")[1]
+        }</td>
+                <td><a href="/doankhoa/quanlihoatdong/Khoa/${
+                  dep_atv[i]._id
+                }">Chi tiết</a></td>
                 <td><a class="more_list" id="dep_edit" href="#">Sửa</a></td>
               </tr>
               <tr class="copy_box">
@@ -472,15 +501,21 @@ $("#year_choice").click(async function () {
               <tr class="atv_box">
                 <td>
                   <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__2__${i}" class="inp-cbx" value="${cls_atv[i]._id}" />
+                    <input type="checkbox" id="row__2__${i}" class="inp-cbx" value="${
+          cls_atv[i]._id
+        }" />
                     <label for="row__2__${i}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                     </label>
                 </td>
                 <td class="index">${i + 1}</td>
                 <td class="a_name">${cls_atv[i].name}</td>
                 <td class="c_name">${cls_atv[i].cls}</td>
-                <td class="school_year">${cls_atv[i].year.split("_")[0]} ${cls_atv[i].year.split("_")[1]}</td>
-                <td><a href="/doankhoa/quanlihoatdong/${cls_atv[i].cls}/${cls_atv[i]._id}">Chi tiết</a></td>
+                <td class="school_year">${cls_atv[i].year.split("_")[0]} ${
+          cls_atv[i].year.split("_")[1]
+        }</td>
+                <td><a href="/doankhoa/quanlihoatdong/${cls_atv[i].cls}/${
+          cls_atv[i]._id
+        }">Chi tiết</a></td>
                 <td><a class="more_list" id="cls_edit" href="#">Sửa</a></td>
               </tr>
               <tr class="copy_box">
@@ -490,7 +525,6 @@ $("#year_choice").click(async function () {
             `);
       }
     });
-
   } else if (response.status == 500) {
     // Error occurred during upload
     notify("x", "Có lỗi xảy ra!");
@@ -504,7 +538,7 @@ $("#subject_choice").click(async function () {
   // disable this btn
   $(this).prop("disabled", true);
   // get semester
-  const choise_cls = $('#select_cls').find("select :selected");
+  const choise_cls = $("#select_cls").find("select :selected");
 
   // send request to load new activities fix year input
   // request
@@ -514,14 +548,14 @@ $("#subject_choice").click(async function () {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      cls: choise_cls.val()
+      cls: choise_cls.val(),
     }),
   };
 
   const response = await fetch("/api/loadClassActivities", requestOptions);
   if (response.ok) {
     // clear all appeariance activities in class activities table
-    $('#cls_tb .atv_box').remove()
+    $("#cls_tb .atv_box").remove();
     //append activities to class' table ************************************************************
     response.json().then(function (result) {
       for (let i = 0; i < result.length; i++) {
@@ -529,15 +563,21 @@ $("#subject_choice").click(async function () {
               <tr class="atv_box">
                 <td>
                   <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__2__${i}" class="inp-cbx" value="${result[i]._id}" />
+                    <input type="checkbox" id="row__2__${i}" class="inp-cbx" value="${
+          result[i]._id
+        }" />
                     <label for="row__2__${i}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                     </label>
                 </td>
                 <td class="index">${i + 1}</td>
                 <td class="a_name">${result[i].name}</td>
                 <td class="c_name">${result[i].cls}</td>
-                <td class="school_year">${result[i].year.split("_")[0]} ${result[i].year.split("_")[1]}</td>
-                <td><a href="/doankhoa/quanlihoatdong/${result[i].cls}/${result[i]._id}">Chi tiết</a></td>
+                <td class="school_year">${result[i].year.split("_")[0]} ${
+          result[i].year.split("_")[1]
+        }</td>
+                <td><a href="/doankhoa/quanlihoatdong/${result[i].cls}/${
+          result[i]._id
+        }">Chi tiết</a></td>
                 <td><a class="more_list" id="cls_edit" href="#">Sửa</a></td>
               </tr>
               <tr class="copy_box">
@@ -547,17 +587,13 @@ $("#subject_choice").click(async function () {
             `);
       }
     });
-
   } else if (response.status == 500) {
-
     // Error occurred during upload
     notify("x", "Có lỗi xảy ra!");
   }
   // able curr button
   $(this).prop("disabled", false);
-
 });
-
 
 // delete button
 // delete check checkbox
@@ -565,7 +601,7 @@ $("#delete__activity").click(async function () {
   // disable curr button
   $(this).prop("disabled", true);
 
-  notify("!", "Đang xóa dữ liệu!");
+  // notify("!", "Đang xóa dữ liệu!");
 
   let school_rmatv = [];
   let dep_rmatv = [];
@@ -586,7 +622,7 @@ $("#delete__activity").click(async function () {
   });
 
   // add all checked line in class activities to class activities remove list
-  $("#cls_tb tbody .inp-cbx").each(function () {
+  $("#cls_tb tbody .inp-cbx").each( function () {
     if (this.checked) {
       cls_rmatv.push(this.value);
     }
@@ -594,7 +630,9 @@ $("#delete__activity").click(async function () {
   });
 
   if (school_rmatv.length > 0 || dep_rmatv.length > 0 || cls_rmatv.length > 0) {
-    quest("Bạn có chắc chắn muốn xoá tất cả hoạt động được đánh dấu. Dữ liệu bị xoá sẽ KHÔNG THỂ ĐƯỢC KHÔI PHỤC!").then(async (result) => {
+    quest(
+      "Bạn có chắc chắn muốn xoá tất cả hoạt động được đánh dấu. Dữ liệu bị xoá sẽ KHÔNG THỂ ĐƯỢC KHÔI PHỤC!"
+    ).then(async (result) => {
       if (result) {
         // request
         const requestOptions = {
@@ -641,21 +679,25 @@ $("#delete__activity").click(async function () {
             index += 1;
           });
 
+          // able curr button
+          $(this).prop("disabled", false);
+
           notify("n", "Đã xóa các cố vấn được đánh dấu");
         } else if (response.status == 500) {
+          // able curr button
+          $(this).prop("disabled", false);
           // Error occurred during upload
           notify("x", "Có lỗi xảy ra!");
         }
-
+      } else {
+        // able curr button
+        $(this).prop("disabled", false);
+        console.log("không xoá bất cứ dữ liệu nào");
       }
-      else {
-        console.log('không xoá bất cứ dữ liệu nào');
-      }
-      // able curr button
-      $(this).prop("disabled", false);
     });
   } else {
     notify("!", "Không có cố vấn được đánh dấu");
+    $(this).prop("disabled", false);
   }
 });
 
