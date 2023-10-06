@@ -71,6 +71,8 @@
               <div class="activity-board">
                 <h2>DANH SÁCH SINH VIÊN ĐÃ ĐĂNG KÝ</h2>
                 <%if (curr_act.student_list){%>
+                  <button class="button-35 " id="save_change">Lưu cập nhật</button>
+
                   <table class="table" id="school_tb">
                     <thead>
                       <tr>
@@ -84,28 +86,36 @@
                         <th style="width: 2%">MSSV</th>
                         <th style="width: 40%">Họ Và Tên</th>
                         <th style="width: 10%">Lớp</th>
+                        <th style="width: 10%">Hình ảnh</th>
+                        <th style="width: 10%">Phê duyệt</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <%const data_student=curr_act.info_student%>
-                        <% for (let i=0; i < data_student.length; i++) {%>
-
+                        <% for (let i=0; i < students_data.length; i++) {%>
                           <tr class="atv_box">
                             <td>
                               <div class="checkbox-wrapper-4">
-                                <input type="checkbox" id="row__0__0" class="inp-cbx" value="18101911" />
+                                <input type="checkbox" id="row__0__0" class="inp-cbx" value="<%=students_data[i]._id%>" />
                                 <label for="row__0__0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                                 </label>
                               </div>
                             </td>
                             <td>
-                              <%=data_student[i]._id%>
+                              <%=students_data[i]._id%>
                             </td>
                             <td class="a_name">
-                              <%=`${data_student[i].last_name} ${data_student[i].first_name}`%>
+                              <%= students_data[i].displayName %>
                             </td>
                             <td class="class_student">
-                              <%=data_student[i].class[0]%>
+                              <%= students_data[i].class[0] %>
+                            </td>
+                            <td><a href="#">Xem</a></td>
+                            <td>
+                              <div class="checkbox-wrapper-4">
+                                <input type="checkbox" id="row__0__1" class="inp-cbx"/>
+                                <label for="row__0__1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                                </label>
+                              </div>
                             </td>
                           </tr>
 

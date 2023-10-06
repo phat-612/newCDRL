@@ -740,13 +740,31 @@ function createDepRouter(client) {
               });
             break;
         }
-  
+        
+        // get all students information joined current activity
+        let students_data = [];
+        for (const [key, value] of Object.entries(curr_act.student_list)) {
+          const data = await client.db(name_global_databases).collection("user_info").findOne(
+            {_id: key},
+            {
+              projection: {
+                displayName: 1,
+                class: 1,
+              }
+            }
+          );
+          // add current data to students data
+          students_data.push(data);
+        }
+
+
         return res.render("doankhoa-activity-assessment", {
           header: "global-header",
           thongbao: "global-notifications",
           footer: "global-footer",
           menu: "doankhoa-menu",
           curr_act: curr_act,
+          students_data: students_data,
         });
       } else {
         return res.redirect("/");
