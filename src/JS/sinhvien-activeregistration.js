@@ -4,9 +4,7 @@ function validateFile(file) {
   let maxSize = 5485760; // MBit in bytes
   // Check file format
   const fileName = file.name;
-  const fileExtension = fileName
-    .substring(fileName.lastIndexOf(".") + 1)
-    .toLowerCase();
+  const fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
   if (!allowedFormats.includes(fileExtension)) {
     // Invalid file format
     notify("x", "Sai định dạng file!");
@@ -321,9 +319,8 @@ async function mark(img_ids) {
       spanElement.text("Đã điểm danh");
       $(".post-btn").remove();
       $(".save-btn").remove();
-      $(".activity_body_studentname h1").text(
-        "Cảm ơn bạn đã tham gia hoạt động!"
-      );
+      $(".activity_body_studentname h1").text("Cảm ơn bạn đã tham gia hoạt động!");
+      $(".activity_body_studentname").addClass("activity_body_alert");
     } else if (response.status == 500) {
       // Error occurred during upload
       notify("x", "Có lỗi xảy ra!");
@@ -351,7 +348,10 @@ $(document).mouseup(function (e) {
 });
 
 setInterval(() => {
-  if (timestart > new Date() && $(".post-btn").length <= 0) {
+  if (
+    timestart < new Date() &&
+    ($(".post-btn").length <= 0 || $(".activeregistration_btn").length <= 0)
+  ) {
     console.log("Interval");
     window.location.reload();
   }

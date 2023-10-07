@@ -104,12 +104,20 @@ databaseLib
             ws.id = cookieParser.signedCookie(cookie_seasion["howtosavealife?"], authenticationKey);
             // Xử lý khi client gửi dữ liệu
             ws.on("message", (message) => {
+              const messDecode = message.toString("utf-8");
               // console.log('SYSTEM | WEBSOCKET | Received message: ', message.toString('utf-8'));
-              if (message.toString("utf-8") == "logout") {
+              if (console == "logout") {
                 ws.close();
-              } else if (message.toString("utf-8") == "ok ko e?") {
+              } else if (messDecode == "ok ko e?") {
                 ws.send("Ok a");
+              } else if (messDecode.startsWith("anhiuem")) {
+                // console.log(messDecode.slice(7));
+                ws.actId = messDecode.slice(7);
+                ws.send("gotta!");
+              }  else if (messDecode == "clearID") {
+                 delete ws.actId;
               }
+
             });
 
             // Xử lý khi client đóng kết nối
