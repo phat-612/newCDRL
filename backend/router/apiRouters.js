@@ -2398,7 +2398,6 @@ function createAPIRouter(client, wss) {
     }
   });
 
-
   // api approval students join in activity
   router.post("/approvalActivityStudent", checkIfUserLoginAPI, async (req, res) => {
     try {

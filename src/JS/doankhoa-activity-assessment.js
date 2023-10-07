@@ -43,14 +43,14 @@ $(".inp-cbx").change(async function () {
 
 // approval student join in current activity
 $('#save-change').on('click', async () => {
-  let cbxs = $('.approval-cbx')
-  let dataUpdate = {};
+  let cbxs = $('.approval-cbx');
+  let dataApproval = {};
   for (let i = 0; i < cbxs.length; i++) {
     if (cbxs[i].checked) {
-      dataUpdate[cbxs[i].value.toString()] = true
+      dataApproval[cbxs[i].value.toString()] = true
       // dataUpdate.push(cbxs[i].value.toString());
     } else {
-      dataUpdate[cbxs[i].value.toString()] = false
+      dataApproval[cbxs[i].value.toString()] = false
     }
   }
 
@@ -58,8 +58,9 @@ $('#save-change').on('click', async () => {
     let postData = JSON.stringify({
       _id: _id,
       level: level,
-      dataUpdate: dataUpdate,
+      dataUpdate: dataApproval,
     });
+    
     const requestOptions = {
       method: 'POST',
       headers: {
@@ -67,8 +68,10 @@ $('#save-change').on('click', async () => {
       },
       body: postData
     };
+
     const response = await fetch('/api/approvalActivityStudent', requestOptions);
     if (response.ok) {
+      defaultApproval = dataApproval; // set default to new update data
       notify('n', 'Duyệt sinh viên thành công!');
     } else {
       notify('!', 'Duyệt sinh viên thất bại!');
@@ -121,6 +124,21 @@ $('#delete-student').on('click', async () => {
   }
 })
 
+// reset all student approval to default
+$('.reset_btn').on('click', async () => {
+  let cbxs = $('.approval-cbx');
+  let all_not_false = true;
+  for (let i = 0; i < cbxs.length; i++) {
+    cbxs.prop('checked', defaultApproval[cbxs[i].value.toString()]);
+    if (!defaultApproval[cbxs[i].value.toString()]) {
+      all_not_false = false;
+    }
+  }
+
+  if (all_not_false) {
+    $('.all-save-cbx').prop('checked', true);
+  }
+});
 
 // all checkbox set (if all-cbx tick all checkboxs will tick otherwise untick all)
 $(document).on("change", ".all-cbx", async function () {
@@ -145,3 +163,26 @@ $(document).on("change", ".delete-cbx", async function () {
   }
 });
 
+// all checkbox set (if all-cbx tick all checkboxs will tick otherwise untick all)
+$(document).on("change", ".all-save-cbx", async function () {
+  if ($(".all-save-cbx")[0].checked) {
+    $("table tbody .approval-cbx").prop("checked", true);
+  } else {
+    $("table tbody .approval-cbx").prop("checked", false);
+  }
+});
+
+// if all checkboxs was check all-cbx will tick
+$(document).on("change", ".approval-cbx", async function () {
+  let check = true;
+  $("table tbody .approval-cbx").each(function () {
+    if (!this.checked) check = false;
+    return;
+  });
+
+  if (check) {
+    $(".all-save-cbx").prop("checked", true);
+  } else {
+    $(".all-save-cbx").prop("checked", false);
+  }
+});

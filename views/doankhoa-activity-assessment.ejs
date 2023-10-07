@@ -31,13 +31,17 @@
                                 )}:${minutes.toString().padStart(2, '0' )}`; %>
                                 <% const formattedDate=`${formattedTime} Ngày ${day} tháng ${month} năm ${year}`; %>
                                   <!-- ----------------------------------------------------- -->
-                                  <p>Cấp độ: <span>
-                                      <%=curr_act.level%>
-                                    </span></p>
-                                  <p>Thời gian diễn ra: <span>
-                                      <%=formattedDate%>
-                                    </span></p>
-                                  <p>Chi tiết: <%=curr_act.content%>
+                                  <p>
+                                    Cấp độ: 
+                                    <span><%=curr_act.level%></span>
+                                  </p>
+                                  <p>
+                                    Thời gian diễn ra: 
+                                    <span><%=formattedDate%></span>
+                                  </p>
+                                  <p>
+                                    Chi tiết: 
+                                    <span><%=curr_act.content%></span>
                                   </p>
                                   
                     <!-- End activity -->
@@ -77,19 +81,37 @@
                   <table class="table" id="school_tb">
                     <thead>
                       <tr>
-                        <th style="width: 1%">
+                        <th style="width: 1%" rowspan="2">
                           <div class="checkbox-wrapper-4">
                             <input type="checkbox" id="row__0" class="inp-cbx all-cbx" />
                             <label for="row__0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                             </label>
                           </div>
                         </th>
-                        <th style="width: 2%">STT</th>
-                        <th style="width: 2%">MSSV</th>
-                        <th style="width: 40%">Họ Và Tên</th>
-                        <th style="width: 10%">Lớp</th>
-                        <th style="width: 10%">Hình ảnh</th>
-                        <th style="width: 10%">Phê duyệt</th>
+                        <th style="width: 2%" rowspan="2">STT</th>
+                        <th style="width: 2%" rowspan="2">MSSV</th>
+                        <th style="width: 40%" rowspan="2">Họ Và Tên</th>
+                        <th style="width: 10%" rowspan="2">Lớp</th>
+                        <th style="width: 10%" rowspan="2">Hình ảnh</th>
+                        <th style="width: 10%" colspan="2">Phê duyệt</th>
+                      </tr>
+                      <tr>
+                        <th style="width: 10%" >
+                          <div class="checkbox-wrapper-4">
+                            <% if (all_true) {%>
+                              <input type="checkbox" id="row__1" class="inp-cbx all-save-cbx" checked/>
+                            <% } else { %>
+                              <input type="checkbox" id="row__1" class="inp-cbx all-save-cbx" />
+                            <% } %>
+                            <label for="row__1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                            </label>
+                          </div>
+                        </th>
+                        <th style="width: 10%">
+                          <button class="reset_btn">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                          </button>
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -113,7 +135,7 @@
                               <%= students_data[i].class[0] %>
                             </td>
                             <td><a href="">Xem</a></td>
-                            <td>
+                            <td colspan="2">
                               <div class="checkbox-wrapper-4">
                                 <% if (curr_act.student_list[students_data[i]._id]) { %>
                                   <input type="checkbox" id="row__<%= i %>__1" class="inp-cbx approval-cbx" value="<%=students_data[i]._id%>" checked/>
@@ -138,6 +160,10 @@
           </div>
           <%- include(footer) %>
 </body>
+
+<script>
+  const defaultApproval = <%-JSON.stringify(curr_act.student_list) %>;
+</script>
 <script src="/src/JS/doankhoa-activity-assessment.js"></script>
 
 </html>

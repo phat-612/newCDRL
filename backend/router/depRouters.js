@@ -743,6 +743,7 @@ function createDepRouter(client) {
         
         // get all students information joined current activity
         let students_data = [];
+        let all_true = true; // check does all student is yes or not
         for (const [key, value] of Object.entries(curr_act.student_list)) {
           const data = await client.db(name_global_databases).collection("user_info").findOne(
             {_id: key},
@@ -755,6 +756,10 @@ function createDepRouter(client) {
           );
           // add current data to students data
           students_data.push(data);
+          
+          if (!value) { // if false it will be false
+            all_true = false;
+          }
         }
 
 
@@ -765,6 +770,7 @@ function createDepRouter(client) {
           menu: "doankhoa-menu",
           curr_act: curr_act,
           students_data: students_data,
+          all_true: all_true,
         });
       } else {
         return res.redirect("/");
