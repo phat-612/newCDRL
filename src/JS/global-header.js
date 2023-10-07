@@ -1,12 +1,20 @@
 const currentUrl = window.location.href;
 const currentURLbase = window.location.protocol + "//" + window.location.host;
 const currentURLsub = currentUrl.replace(currentURLbase, "");
+const urlParams = new URLSearchParams(currentURLsub.split("?")[1]);
+
 function connectWebSocket() {
   const wss = new WebSocket(
     `${currentURLbase.replace("https", "wss").replace("http", "ws")}/howtosavealife?`
   );
   wss.onopen = function () {
     wss.send("ok ko e?");
+    const id_acti = urlParams.get("id");
+    if (id_acti) {
+      wss.send(`anhiuem${id_acti}`);
+    } else {
+      wss.send(`clearID`);
+    }
   };
   wss.onmessage = (event) => {
     if (event.data === "reload") {
@@ -18,7 +26,7 @@ function connectWebSocket() {
     if (!currentURLsub.startsWith(currentURLsub)) {
       console.log("Reconnect");
       // Khi bị mất kết nối, ta sẽ gọi hàm reconnect sau khoảng thời gian xác định
-      setTimeout(connectWebSocket, 15000);
+      setTimeout(connectWebSocket, 5000);
     }
   };
 }

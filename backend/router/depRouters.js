@@ -740,9 +740,9 @@ function createDepRouter(client) {
               });
             break;
         }
-        
         // get all students information joined current activity
         let students_data = [];
+        if (curr_act.student_list){
         for (const [key, value] of Object.entries(curr_act.student_list)) {
           const data = await client.db(name_global_databases).collection("user_info").findOne(
             {_id: key},
@@ -756,7 +756,7 @@ function createDepRouter(client) {
           // add current data to students data
           students_data.push(data);
         }
-
+      }
 
         return res.render("doankhoa-activity-assessment", {
           header: "global-header",
@@ -770,7 +770,7 @@ function createDepRouter(client) {
         return res.redirect("/");
       }
     } catch (err) {
-      console.log("SYSTEM | REVIEWS | ERROR | ", err);
+      console.log("SYSTEM | REVIEWS_ACTIVITY | ERROR | ", err);
       res.sendStatus(500);
     }
   });

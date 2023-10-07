@@ -24,8 +24,7 @@
                 year=activitie_info.start_time.getFullYear(); %> <% const
                 formattedTime=`${hours.toString().padStart(2, '0'
                 )}:${minutes.toString().padStart(2, '0' )}`; %> <% const
-                formattedDate=`${formattedTime} Ngày ${day} tháng ${month} năm
-                ${year}`; %>
+                formattedDate=`${formattedTime} Ngày ${day} tháng ${month} năm ${year}`; %>
                 <!-- ----------------------------------------------------- -->
                 <p>Cấp độ: <span> <%=activitie_info.level%> </span></p>
                 <p>Thời gian diễn ra: <span> <%=formattedDate%> </span></p>
@@ -37,29 +36,31 @@
                   Trạng thái:
                   <span class="activity_body_alert">Đã điểm danh</span>
                 </p>
-                <%} else if (activitie_info.join) {%> 
-                <%if (activitie_info.start_time  > new Date()){%>
+                <%} else if (activitie_info.join) {%> <%if (activitie_info.start_time > new
+                Date()){%>
                 <p>
                   Trạng thái:
                   <span class="activity_body_alert">Đã ghi danh</span>
                 </p>
                 <%} else {%>
-                <p>
-                  Trạng thái: <span class="attendance">Chưa điểm danh</span>
-                </p>
+                <p>Trạng thái: <span class="attendance">Chưa điểm danh</span></p>
 
-                 <%}%>
-                 
-                <%}%> <%}%>
+                <%}%> <%}%> <%}%>
               </div>
-              <%if (isST){%> <%if (!activitie_info.join){%>
+              <%if (isST){%> <%if (activitie_info.end && !activitie_info.diemdanh){%>
+              <div class="activity_body_studentname attendance">
+                <h1>Rất tiết hoạt động này đã kết thúc!</h1>
+              </div>
+              <%} else if (activitie_info.end && activitie_info.diemdanh) {%>
+              <div class="activity_body_studentname activity_body_alert">
+                <h1>Cảm ơn bạn đã tham gia hoạt động!</h1>
+              </div>
+              <%} else {%> <% if (!activitie_info.join){%>
               <!--ghi danh -->
               <div class="activity_body_studentname">
                 <h1><%=displayName%></h1>
               </div>
-              <button
-                class="button-35 button-35-a activeregistration_btn"
-                id="<%=id_acti%>">
+              <button class="button-35 button-35-a activeregistration_btn" id="<%=id_acti%>">
                 Ghi Danh
               </button>
               <!--diem danh -->
@@ -70,27 +71,19 @@
               </div>
               <%if (activitie_info.start_time < new Date()){%>
               <button class="button-35 up-btn post-btn">Tải ảnh</button>
-              <button class="button-35 up-btn save-btn" id="<%=id_acti%>">
-                Điểm Danh
-              </button>
+              <button class="button-35 up-btn save-btn" id="<%=id_acti%>">Điểm Danh</button>
               <%} else {%>
-                <p>Chưa đến thời hạn điểm danh!</p>
-                <%}%>
-              <%} else {%>
-              <div class="activity_body_studentname">
+              <p>Chưa đến thời hạn điểm danh!</p>
+              <%}%> <%} else {%>
+              <div class="activity_body_studentname activity_body_alert">
                 <h1>Cảm ơn bạn đã tham gia hoạt động!</h1>
               </div>
               <!--diem danh -->
               <%}%> <%}%>
 
               <!-- sau khi ghi danh -->
-              <!-- <div class="activity_body_alert">
-                        <h1>
-                            RẤT TIẾC HOẠT ĐỘNG ĐÃ KẾT THÚC 
-                        </h1>
-                    </div> -->
             </section>
-            <%}%>
+            <%}%> <%}%>
           </div>
 
           <div class="activity-board dsdangky">
@@ -99,34 +92,31 @@
             <table class="table" id="school_tb">
               <thead>
                 <tr>
-                  <th style="width: 1%">
-                    <div class="checkbox-wrapper-4">
-                      <input
-                        type="checkbox"
-                        id="row__0"
-                        class="inp-cbx all-cbx" />
-                      <label for="row__0" class="cbx"
-                        ><span> <svg height="10px" width="12px"></svg></span>
-                      </label>
-                    </div>
-                  </th>
+                  <th style="width: 1%">Điểm danh</th>
                   <th style="width: 2%">MSSV</th>
                   <th style="width: 40%">Họ Và Tên</th>
                   <th style="width: 10%">Lớp</th>
                 </tr>
               </thead>
               <tbody>
-                <%const data_student=activitie_info.info_student%> <% for (let
-                i=0; i < data_student.length; i++) {%>
+                <%const data_student=activitie_info.info_student%> <% for (let i=0; i <
+                data_student.length; i++) {%>
 
                 <tr class="atv_box">
                   <td>
                     <div class="checkbox-wrapper-4">
+                      <%if (!activitie_info.diemdanh){%>
+                      <input type="checkbox" id="row__0__0" class="inp-cbx" value="18101911" disabled />
+                      <%} else {%>
                       <input
                         type="checkbox"
                         id="row__0__0"
                         class="inp-cbx"
-                        value="18101911" />
+                        value="18101911"
+                        checked
+                        disabled
+                      />
+                      <%}%>
                       <label for="row__0__0" class="cbx"
                         ><span> <svg height="10px" width="12px"></svg></span>
                       </label>
@@ -134,8 +124,7 @@
                   </td>
                   <td><%=data_student[i]._id%></td>
                   <td class="a_name">
-                    <%=`${data_student[i].last_name}
-                    ${data_student[i].first_name}`%>
+                    <%=`${data_student[i].last_name} ${data_student[i].first_name}`%>
                   </td>
                   <td class="class_student"><%=data_student[i].class[0]%></td>
                 </tr>
@@ -153,9 +142,9 @@
       <%- include(footer) %>
     </div>
     <script>
-      const timestart =  new Date("<%- activitie_info.start_time%>")
-      </script>
-      <script src="/src/JS/sinhvien-activeregistration.js"></script>
+      const timestart = new Date("<%- activitie_info.start_time%>");
+    </script>
+    <script src="/src/JS/sinhvien-activeregistration.js"></script>
   </body>
 
   <div class="modal">

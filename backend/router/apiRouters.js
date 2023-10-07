@@ -2203,6 +2203,11 @@ function createAPIRouter(client, wss) {
             // school database do not need create index because it already have it
             break;
         }
+        wss.clients.forEach((ws) => {
+          if (ws.actId == data.atv_id) {
+            ws.send("reload");
+          }
+        });
         return res.status(200).json({ message: "Success" });
       } else {
         return res.sendStatus(403);
@@ -2339,56 +2344,59 @@ function createAPIRouter(client, wss) {
     }
   });
 
-  // api end activities 
+  // api end activities
   router.post("/updateActivitiesStatus", checkIfUserLoginAPI, async (req, res) => {
     try {
       const user = req.session.user;
       const data = req.body; // data = {_id: 18102003 (activities' id), level: 'Truong', status: '1' (1: đang diễn ra, 0: đã kết thúc)}
       // must be department to use this api
       if (user.pow[3]) {
-        
-        if (data.level == 'Truong') {
+        if (data.level == "Truong") {
           // update status of current activity
           await client
-              .db(name_global_databases)
-              .collection("activities")
-              .updateOne(
-                {
-                  _id: data._id,
-                },
-                {
-                  $set: { end: data.status == '1'},
-                }
-              );
-        } else if (data.level == 'Khoa') {
+            .db(name_global_databases)
+            .collection("activities")
+            .updateOne(
+              {
+                _id: data._id,
+              },
+              {
+                $set: { end: data.status == "1" },
+              }
+            );
+        } else if (data.level == "Khoa") {
           // update status of current activity
           await client
-              .db(user.dep)
-              .collection("activities")
-              .updateOne(
-                {
-                  _id: data._id,
-                },
-                {
-                  $set: { end: data.status == '1'},
-                }
-              );
+            .db(user.dep)
+            .collection("activities")
+            .updateOne(
+              {
+                _id: data._id,
+              },
+              {
+                $set: { end: data.status == "1" },
+              }
+            );
         } else {
           // update status of current activity
           await client
-              .db(user.dep)
-              .collection(data.level + "_activities")
-              .updateOne(
-                {
-                  _id: data._id,
-                },
-                {
-                  $set: { end: data.status == '1'},
-                }
-              );
+            .db(user.dep)
+            .collection(data.level + "_activities")
+            .updateOne(
+              {
+                _id: data._id,
+              },
+              {
+                $set: { end: data.status == "1" },
+              }
+            );
         }
-
-        return res.sendStatus(200); 
+        wss.clients.forEach((ws) => {
+          if (ws.actId == data._id) {
+            ws.send("reload");
+          }
+        });
+        return res.sendStatus(200);
       } else {
         return res.sendStatus(403); // send user to 403 page
       }
@@ -2398,7 +2406,6 @@ function createAPIRouter(client, wss) {
     }
   });
 
-
   // api approval students join in activity
   router.post("/approvalActivityStudent", checkIfUserLoginAPI, async (req, res) => {
     try {
@@ -2406,49 +2413,48 @@ function createAPIRouter(client, wss) {
       const data = req.body; // data = {_id: _id, level: level, dataUpdate: list of update students}
       // must be department to use this api
       if (user.pow[3]) {
-        
-        if (data.level == 'Truong') {
+        if (data.level == "Truong") {
           // update status of current activity
           await client
-              .db(name_global_databases)
-              .collection("activities")
-              .updateOne(
-                {
-                  _id: data._id,
-                },
-                {
-                  $set: { student_list: data.dataUpdate },
-                }
-              );
-        } else if (data.level == 'Khoa') {
+            .db(name_global_databases)
+            .collection("activities")
+            .updateOne(
+              {
+                _id: data._id,
+              },
+              {
+                $set: { student_list: data.dataUpdate },
+              }
+            );
+        } else if (data.level == "Khoa") {
           // update status of current activity
           await client
-              .db(user.dep)
-              .collection("activities")
-              .updateOne(
-                {
-                  _id: data._id,
-                },
-                {
-                  $set: { student_list: data.dataUpdate },
-                }
-              );
+            .db(user.dep)
+            .collection("activities")
+            .updateOne(
+              {
+                _id: data._id,
+              },
+              {
+                $set: { student_list: data.dataUpdate },
+              }
+            );
         } else {
           // update status of current activity
           await client
-              .db(user.dep)
-              .collection(data.level + "_activities")
-              .updateOne(
-                {
-                  _id: data._id,
-                },
-                {
-                  $set: { student_list: data.dataUpdate },
-                }
-              );
+            .db(user.dep)
+            .collection(data.level + "_activities")
+            .updateOne(
+              {
+                _id: data._id,
+              },
+              {
+                $set: { student_list: data.dataUpdate },
+              }
+            );
         }
 
-        return res.sendStatus(200); 
+        return res.sendStatus(200);
       } else {
         return res.sendStatus(403); // send user to 403 page
       }
