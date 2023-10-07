@@ -2344,7 +2344,6 @@ function createAPIRouter(client, wss) {
     try {
       const user = req.session.user;
       const data = req.body; // data = {_id: 18102003 (activities' id), level: 'Truong', status: '1' (1: đang diễn ra, 0: đã kết thúc)}
-
       // must be department to use this api
       if (user.pow[3]) {
         
@@ -2358,7 +2357,7 @@ function createAPIRouter(client, wss) {
                   _id: data._id,
                 },
                 {
-                  $set: { end: data.status == '1' ? true : false },
+                  $set: { end: data.status == '1'},
                 }
               );
         } else if (data.level == 'Khoa') {
@@ -2371,7 +2370,7 @@ function createAPIRouter(client, wss) {
                   _id: data._id,
                 },
                 {
-                  $set: { end: data.status == '1' ? true : false },
+                  $set: { end: data.status == '1'},
                 }
               );
         } else {
@@ -2384,7 +2383,67 @@ function createAPIRouter(client, wss) {
                   _id: data._id,
                 },
                 {
-                  $set: { end: data.status == '1' ? true : false },
+                  $set: { end: data.status == '1'},
+                }
+              );
+        }
+
+        return res.sendStatus(200); 
+      } else {
+        return res.sendStatus(403); // send user to 403 page
+      }
+    } catch (err) {
+      console.log("SYSTEM | DELETE_TEACHER | ERROR | ", err);
+      return res.sendStatus(500);
+    }
+  });
+
+
+  // api approval students join in activity
+  router.post("/approvalActivityStudent", checkIfUserLoginAPI, async (req, res) => {
+    try {
+      const user = req.session.user;
+      const data = req.body; // data = {_id: _id, level: level, dataUpdate: list of update students}
+      // must be department to use this api
+      if (user.pow[3]) {
+        
+        if (data.level == 'Truong') {
+          // update status of current activity
+          await client
+              .db(name_global_databases)
+              .collection("activities")
+              .updateOne(
+                {
+                  _id: data._id,
+                },
+                {
+                  $set: { student_list: data.dataUpdate },
+                }
+              );
+        } else if (data.level == 'Khoa') {
+          // update status of current activity
+          await client
+              .db(user.dep)
+              .collection("activities")
+              .updateOne(
+                {
+                  _id: data._id,
+                },
+                {
+                  $set: { student_list: data.dataUpdate },
+                }
+              );
+        } else {
+          // update status of current activity
+          await client
+              .db(user.dep)
+              .collection(data.level + "_activities")
+              .updateOne(
+                {
+                  _id: data._id,
+                },
+                {
+                  $set: { student_list: data.dataUpdate },
                 }
               );
         }

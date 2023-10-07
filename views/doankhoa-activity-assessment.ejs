@@ -71,7 +71,8 @@
               <div class="activity-board">
                 <h2>DANH SÁCH SINH VIÊN ĐÃ ĐĂNG KÝ</h2>
                 <%if (curr_act.student_list){%>
-                  <button class="button-35 " id="save_change">Lưu cập nhật</button>
+                  <button class="button-35 " id="save-change">Lưu cập nhật</button>
+                  <button class="button-35 " id="delete-student">Xoá sinh viên</button>
 
                   <table class="table" id="school_tb">
                     <thead>
@@ -83,6 +84,7 @@
                             </label>
                           </div>
                         </th>
+                        <th style="width: 2%">STT</th>
                         <th style="width: 2%">MSSV</th>
                         <th style="width: 40%">Họ Và Tên</th>
                         <th style="width: 10%">Lớp</th>
@@ -95,11 +97,12 @@
                           <tr class="atv_box">
                             <td>
                               <div class="checkbox-wrapper-4">
-                                <input type="checkbox" id="row__0__0" class="inp-cbx" value="<%=students_data[i]._id%>" />
-                                <label for="row__0__0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                                <input type="checkbox" id="row__<%= i %>__0" class="inp-cbx delete-cbx" value="<%=students_data[i]._id%>" />
+                                <label for="row__<%= i %>__0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                                 </label>
                               </div>
                             </td>
+                            <td><%= i+1 %></td>
                             <td>
                               <%=students_data[i]._id%>
                             </td>
@@ -109,11 +112,15 @@
                             <td class="class_student">
                               <%= students_data[i].class[0] %>
                             </td>
-                            <td><a href="#">Xem</a></td>
+                            <td><a href="">Xem</a></td>
                             <td>
                               <div class="checkbox-wrapper-4">
-                                <input type="checkbox" id="row__0__1" class="inp-cbx"/>
-                                <label for="row__0__1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                                <% if (curr_act.student_list[students_data[i]._id]) { %>
+                                  <input type="checkbox" id="row__<%= i %>__1" class="inp-cbx approval-cbx" value="<%=students_data[i]._id%>" checked/>
+                                <% } else { %>
+                                  <input type="checkbox" id="row__<%= i %>__1" class="inp-cbx approval-cbx" value="<%=students_data[i]._id%>" />
+                                <% } %>
+                                <label for="row__<%= i %>__1" class="cbx"><span> <svg height="10px" width="12px"></svg> </span>
                                 </label>
                               </div>
                             </td>
