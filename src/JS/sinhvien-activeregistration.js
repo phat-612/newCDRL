@@ -347,7 +347,7 @@ $(document).mouseup(function (e) {
   }
 });
 
-// ĐUN SÔI ĐỂ KIỂM TRA THỜI GIAN BÊN CLIENT CHO GIẢM TẢI MÁY CHỦ
+// ĐUN SÔI ĐỂ KIỂM TRA THỜI GIAN BÊN CLIENT ĐỂ CHO GIẢM TẢI MÁY CHỦ
 setInterval(() => {
   if (
     timestart < new Date() &&
