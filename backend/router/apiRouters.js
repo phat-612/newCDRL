@@ -2070,7 +2070,7 @@ function createAPIRouter(client, wss) {
       // start_date: '2020-05-18';
       // start_hour: '14:10:30'}
 
-      if (user.pow[3]) {
+      if (user.pow[3] && user.pow[11]) {
         // get curr school year
         const school_year = await client
           .db(name_global_databases)
@@ -2228,7 +2228,7 @@ function createAPIRouter(client, wss) {
       const user = req.session.user;
       const data = req.body; // data = {year: '2022-2023', semester: '1'}
       const curr_year = "HK" + data.semester + "_" + data.year;
-      if (user.pow[3]) {
+      if (user.pow[3] && user.pow[11]) {
         // find all activities in this year:
         // get all activities of school
         const school_atv = await client
@@ -2326,7 +2326,7 @@ function createAPIRouter(client, wss) {
     try {
       const user = req.session.user;
       const data = req.body; // data = {cls: 'KTPM0121'}
-      if (user.pow[3]) {
+      if (user.pow[3] && user.pow[11]) {
         // get all activities in that class:
         const cls_act = await client
           .db(user.dep)
@@ -2464,6 +2464,67 @@ function createAPIRouter(client, wss) {
     }
   });
 
+  // api delete student join in activity
+  router.post("/deleteActivityStudent", checkIfUserLoginAPI, async (req, res) => {
+    try {
+      const user = req.session.user;
+      const data = req.body; // data = {_id: _id, level: level, dataDelete: dataDelete}
+      
+      console.log(data);
+
+      // must be department to use this api
+      if (user.pow[3]) {
+        if (data.level == "Truong") {
+          // update status of current activity
+          await client
+            .db(name_global_databases)
+            .collection("activities")
+            .updateOne(
+              {
+                _id: data._id,
+              },
+              {
+                $unset: data.dataDelete,
+              }
+            );
+        } else if (data.level == "Khoa") {
+          // update status of current activity
+          await client
+            .db(user.dep)
+            .collection("activities")
+            .updateOne(
+              {
+                _id: data._id,
+              },
+              {
+                $unset: data.dataDelete,
+              }
+            );
+        } else {
+          // update status of current activity
+          await client
+            .db(user.dep)
+            .collection(data.level + "_activities")
+            .updateOne(
+              {
+                _id: data._id,
+              },
+              {
+                $unset: data.dataDelete,
+              }
+            );
+        }
+
+        return res.sendStatus(200);
+      } else {
+        return res.sendStatus(403); // send user to 403 page
+      }
+    } catch (err) {
+      console.log("SYSTEM | DELETE_TEACHER | ERROR | ", err);
+      return res.sendStatus(500);
+    }
+  });
+
   // api delete activities checked
   router.post("/deleteActivities", checkIfUserLoginAPI, async (req, res) => {
     try {
@@ -2471,7 +2532,7 @@ function createAPIRouter(client, wss) {
       const data = req.body; // data = {school_rmatv: ["19112003" (school_activity_id), ...], dep_rmatv: ["28091978" (dep_activity_id), ...], cls_rmatv: ["18102003" (cls_activity_id), ...]}
 
       // must be department to use this api
-      if (user.pow[3]) {
+      if (user.pow[3] && user.pow[11]) {
         // remove all checked school activities
         await client
           .db(name_global_databases)
@@ -2506,11 +2567,11 @@ function createAPIRouter(client, wss) {
               _id: { $in: data.cls_rmatv },
             });
         });
+        return res.sendStatus(200);
       } else {
         return res.sendStatus(403); // send user to 403 page
       }
 
-      return res.sendStatus(200);
     } catch (err) {
       console.log("SYSTEM | DELETE_TEACHER | ERROR | ", err);
       return res.sendStatus(500);

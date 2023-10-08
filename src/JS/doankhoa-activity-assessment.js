@@ -11,7 +11,7 @@ if (matches) {
   console.log("No match found.");
 }
 
-$(".inp-cbx").change(async function () {
+$(".status_update").change(async function () {
   const requestOptions = {
     method: "POST",
     headers: {
@@ -83,16 +83,19 @@ $('#save-change').on('click', async () => {
 
 // delete students
 $('#delete-student').on('click', async () => {
-  let cbxs = $('.delete--cbx')
-  let dataDelete = [];
+  let cbxs = $('.delete-cbx');
+  let dataDelete = {};
   let tableDelete = []
   for (let i = 1; i < cbxs.length; i++) {
     if (cbxs[i].checked) {
-      dataDelete.push(cbxs[i].value.toString());
+      dataDelete['student_list.' + cbxs[i].value.toString()] = "";
       tableDelete.push(cbxs[i]);
     }
-  }
-  if (dataDelete.length > 0) {
+  };
+
+  console.log(dataDelete);
+
+  if (tableDelete.length > 0) {
     try {
       let postData = JSON.stringify({
         _id: _id,
@@ -109,8 +112,7 @@ $('#delete-student').on('click', async () => {
       const response = await fetch('/api/deleteActivityStudent', requestOptions);
       if (response.ok) {
         for (let i = 0; i < tableDelete.length; i++) {
-          console.log(tableDelete);
-          tableDelete[i].remove();
+          tableDelete[i].parentNode.parentNode.parentNode.remove();
         }
         notify('n', 'Xóa sinh viên thành công!');
       } else {
@@ -129,7 +131,7 @@ $('.reset_btn').on('click', async () => {
   let cbxs = $('.approval-cbx');
   let all_not_false = true;
   for (let i = 0; i < cbxs.length; i++) {
-    cbxs.prop('checked', defaultApproval[cbxs[i].value.toString()]);
+    cbxs[i].checked = defaultApproval[cbxs[i].value.toString()];
     if (!defaultApproval[cbxs[i].value.toString()]) {
       all_not_false = false;
     }

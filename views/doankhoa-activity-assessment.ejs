@@ -59,7 +59,7 @@
                           <% } else { %>
                             <label class="close_now" for="">Đang diễn ra</label>
                           <div class="checkbox-wrapper-4">
-                            <input type="checkbox" id="morning1" class="inp-cbx" value="1" checked/>
+                            <input type="checkbox" id="morning1" class="inp-cbx status_update" value="1" checked/>
                             <label for="morning1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                             </label>
                           </div>
@@ -119,8 +119,8 @@
                           <tr class="atv_box">
                             <td>
                               <div class="checkbox-wrapper-4">
-                                <input type="checkbox" id="row__<%= i %>__0" class="inp-cbx delete-cbx" value="<%=students_data[i]._id%>" />
-                                <label for="row__<%= i %>__0" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                                <input type="checkbox" id="row__0__<%= i %>" class="inp-cbx delete-cbx" value="<%=students_data[i]._id%>" />
+                                <label for="row__0__<%= i %>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                                 </label>
                               </div>
                             </td>
@@ -138,11 +138,11 @@
                             <td colspan="2">
                               <div class="checkbox-wrapper-4">
                                 <% if (curr_act.student_list[students_data[i]._id]) { %>
-                                  <input type="checkbox" id="row__<%= i %>__1" class="inp-cbx approval-cbx" value="<%=students_data[i]._id%>" checked/>
+                                  <input type="checkbox" id="row__1__<%= i %>" class="inp-cbx approval-cbx" value="<%=students_data[i]._id%>" checked/>
                                 <% } else { %>
-                                  <input type="checkbox" id="row__<%= i %>__1" class="inp-cbx approval-cbx" value="<%=students_data[i]._id%>" />
+                                  <input type="checkbox" id="row__1__<%= i %>" class="inp-cbx approval-cbx" value="<%=students_data[i]._id%>" />
                                 <% } %>
-                                <label for="row__<%= i %>__1" class="cbx"><span> <svg height="10px" width="12px"></svg> </span>
+                                <label for="row__1__<%= i %>" class="cbx"><span> <svg height="10px" width="12px"></svg> </span>
                                 </label>
                               </div>
                             </td>

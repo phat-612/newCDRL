@@ -384,7 +384,7 @@ function createDepRouter(client) {
       .collection("school_year")
       .findOne({}, { projection: { _id: 0, year: 1 } });
     // check user login:
-    if (user.pow[3]) {
+    if (user.pow[3] && user.pow[11]) {
       let branch_list = await client
         .db(name_global_databases)
         .collection("branchs")
