@@ -347,12 +347,17 @@ $(document).mouseup(function (e) {
   }
 });
 
+// ĐUN SÔI ĐỂ KIỂM TRA THỜI GIAN BÊN CLIENT CHO GIẢM TẢI MÁY CHỦ
 setInterval(() => {
   if (
     timestart < new Date() &&
-    ($(".post-btn").length <= 0 || $(".activeregistration_btn").length <= 0)
+    $(".post-btn").length <= 0 &&
+    $(".activeregistration_btn").length <= 0 &&
+    !["Cảm ơn bạn đã tham gia hoạt động!", "Rất tiết hoạt động này đã kết thúc!"].includes(
+      $(".activity_body_studentname h1").text()
+    )
   ) {
     console.log("Interval");
     window.location.reload();
   }
-}, 1000);
+}, 3000);
