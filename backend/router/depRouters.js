@@ -128,6 +128,8 @@ function createDepRouter(client) {
       )
       .toArray();
 
+    console.log(class_teachers);
+
     // get all teacher's name of classes
     for (let i = 0; i < class_teachers.length; i++) {
       // replace current teacher's _id with teacher's name
@@ -743,25 +745,25 @@ function createDepRouter(client) {
         // get all students information joined current activity
         let students_data = [];
         let all_true = true; // check does all student is yes or not
-        if (curr_act.student_list){
-        for (const [key, value] of Object.entries(curr_act.student_list)) {
-          const data = await client.db(name_global_databases).collection("user_info").findOne(
-            {_id: key},
-            {
-              projection: {
-                displayName: 1,
-                class: 1,
+        if (curr_act.student_list) {
+          for (const [key, value] of Object.entries(curr_act.student_list)) {
+            const data = await client.db(name_global_databases).collection("user_info").findOne(
+              { _id: key },
+              {
+                projection: {
+                  displayName: 1,
+                  class: 1,
+                }
               }
+            );
+            // add current data to students data
+            students_data.push(data);
+
+            if (!value) { // if false it will be false
+              all_true = false;
             }
-          );
-          // add current data to students data
-          students_data.push(data);
-          
-          if (!value) { // if false it will be false
-            all_true = false;
           }
         }
-      }
 
         return res.render("doankhoa-activity-assessment", {
           header: "global-header",
