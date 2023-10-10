@@ -107,7 +107,7 @@ async function checkIfUserLoginRoute(req, res, next) {
     if ((user.pow[1] && user.pow[4]) || user.pow[8]) {
       res.locals.isnotST = true;
     }
-    if (user.pow[0]) {
+    if (user.pow[0] && !user.pow[1]) {
       res.locals.iskhoa = false;
       res.locals.isbancansu = false;
       res.locals.isgiaovien = false;
@@ -117,7 +117,7 @@ async function checkIfUserLoginRoute(req, res, next) {
       res.locals.isbancansu = true;
       res.locals.isgiaovien = false;
       res.locals.isST = false;
-    } else if (user.pow[1] && user.pow[3]&& user.pow[4]) {
+    } else if (user.pow[1] && user.pow[3] && user.pow[4]) {
       res.locals.iskhoa = false;
       res.locals.isbancansu = false;
       res.locals.isgiaovien = true;
@@ -185,7 +185,7 @@ async function mark(table, user, mssv, data, marker, cls) {
       third: data.third,
       fourth: data.fourth,
       fifth: data.fifth,
-      img_ids: data.img_ids,
+      [`img_ids.global`]: data.img_ids,
       total: data.total,
       update_date: new Date(),
     };
@@ -194,7 +194,14 @@ async function mark(table, user, mssv, data, marker, cls) {
     if (table == "_stf_table") {
       update.marker = marker.last_name + " " + marker.first_name;
     }
-
+    await client.db(user.dep).collection(cls + table).createIndex(
+      {
+        mssv: 1,
+      },
+      {
+        name: "_mssv",
+      }
+    );
     await client
       .db(user.dep)
       .collection(cls + table)

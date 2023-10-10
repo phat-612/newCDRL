@@ -31,6 +31,7 @@ function validateFile(file) {
 $(document).ready(function () {
   autoCheck();
   $(".post-btn").click(function () {
+    console.log("ol")
     const modal_wrap_img = document.querySelectorAll(".modal_wrap_img");
     if (modal_wrap_img.length < 5) {
       $(".add-btn").css("display", "block");
@@ -266,29 +267,31 @@ function total_tier() {
     index_tier_4() +
     index_tier_5() +
     " điểm";
+    showUploadImg()
   
 }
 
-// const showUploadImg = () => {
-//   const require_upload_img = [
-//     index_tier_3(),
-//     getSelectValue("mySelect11"),
-//     getSelectValue("mySelect13"),
-//     getSelectValue("mySelect14"),
-//     getSelectValue("mySelect16"),
-//   ];
-//   if (
-//     !require_upload_img.every((element) => element === 0 || element === "0")
-//   ) {
-//     if (!$(".post-btn").is(":visible")) {
-//       notify("!", "Hãy upload ảnh chứng minh bạn tham gia sự kiện nhé!");
-//     }
-//     $(".post-btn").show();
-//   } else {
-//     $(".post-btn").hide();
-//   }
-// };
+const showUploadImg = () => {
+  const require_upload_img = [
+    index_tier_3(),
+    getSelectValue("mySelect11"),
+    getSelectValue("mySelect13"),
+    getSelectValue("mySelect14"),
+    getSelectValue("mySelect16"),
+  ];
+  if (
+    !require_upload_img.every((element) => element === 0 || element === "0")
+  ) {
+    if (!$(".post-btn").is(":visible")) {
+      notify("!", "Hãy upload ảnh chứng minh bạn tham gia sự kiện nhé!");
+    }
+    $(".post-btn").show();
+  } else {
+    $(".post-btn").hide();
+  }
+};
 
+console.log('hahahahahahhah')
 function handleCheckboxChange(event) {
   const checkbox = event.target;
   if (checkbox.checked) {

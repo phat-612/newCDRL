@@ -116,5 +116,11 @@
     .button-35{
         margin: 0 !important;
     }
+    /* .modal_img{
+
+    } */
+    .modal_img_btn{
+        justify-content: space-evenly;
+    }
 
 }

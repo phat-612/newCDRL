@@ -28,7 +28,7 @@
 }
 
 .footer_wrap a {
-  color: var(--black-color);
+  color: transparent;
   width: 33.3333333%;
 }
 
@@ -95,7 +95,7 @@
     /* height: 700px; */
     width: 100%;
     position: absolute;
-    /* top: auto; */
+    top: auto;
     left: auto;
   }
 

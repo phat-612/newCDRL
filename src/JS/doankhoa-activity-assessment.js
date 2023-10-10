@@ -20,20 +20,19 @@ $(".status_update").change(async function () {
     body: JSON.stringify({
       _id: _id,
       level: level,
-      status: $(this).val()
+      status: $(this).val(),
     }),
   };
 
   const response = await fetch("/api/updateActivitiesStatus", requestOptions);
   if (response.ok) {
-
     // change value and text of current check box to "Đang diển ra" or "Đã kết thúc"
-    if ($(this).val() == '1') {
-      $('.close_now').text('Đã kết thúc');
-      $(this).val('0');
-    } else if ($(this).val() == '0') {
-      $('.close_now').text('Đang diễn ra');
-      $(this).val('1');
+    if ($(this).val() == "1") {
+      $(".close_now").text("Đã kết thúc");
+      $(this).val("0");
+    } else if ($(this).val() == "0") {
+      $(".close_now").text("Đang diễn ra");
+      $(this).val("1");
     }
   } else if (response.status == 500) {
     // Error occurred during upload
@@ -42,15 +41,21 @@ $(".status_update").change(async function () {
 });
 
 // approval student join in current activity
-$('#save-change').on('click', async () => {
-  let cbxs = $('.approval-cbx');
+$("#save-change").on("click", async () => {
+  let cbxs = $(".approval-cbx");
+  let bcbs = $(".bonus-cbx");
   let dataApproval = {};
   for (let i = 0; i < cbxs.length; i++) {
     if (cbxs[i].checked) {
-      dataApproval[cbxs[i].value.toString()] = true
-      // dataUpdate.push(cbxs[i].value.toString());
+      dataApproval[cbxs[i].value.toString()] = 1; // check if students have approval or not
     } else {
-      dataApproval[cbxs[i].value.toString()] = false
+      dataApproval[cbxs[i].value.toString()] = 0;
+    }
+  }
+
+  for (let i = 0; i < bcbs.length; i++) {
+    if (bcbs[i].checked) {
+      dataApproval[bcbs[i].value.toString()] = 2; // check does student have bonus or not
     }
   }
 
@@ -60,38 +65,38 @@ $('#save-change').on('click', async () => {
       level: level,
       dataUpdate: dataApproval,
     });
-    
+
     const requestOptions = {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: postData
+      body: postData,
     };
 
-    const response = await fetch('/api/approvalActivityStudent', requestOptions);
+    const response = await fetch("/api/approvalActivityStudent", requestOptions);
     if (response.ok) {
       defaultApproval = dataApproval; // set default to new update data
-      notify('n', 'Duyệt sinh viên thành công!');
+      notify("n", "Duyệt sinh viên thành công!");
     } else {
-      notify('!', 'Duyệt sinh viên thất bại!');
+      notify("!", "Duyệt sinh viên thất bại!");
     }
   } catch (error) {
     console.log(error);
   }
-})
+});
 
 // delete students
-$('#delete-student').on('click', async () => {
-  let cbxs = $('.delete-cbx');
+$("#delete-student").on("click", async () => {
+  let cbxs = $(".delete-cbx");
   let dataDelete = {};
-  let tableDelete = []
+  let tableDelete = [];
   for (let i = 1; i < cbxs.length; i++) {
     if (cbxs[i].checked) {
-      dataDelete['student_list.' + cbxs[i].value.toString()] = "";
+      dataDelete["student_list." + cbxs[i].value.toString()] = "";
       tableDelete.push(cbxs[i]);
     }
-  };
+  }
 
   console.log(dataDelete);
 
@@ -100,45 +105,66 @@ $('#delete-student').on('click', async () => {
       let postData = JSON.stringify({
         _id: _id,
         level: level,
-        dataDelete: dataDelete
+        dataDelete: dataDelete,
       });
       const requestOptions = {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: postData
+        body: postData,
       };
-      const response = await fetch('/api/deleteActivityStudent', requestOptions);
+      const response = await fetch("/api/deleteActivityStudent", requestOptions);
       if (response.ok) {
         for (let i = 0; i < tableDelete.length; i++) {
           tableDelete[i].parentNode.parentNode.parentNode.remove();
         }
-        notify('n', 'Xóa sinh viên thành công!');
+        notify("n", "Xóa sinh viên thành công!");
       } else {
-        notify('!', 'Xóa sinh viên thất bại!');
+        notify("!", "Xóa sinh viên thất bại!");
       }
     } catch (error) {
       console.log(error);
     }
   } else {
-    notify('!', 'Vui lòng chọn sinh viên');
+    notify("!", "Vui lòng chọn sinh viên");
   }
-})
+});
 
 // reset all student approval to default
-$('.reset_btn').on('click', async () => {
-  let cbxs = $('.approval-cbx');
+$(".reset_approval").on("click", async () => {
+  let cbxs = $(".approval-cbx");
+
   let all_not_false = true;
   for (let i = 0; i < cbxs.length; i++) {
-    cbxs[i].checked = defaultApproval[cbxs[i].value.toString()];
+    cbxs[i].checked = defaultApproval[cbxs[i].value.toString()] > 0;
     if (!defaultApproval[cbxs[i].value.toString()]) {
       all_not_false = false;
     }
   }
 
   if (all_not_false) {
-    $('.all-save-cbx').prop('checked', true);
+    $(".all-save-cbx").prop("checked", true);
+  } else {
+    $(".all-save-cbx").prop("checked", false);
+  }
+});
+
+// reset all student bonus to default
+$(".reset_bonus").on("click", async () => {
+  let cbxs = $(".bonus-cbx");
+  let all_not_false = true;
+  for (let i = 0; i < cbxs.length; i++) {
+    cbxs[i].checked = defaultApproval[cbxs[i].value.toString()] > 1;
+    if (!defaultApproval[cbxs[i].value.toString()]) {
+      all_not_false = false;
+    }
+  }
+
+  if (all_not_false) {
+    $(".all-bonus-cbx").prop("checked", true);
+  } else {
+    $(".all-bonus-cbx").prop("checked", false);
   }
 });
 
@@ -186,5 +212,29 @@ $(document).on("change", ".approval-cbx", async function () {
     $(".all-save-cbx").prop("checked", true);
   } else {
     $(".all-save-cbx").prop("checked", false);
+  }
+});
+
+// all checkbox set (if all-cbx tick all checkboxs will tick otherwise untick all)
+$(document).on("change", ".all-bonus-cbx", async function () {
+  if ($(".all-bonus-cbx")[0].checked) {
+    $("table tbody .bonus-cbx").prop("checked", true);
+  } else {
+    $("table tbody .bonus-cbx").prop("checked", false);
+  }
+});
+
+// if all checkboxs was check all-cbx will tick
+$(document).on("change", ".bonus-cbx", async function () {
+  let check = true;
+  $("table tbody .bonus-cbx").each(function () {
+    if (!this.checked) check = false;
+    return;
+  });
+
+  if (check) {
+    $(".all-bonus-cbx").prop("checked", true);
+  } else {
+    $(".all-bonus-cbx").prop("checked", false);
   }
 });

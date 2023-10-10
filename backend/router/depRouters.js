@@ -759,8 +759,13 @@ function createDepRouter(client) {
             // add current data to students data
             students_data.push(data);
 
-            if (!value) { // if false it will be false
+            if (value == 1) { // have one student not have bonus
+              bonus_true == false; 
+            }
+
+            if (value == 0) { // have one student not aproval yet
               all_true = false;
+              bonus_true = false;
             }
           }
         }
@@ -773,6 +778,7 @@ function createDepRouter(client) {
           curr_act: curr_act,
           students_data: students_data,
           all_true: all_true,
+          bonus_true: bonus_true,
         });
       } else {
         return res.redirect("/");

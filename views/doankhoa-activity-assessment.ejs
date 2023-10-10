@@ -52,14 +52,14 @@
                         <% if (curr_act.end) { %>
                         <label class="close_now" for="">Đã kết thúc</label>
                           <div class="checkbox-wrapper-4">
-                            <input type="checkbox" id="morning1" class="inp-cbx" value="0"/>
+                            <input type="checkbox" id="morning1" class="inp-cbx status_update" value="0" checked/>
                             <label for="morning1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                             </label>
                           </div>
                           <% } else { %>
                             <label class="close_now" for="">Đang diễn ra</label>
                           <div class="checkbox-wrapper-4">
-                            <input type="checkbox" id="morning1" class="inp-cbx status_update" value="1" checked/>
+                            <input type="checkbox" id="morning1" class="inp-cbx status_update" value="1"/>
                             <label for="morning1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                             </label>
                           </div>
@@ -93,7 +93,8 @@
                         <th style="width: 40%" rowspan="2">Họ Và Tên</th>
                         <th style="width: 10%" rowspan="2">Lớp</th>
                         <th style="width: 10%" rowspan="2">Hình ảnh</th>
-                        <th style="width: 10%" colspan="2">Phê duyệt</th>
+                        <th style="width: 10%" colspan="2">Điểm danh</th>
+                        <th style="width: 10%" colspan="2">Khen thưởng</th>
                       </tr>
                       <tr>
                         <th style="width: 10%" >
@@ -108,7 +109,24 @@
                           </div>
                         </th>
                         <th style="width: 10%">
-                          <button class="reset_btn">
+                          <button class="reset_btn reset_approval">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                          </button>
+                        </th>
+
+                        <th style="width: 10%" >
+                          <div class="checkbox-wrapper-4">
+                            <% if (bonus_true) {%>
+                              <input type="checkbox" id="row__2" class="inp-cbx all-bonus-cbx" checked/>
+                            <% } else { %>
+                              <input type="checkbox" id="row__2" class="inp-cbx all-bonus-cbx" />
+                            <% } %>
+                            <label for="row__2" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                            </label>
+                          </div>
+                        </th>
+                        <th style="width: 10%">
+                          <button class="reset_btn reset_bonus">
                             <i class="fa-solid fa-clock-rotate-left"></i>
                           </button>
                         </th>
@@ -137,12 +155,24 @@
                             <td><a href="">Xem</a></td>
                             <td colspan="2">
                               <div class="checkbox-wrapper-4">
-                                <% if (curr_act.student_list[students_data[i]._id]) { %>
+                                <% if (curr_act.student_list[students_data[i]._id] > 0) { %>
                                   <input type="checkbox" id="row__1__<%= i %>" class="inp-cbx approval-cbx" value="<%=students_data[i]._id%>" checked/>
                                 <% } else { %>
                                   <input type="checkbox" id="row__1__<%= i %>" class="inp-cbx approval-cbx" value="<%=students_data[i]._id%>" />
                                 <% } %>
                                 <label for="row__1__<%= i %>" class="cbx"><span> <svg height="10px" width="12px"></svg> </span>
+                                </label>
+                              </div>
+                            </td>
+
+                            <td colspan="2">
+                              <div class="checkbox-wrapper-4">
+                                <% if (curr_act.student_list[students_data[i]._id] > 1) { %>
+                                  <input type="checkbox" id="row__2__<%= i %>" class="inp-cbx bonus-cbx" value="<%=students_data[i]._id%>" checked/>
+                                <% } else { %>
+                                  <input type="checkbox" id="row__2__<%= i %>" class="inp-cbx bonus-cbx" value="<%=students_data[i]._id%>" />
+                                <% } %>
+                                <label for="row__2__<%= i %>" class="cbx"><span> <svg height="10px" width="12px"></svg> </span>
                                 </label>
                               </div>
                             </td>

@@ -1903,7 +1903,7 @@ function createAPIRouter(client, wss) {
                 },
                 {
                   $set: {
-                    [`student_list.${user._id}`]: false,
+                    [`student_list.${user._id}`]: 0,
                   },
                   // $push: {
                   //   bonus_list: user._id,
@@ -1925,7 +1925,7 @@ function createAPIRouter(client, wss) {
                 },
                 {
                   $set: {
-                    [`student_list.${user._id}`]: false,
+                    [`student_list.${user._id}`]: 0,
                   },
                   // $push: {
                   //   bonus_list: user._id,
@@ -1946,7 +1946,7 @@ function createAPIRouter(client, wss) {
                 },
                 {
                   $set: {
-                    [`student_list.${user._id}`]: false,
+                    [`student_list.${user._id}`]: 0,
                   },
                   // $push: {
                   //   bonus_list: user._id,
@@ -1989,7 +1989,7 @@ function createAPIRouter(client, wss) {
                 },
                 {
                   $set: {
-                    [`student_list.${user._id}`]: true,
+                    [`ai.${user._id}`]: true,
                   },
                   // $push: {
                   //   bonus_list: user._id,
@@ -1999,7 +1999,7 @@ function createAPIRouter(client, wss) {
                   upsert: true,
                 }
               );
-            return res.status(200).json({ id: user._id, cls: user.cls });
+            break;
           case "Khoa":
             // save activity in activities collection in 'Dep name' database
             await client
@@ -2011,7 +2011,7 @@ function createAPIRouter(client, wss) {
                 },
                 {
                   $set: {
-                    [`student_list.${user._id}`]: true,
+                    [`ai.${user._id}`]: true,
                   },
                   // $push: {
                   //   bonus_list: user._id,
@@ -2021,7 +2021,7 @@ function createAPIRouter(client, wss) {
                   upsert: true,
                 }
               );
-            return res.status(200).json({ id: user._id, cls: user.cls });
+            break;
           case "Trường":
             await client
               .db(name_global_databases)
@@ -2032,7 +2032,7 @@ function createAPIRouter(client, wss) {
                 },
                 {
                   $set: {
-                    [`student_list.${user._id}`]: true,
+                    [`ai.${user._id}`]: true,
                   },
                   // $push: {
                   //   bonus_list: user._id,
@@ -2042,9 +2042,23 @@ function createAPIRouter(client, wss) {
                   upsert: true,
                 }
               );
-            return res.status(200).json({ id: user._id, cls: user.cls });
+            break;
         }
-        return res.status(404).json({ message: "Thông tin xác thực sai!" });
+
+        await client
+          .db(user.dep)
+          .collection(user.cls[0] + "_std_table")
+          .updateOne(
+            {
+              mssv: user._id,
+              school_year: data.year,
+            },
+            {
+              $set: { [`img_ids.${data.id}`]: data.img_ids },
+            },
+            { upsert: true }
+          );
+        return res.status(200).json({ id: user._id, cls: user.cls });
       } else {
         return res.sendStatus(403);
       }
@@ -2108,6 +2122,7 @@ function createAPIRouter(client, wss) {
               .db(name_global_databases)
               .collection("activities")
               .deleteOne({ _id: data.atv_id }); // school
+
             await client.db(user.dep).collection("activities").deleteOne({ _id: data.atv_id }); // department
 
             // create index for new table has just created
@@ -2454,12 +2469,27 @@ function createAPIRouter(client, wss) {
             );
         }
 
+        // update student activities list
+        for (const key of Object.keys(curr_act.student_list)) {
+          await client.db(name_global_databases).collection("user_info").updateOne(
+            {
+              _id: key
+            },
+            {
+              $set: {[`act_list.${data._id}`]: data.dataUpdate},
+            },
+            { 
+              upsert: true
+            },
+          );
+        }
+
         return res.sendStatus(200);
       } else {
         return res.sendStatus(403); // send user to 403 page
       }
     } catch (err) {
-      console.log("SYSTEM | DELETE_TEACHER | ERROR | ", err);
+      console.log("SYSTEM | APPROVAL ACTIVITY STUDENTS | ERROR | ", err);
       return res.sendStatus(500);
     }
   });
@@ -2469,37 +2499,29 @@ function createAPIRouter(client, wss) {
     try {
       const user = req.session.user;
       const data = req.body; // data = {_id: _id, level: level, dataDelete: dataDelete}
-      
-      console.log(data);
 
       // must be department to use this api
       if (user.pow[3]) {
         if (data.level == "Truong") {
           // update status of current activity
-          await client
-            .db(name_global_databases)
-            .collection("activities")
-            .updateOne(
-              {
-                _id: data._id,
-              },
-              {
-                $unset: data.dataDelete,
-              }
-            );
+          await client.db(name_global_databases).collection("activities").updateOne(
+            {
+              _id: data._id,
+            },
+            {
+              $unset: data.dataDelete,
+            }
+          );
         } else if (data.level == "Khoa") {
           // update status of current activity
-          await client
-            .db(user.dep)
-            .collection("activities")
-            .updateOne(
-              {
-                _id: data._id,
-              },
-              {
-                $unset: data.dataDelete,
-              }
-            );
+          await client.db(user.dep).collection("activities").updateOne(
+            {
+              _id: data._id,
+            },
+            {
+              $unset: data.bonusDelete,
+            }
+          );
         } else {
           // update status of current activity
           await client
@@ -2510,7 +2532,7 @@ function createAPIRouter(client, wss) {
                 _id: data._id,
               },
               {
-                $unset: data.dataDelete,
+                $unset: data.bonusDelete,
               }
             );
         }
@@ -2520,7 +2542,7 @@ function createAPIRouter(client, wss) {
         return res.sendStatus(403); // send user to 403 page
       }
     } catch (err) {
-      console.log("SYSTEM | DELETE_TEACHER | ERROR | ", err);
+      console.log("SYSTEM | DELETE ACTIVITY STUDENTS | ERROR | ", err);
       return res.sendStatus(500);
     }
   });
@@ -2571,7 +2593,6 @@ function createAPIRouter(client, wss) {
       } else {
         return res.sendStatus(403); // send user to 403 page
       }
-
     } catch (err) {
       console.log("SYSTEM | DELETE_TEACHER | ERROR | ", err);
       return res.sendStatus(500);

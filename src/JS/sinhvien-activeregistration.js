@@ -1,4 +1,6 @@
 console.log(timestart);
+console.log(school_year);
+
 function validateFile(file) {
   let allowedFormats = ["jpg", "jpeg", "png"]; // Allowed file formats
   let maxSize = 5485760; // MBit in bytes
@@ -300,6 +302,7 @@ async function mark(img_ids) {
       id: id,
       level: level,
       img_ids: img_ids,
+      year: school_year,
     });
 
     const requestOptions = {
@@ -309,7 +312,7 @@ async function mark(img_ids) {
       },
       body: postData,
     };
-
+    
     const response = await fetch("/api/muster", requestOptions);
     if (response.ok) {
       notify("n", "Đã điểm danh thành công!");

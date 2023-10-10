@@ -64,6 +64,51 @@ function createRootRouter(client) {
               };
             })
           );
+
+          const studentActivities = await Promise.all(
+            schoolYearsToSearch.map(async (year) => {
+              info_search = `student_list.${user._id}`;
+              console.log(info_search);
+              let activitie_info_lop = await client
+                .db(user.dep)
+                .collection(`${user.cls[0]}_activities`)
+                .findOne(
+                  {
+                    [info_search]: { $exists: true },
+                    year: year,
+                  },
+                  { projection: { name: 1 } }
+                );
+              let activitie_info_khoa = await client
+                .db(user.dep)
+                .collection("activities")
+                .findOne(
+                  {
+                    [info_search]: { $exists: true },
+                    year: year,
+                  },
+                  { projection: { name: 1 } }
+                );
+              let activitie_info_truong = await client
+                .db(name_global_databases)
+                .collection("activities")
+                .findOne(
+                  {
+                    [info_search]: { $exists: true },
+                    year: year,
+                  },
+                  { projection: { name: 1 } }
+                );
+
+              return {
+                year: year,
+                activitie_info_lop: activitie_info_lop,
+                activitie_info_khoa: activitie_info_khoa,
+                activitie_info_truong: activitie_info_truong,
+              };
+            })
+          );
+          console.log(studentActivities);
           if (
             user.pow[0] &&
             !user.pow[1] &&
@@ -309,7 +354,7 @@ function createRootRouter(client) {
           if (user._id in activitie_info.student_list) {
             activitie_info.join = true;
           }
-          if (activitie_info.student_list[user._id]) {
+          if (activitie_info.ai && user._id in activitie_info.ai && activitie_info.ai[user._id]) {
             activitie_info.diemdanh = true;
           }
         }

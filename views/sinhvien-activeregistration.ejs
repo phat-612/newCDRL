@@ -105,8 +105,14 @@
                 <tr class="atv_box">
                   <td>
                     <div class="checkbox-wrapper-4">
-                      <%if (!activitie_info.diemdanh){%>
-                      <input type="checkbox" id="row__0__0" class="inp-cbx" value="18101911" disabled />
+                      <%if (activitie_info.student_list[data_student[i]._id] == 0){%>
+                      <input
+                        type="checkbox"
+                        id="row__0__0"
+                        class="inp-cbx"
+                        value="18101911"
+                        disabled
+                      />
                       <%} else {%>
                       <input
                         type="checkbox"
@@ -143,6 +149,7 @@
     </div>
     <script>
       const timestart = new Date("<%- activitie_info.start_time%>");
+      const school_year = "<%= activitie_info.year%>";
     </script>
     <script src="/src/JS/sinhvien-activeregistration.js"></script>
   </body>

@@ -71,3 +71,7 @@ $(".footer_item_more").click(function () {
   $(this).find("i").toggleClass("fa-chevron-down fa-chevron-up");
   $(this).find(".lop_item").toggle();
 });
+
+if (cur_links == document.querySelector(".a_home").href) {
+  document.querySelector(".a_home i").style.color = "#1b57c6";
+}

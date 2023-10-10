@@ -101,7 +101,7 @@ td .title{
   position: relative;
   overflow: hidden;
   cursor: pointer;
-  border: 0.2rem dashed black;
+  border: 0.2rem dashed var(--black-color);
   border-radius: 0.8rem;
 }
 
@@ -157,6 +157,7 @@ td .title{
   height: 100%;
   position: fixed;
   top: 0;
+  z-index:999;
   display: none;
   background-color: var(--table-border)bf;
 }

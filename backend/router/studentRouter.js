@@ -124,13 +124,7 @@ function createStudentRouter(client) {
         );
       nulltable = {
         fifth: ["Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm"],
-        first: [
-          "Chưa chấm",
-          "Chưa chấm",
-          "Chưa chấm",
-          "Chưa chấm",
-          "Chưa chấm",
-        ],
+        first: ["Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm"],
         fourth: ["Chưa chấm", "Chưa chấm", "Chưa chấm"],
         second: ["Chưa chấm", "Chưa chấm"],
         third: ["Chưa chấm", "Chưa chấm", "Chưa chấm"],
@@ -144,9 +138,54 @@ function createStudentRouter(client) {
       }
       let link_img = [];
       if (studentTotalScore) {
-        for (const i of studentTotalScore.img_ids) {
-          link_img.push(await server.getDriveFileLinkAndDescription(i));
+        for (const [key, value] of Object.entries(studentTotalScore.img_ids)) {
+          if (key == "global") {
+            for (const i of value) {
+              link_img.push(await server.getDriveFileLinkAndDescription(i));
+            }
+          } else {
+            let activitie_info;
+            activitie_info = await client
+              .db(user.dep)
+              .collection(`${user.cls[0]}_activities`)
+              .findOne(
+                {
+                  _id: key,
+                },
+                { projection: { name: 1 } }
+              );
+            if (!activitie_info) {
+              activitie_info = await client
+                .db(user.dep)
+                .collection("activities")
+                .findOne(
+                  {
+                    _id: key,
+                  },
+                  { projection: { name: 1 } }
+                );
+              if (!activitie_info) {
+                activitie_info = await client
+                  .db(name_global_databases)
+                  .collection("activities")
+                  .findOne(
+                    {
+                      _id: key,
+                    },
+                    { projection: { name: 1 } }
+                  );
+              }
+            }
+            for (const i of value) {
+              let imginfo = await server.getDriveFileLinkAndDescription(i);
+              if (imginfo) {
+                imginfo.fileDescription = activitie_info.name + "-" + imginfo.fileDescription;
+                link_img.push(imginfo);
+              }
+            }
+          }
         }
+
         return res.render("sinhvien-view-grades", {
           header: "global-header",
           thongbao: "global-notifications",

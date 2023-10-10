@@ -13,7 +13,7 @@ const createLoginRouter = require("./router/loginRouters");
 const createProfileRouter = require("./router/profileRouters");
 const createApiRouter = require("./router/apiRouters");
 const createDepRouter = require("./router/depRouters");
-const createStaffRouter = require("./router/staff Routers");
+const createStaffRouter = require("./router/staffRouters");
 const createTeacherRouter = require("./router/teacherRoutes");
 const createStudentRouter = require("./router/studentRouter");
 
