@@ -238,3 +238,47 @@ $(document).on("change", ".bonus-cbx", async function () {
     $(".all-bonus-cbx").prop("checked", false);
   }
 });
+
+
+
+// show img
+
+const show_btns = document.querySelectorAll(".show_img_btn");
+const show_element = document.querySelector(".model_show");
+const popup_show = document.querySelector(".main_img");
+
+show_btns.forEach(function (show_btn) {
+  show_btn.addEventListener("click", function (event) {
+    event.preventDefault();
+    show_element.classList.add("show_img");
+  })
+});
+
+show_element.addEventListener("click", function (event) {
+  show_element.classList.remove("show_img");
+});
+
+popup_show.addEventListener("click", function (event) {
+  event.stopPropagation();
+});
+
+
+
+
+var viewLinks = document.querySelectorAll("#school_tb tbody tr.atv_box td.show_img_btn a");
+viewLinks.forEach(function (link) {
+  link.addEventListener("click", function (event) {
+    event.preventDefault();
+    var row = this.closest("tr");
+    var stt = row.querySelector("td:nth-child(2)").textContent.trim();
+    var mssv = row.querySelector("td.mssv").textContent.trim();
+    var a_name = row.querySelector("td.a_name").textContent.trim();
+    var class_student = row.querySelector("td.class_student").textContent.trim();
+    console.log("STT: " + stt);
+    console.log("MSSV: " + mssv);
+    console.log("Họ và Tên: " + a_name);
+    console.log("Lớp: " + class_student);
+  });
+});
+
+

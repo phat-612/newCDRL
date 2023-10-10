@@ -143,7 +143,7 @@
                               </div>
                             </td>
                             <td><%= i+1 %></td>
-                            <td>
+                            <td class="mssv">
                               <%=students_data[i]._id%>
                             </td>
                             <td class="a_name">
@@ -152,7 +152,9 @@
                             <td class="class_student">
                               <%= students_data[i].class[0] %>
                             </td>
-                            <td><a href="">Xem</a></td>
+                            <td class="show_img_btn">
+                              <a href="">Xem</a>
+                            </td>
                             <td colspan="2">
                               <div class="checkbox-wrapper-4">
                                 <% if (curr_act.student_list[students_data[i]._id] > 0) { %>
@@ -190,9 +192,24 @@
           </div>
           <%- include(footer) %>
 </body>
+<div class="model_show">
+  <div class="main_img content_top">
+    <h2>HÌNH ẢNH LIÊN QUAN</h2>
+    <div class="main_img_list">
+      
+      <div class="main_img_item">
+        <img src="https://drive.google.com/uc?export=view&amp;id=1_q_LenyQoz0uMZ4Vj-9rkCzGwA8M5IQZ" alt="">
+        <img src="https://drive.google.com/uc?export=view&amp;id=1_q_LenyQoz0uMZ4Vj-9rkCzGwA8M5IQZ" alt="">
+        <img src="https://drive.google.com/uc?export=view&amp;id=1_q_LenyQoz0uMZ4Vj-9rkCzGwA8M5IQZ" alt="">
+      </div>
+    
+    </div>
+  </div>
+</div>
 
 <script>
   const defaultApproval = <%-JSON.stringify(curr_act.student_list) %>;
+  
 </script>
 <script src="/src/JS/doankhoa-activity-assessment.js"></script>
 
