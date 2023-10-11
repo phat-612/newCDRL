@@ -2425,7 +2425,7 @@ function createAPIRouter(client, wss) {
   router.post("/approvalActivityStudent", checkIfUserLoginAPI, async (req, res) => {
     try {
       const user = req.session.user;
-      const data = req.body; // data = {_id: _id, level: level, dataUpdate: list of update students}
+      const data = req.body; // data = {_id: _id, level: level, dataUpdate: list of update students, defaultApproval: old student list}
       // must be department to use this api
       if (user.pow[3]) {
         if (data.level == "Truong") {
@@ -2470,18 +2470,31 @@ function createAPIRouter(client, wss) {
         }
 
         // update student activities list
-        for (const key of Object.keys(curr_act.student_list)) {
-          await client.db(name_global_databases).collection("user_info").updateOne(
-            {
-              _id: key
-            },
-            {
-              $set: {[`act_list.${data._id}`]: data.dataUpdate},
-            },
-            { 
-              upsert: true
-            },
-          );
+        for (const key of Object.keys(data.dataUpdate)) {
+          if (data.defaultApproval[key] != data.dataUpdate[key]) {// only update if it different
+            if (data.dataUpdate[key] == 0) { // remove from list
+              await client.db(name_global_databases).collection("user_info").updateOne(
+                {
+                  _id: key
+                },
+                {
+                  $unset: { [`act_list.${data._id}`]: "" }
+                }
+              );
+            } else { // update from list
+              await client.db(name_global_databases).collection("user_info").updateOne(
+                {
+                  _id: key
+                },
+                {
+                  $set: { [`act_list.${data._id}`]: data.dataUpdate[key] },
+                },
+                {
+                  upsert: true
+                },
+              );
+            }
+          }
         }
 
         return res.sendStatus(200);
@@ -2498,7 +2511,7 @@ function createAPIRouter(client, wss) {
   router.post("/deleteActivityStudent", checkIfUserLoginAPI, async (req, res) => {
     try {
       const user = req.session.user;
-      const data = req.body; // data = {_id: _id, level: level, dataDelete: dataDelete}
+      const data = req.body; // data = {_id: _id, level: level, dataDelete: dataDelete, studentDelete: }
 
       // must be department to use this api
       if (user.pow[3]) {
@@ -2535,6 +2548,18 @@ function createAPIRouter(client, wss) {
                 $unset: data.bonusDelete,
               }
             );
+        }
+
+        // remove activity in actlist of all students join in:
+        for (let i = 0; i < data.studentDelete; i++) {
+          await client.db(name_global_databases).collection("user_info").updateOne(
+            {
+              _id: data.studentDelete[i]
+            },
+            {
+              $unset: { [`act_list.${data._id}`]: "" }
+            }
+          );
         }
 
         return res.sendStatus(200);
@@ -2589,6 +2614,8 @@ function createAPIRouter(client, wss) {
               _id: { $in: data.cls_rmatv },
             });
         });
+
+        
         return res.sendStatus(200);
       } else {
         return res.sendStatus(403); // send user to 403 page

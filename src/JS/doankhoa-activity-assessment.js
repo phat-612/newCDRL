@@ -45,6 +45,9 @@ $("#save-change").on("click", async () => {
   let cbxs = $(".approval-cbx");
   let bcbs = $(".bonus-cbx");
   let dataApproval = {};
+
+  notify("n", "Đang cập nhật...");
+
   for (let i = 0; i < cbxs.length; i++) {
     if (cbxs[i].checked) {
       dataApproval[cbxs[i].value.toString()] = 1; // check if students have approval or not
@@ -64,6 +67,7 @@ $("#save-change").on("click", async () => {
       _id: _id,
       level: level,
       dataUpdate: dataApproval,
+      defaultApproval: defaultApproval
     });
 
     const requestOptions = {
@@ -76,10 +80,10 @@ $("#save-change").on("click", async () => {
 
     const response = await fetch("/api/approvalActivityStudent", requestOptions);
     if (response.ok) {
+      notify("n", "Lưu cập nhật thành công!");
       defaultApproval = dataApproval; // set default to new update data
-      notify("n", "Duyệt sinh viên thành công!");
     } else {
-      notify("!", "Duyệt sinh viên thất bại!");
+      notify("!", "Lưu cập nhật thất bại!");
     }
   } catch (error) {
     console.log(error);
@@ -91,14 +95,15 @@ $("#delete-student").on("click", async () => {
   let cbxs = $(".delete-cbx");
   let dataDelete = {};
   let tableDelete = [];
-  for (let i = 1; i < cbxs.length; i++) {
+  for (let i = 0; i < cbxs.length; i++) {
     if (cbxs[i].checked) {
       dataDelete["student_list." + cbxs[i].value.toString()] = "";
       tableDelete.push(cbxs[i]);
     }
   }
 
-  console.log(dataDelete);
+  notify("n", "Đang xóa sinh viên...");
+
 
   if (tableDelete.length > 0) {
     try {
@@ -106,6 +111,7 @@ $("#delete-student").on("click", async () => {
         _id: _id,
         level: level,
         dataDelete: dataDelete,
+        studentDelete: tableDelete.map((cls) => cls.value.toString()),
       });
       const requestOptions = {
         method: "POST",
@@ -119,7 +125,7 @@ $("#delete-student").on("click", async () => {
         for (let i = 0; i < tableDelete.length; i++) {
           tableDelete[i].parentNode.parentNode.parentNode.remove();
         }
-        notify("n", "Xóa sinh viên thành công!");
+        notify("n", "Xóa sinh viên thành công!"); 
       } else {
         notify("!", "Xóa sinh viên thất bại!");
       }
@@ -207,6 +213,10 @@ $(document).on("change", ".approval-cbx", async function () {
     if (!this.checked) check = false;
     return;
   });
+
+  if (!this.checked) {
+    $(this).parent().parent().parent().find('.bonus-cbx').prop('checked', false);
+  }
 
   if (check) {
     $(".all-save-cbx").prop("checked", true);
