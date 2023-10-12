@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const server = require("../lib/csdl_google_lib");
 const { checkIfUserLoginRoute, sortStudentName } = require("../lib/function_lib");
-const { getNameGlobal } = require('../lib/mogodb_lib');
+const { getNameGlobal } = require("../lib/mogodb_lib");
 const name_global_databases = getNameGlobal();
 function createStaffRouter(client) {
   // ban can su nhap diem route
@@ -76,25 +76,101 @@ function createStaffRouter(client) {
             },
           }
         );
-        nulltable = {
-          fifth: ["Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm"],
-          first: ["Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm"],
-          fourth: ["Chưa chấm", "Chưa chấm", "Chưa chấm"],
-          second: ["Chưa chấm", "Chưa chấm"],
-          third: ["Chưa chấm", "Chưa chấm", "Chưa chấm"],
-          total: "Chưa chấm",
-        };
-        if (!stfTotalScore) {
-          stfTotalScore = nulltable;
-        }
-        if (!depTotalScore) {
-          depTotalScore = nulltable;
-        }
+      nulltable = {
+        fifth: ["Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm"],
+        first: ["Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm"],
+        fourth: ["Chưa chấm", "Chưa chấm", "Chưa chấm"],
+        second: ["Chưa chấm", "Chưa chấm"],
+        third: ["Chưa chấm", "Chưa chấm", "Chưa chấm"],
+        total: "Chưa chấm",
+      };
+      if (!stfTotalScore) {
+        stfTotalScore = nulltable;
+      }
+      if (!depTotalScore) {
+        depTotalScore = nulltable;
+      }
       let link_img = [];
+      let std_act_img = {};
+      let stf_act_img = {};
+      let dep_act_img = {};
+
       if (studentTotalScore) {
-        for (const i of studentTotalScore.img_ids) {
-          link_img.push(await server.getDriveFileLinkAndDescription(i));
+        for (const [key, value] of Object.entries(studentTotalScore.img_ids)) {
+          if (key == "global") {
+            for (const i of value) {
+              link_img.push(await server.getDriveFileLinkAndDescription(i));
+            }
+          } else {
+            let activitie_info;
+            activitie_info = await client
+              .db(user.dep)
+              .collection(`${user.cls[0]}_activities`)
+              .findOne(
+                {
+                  _id: key,
+                },
+                { projection: { name: 1 } }
+              );
+            if (activitie_info) {
+              for (const i of value) {
+                let imginfo = await server.getDriveFileLinkAndDescription(i);
+                if (std_act_img[activitie_info.name] && imginfo) {
+                  std_act_img[activitie_info.name].push(imginfo);
+                } else if (imginfo) {
+                  std_act_img[activitie_info.name] = [imginfo];
+                }
+              }
+            } else {
+              activitie_info = await client
+                .db(user.dep)
+                .collection("activities")
+                .findOne(
+                  {
+                    _id: key,
+                  },
+                  { projection: { name: 1 } }
+                );
+
+              if (activitie_info) {
+                for (const i of value) {
+                  let imginfo = await server.getDriveFileLinkAndDescription(i);
+                  if (stf_act_img[activitie_info.name] && imginfo) {
+                    stf_act_img[activitie_info.name].push(imginfo);
+                  } else if (imginfo) {
+                    stf_act_img[activitie_info.name] = [imginfo];
+                  }
+                }
+              } else {
+                activitie_info = await client
+                  .db(name_global_databases)
+                  .collection("activities")
+                  .findOne(
+                    {
+                      _id: key,
+                    },
+                    { projection: { name: 1 } }
+                  );
+
+                if (activitie_info) {
+                  for (const i of value) {
+                    let imginfo = await server.getDriveFileLinkAndDescription(i);
+                    console.log(activitie_info.name);
+                    if (dep_act_img[activitie_info.name] && imginfo) {
+                      dep_act_img[activitie_info.name].push(imginfo);
+                    } else if (imginfo) {
+                      dep_act_img[activitie_info.name] = [imginfo];
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
+
+        console.log("std_act_img: ", std_act_img);
+        console.log("stf_act_img: ", stf_act_img);
+        console.log("dep_act_img: ", dep_act_img);
 
         return res.render("bancansu-manage-grades", {
           header: "global-header",
@@ -103,7 +179,10 @@ function createStaffRouter(client) {
           Scorestd: studentTotalScore,
           Score: stfTotalScore,
           Scorek: depTotalScore,
-          img: link_img,
+          link_img: link_img,
+          std_act_img: std_act_img,
+          stf_act_img: stf_act_img,
+          dep_act_img: dep_act_img,
         });
       } else {
         return res.sendStatus(404);
@@ -123,16 +202,12 @@ function createStaffRouter(client) {
   });
 
   // danh gia hoat dong
-  router.get(
-    "/quanlihoatdong/danhgiahoatdong",
-    checkIfUserLoginRoute,
-    async (req, res) => {
-      return res.render("bancansu-activity-assessment", {
-        header: "global-header",
-        footer: "global-footer",
-      });
-    }
-  );
+  router.get("/quanlihoatdong/danhgiahoatdong", checkIfUserLoginRoute, async (req, res) => {
+    return res.render("bancansu-activity-assessment", {
+      header: "global-header",
+      footer: "global-footer",
+    });
+  });
 
   // danh sach bang diem
   router.get("/danhsachbangdiem", checkIfUserLoginRoute, async (req, res) => {

@@ -77,8 +77,16 @@ function createRootRouter(client) {
                     [info_search]: { $exists: true },
                     year: year,
                   },
-                  { projection: { name: 1 } }
+                  { projection: { name: 1, student_list: 1, ai: 1, level: 1 } }
                 );
+              if (activitie_info_lop) {
+                if (activitie_info_lop.ai && activitie_info_lop.ai[user._id]) {
+                  activitie_info_lop.thamgia = true;
+                }
+                if (activitie_info_lop.student_list[user._id] == 2) {
+                  activitie_info_lop.khenthuong = true;
+                }
+              }
               let activitie_info_khoa = await client
                 .db(user.dep)
                 .collection("activities")
@@ -87,8 +95,16 @@ function createRootRouter(client) {
                     [info_search]: { $exists: true },
                     year: year,
                   },
-                  { projection: { name: 1 } }
+                  { projection: { name: 1, student_list: 1, ai: 1, level: 1 } }
                 );
+              if (activitie_info_khoa) {
+                if (activitie_info_khoa.ai && activitie_info_khoa.ai[user._id]) {
+                  activitie_info_khoa.thamgia = true;
+                }
+                if (activitie_info_khoa.student_list[user._id] == 2) {
+                  activitie_info_khoa.khenthuong = true;
+                }
+              }
               let activitie_info_truong = await client
                 .db(name_global_databases)
                 .collection("activities")
@@ -97,8 +113,16 @@ function createRootRouter(client) {
                     [info_search]: { $exists: true },
                     year: year,
                   },
-                  { projection: { name: 1 } }
+                  { projection: { name: 1, student_list: 1, ai: 1, level: 1 } }
                 );
+              if (activitie_info_truong) {
+                if (activitie_info_truong.ai && activitie_info_truong.ai[user._id]) {
+                  activitie_info_truong.thamgia = true;
+                }
+                if (activitie_info_truong.student_list[user._id] == 2) {
+                  activitie_info_truong.khenthuong = true;
+                }
+              }
 
               return {
                 year: year,
@@ -125,6 +149,7 @@ function createRootRouter(client) {
               footer: "global-footer",
               thongbao: "global-notifications",
               bandiem: studentTotalScores,
+              hoatdong: studentActivities,
               nienkhoa: Object.keys(schoolYear_all.years),
             });
           } else if (
@@ -144,6 +169,7 @@ function createRootRouter(client) {
               thongbao: "global-notifications",
               pow: 0,
               bandiem: studentTotalScores,
+              hoatdong: studentActivities,
               nienkhoa: Object.keys(schoolYear_all.years),
             });
           } else if (
@@ -163,6 +189,8 @@ function createRootRouter(client) {
               thongbao: "global-notifications",
               pow: 1,
               bandiem: studentTotalScores,
+              hoatdong: studentActivities,
+
               nienkhoa: Object.keys(schoolYear_all.years),
             });
           } else if (
@@ -182,6 +210,8 @@ function createRootRouter(client) {
               thongbao: "global-notifications",
               pow: 2,
               bandiem: studentTotalScores,
+              hoatdong: studentActivities,
+
               nienkhoa: Object.keys(schoolYear_all.years),
             });
           }

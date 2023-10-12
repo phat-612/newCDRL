@@ -8,6 +8,7 @@ function createTeacherRouter(client) {
   // giao vien route
   router.get("/quanlyquyen", checkIfUserLoginRoute, async (req, res) => {
     const user = req.session.user;
+    console.log(user);
     return res.render("teacher-manage-student", {
       header: "global-header",
       footer: "global-footer",

@@ -2,6 +2,9 @@
     .main{
         margin-bottom: 120px;
     }
+    table{
+        width: 70rem;
+    }
     .year_full{
         flex-direction: column;
         width: 100%;

@@ -112,30 +112,59 @@
                     </tr>
                   </thead>
                   <tbody>
+                    <% for (let i=0; i < hoatdong.length; i++) {%>
+                    <%if(hoatdong[i].activitie_info_lop){%>
                     <tr>
-                      <td>1</td>
-                      <td>I</td>
-                      <td>Hoạt Động xxx</td>
-                      <td>Cấp xxx</td>
+                      <td><%=i+1%></td>
+                      <td><%=hoatdong[i].year.split("_")[0]%></td>
+                      <td><%=hoatdong[i].activitie_info_lop.name%></td>
+                      <td><%=hoatdong[i].activitie_info_lop.level%></td>
+                      <%if (hoatdong[i].activitie_info_lop.thamgia){%>
                       <td>x</td>
+                      <%} else {%>
+                      <td></td>
+                      <%}%> <%if (hoatdong[i].activitie_info_lop.khenthuong){%>
                       <td>x</td>
+                      <%} else {%>
+                      <td></td>
+                      <%}%>
                     </tr>
+                    <%}%>
+                    <%if(hoatdong[i].activitie_info_khoa){%>
                     <tr>
-                      <td>1</td>
-                      <td>I</td>
-                      <td>Hoạt Động xxx</td>
-                      <td>Cấp xxx</td>
+                      <td><%=i+1%></td>
+                      <td><%=hoatdong[i].year.split("_")[0]%></td>
+                      <td><%=hoatdong[i].activitie_info_khoa.name%></td>
+                      <td><%=hoatdong[i].activitie_info_khoa.level%></td>
+                      <%if (hoatdong[i].activitie_info_khoa.thamgia){%>
                       <td>x</td>
+                      <%} else {%>
+                      <td></td>
+                      <%}%> <%if (hoatdong[i].activitie_info_khoa.khenthuong){%>
                       <td>x</td>
+                      <%} else {%>
+                      <td></td>
+                      <%}%>
                     </tr>
+                    <%}%>
+                    <%if(hoatdong[i].activitie_info_truong){%>
                     <tr>
-                      <td>1</td>
-                      <td>I</td>
-                      <td>Hoạt Động xxx</td>
-                      <td>Cấp xxx</td>
+                      <td><%=i+1%></td>
+                      <td><%=hoatdong[i].year.split("_")[0]%></td>
+                      <td><%=hoatdong[i].activitie_info_truong.name%></td>
+                      <td><%=hoatdong[i].activitie_info_truong.level%></td>
+                      <%if (hoatdong[i].activitie_info_truong.thamgia){%>
                       <td>x</td>
+                      <%} else {%>
+                      <td></td>
+                      <%}%> <%if (hoatdong[i].activitie_info_truong.khenthuong){%>
                       <td>x</td>
+                      <%} else {%>
+                      <td></td>
+                      <%}%>
                     </tr>
+                    <%}%>
+                    <%}%>
                   </tbody>
                 </table>
               </div>

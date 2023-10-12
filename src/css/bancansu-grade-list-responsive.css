@@ -2,12 +2,17 @@
   .table_container {
     overflow: auto;
   }
-
+  table{
+    width: 83rem;
+  }
   table tr td:nth-child(9) {
     padding: 24px;
   }
   .button-35 {
     font-size: 1.5rem !important;
+  }
+  .container{
+    margin-bottom: 12rem;
   }
   .content .hk_nk {
     display: flex;

@@ -2005,13 +2005,13 @@
         </td>
         
                  
-        <td id="total_muc_1k"> <%=  Score.first[0] + Score.first[1] + Score.first[2] + Score.first[3] + Score.first[4] %> điểm
+        <td id="total_muc_1k"> <%=  Score.first[0] %> ok điểm
           
                   </td>
                   <%if (Scorek.first[0] == 'Chưa chấm') {%>
                     <td id="total_muc_1"> <%=  Scorek.first[0]%>
                       <%}else {%>
-                    <td id="total_muc_1"> <%=  Scorek.first[0] + Scorek.first[1] + Scorek.first[2] + Scorek.first[3] + Scorek.first[4] %> điểm
+                    <td id="total_muc_1"> <%=  Scorek.first[0]  %> haha điểm
                       <%}%>
                                   </td>
                 </tr>
@@ -3076,9 +3076,50 @@
     </button>
   </div>
   <div class="main_img content_top">
+    <h2>THÔNG TIN HOẠT ĐỘNG</h2>
+    <% if (Object.keys(std_act_img).length !== 0) { %>
+      <div class="level_title">Cấp Lớp:</div>
+      <% for (const [key, value] of Object.entries(std_act_img)) { %>
+        <div class="act_name_title"><%= key %>:</div>
+        <%for (img_info of value){%>
+          <div class="main_img_item">
+            <img src="<%=img_info.fileLink%>" alt="<%=img_info.fileDescription%>">
+            <div class="main_img_item_title"><%=img_info.fileDescription%></div>
+          </div>
+          <%}%>
+      <% } %>
+    <% } %>
+
+    <% if (Object.keys(stf_act_img).length !== 0) { %>
+      <div class="level_title">Cấp Khoa:</div>
+      <% for (const [key, value] of Object.entries(stf_act_img)) { %>
+        <div class="act_name_title"><%= key %>:</div>
+        <%for (img_info of value){%>
+          <div class="main_img_item">
+            <img src="<%=img_info.fileLink%>" alt="<%=img_info.fileDescription%>">
+            <div class="main_img_item_title"><%=img_info.fileDescription%></div>
+          </div>
+          <%}%>
+      <% } %>
+    <% } %>
+
+    <% if (Object.keys(dep_act_img).length !== 0) { %>
+      <div class="level_title">Cấp Trường:</div>
+      <% for (const [key, value] of Object.entries(dep_act_img)) { %>
+        <div class="act_name_title"><%= key %>:</div>
+        <%for (img_info of value){%>
+          <div class="main_img_item">
+            <img src="<%=img_info.fileLink%>" alt="<%=img_info.fileDescription%>">
+            <div class="main_img_item_title"><%=img_info.fileDescription%></div>
+          </div>
+          <%}%>
+      <% } %>
+    <% } %>
+  </div>
+  <div class="main_img content_top">
     <h2>HÌNH ẢNH LIÊN QUAN</h2>
     <div class="main_img_list">
-      <%for (img_info of img){%>
+      <%for (img_info of link_img){%>
       <div class="main_img_item">
         <img src="<%=img_info.fileLink%>" alt="<%=img_info.fileDescription%>">
         <div class="main_img_item_title"><%=img_info.fileDescription%></div>

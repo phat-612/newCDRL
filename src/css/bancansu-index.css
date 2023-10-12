@@ -7,7 +7,6 @@ html {
   box-sizing: content-box;
 }
 
-
 /* css tra cứu */
 .tra_cuu,
 .manager,
@@ -37,7 +36,7 @@ html {
   display: inline-block;
   font-size: 1.8rem;
 }
-  
+
 .nien-khoa {
   margin-left: 2rem;
 }
@@ -51,7 +50,8 @@ table {
   text-align: center;
 }
 
-th, td {
+th,
+td {
   padding: 1rem;
   font-size: 1.5rem;
 }
@@ -62,4 +62,14 @@ th, td {
 
 .content_top .group_btn {
   text-align: center;
+}
+.content_top .nien-khoa {
+  text-align: center;
+}
+.content_top a {
+  text-align: center;
+}
+.content_top {
+  display: flex;
+  flex-direction: column;
 }

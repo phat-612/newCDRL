@@ -176,7 +176,6 @@ async function autoCheck() {
     // $("#mySelect14").trigger('change');
     document.querySelector("#mySelect14").dispatchEvent(new Event("change"));
   }
-  console.log(infoMark);
 }
 function getSelectValue(selectId) {
   return parseInt(document.getElementById(selectId).value);
@@ -291,7 +290,6 @@ const showUploadImg = () => {
   }
 };
 
-console.log('hahahahahahhah')
 function handleCheckboxChange(event) {
   const checkbox = event.target;
   if (checkbox.checked) {
@@ -526,6 +524,8 @@ $(document).on("click", ".button_medium", function () {
     select_point0();
     removeNow();
     remarksellect();
+    $(this).removeClass("now");
+
   } else {
     removeNow();
 
@@ -558,6 +558,8 @@ $(document).on("click", ".button_plus", function () {
     select_point0();
     removeNow();
     remarksellect();
+    $(this).removeClass("now");
+
   } else {
     removeNow();
     $(this).addClass("now");
@@ -590,6 +592,8 @@ $(document).on("click", ".button_premium", function () {
     select_point0();
     removeNow();
     remarksellect();
+    $(this).removeClass("now");
+
   } else {
     removeNow();
     $(this).addClass("now");

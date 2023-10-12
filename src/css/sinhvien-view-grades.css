@@ -323,8 +323,13 @@ html {
     width: 300px;
   }
   
-  
-
+.level_title {
+  font-size: 2rem;
+}
+.act_name_title {
+  font-size: 2rem;
+  margin-left: 3rem;
+}
   
   
   

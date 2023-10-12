@@ -449,6 +449,7 @@ td a:hover {
 
 .content_top h2 {
   border-bottom: 1px solid;
+  margin: 0 1rem;
   margin-bottom: 1rem;
   font-size: 2rem;
   background: rgb(27 87 198);
@@ -564,6 +565,9 @@ textarea {
 
 /* responsive */
 @media screen and (max-width: 600px) {
+  .container{
+    margin-bottom: 12rem;
+  }
   .header {
     display: flex;
     top: 0;
@@ -749,5 +753,6 @@ textarea {
   align-items: center;
   width: 100%;
   justify-content: center;
+  box-sizing: border-box;
 }
 /* ----------------------------------- */

@@ -1,4 +1,7 @@
 @media screen and (max-width: 600px) {
+    table{
+        width: 65rem;
+    }
     .content--button {
         display: flex !important;
         gap: 2;

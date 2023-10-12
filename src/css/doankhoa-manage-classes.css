@@ -189,6 +189,9 @@ label {
   flex-direction: column;
 }
 @media screen and (max-width: 600px) {
+  table{
+    width: 65rem;
+}
   .container__button{
     display: flex;
     gap: 2rem;

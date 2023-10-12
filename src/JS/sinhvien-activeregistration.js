@@ -21,7 +21,7 @@ function validateFile(file) {
 }
 //////////////////////
 $(document).ready(function () {
-  $(".post-btn").click(function () {
+  $(document).on("click", ".post-btn", function () {
     const modal_wrap_img = document.querySelectorAll(".modal_wrap_img");
     if (modal_wrap_img.length < 5) {
       $(".add-btn").css("display", "block");
@@ -90,7 +90,9 @@ $(document).on("click", ".drop_img ", function () {
 $(document).on("dragover", ".modal_wrap_img_item", handleDragOver);
 $(document).on("dragleave", ".modal_wrap_img_item", handleDragLeave);
 $(document).on("drop", ".modal_wrap_img_item", handleDrop);
-$(document).on("click", ".post-btn", handleUploadButtonClick);
+// $(document).on("click", ".post-btn", handleUploadButtonClick);
+$(document).on("click", ".up-img-btn", handleUploadButtonClick);
+
 $(document).on("change", ".upload-input", handleUploadInputChange);
 $(document).on("click", ".activeregistration_btn", handleCheckinButtonClick);
 $(document).on("click", ".save-btn", handleCheckinwithImgButtonClick);
@@ -312,7 +314,7 @@ async function mark(img_ids) {
       },
       body: postData,
     };
-    
+
     const response = await fetch("/api/muster", requestOptions);
     if (response.ok) {
       notify("n", "Đã điểm danh thành công!");
