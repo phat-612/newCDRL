@@ -29,12 +29,12 @@
         <!-- Table 1-->
 
         
-        <% if (Score.first[0] == 'chưa chấm') {%>
+        <% if (Score.total == 'Chưa chấm') {%>
           <table class="bang_cham_diem">
             <thead>
               <tr>
                 <th>
-                  <p>Nội Dung Đánh Giá</p>
+                  <p>Nội Dung Đánh Giá ok <%=Scorestd.total%> </p>
                 </th>
                 <th style="width: 12%">
                   <p>Điểm Tối Đa</p>
@@ -81,7 +81,7 @@
                 </td>
                 
                 <td>
-                  <%if (Score.first[0] == 'chưa chấm'){%>
+                  <%if (Score.first[0] == 'Chưa chấm'){%>
                   <div class="selectbox">
                     <div class="select">
                       <select id="mySelect1">
@@ -328,10 +328,10 @@
                 <td class="score_1"> <%=Scorestd.first[4]%>
   
     </td>
+    <td id="score_05"> 0 điểm
     <td class="score_1"> <%=Score.first[4]%>
   
     </td>
-    <td id="score_05"> 0 điểm
     </td>
     </tr>
 
@@ -1521,7 +1521,7 @@
               <thead>
                 <tr>
                   <th>
-                    <p>Nội Dung Đánh Giá</p>
+                    <p>Nội Dung Đánh Giá <%=Scorestd.total%></p>
                   </th>
                   <th style="width: 12%">
                     <p>Điểm Tối Đa</p>
@@ -2005,7 +2005,7 @@
         </td>
         
                  
-        <td id="total_muc_1k"> <%=  Score.first[0] %> ok điểm
+        <td id="total_muc_1k"> <%=  Score.first[0] %> điểm
           
                   </td>
                   <%if (Scorek.first[0] == 'Chưa chấm') {%>

@@ -66,8 +66,7 @@ $("#save-change").on("click", async () => {
     let postData = JSON.stringify({
       _id: _id,
       level: level,
-      dataUpdate: dataApproval,
-      defaultApproval: defaultApproval
+      dataUpdate: dataApproval
     });
 
     const requestOptions = {
@@ -111,7 +110,6 @@ $("#delete-student").on("click", async () => {
         _id: _id,
         level: level,
         dataDelete: dataDelete,
-        studentDelete: tableDelete.map((cls) => cls.value.toString()),
       });
       const requestOptions = {
         method: "POST",

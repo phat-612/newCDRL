@@ -196,6 +196,7 @@ $(document).ready(() => {
       }
     });
   }
+
   function editStudent(event) {
     event.preventDefault();
     const row = event.target.closest('tr');
@@ -301,23 +302,34 @@ $(document).ready(() => {
           URL.revokeObjectURL(blobUrl);
           $('.js_md_add').text('Thêm');
         } else {
-          dataStudents[cls] = dataStudents[cls].map((student) => {
-            if (student['_id'] == inpMssv.val()) {
-              return {
-                _id: inpMssv.val(),
-                last_name: inpHo.val(),
-                first_name: inpTen.val(),
-                role: inpCd.prop('checked') || inpLbhd.prop('checked') ? 'Ban cán sự' : 'Sinh viên',
-                dang_vien: inpDv.prop('checked'),
-                cham_diem: inpCd.prop('checked'),
-                lap_hoat_dong: inpLbhd.prop('checked'),
-              }
-            } else {
-              return student
-            }
-          })
-          // console.log(dataStudents[cls]);
-          loadStudents(true);
+          // dataStudents[cls] = dataStudents[cls].map((student) => {
+          //   if (student['_id'] == inpMssv.val()) {
+          //     return {
+          //       _id: inpMssv.val(),
+          //       last_name: inpHo.val(),
+          //       first_name: inpTen.val(),
+          //       role: inpCd.prop('checked') || inpLbhd.prop('checked') ? 'Ban cán sự' : 'Sinh viên',
+          //       dang_vien: inpDv.prop('checked'),
+          //       cham_diem: inpCd.prop('checked'),
+          //       lap_hoat_dong: inpLbhd.prop('checked'),
+          //     }
+          //   } else {
+          //     return student
+          //   }
+          // })
+
+          // console.log(skip[cls]);
+          // loadStudents(true);
+
+          new Promise(() => {
+            delete dataStudents[cls]; // clear data
+            delete skip[cls]; // reset to load again
+            return true;
+          }).then(
+            loadStudents(true),
+            (err) => console.log(err)
+          )
+
           notify('n', 'Cập nhật sinh viên thành công')
         }
       } else {
