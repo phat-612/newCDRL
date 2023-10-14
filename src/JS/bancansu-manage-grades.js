@@ -1,12 +1,18 @@
-
 const url = window.location.href
-var regex = /studentId=([^&]+)/; // Biểu thức chính quy để tìm chuỗi "studentId=" và các ký tự sau đó
-var match = url.match(regex); // Tìm kiếm sự khớp trong chuỗi
-var mssv = match[1]
+// var regex = /studentId=([^&]+)/; // Biểu thức chính quy để tìm chuỗi "studentId=" và các ký tự sau đó
+// var match = url.match(regex); // Tìm kiếm sự khớp trong chuỗi
+// var mssv = match[1]
 
-var parts = url.split("=");
-var currentClass = parts.pop();
-console.log(mssv)
+// Extract studentId value using regex
+const studentIdRegex = /studentId=([^&]+)/;
+const studentIdMatch = url.match(studentIdRegex);
+const mssv = studentIdMatch ? studentIdMatch[1] : null;
+
+// Extract class value using regex
+const classRegex = /class=([^&]+)/;
+const classMatch = url.match(classRegex);
+const currentClass = classMatch ? classMatch[1] : null;
+
 // tính điểm ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 function getSelectValue(selectId) {

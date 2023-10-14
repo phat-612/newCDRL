@@ -175,45 +175,42 @@
                   </td>
                   <td>
                     <%= student_list[i].last_name + " " + student_list[i].first_name%>
-                    <%if(student_scores[i]=='-' || student_scores[i]==0){%>
-                    <span class="dau_sao">*</span>
-                    <%}%>
-                    </td>
-                    <%if(department_scores[i] != '-'){%>
-                    
-                      <td class="zero_score"><%= student_scores[i] %></td>
-                      <td class="first_score"><%= staff_scores[i] %></td>
-                      <td class="marker_name"><%= staff_name[i] %></td>
-                      <td class="new_update khoa_score"><%= department_scores[i] %></td>
-                      <td><a class="chamdiem">Chấm điểm</a></td>
-                  <%}else {%>
-                <%if(staff_scores[i] != '-'){%>
-                  <td class="zero_score"><%= student_scores[i] %></td>
-                  <td class="new_update first_score"><%= staff_scores[i] %></td>
-                  
-                  <%}else {%>
-                    <%if(student_scores[i] != '-'){%>
-                    <td class="new_update zero_score"><%= student_scores[i] %></td>
-                    <td class="first_score"><%= staff_scores[i] %></td>
+                    <% if( student_list[i].total_score.std || student_list[i].total_score.std == 0 ) {%>
+                      <span class="dau_sao">*</span>
+                    <% } %>
+                  </td>
+                  <% if(student_list[i].total_score.dep) { %>
+                    <td class="zero_score"><%= student_list[i].total_score.std %></td>
+                    <td class="first_score"><%= student_list[i].total_score.stf %></td>
+                    <td class="marker_name"><%= student_list[i].total_score.marker %></td>
+                    <td class="new_update khoa_score"><%= student_list[i].total_score.dep %></td>
+                    <td><a class="chamdiem">Chấm điểm</a></td>
+                  <%} else {%>
+                    <% if(student_list[i].total_score.stf) { %>
+                      <td class="zero_score"><%= student_list[i].total_score.std %></td>
+                      <td class="new_update first_score"><%= student_list[i].total_score.std %></td>
                     <%}else {%>
-                      <td class="zero_score"><%= student_scores[i] %></td>
+                      <%if(student_list[i].total_score.std){%>
+                      <td class="new_update zero_score"><%= student_list[i].total_score.std %></td>
                       <td class="first_score"><%= staff_scores[i] %></td>
-                    <%}%>
-  
-                    <%}%>
-                    <td class="marker_name"><%= staff_name[i] %></td>
-                    <td class="khoa_score"><%= department_scores[i] %></td>
-                    <%if(student_scores[i] != '-' &&  student_scores[i]!= 0){%>
-                      <td><a  class="chamdiem">Chấm điểm</a></td>
-    
-                      <%}else {%>
-                        <td>-</td>
-      
+                      <%} else {%>
+                        <td class="zero_score"><%= student_scores[i] %></td>
+                        <td class="first_score"><%= staff_scores[i] %></td>
                       <%}%>
+
                     <%}%>
-  
-                          </tr>
-                          <% } %>
+                      <td class="marker_name"><%= staff_name[i] %></td>
+                      <td class="khoa_score"><%= department_scores[i] %></td>
+                    <% if(student_scores[i] != '-' &&  student_scores[i]!= 0) { %>
+                        <td><a  class="chamdiem">Chấm điểm</a></td>
+      
+                    <%}else {%>
+                          <td>-</td>
+                    <%}%>
+                  <%}%>
+
+                </tr>
+              <% } %>
               </tbody>
             </table>
           </div>

@@ -177,6 +177,7 @@ function createDepRouter(client) {
         .findOne({}, { projection: { _id: 0, year: 1 } });
       // check user login:
       if (user.pow[2]) {
+        // get all branch of department:
         let branch_list = await client
           .db(name_global_databases)
           .collection("branchs")
@@ -191,11 +192,12 @@ function createDepRouter(client) {
             { projection: { _id: 1, branch: 1 } }
           )
           .toArray();
-        console.log(classlist)
+
         const years = await client
           .db(name_global_databases)
           .collection("classes")
           .findOne({ _id: classlist[0]._id }, { projection: { _id: 0, years: 1 } });
+
 
         // get all student in staff member class:
         let student_list = await client
@@ -203,12 +205,17 @@ function createDepRouter(client) {
           .collection("user_info")
           .find(
             { class: classlist[0]._id, "power.0": { $exists: true } },
-            { projection: { first_name: 1, last_name: 1 } }
+            { 
+              projection: { 
+                first_name: 1, 
+                last_name: 1,
+                total_score: 1,
+              } 
+            }
           )
           .toArray();
+
         student_list = sortStudentName(student_list);
-        console.log(student_list);
-        // get all branch of department:
 
         // get all student total score from themself:
         let render = {
@@ -218,75 +225,75 @@ function createDepRouter(client) {
           menu: "doankhoa-menu",
           staff_name: [],
           student_list: student_list,
-          student_scores: [],
-          staff_scores: [],
-          department_scores: [],
+          // student_scores: [],
+          // staff_scores: [],
+          // department_scores: [],
           cls: classlist,
           years: years.years,
           curr_year: school_year.year,
           branch: branch_list,
         };
-        for (student of student_list) {
-          const curr_student_score = await client
-            .db(user.dep)
-            .collection(classlist[0]._id + "_std_table")
-            .findOne(
-              {
-                mssv: student._id,
-                school_year: school_year.year,
-              },
-              {
-                projection: { total: 1 },
-              }
-            );
-          const curr_staff_score = await client
-            .db(user.dep)
-            .collection(classlist[0]._id + "_stf_table")
-            .findOne(
-              {
-                mssv: student._id,
-                school_year: school_year.year,
-              },
-              {
-                projection: {
-                  total: 1,
-                  marker: 1,
-                },
-              }
-            );
-          const curr_department_score = await client
-            .db(user.dep)
-            .collection(classlist[0]._id + "_dep_table")
-            .findOne(
-              {
-                mssv: student._id,
-                school_year: school_year.year,
-              },
-              {
-                projection: { total: 1 },
-              }
-            );
-          // student
-          if (curr_student_score) {
-            render.student_scores.push(curr_student_score.total);
-          } else {
-            render.student_scores.push("-");
-          }
-          // staff member
-          if (curr_staff_score) {
-            render.staff_scores.push(curr_staff_score.total);
-            render.staff_name.push(curr_staff_score.marker);
-          } else {
-            render.staff_scores.push("-");
-            render.staff_name.push("-");
-          }
-          // department
-          if (curr_department_score) {
-            render.department_scores.push(curr_department_score.total);
-          } else {
-            render.department_scores.push("-");
-          }
-        }
+        // for (student of student_list) {
+        //   const curr_student_score = await client
+        //     .db(user.dep)
+        //     .collection(classlist[0]._id + "_std_table")
+        //     .findOne(
+        //       {
+        //         mssv: student._id,
+        //         school_year: school_year.year,
+        //       },
+        //       {
+        //         projection: { total: 1 },
+        //       }
+        //     );
+        //   const curr_staff_score = await client
+        //     .db(user.dep)
+        //     .collection(classlist[0]._id + "_stf_table")
+        //     .findOne(
+        //       {
+        //         mssv: student._id,
+        //         school_year: school_year.year,
+        //       },
+        //       {
+        //         projection: {
+        //           total: 1,
+        //           marker: 1,
+        //         },
+        //       }
+        //     );
+        //   const curr_department_score = await client
+        //     .db(user.dep)
+        //     .collection(classlist[0]._id + "_dep_table")
+        //     .findOne(
+        //       {
+        //         mssv: student._id,
+        //         school_year: school_year.year,
+        //       },
+        //       {
+        //         projection: { total: 1 },
+        //       }
+        //     );
+        //   // student
+        //   if (curr_student_score) {
+        //     render.student_scores.push(curr_student_score.total);
+        //   } else {
+        //     render.student_scores.push("-");
+        //   }
+        //   // staff member
+        //   if (curr_staff_score) {
+        //     render.staff_scores.push(curr_staff_score.total);
+        //     render.staff_name.push(curr_staff_score.marker);
+        //   } else {
+        //     render.staff_scores.push("-");
+        //     render.staff_name.push("-");
+        //   }
+        //   // department
+        //   if (curr_department_score) {
+        //     render.department_scores.push(curr_department_score.total);
+        //   } else {
+        //     render.department_scores.push("-");
+        //   }
+        // }
         return res.render("doankhoa-grade-list", render);
       } else {
         // user not staff members

@@ -4,8 +4,8 @@ let curr_tb_year =
   "_" +
   $(".nien_khoa select option:selected").text().trim();
 // console.log(branch_list);
-console.log(class_list);
-console.log(year_cur);
+// console.log(class_list);
+// console.log(year_cur);
 
 $(document).on("change", ".--bomon select", async function () {
   const selectedBranch = $(".--bomon select option:selected").text().trim();
@@ -184,7 +184,7 @@ $(document).on("click", ".button-35-a", async function () {
   $(".load_list_btn").prop("disabled", true);
   $(".load_list_btn").text("Loading...");
   notify("!", "Đợi chút đang tải bảng điểm!");
-  console.log(curr_tb_year);
+  // console.log(curr_tb_year);
   try {
     const year =
       "HK" +
@@ -206,8 +206,9 @@ $(document).on("click", ".button-35-a", async function () {
     if (response.ok) {
       const data = await response.json();
       const year_available = data.year_available.year;
-      console.log(data.year_available);
-      console.log(year);
+      // console.log(data.year_available);
+      // console.log(year);
+      console.log(data.student_list[0].total_score.dep);
 
       // empty old table:
       $("table tbody").empty();
@@ -216,20 +217,20 @@ $(document).on("click", ".button-35-a", async function () {
         let newdep = "khoa_score",
           newstf = "first_score",
           newstd = "zero_score";
-        if (data.department_scores[i] != "-") {
+        if (data.student_list[i].total_score.dep) {
           newdep = "new_update khoa_score";
-        } else if (data.staff_name[i] != "-") {
+        } else if (data.student_list[i].total_score.stf) {
           newstf = "new_update first_score";
-        } else if (data.student_scores[i] != "-") {
+        } else if (data.student_list[i].total_score.std) {
           newstd = "new_update zero_score";
         } else {
           newstd = "zero_score";
         }
-        let std_score_html = `<td class="${newstd}">${data.student_scores[i]}</td>`;
-        let stf_score_html = `<td class="${newstf}">${data.staff_scores[i]}</td>`;
-        let dep_score_html = `<td class="${newdep}">${data.department_scores[i]}</td>`;
-
-        if (data.student_scores[i] != "-" && data.student_scores[i] != 0) {
+        let std_score_html = data.student_list[i].total_score.std ? `<td class="${newstd}">${data.student_list[i].total_score.std}</td>` : `<td class="${newstd}">-</td>`;
+        let stf_score_html = data.student_list[i].total_score.stf ? `<td class="${newstf}">${data.student_list[i].total_score.stf}</td>` : `<td class="${newstf}">-</td>`;
+        let dep_score_html = data.student_list[i].total_score.dep ? `<td class="${newdep}">${data.student_list[i].total_score.dep}</td>` : `<td class="${newdep}">-</td>`;
+        let maker_html = data.student_list[i].total_score.marker ?  `<td>${data.student_list[i].total_score.marker}</td>` : `<td>-</td>` 
+        if (data.student_list[i].total_score.std != "-" && data.student_list[i].total_score.std != 0) {
           $("table tbody").append(`
         <tr>
           <td>
@@ -252,7 +253,7 @@ $(document).on("click", ".button-35-a", async function () {
           }</td>
           ${std_score_html}
           ${stf_score_html}
-          <td>${data.staff_name[i]}</td>
+          ${maker_html}
           ${dep_score_html}
           <td><a class="chamdiem">Chấm điểm</a></td>
         </tr>
@@ -263,7 +264,7 @@ $(document).on("click", ".button-35-a", async function () {
           <td>
             <div class="checkbox-wrapper-4">
               <input type="checkbox" id="row${i + 1}" class="inp-cbx" value="${
-            data.student_list[i]._id
+                data.student_list[i].total_score.dep
           }" />
               <label for="row${
                 i + 1
@@ -272,7 +273,7 @@ $(document).on("click", ".button-35-a", async function () {
             </div>
           </td>
           <td>${i + 1}</td>
-          <td>${data.student_list[i]._id}</td>
+          <td>${data.student_list[i].total_score.dep}</td>
           <td class='std_name_row'>${
             data.student_list[i].last_name +
             " " +
@@ -280,7 +281,7 @@ $(document).on("click", ".button-35-a", async function () {
           }</td>
           ${std_score_html}
           ${stf_score_html}
-          <td>${data.staff_name[i]}</td>
+          ${maker_html}
           ${dep_score_html}
           <td>-</td>
         </tr>
@@ -288,9 +289,9 @@ $(document).on("click", ".button-35-a", async function () {
         }
 
         // add '*' to student have not mark yet
-        if (data.student_scores[i] == "-" || data.student_scores[i] == 0) {
-          console.log(data.student_scores[i]);
-          console.log(i);
+        if (data.student_list[i].total_score.dep || data.student_list[i].total_score.dep == 0) {
+          // console.log(data.student_scores[i]);
+          // console.log(i);
           $("table tbody tr")
             .eq(i)
             .find(".std_name_row")
@@ -298,12 +299,12 @@ $(document).on("click", ".button-35-a", async function () {
         }
       }
       $(".chamdiem").click(function () {
-        console.log(year_available);
-        console.log(curr_tb_year);
+        // console.log(year_available);
+        // console.log(curr_tb_year);
 
-        console.log(
-          $(".selectbox--hocky select option:selected").text().trim()
-        );
+        // console.log(
+        //   $(".selectbox--hocky select option:selected").text().trim()
+        // );
         const cur_tb_year =
           "HK" +
           $(".selectbox--hocky select option:selected").text().trim() +
@@ -339,6 +340,7 @@ $(document).on("click", ".button-35-a", async function () {
     notify("x", "Có lỗi xảy ra!");
   }
 });
+
 $(".chamdiem").click(function () {
   console.log($(".selectbox--hocky select option:selected").text().trim());
   const cur_tb_year =

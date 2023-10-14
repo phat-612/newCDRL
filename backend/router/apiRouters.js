@@ -1275,7 +1275,13 @@ function createAPIRouter(client, wss) {
             .collection("user_info")
             .find(
               { class: cls, "power.0": { $exists: true } },
-              { projection: { first_name: 1, last_name: 1 } }
+              { 
+                projection: { 
+                  first_name: 1, 
+                  last_name: 1,
+                  total_score: 1,
+                } 
+              }
             )
             .toArray()
         );
@@ -1284,79 +1290,80 @@ function createAPIRouter(client, wss) {
         let result = {
           staff_name: [],
           student_list: student_list,
-          student_scores: [],
-          staff_scores: [],
-          department_scores: [],
+          // student_scores: [],
+          // staff_scores: [],
+          // department_scores: [],
           year_available: year_available,
         };
-        for (student of student_list) {
-          const curr_student_score = await client
-            .db(user.dep)
-            .collection(cls + "_std_table")
-            .findOne(
-              {
-                mssv: student._id,
-                school_year: school_year,
-              },
-              {
-                projection: {
-                  _id: 0,
-                  total: 1,
-                },
-              }
-            );
-          const curr_staff_score = await client
-            .db(user.dep)
-            .collection(cls + "_stf_table")
-            .findOne(
-              {
-                mssv: student._id,
-                school_year: school_year,
-              },
-              {
-                projection: {
-                  _id: 0,
-                  total: 1,
-                  marker: 1,
-                },
-              }
-            );
-          const curr_departmentt_score = await client
-            .db(user.dep)
-            .collection(cls + "_dep_table")
-            .findOne(
-              {
-                mssv: student._id,
-                school_year: school_year,
-              },
-              {
-                projection: {
-                  _id: 0,
-                  total: 1,
-                },
-              }
-            );
-          // student
-          if (curr_student_score) {
-            result.student_scores.push(curr_student_score.total);
-          } else {
-            result.student_scores.push("-");
-          }
-          // staff member
-          if (curr_staff_score) {
-            result.staff_scores.push(curr_staff_score.total);
-            result.staff_name.push(curr_staff_score.marker);
-          } else {
-            result.staff_scores.push("-");
-            result.staff_name.push("-");
-          }
-          // department
-          if (curr_departmentt_score) {
-            result.department_scores.push(curr_departmentt_score.total);
-          } else {
-            result.department_scores.push("-");
-          }
-        }
+
+        // for (student of student_list) {
+        //   const curr_student_score = await client
+        //     .db(user.dep)
+        //     .collection(cls + "_std_table")
+        //     .findOne(
+        //       {
+        //         mssv: student._id,
+        //         school_year: school_year,
+        //       },
+        //       {
+        //         projection: {
+        //           _id: 0,
+        //           total: 1,
+        //         },
+        //       }
+        //     );
+        //   const curr_staff_score = await client
+        //     .db(user.dep)
+        //     .collection(cls + "_stf_table")
+        //     .findOne(
+        //       {
+        //         mssv: student._id,
+        //         school_year: school_year,
+        //       },
+        //       {
+        //         projection: {
+        //           _id: 0,
+        //           total: 1,
+        //           marker: 1,
+        //         },
+        //       }
+        //     );
+        //   const curr_departmentt_score = await client
+        //     .db(user.dep)
+        //     .collection(cls + "_dep_table")
+        //     .findOne(
+        //       {
+        //         mssv: student._id,
+        //         school_year: school_year,
+        //       },
+        //       {
+        //         projection: {
+        //           _id: 0,
+        //           total: 1,
+        //         },
+        //       }
+        //     );
+        //   // student
+        //   if (curr_student_score) {
+        //     result.student_scores.push(curr_student_score.total);
+        //   } else {
+        //     result.student_scores.push("-");
+        //   }
+        //   // staff member
+        //   if (curr_staff_score) {
+        //     result.staff_scores.push(curr_staff_score.total);
+        //     result.staff_name.push(curr_staff_score.marker);
+        //   } else {
+        //     result.staff_scores.push("-");
+        //     result.staff_name.push("-");
+        //   }
+        //   // department
+        //   if (curr_departmentt_score) {
+        //     result.department_scores.push(curr_departmentt_score.total);
+        //   } else {
+        //     result.department_scores.push("-");
+        //   }
+        // }
 
         return res.status(200).json(result);
       } else {
@@ -1438,6 +1445,7 @@ function createAPIRouter(client, wss) {
       return res.sendStatus(500);
     }
   });
+
   router.post("/doan_khoa/autoMark", checkIfUserLoginAPI, async (req, res) => {
     try {
       const user = req.session.user;
@@ -1461,7 +1469,7 @@ function createAPIRouter(client, wss) {
               },
             }
           );
-
+        
         // check if table is exist or not
         // update or add new table copy from std_table to staff_table
         for (let i = 0; i < data.std_list.length; i++) {

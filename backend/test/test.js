@@ -98,82 +98,95 @@ const name_global_databases = "global";
 //     console.log(ok);
 //   });
 
-async function inet() {
-  const all_branchs = await client
-    .db(name_global_databases)
-    .collection("branchs")
-    .find(
-      {
-        dep: "CNTT",
-      },
-      {
-        projection: {
-          name: 1,
-        },
-      }
-    )
-    .toArray();
-  const teachers = await client
-    .db(name_global_databases)
-    .collection("user_info")
-    .find(
-      {
-        "power.1": { $exists: true },
-        "power.4": { $exists: true },
-        "power.999": { $exists: false },
+// async function inet() {
+//   const all_branchs = await client
+//     .db(name_global_databases)
+//     .collection("branchs")
+//     .find(
+//       {
+//         dep: "CNTT",
+//       },
+//       {
+//         projection: {
+//           name: 1,
+//         },
+//       }
+//     )
+//     .toArray();
+//   const teachers = await client
+//     .db(name_global_databases)
+//     .collection("user_info")
+//     .find(
+//       {
+//         "power.1": { $exists: true },
+//         "power.4": { $exists: true },
+//         "power.999": { $exists: false },
 
-        $or: [
-          { branch: { $in: all_branchs.map((branch) => branch._id) } },
-          { branch: ObjectId.createFromHexString("650985a345e2e896b37efd4f") },
-        ],
-      }, // user is teacher
-      {
-        projection: {
-          first_name: 1,
-          last_name: 1,
-          class: 1,
-          branch: 1,
-        },
-      }
-    )
-    .toArray();
+//         $or: [
+//           { branch: { $in: all_branchs.map((branch) => branch._id) } },
+//           { branch: ObjectId.createFromHexString("650985a345e2e896b37efd4f") },
+//         ],
+//       }, // user is teacher
+//       {
+//         projection: {
+//           first_name: 1,
+//           last_name: 1,
+//           class: 1,
+//           branch: 1,
+//         },
+//       }
+//     )
+//     .toArray();
 
-  const cls = await client.db(name_global_databases).collection("classes").find({}).toArray();
-  teachers.forEach(async (teacher) => {
-    cls.forEach(async (cls) => {
-      await client
-        .db(name_global_databases)
-        .collection("user_info")
-        .updateMany(
-          {
-            _id: teacher._id,
-            "power.1": { $exists: true },
-            "power.4": { $exists: true },
-            "power.999": { $exists: false },
-          },
-          {
-            $push: { class: cls.cvht == teacher._id ? cls._id : null },
-            // $set: { class: [] },
-          }
-        );
-      await client
-        .db(name_global_databases)
-        .collection("user_info")
-        .updateMany(
-          {
-            _id: teacher._id,
-            "power.1": { $exists: true },
-            "power.4": { $exists: true },
-            "power.999": { $exists: false },
-          },
-          {
-            $pull: { class: null },
-            // $set: { class: [] },
-          }
-        );
-    });
-  });
-}
-inet().then(async (inet) => {
-  console.log(inet);
-});
+//   const cls = await client.db(name_global_databases).collection("classes").find({}).toArray();
+//   teachers.forEach(async (teacher) => {
+//     cls.forEach(async (cls) => {
+//       await client
+//         .db(name_global_databases)
+//         .collection("user_info")
+//         .updateMany(
+//           {
+//             _id: teacher._id,
+//             "power.1": { $exists: true },
+//             "power.4": { $exists: true },
+//             "power.999": { $exists: false },
+//           },
+//           {
+//             $push: { class: cls.cvht == teacher._id ? cls._id : null },
+//             // $set: { class: [] },
+//           }
+//         );
+//       await client
+//         .db(name_global_databases)
+//         .collection("user_info")
+//         .updateMany(
+//           {
+//             _id: teacher._id,
+//             "power.1": { $exists: true },
+//             "power.4": { $exists: true },
+//             "power.999": { $exists: false },
+//           },
+//           {
+//             $pull: { class: null },
+//             // $set: { class: [] },
+//           }
+//         );
+//     });
+//   });
+// }
+// inet().then(async (inet) => {
+//   console.log(inet);
+// });
+
+client.db('global').collection('user_info').updateMany(
+    {
+      "power.0": { $exists: true },
+      "total_score": { $exists: false },
+    },
+    { 
+      $set: 
+      {
+        total_score: {}
+      } 
+    }
+).then(console.log('ok'));

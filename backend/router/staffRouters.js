@@ -11,6 +11,7 @@ function createStaffRouter(client) {
       const user = req.session.user;
       const mssv = req.query.studentId;
       const schoolYearParam = req.query.schoolYear;
+
       let studentTotalScore = await client
         .db(user.dep)
         .collection(user.cls[0] + "_std_table")
@@ -76,6 +77,7 @@ function createStaffRouter(client) {
             },
           }
         );
+      
       nulltable = {
         fifth: ["Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm"],
         first: ["Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm", "Chưa chấm"],
@@ -84,6 +86,7 @@ function createStaffRouter(client) {
         third: ["Chưa chấm", "Chưa chấm", "Chưa chấm"],
         total: "Chưa chấm",
       };
+
       if (!stfTotalScore) {
         stfTotalScore = nulltable;
       }
@@ -167,10 +170,6 @@ function createStaffRouter(client) {
             }
           }
         }
-
-        console.log("std_act_img: ", std_act_img);
-        console.log("stf_act_img: ", stf_act_img);
-        console.log("dep_act_img: ", dep_act_img);
 
         return res.render("bancansu-manage-grades", {
           header: "global-header",

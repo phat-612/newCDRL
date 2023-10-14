@@ -39,7 +39,13 @@ function createTeacherRouter(client) {
             .collection("user_info")
             .find(
               { class: user.cls[0], "power.0": { $exists: true } },
-              { projection: { first_name: 1, last_name: 1 } }
+              { 
+                projection: { 
+                  first_name: 1, 
+                  last_name: 1,
+                  class: 1,
+                } 
+              }
             )
             .toArray()
         );
