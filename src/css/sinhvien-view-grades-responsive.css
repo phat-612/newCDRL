@@ -12,6 +12,7 @@
     }
     .select {
         overflow: inherit;
+        min-width: auto !important;
     }
 
     .select::after {

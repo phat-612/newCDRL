@@ -573,7 +573,7 @@ function createAPIRouter(client, wss) {
     const user = req.session.user;
     if (user.pow[4] || user.pow[7]) {
       const fileStudents = req.file;
-      console.log(req.body);
+      // console.log(req.body);
       async function generateEmail(str) {
         let s1 =
           "ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠạẢảẤấẦầẨẩẪẫẬậẮắẰằẲẳẴẵẶặẸẹẺẻẼẽẾếỀềỂểỄễỆệỈỉỊịỌọỎỏỐốỒồỔổỖỗỘộỚớỜờỞởỠỡỢợỤụỦủỨứỪừỬửỮữỰựỲỳỴỵỶỷỸỹ";
@@ -624,15 +624,15 @@ function createAPIRouter(client, wss) {
         }
 
         if (isCorrect) {
-          console.log("Các giá trị đúng theo thứ tự");
+          // console.log("Các giá trị đúng theo thứ tự");
 
           let havevalue = true;
 
           for (let row = 2; row <= 5; row++) {
             let hasValue = false;
-            console.log("ok");
+            // console.log("ok");
             for (let column = 1; column <= columnCount; column++) {
-              console.log("ko");
+              // console.log("ko");
 
               const cell = sheet.cell(row, column);
               const value = cell.value();
@@ -648,7 +648,7 @@ function createAPIRouter(client, wss) {
             } else {
               console.log(`Hàng ${row}: Không có giá trị`);
               havevalue = false;
-              console.log(havevalue);
+              // console.log(havevalue);
               break;
             }
           }
@@ -679,6 +679,7 @@ function createAPIRouter(client, wss) {
                     class: [req.body.cls],
                     displayName: `${values[i][1].toString()} ${values[i][2].toString()}`,
                     email: email,
+                    total_score: {},
                   };
                   let dataInsertLogin = {
                     _id: values[i][0].toString(),
@@ -728,7 +729,7 @@ function createAPIRouter(client, wss) {
               }
             } else {
               try {
-                console.log("ngu");
+                // console.log("ngu");
                 // read excel file:
                 // create all account
                 const workbook = await XlsxPopulate.fromFileAsync(fileStudents.path);
@@ -791,6 +792,7 @@ function createAPIRouter(client, wss) {
                       class: [req.body.cls],
                       displayName: `${values[i][1].toString()} ${values[i][2].toString()}`,
                       email: email,
+                      total_score: {},
                     };
                     let dataInsertLogin = {
                       _id: values[i][0].toString(),
@@ -844,16 +846,16 @@ function createAPIRouter(client, wss) {
               }
             }
           } else {
-            console.log("ngu hon nua");
+            // console.log("ngu hon nua");
 
             return res.sendStatus(404);
           }
         } else {
-          console.log("Các giá trị không đúng theo thứ tự");
+          // console.log("Các giá trị không đúng theo thứ tự");
           return res.sendStatus(405);
         }
       } else {
-        console.log("them 1 sinh vien");
+        // console.log("them 1 sinh vien");
         const dataStudent = req.body;
         // console.log(dataStudent);
         let pw = await randomPassword();
@@ -878,6 +880,7 @@ function createAPIRouter(client, wss) {
           class: [dataStudent["cls"]],
           displayName: `${dataStudent["ho"]} ${dataStudent["ten"]}`,
           email: email,
+          total_score: {}
         };
         let dataInsertLogin = {
           _id: dataStudent["mssv"].toString(),

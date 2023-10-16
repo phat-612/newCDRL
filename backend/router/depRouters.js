@@ -767,7 +767,7 @@ function createDepRouter(client) {
             students_data.push(data);
 
             if (value == 1) { // have one student not have bonus
-              bonus_true == false; 
+              bonus_true = false; 
             }
 
             if (value == 0) { // have one student not aproval yet

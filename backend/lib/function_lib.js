@@ -194,6 +194,7 @@ async function mark(table, user, mssv, data, marker, cls) {
     if (table == "_stf_table") {
       update.marker = marker.last_name + " " + marker.first_name;
     }
+
     await client.db(user.dep).collection(cls + table).createIndex(
       {
         mssv: 1,
@@ -202,6 +203,7 @@ async function mark(table, user, mssv, data, marker, cls) {
         name: "_mssv",
       }
     );
+
     await client
       .db(user.dep)
       .collection(cls + table)
@@ -215,7 +217,63 @@ async function mark(table, user, mssv, data, marker, cls) {
         },
         { upsert: true }
       );
+      // update total score list for student
+      switch (table) {
+        case '_std_table':
+          await client
+            .db(name_global_databases)
+            .collection('user_info')
+            .updateOne(
+              {
+                _id: mssv,
+              }, 
+              {
+                $set : {
+                  [`total.${school_year.year}.std`]: data.total,
+                }
+              },
+              {
+                upsert: true,
+              }
+            );
+        case '_stf_table':
+          await client
+            .db(name_global_databases)
+            .collection('user_info')
+            .updateOne(
+              {
+                _id: mssv,
+              }, 
+              {
+                $set : {
+                  [`total.${school_year.year}.stf`]: data.total,
+                  [`total.${school_year.year}.marker`]: marker.last_name + " " + marker.first_name,
+                }
+              },
+              {
+                upsert: true,
+              }
+            );
+        case '_dep_table':
+          await client
+            .db(name_global_databases)
+            .collection('user_info')
+            .updateOne(
+              {
+                _id: mssv,
+              }, 
+              {
+                $set : {
+                  [`total.${school_year.year}.dep`]: data.total,
+                }
+              },
+              {
+                upsert: true,
+              }
+            );
+        }
   }
+
 }
 
 async function get_full_id(directoryPath, listName, listdep) {

@@ -55,6 +55,7 @@ html {
     width: 115.5rem;
     max-width: 95%;
     margin-top: 3rem;
+    padding: 1rem;
   }
   .tittle-table {
     margin: 0;
@@ -324,11 +325,25 @@ html {
   }
   
 .level_title {
-  font-size: 2rem;
+  font-size: 2.5rem;
+  padding: 10px;
+  text-align: center;
 }
 .act_name_title {
+  text-align: center;
   font-size: 2rem;
-  margin-left: 3rem;
+  /* margin-left: 3rem; */
+  padding: 1rem;
+  background-color: #56bec9;
+  margin: 2rem 20rem;
+  border-radius: 1rem;
+}
+.active_con{
+  border: 1px solid var(--black-color);
+  border-radius: 5px;
+}
+.active_item{
+  margin-bottom: 2rem;
 }
   
   

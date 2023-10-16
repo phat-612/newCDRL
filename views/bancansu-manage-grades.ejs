@@ -34,7 +34,7 @@
             <thead>
               <tr>
                 <th>
-                  <p>Nội Dung Đánh Giá ok <%=Scorestd.total%> </p>
+                  <p>Nội Dung Đánh Giá </p>
                 </th>
                 <th style="width: 12%">
                   <p>Điểm Tối Đa</p>
@@ -45,26 +45,18 @@
                 <th style="width: 10%">
                   <p>Tập Thể Lớp</p>
                 </th>
-                <th style="width: 12%">
-                  <p>Khoa Đánh Giá</p>
-                </th>
+                
               </tr>
             </thead>
             <tbody>
               <tr class="tr-title">
-                <td>
+                <td colspan="4">
   
                   <p class="title">1. Đánh giá về ý thức học tập</p>
   
                 </td>
-                <td>
-                </td>
-                <td>
-                </td>
-                <td>
-                </td>
-                <td>
-                </td>
+               
+                
               </tr>
               <tr>
                 <td>
@@ -116,9 +108,7 @@
   
                 </td>
 
-                <td>
-                  <div class="score_1"><%=Scorek.first[0]%></div>
-                </td>
+               
 
               </tr>
               <tr>
@@ -152,9 +142,7 @@
           <%}%> 
                 </td>
 
-                <td>
-                  <div class="score_1"><%=Scorek.first[1]%></div>
-                </td>
+                
 
               </tr>
 
@@ -164,7 +152,7 @@
               <tr>
                 <td>
                   <p class="first-column-value">
-                    c. Ý thức thực hiện tốt quy chế khi tham gia các kỳ thi.
+                    c. Ý thức thực hiện tốt quy chế khi tham gia các kỳ thi,
                     cuộc thi
                   </p>
                 </td>
@@ -193,9 +181,7 @@
         <div class="score_1"><%=Score.first[2]%></div>
         <%}%> 
                 </td>
-                <td>
-                  <div class="score_1"><%=Scorek.first[2]%></div>
-                </td>
+               
               </tr>
 
 
@@ -230,13 +216,7 @@
         <div id="hoverbox_01" class="pop-up-bc-tooltip"></div>
         <%}%>  
                 </td>
-                <td>
-                  <%if (Scorek.first[2] == 2){%>
-                  <div class="check_score"><i class="fa-solid fa-check"></i></div>
-                  <%} else {%>
-                  <div class="check_score"></div>
-                  <%}%>  
-                </td>
+               
 
               </tr>
 
@@ -273,13 +253,7 @@
         <%}%>
                 </td>
 
-                <td>
-                  <%if (Scorek.first[2] == 0){%>
-        <div class="check_score"><i class="fa-solid fa-check"></i></div>
-        <%} else {%>
-        <div class="check_score"></div>
-        <%}%>  
-                </td>
+               
 
               </tr>
               <tr>
@@ -312,9 +286,7 @@
       <%}%> 
   
                 </td>
-                <td>
-                  <div class="score_1"><%=Scorek.first[3]%></div>
-                </td>
+                
 
               </tr>
               <tr>
@@ -329,9 +301,7 @@
   
     </td>
     <td id="score_05"> 0 điểm
-    <td class="score_1"> <%=Score.first[4]%>
   
-    </td>
     </td>
     </tr>
 
@@ -367,13 +337,7 @@
         <%}%>  
                 </td>
 
-                <td>
-                  <%if (Scorek.first[4] == 2){%>
-        <div class="check_score"><i class="fa-solid fa-check"></i></div>
-        <%} else {%>
-        <div class="check_score"></div>
-        <%}%>          
-                </td>
+                
               </tr>
               <tr>
                 <td>
@@ -405,13 +369,7 @@
         <%}%>   
                 </td>
 
-                <td>
-                  <%if (Scorek.first[4] == 3){%>
-        <div class="check_score"><i class="fa-solid fa-check"></i></div>
-        <%} else {%>
-        <div class="check_score"></div>
-        <%}%>             
-                </td>
+                
 
 
               </tr>
@@ -448,13 +406,7 @@
         <%}%>  
                 </td>
 
-                <td>
-                  <%if (Scorek.first[4] == 4){%>
-        <div class="check_score"><i class="fa-solid fa-check"></i></div>
-        <%} else {%>
-        <div class="check_score"></div>
-        <%}%>     
-                  </td>
+             
               </tr>
 
 
@@ -487,13 +439,7 @@
         <div id="hoverbox_06" class="pop-up-bc-tooltip"></div>
         <%}%> 
                 </td>
-                <td>
-                  <%if (Scorek.first[4] == 5){%>
-        <div class="check_score"><i class="fa-solid fa-check"></i></div>
-        <%} else {%>
-        <div class="check_score"></div>
-        <%}%> 
-                </td>
+              
               </tr>
 
 
@@ -515,29 +461,17 @@
                 </td>
 
 
-                <%if (Scorek.first[0] == 'Chưa chấm') {%>
-                  <td id="total_muc_1"> <%=  Scorek.first[0]%>
-                    <%}else {%>
-                  <td id="total_muc_1"> <%=  Scorek.first[0] + Scorek.first[1] + Scorek.first[2] + Scorek.first[3] + Scorek.first[4] %> điểm
-                    <%}%>
-                                </td>
               </tr>
 
         <tr class="tr-title">
-          <td >
+          <td colspan="4">
   
             <p class="title">2. Đánh giá về ý thức và kết quả chấp hành nội quy, quy
               chế, quy định trong nhà trường</p>
   
           </td>
-          <td>
-          </td>
-          <td>
-          </td>
-          <td>
-          </td>
-          <td>
-          </td>
+         
+         
         </tr>
 
 
@@ -582,9 +516,7 @@
         <%}%> 
   
       </td>
-      <td>
-        <div class="score_2"><%=Scorek.second[0]%></div>
-      </td>
+     
       
         </tr>
 
@@ -605,26 +537,8 @@
         <%}%>
           </td>
           
-          <td>
-            <%if (Scorek.second[0] == 10){%>
-        <div class="check_score"><i class="fa-solid fa-check"></i></div>
-        <%} else {%>
-        <div class="checkbox-wrapper-4">
-          <input type="checkbox" id="morning7" class="inp-cbx" value="10" />
-          <label for="morning7" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-          </label>
-  
-        </div>
-        <div id="hoverbox_07" class="pop-up-bc-tooltip"></div>
-        <%}%>
-          </td>
-          <td>
-            <%if (Scorek.second[0] == 10){%>
-        <div class="check_score"><i class="fa-solid fa-check"></i></div>
-        <%} else {%>
-        <div class="check_score"></div>
-        <%}%>
-          </td>
+
+          
         </tr>
         <tr>
           <td>
@@ -656,13 +570,7 @@
         <%}%> 
           </td>
 
-          <td>
-            <%if (Scorek.second[0] == 0){%>
-        <div class="check_score"><i class="fa-solid fa-check"></i></div>
-        <%} else {%>
-        <div class="check_score"></div>
-        <%}%>     
-          </td>
+          
         </tr>
         <tr>
           <td>
@@ -701,9 +609,7 @@
         <%}%> 
           </td>
 
-          <td>
-            <div class="score_2"><%=Scorek.second[1]%></div>
-          </td>
+         
         </tr>
 
 
@@ -737,13 +643,7 @@
         <%}%>  
           </td>
 
-          <td>
-            <%if (Scorek.second[1] == 5){%>
-        <div class="check_score"><i class="fa-solid fa-check"></i></div>
-        <%} else {%>
-        <div class="check_score"></div>
-        <%}%>      
-          </td>
+          
         </tr>
 
         <tr>
@@ -782,13 +682,7 @@
         <%}%>
           </td>
 
-          <td>
-            <%if (Scorek.second[1] == 0){%>
-        <div class="check_score"><i class="fa-solid fa-check"></i></div>
-        <%} else {%>
-        <div class="check_score"></div>
-        <%}%>         
-          </td>
+          
 
         </tr>
 
@@ -813,29 +707,17 @@
   
         </td>
 
-        <%if (Scorek.first[0] == 'Chưa chấm') {%>
-          <td id="total_muc_1"> <%=  Scorek.first[0]%>
-            <%}else {%>
-          <td id="total_muc_2"> <%=Scorek.second[0]+Scorek.second[1]%> điểm
-            <%}%>
-                </td>
+       
         </tr>
         <tr class="tr-title">
-          <td>
+          <td colspan="4">
   
             <p class="title">3. Đánh giá về ý thức và kết quả tham gia các hoạt động
               chính trị, xã hội, văn hoá, văn nghệ, thể thao, phòng
               chống tội phạm và các tệ nạn xã hội</p>
   
           </td>
-          <td>
-          </td>
-          <td>
-          </td>
-          <td>
-          </td>
-          <td>
-          </td>
+          
         </tr>
         <tr>
           <td>
@@ -874,9 +756,7 @@
         <%}%> 
   
           </td>
-          <td>
-            <div class="score_3"><%=Scorek.third[0]%></div>
-          </td>
+          
         </tr>
         <tr>
       <td>
@@ -909,13 +789,7 @@
         <%}%> 
         </td>
 
-        <td>
-          <%if (Scorek.third[0] == 5){%>
-        <div class="check_score"><i class="fa-solid fa-check"></i></div>
-        <%} else {%>
-        <div class="check_score"></div>
-        <%}%>           
-        </td>
+       
         </tr>
       <tr>
         <td>
@@ -948,13 +822,7 @@
         <div id="hoverbox_12" class="pop-up-bc-tooltip"></div>
         <%}%> 
         </td>
-        <td>
-          <%if (Scorek.third[0] == 8){%>
-        <div class="check_score"><i class="fa-solid fa-check"></i></div>
-        <%} else {%>
-        <div class="check_score"></div>
-        <%}%>  
-        </td>
+       
       </tr>
       <tr>
         <td>
@@ -991,9 +859,7 @@
   
         </td>
 
-        <td>
-          <div class="score_3"><%=Scorek.third[1]%></div>
-        </td>
+        
       </tr>
     <tr>
       <td>
@@ -1010,30 +876,9 @@
   
       </td>
       
-      <td>
-        <%if (Scorek.third[2] !== 'chưa chấm'){%>
-        <div class="selectbox">
-          <div class="select">
-            <select id="mySelect9">
-              <option value="0">0</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-            </select>
-          </div>
-        </div>
-        <%} else {%>
-        <div class="score_1"><%=Scorek.third[2]%></div>
-        <%}%> 
-  
-      </td>
+      
 
-      <td>
-        <div class="score_3"><%=Score.third[2]%></div>
-      </td>
+     
     </tr>
     <tr>
       <td>
@@ -1057,28 +902,17 @@
         <%}%>
       </td>
 
-      <%if (Scorek.first[0] == 'Chưa chấm') {%>
-        <td id="total_muc_3"> <%=  Scorek.first[0]%>
-          <%}else {%>
-        <td id="total_muc_3"> <%=Scorek.third[0]+Scorek.third[1]+Scorek.third[2]%> điểm
-          <%}%>
-        </td>
+      
     </tr>
     <tr class="tr-title">
-      <td>
+      <td colspan="4">
   
         <p class="title">4. Đánh giá về ý thức công dân trong quan hệ cộng
           đồng</p>
   
       </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
+      
+      
     </tr>
     <tr>
       <td>
@@ -1119,9 +953,7 @@
   
       </td>
 
-      <td>
-        <div class="score_4"><%=Scorek.fourth[0]%></div>
-      </td>
+    
     </tr>
 
     <tr>
@@ -1158,9 +990,7 @@
   
       </td>
 
-      <td>
-        <div class="score_4"><%=Scorek.fourth[1]%></div>
-      </td>
+     
     </tr>
     <tr>
       <td>
@@ -1201,9 +1031,7 @@
   
       </td>
 
-      <td>
-        <div class="score_4"><%=Scorek.fourth[2]%></div>
-      </td>
+     
     </tr>
     <tr>
       <td>
@@ -1222,16 +1050,11 @@
         <%}%>
       </td>
 
-      <%if (Scorek.first[0] == 'Chưa chấm') {%>
-        <td id="total_muc_4"> <%=  Scorek.first[0]%>
-          <%}else {%>
-        <td id="total_muc_4"> <%=Scorek.fourth[0]+Scorek.fourth[1]+Scorek.fourth[2]%> điểm
-          <%}%>
-        </td>
+     
 
     </tr>
     <tr class="tr-title">
-      <td colspan="2">
+      <td colspan="4">
   
         <p class="title" style="font-size: 1.5rem;">5. Đánh giá về ý thức và kết quả tham gia công tác phụ
           trách lớp, các đoàn thể, tổ chức trong nhà trường hoặc
@@ -1239,14 +1062,8 @@
           của học sinh, sinh viên</p>
   
       </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
+      
+      
     </tr>
     <tr>
       <td>
@@ -1280,9 +1097,6 @@
   
       </td>
 
-      <td>
-        <div class="score_5"><%=Scorek.fifth[0]%></div>
-      </td>
     </tr>
 
 
@@ -1318,9 +1132,7 @@
   
       </td>
 
-      <td>
-        <div class="score_5"><%=Scorek.fifth[1]%></div>
-      </td>
+     
     </tr>
     <tr>
       <td>
@@ -1354,9 +1166,7 @@
   
       </td>
 
-      <td>
-        <div class="score_5"><%=Scorek.fifth[2]%></div>
-      </td>
+     
     </tr>
     <tr>
       <td>
@@ -1388,9 +1198,7 @@
         <%}%> 
   
       </td>
-      <td>
-        <div class="score_5"><%=Scorek.fifth[3]%></div>
-      </td>
+     
     </tr>
     <tr>
       <td>
@@ -1420,13 +1228,7 @@
       </td>
       <%}%> 
       </td>
-      <td>
-        <%if (Score.fifth[3] == 1){%>
-        <div class="check_score"><i class="fa-solid fa-check"></i></div>
-        <%} else {%>
-        <div class="check_score"></div>
-        <%}%>  
-      </td>
+     
     </tr>
     <tr>
       <td>
@@ -1455,13 +1257,7 @@
       <div id="hoverbox_14" class="pop-up-bc-tooltip"></div>
       <%}%>  
       </td>
-      <td>
-        <%if (Scorek.fifth[3] == 2){%>
-      <div class="check_score"><i class="fa-solid fa-check"></i></div>
-      <%} else {%>
-      <div class="check_score"></div>
-      <%}%>      
-      </td>
+      
     </tr>
     <tr>
       <td>
@@ -1476,18 +1272,8 @@
   
       </td>
       
-        <%if (Score.first[0] == 'Chưa chấm') {%>
-      <td id="total_muc_5k"> 0 điểm
-        <%}else {%>
-      <td id="total_muc_5k"><%=Scorek.fifth[0]+Scorek.fifth[1]+Scorek.fifth[2]+Scorek.fifth[3]%> điểm
-        <%}%>
-      </td>
-      <%if (Scorek.first[0] == 'Chưa chấm') {%>
-        <td id="total_muc_5"> <%=  Score.first[0]%>
-          <%}else {%>
-        <td id="total_muc_5"> <%=Score.fifth[0]+Score.fifth[1]+Score.fifth[2]+Score.fifth[3]%> điểm
-          <%}%>
-        </td>
+       
+      
     </tr>
     <tr>
       <td>
@@ -1507,12 +1293,7 @@
       <td id="total_allk"><%=Score.total%> điểm
         <%}%>
       </td>
-      <%if (Scorek.first[0] == 'Chưa chấm') {%>
-        <td id="total_all"><%=Scorek.total%>
-          <%}else {%>
-        <td id="total_all"><%=Scorek.total%> điểm
-          <%}%>
-        </td>
+      
     </tr>
     </tbody>
           </table>
@@ -1532,26 +1313,18 @@
                   <th style="width: 10%">
                     <p>Tập Thể Lớp</p>
                   </th>
-                  <th style="width: 12%">
-                    <p>Khoa Đánh Giá</p>
-                  </th>
+                 
                 </tr>
               </thead>
               <tbody>
                 <tr class="tr-title">
-                  <td>
+                  <td colspan="4">
     
                     <p class="title">1. Đánh giá về ý thức học tập</p>
     
                   </td>
-                  <td>
-                  </td>
-                  <td>
-                  </td>
-                  <td>
-                  </td>
-                  <td>
-                  </td>
+                  
+                  
                 </tr>
                 <tr>
                   <td>
@@ -1590,9 +1363,7 @@
                     
     
                   </td>
-                  <td>
-                    <div class="score_1"><%=Scorek.first[0]%></div>
-                  </td>
+                 
                 </tr>
 
                 <tr>
@@ -1631,14 +1402,12 @@
             </div>
             
                   </td>
-                  <td>
-                    <div class="score_1"><%=Scorek.first[1]%></div>
-                  </td>
+                 
                 </tr>
                 <tr>
                   <td>
                     <p class="first-column-value">
-                      c. Ý thức thực hiện tốt quy chế khi tham gia các kỳ thi.
+                      c. Ý thức thực hiện tốt quy chế khi tham gia các kỳ thi,
                       cuộc thi
                     </p>
                   </td>
@@ -1671,9 +1440,7 @@
           </div>
           
                   </td>
-                  <td>
-                    <div class="score_1"><%=Scorek.first[2]%></div>
-                  </td>
+                 
                 </tr>
                 <tr>
                   <td>
@@ -1710,13 +1477,7 @@
           <div id="hoverbox_01" class="pop-up-bc-tooltip"></div>
           <%}%>  
                   </td>
-                  <td>
-                    <%if (Scorek.first[2] == 2){%>
-          <div class="check_score"><i class="fa-solid fa-check"></i></div>
-          <%} else {%>
-          <div class="check_score"></div>
-          <%}%>  
-                  </td>
+                
                 </tr>
                 <tr>
                   <td>
@@ -1753,13 +1514,7 @@
           <div id="hoverbox_01" class="pop-up-bc-tooltip"></div>
           <%}%>
                   </td>
-                  <td>
-                    <%if (Scorek.first[2] == 0){%>
-          <div class="check_score"><i class="fa-solid fa-check"></i></div>
-          <%} else {%>
-          <div class="check_score"></div>
-          <%}%>  
-                  </td>
+                  
                 </tr>
                 <tr>
                   <td>
@@ -1797,9 +1552,7 @@
         
     
                   </td>
-                  <td>
-                    <div class="score_1"><%=Scorek.first[3]%></div>
-                  </td>
+                  
                 </tr>
                 <tr>
                   <td>
@@ -1814,9 +1567,7 @@
       </td>
       <td id="score_05"> <%=Score.first[4]%> điểm
       </td>
-      <td class="score_1"> <%=Scorek.first[4]%>
     
-      </td>
       
       </tr>
 
@@ -1855,13 +1606,7 @@
           <div id="hoverbox_03" class="pop-up-bc-tooltip"></div>
           <%}%>  
                   </td>
-                  <td>
-                    <%if (Scorek.first[4] == 2){%>
-          <div class="check_score"><i class="fa-solid fa-check"></i></div>
-          <%} else {%>
-          <div class="check_score"></div>
-          <%}%>          
-                  </td>
+                  
                 </tr>
                 <tr>
                   <td>
@@ -1898,13 +1643,7 @@
           <div id="hoverbox_04" class="pop-up-bc-tooltip"></div>
           <%}%>   
                   </td>
-                  <td>
-                    <%if (Scorek.first[4] == 3){%>
-          <div class="check_score"><i class="fa-solid fa-check"></i></div>
-          <%} else {%>
-          <div class="check_score"></div>
-          <%}%>             
-                  </td>
+                  
                 </tr>
                 <tr>
                   <td>
@@ -1941,13 +1680,7 @@
           <div id="hoverbox_05" class="pop-up-bc-tooltip"></div>
           <%}%>  
                   </td>
-                  <td>
-                    <%if (Scorek.first[4] == 4){%>
-          <div class="check_score"><i class="fa-solid fa-check"></i></div>
-          <%} else {%>
-          <div class="check_score"></div>
-          <%}%>     
-                    </td>
+                  
                 </tr>
                 <tr>
                   <td>
@@ -1984,13 +1717,7 @@
           <div id="hoverbox_06" class="pop-up-bc-tooltip"></div>
           <%}%> 
                   </td>
-                  <td>
-                    <%if (Scorek.first[4] == 5){%>
-          <div class="check_score"><i class="fa-solid fa-check"></i></div>
-          <%} else {%>
-          <div class="check_score"></div>
-          <%}%> 
-                  </td>
+                  
                 </tr>
                 
                 <tr>
@@ -2008,28 +1735,17 @@
         <td id="total_muc_1k"> <%=  Score.first[0] %> điểm
           
                   </td>
-                  <%if (Scorek.first[0] == 'Chưa chấm') {%>
-                    <td id="total_muc_1"> <%=  Scorek.first[0]%>
-                      <%}else {%>
-                    <td id="total_muc_1"> <%=  Scorek.first[0]  %> haha điểm
-                      <%}%>
-                                  </td>
+                 
                 </tr>
           <tr class="tr-title">
-            <td >
+            <td colspan="4">
     
               <p class="title">2. Đánh giá về ý thức và kết quả chấp hành nội quy, quy
                 chế, quy định trong nhà trường</p>
     
             </td>
-            <td>
-            </td>
-            <td>
-            </td>
-            <td>
-            </td>
-            <td>
-            </td>
+            
+            
           </tr>
           <tr>
             <td>
@@ -2066,9 +1782,7 @@
         
     
             </td>
-            <td>
-              <div class="score_2"><%=Scorek.second[0]%></div>
-            </td>
+            
           </tr>
           <tr>
           <td>
@@ -2106,13 +1820,7 @@
           <%}%>
             </td>
             
-            <td>
-              <%if (Scorek.second[0] == 10){%>
-          <div class="check_score"><i class="fa-solid fa-check"></i></div>
-          <%} else {%>
-          <div class="check_score"></div>
-          <%}%>
-            </td>
+            
 
           </tr>
           <tr>
@@ -2151,13 +1859,7 @@
           <%}%> 
             </td>
 
-            <td>
-              <%if (Scorek.second[0] == 0){%>
-          <div class="check_score"><i class="fa-solid fa-check"></i></div>
-          <%} else {%>
-          <div class="check_score"></div>
-          <%}%>     
-            </td>
+            
 
           </tr>
 
@@ -2195,9 +1897,7 @@
           </div>
           
             </td>
-            <td>
-              <div class="score_2"><%=Scorek.second[1]%></div>
-            </td>
+            
           </tr>
           <tr>
             <td>
@@ -2234,13 +1934,7 @@
           <div id="hoverbox_09" class="pop-up-bc-tooltip"></div>
           <%}%>  
             </td>
-            <td>
-              <%if (Scorek.second[1] == 5){%>
-          <div class="check_score"><i class="fa-solid fa-check"></i></div>
-          <%} else {%>
-          <div class="check_score"></div>
-          <%}%>      
-            </td>
+           
           </tr>
           <tr>
             <td>
@@ -2278,13 +1972,7 @@
           <%}%>
             </td>
 
-            <td>
-              <%if (Scorek.second[1] == 0){%>
-          <div class="check_score"><i class="fa-solid fa-check"></i></div>
-          <%} else {%>
-          <div class="check_score"></div>
-          <%}%>         
-            </td>
+            
 
           </tr>
           <tr>
@@ -2307,29 +1995,18 @@
           </td>
 
 
-          <%if (Scorek.first[0] == 'Chưa chấm') {%>
-            <td id="total_muc_1"> <%=  Scorek.first[0]%>
-              <%}else {%>
-            <td id="total_muc_2"> <%=Scorek.second[0]+Scorek.second[1]%> điểm
-              <%}%>
-                  </td>
+          
           </tr>
           <tr class="tr-title">
-            <td>
+            <td colspan="4">
     
               <p class="title">3. Đánh giá về ý thức và kết quả tham gia các hoạt động
                 chính trị, xã hội, văn hoá, văn nghệ, thể thao, phòng
                 chống tội phạm và các tệ nạn xã hội</p>
     
             </td>
-            <td>
-            </td>
-            <td>
-            </td>
-            <td>
-            </td>
-            <td>
-            </td>
+         
+           
           </tr>
           <tr>
             <td>
@@ -2369,9 +2046,7 @@
     
             </td>
 
-            <td>
-              <div class="score_3"><%=Scorek.third[0]%></div>
-            </td>
+            
           </tr>
           <tr>
         <td>
@@ -2409,13 +2084,7 @@
           <div id="hoverbox_11" class="pop-up-bc-tooltip"></div>
           <%}%> 
           </td>
-          <td>
-            <%if (Scorek.third[0] == 5){%>
-          <div class="check_score"><i class="fa-solid fa-check"></i></div>
-          <%} else {%>
-          <div class="check_score"></div>
-          <%}%>           
-          </td>
+          
           </tr>
         <tr>
           <td>
@@ -2457,13 +2126,7 @@
           <%}%> 
           </td>
 
-          <td>
-            <%if (Scorek.third[0] == 8){%>
-          <div class="check_score"><i class="fa-solid fa-check"></i></div>
-          <%} else {%>
-          <div class="check_score"></div>
-          <%}%>  
-          </td>
+          
 
         </tr>
 
@@ -2505,9 +2168,7 @@
     
           </td>
 
-          <td>
-            <div class="score_3"><%=Scorek.third[1]%></div>
-          </td>
+          
 
         </tr>
       <tr>
@@ -2548,9 +2209,7 @@
     
         </td>
 
-        <td>
-          <div class="score_3"><%=Scorek.third[2]%></div>
-        </td>
+        
       </tr>
       <tr>
         <td>
@@ -2572,28 +2231,17 @@
         
         </td>
 
-        <%if (Scorek.first[0] == 'Chưa chấm') {%>
-          <td id="total_muc_3"> <%=  Scorek.first[0]%>
-            <%}else {%>
-          <td id="total_muc_3"> <%=Scorek.third[0]+Scorek.third[1]+Scorek.third[2]%> điểm
-            <%}%>
-              </td>
+       
       </tr>
       <tr class="tr-title">
-        <td>
+        <td colspan="4">
     
           <p class="title">4. Đánh giá về ý thức công dân trong quan hệ cộng
             đồng</p>
     
         </td>
-        <td>
-        </td>
-        <td>
-        </td>
-        <td>
-        </td>
-        <td>
-        </td>
+      
+        
       </tr>
       <tr>
         <td>
@@ -2632,9 +2280,7 @@
     
         </td>
 
-        <td>
-          <div class="score_4"><%=Scorek.fourth[0]%></div>
-        </td>
+        
       </tr>
       <tr>
         <td>
@@ -2673,9 +2319,7 @@
     
         </td>
 
-        <td>
-          <div class="score_4"><%=Scorek.fourth[1]%></div>
-        </td>
+        
       </tr>
       <tr>
         <td>
@@ -2713,9 +2357,7 @@
           
     
         </td>
-        <td>
-          <div class="score_4"><%=Scorek.fourth[2]%></div>
-        </td>
+        
       </tr>
       <tr>
         <td>
@@ -2733,15 +2375,10 @@
           
         </td>
 
-        <%if (Scorek.first[0] == 'Chưa chấm') {%>
-          <td id="total_muc_4"> <%=  Scorek.first[0]%>
-            <%}else {%>
-          <td id="total_muc_4"> <%=Scorek.fourth[0]+Scorek.fourth[1]+Scorek.fourth[2]%> điểm
-            <%}%>
-          </td>
+        
       </tr>
       <tr class="tr-title">
-        <td colspan="2">
+        <td colspan="4">
     
           <p class="title" style="font-size: 1.5rem;">5. Đánh giá về ý thức và kết quả tham gia công tác phụ
             trách lớp, các đoàn thể, tổ chức trong nhà trường hoặc
@@ -2749,14 +2386,9 @@
             của học sinh, sinh viên</p>
     
         </td>
-        <td>
-        </td>
-        <td>
-        </td>
-        <td>
-        </td>
-        <td>
-        </td>
+       
+       
+        
       </tr>
       <tr>
         <td>
@@ -2795,9 +2427,7 @@
     
         </td>
 
-        <td>
-          <div class="score_5"><%=Scorek.fifth[0]%></div>
-        </td>
+       
       </tr>
       <tr>
         <td>
@@ -2835,9 +2465,7 @@
           
     
         </td>
-        <td>
-          <div class="score_5"><%=Scorek.fifth[1]%></div>
-        </td>
+        
       </tr>
       <tr>
         <td>
@@ -2876,9 +2504,7 @@
           
     
         </td>
-        <td>
-          <div class="score_5"><%=Scorek.fifth[2]%></div>
-        </td>
+        
       </tr>
       <tr>
         <td>
@@ -2917,9 +2543,7 @@
          
     
         </td>
-        <td>
-          <div class="score_5"><%=Scorek.fifth[3]%></div>
-        </td>
+       
       </tr>
 
       
@@ -2936,13 +2560,7 @@
           <div class="check_score"></div>
           <%}%>  
         </td>
-        <td>
-          <%if (Score.fifth[3] == 1){%>
-          <div class="check_score"><i class="fa-solid fa-check"></i></div>
-          <%} else {%>
-          <div class="check_score"></div>
-          <%}%>  
-        </td>
+       
         <td>
           <%if (Score.fifth[3] == 1){%>
             <div class="checkbox-wrapper-4">
@@ -2964,13 +2582,7 @@
         <%}%> 
         </td>
 
-        <td>
-          <%if (Scorek.fifth[3] == 1){%>
-          <div class="check_score"><i class="fa-solid fa-check"></i></div>
-          <%} else {%>
-          <div class="check_score"></div>
-          <%}%>  
-        </td>
+        
       </tr>
       <tr>
         <td>
@@ -3006,13 +2618,7 @@
         <%}%>  
         </td>
         
-        <td>
-          <%if (Scorek.fifth[3] == 2){%>
-        <div class="check_score"><i class="fa-solid fa-check"></i></div>
-        <%} else {%>
-        <div class="check_score"></div>
-        <%}%>      
-        </td>
+        
 
 
       </tr>
@@ -3034,12 +2640,7 @@
           
         </td>
 
-        <%if (Score.first[0] == 'Chưa chấm') {%>
-          <td id="total_muc_5"> <%=  Score.first[0]%>
-            <%}else {%>
-          <td id="total_muc_5"> <%=Score.fifth[0]+Score.fifth[1]+Score.fifth[2]+Score.fifth[3]%> điểm
-            <%}%>
-              </td>
+      
 
       </tr>
       <tr>
@@ -3059,12 +2660,7 @@
           
         </td>
 
-        <%if (Scorek.first[0] == 'Chưa chấm') {%>
-          <td id="total_all"><%=Score.total%>
-            <%}else {%>
-          <td id="total_all"><%=Score.total%> điểm
-            <%}%>
-          </td>
+        
       </tr>
       </tbody>
             </table>
@@ -3104,8 +2700,11 @@
     <% } %>
 
     <% if (Object.keys(dep_act_img).length !== 0) { %>
+      <div class="active_con">
+
       <div class="level_title">Cấp Trường:</div>
       <% for (const [key, value] of Object.entries(dep_act_img)) { %>
+       <div class="active_item">
         <div class="act_name_title"><%= key %>:</div>
         <%for (img_info of value){%>
           <div class="main_img_item">
@@ -3113,7 +2712,9 @@
             <div class="main_img_item_title"><%=img_info.fileDescription%></div>
           </div>
           <%}%>
+       </div>
       <% } %>
+    </div>
     <% } %>
   </div>
   <div class="main_img content_top">
