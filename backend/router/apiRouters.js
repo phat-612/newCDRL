@@ -13,6 +13,7 @@ const {
   sortStudentName,
   scheduleFileDeletion,
   mark,
+  updateStudentTotalScore,
   sendEmail,
   randomPassword,
   checkIfUserLoginAPI,
@@ -1437,6 +1438,8 @@ function createAPIRouter(client, wss) {
                 { upsert: true }
               );
           }
+
+          await updateStudentTotalScore('_stf_table', std_table.school_year, std_table.mssv, std_table.total, std_table.marker);
         }
 
         return res.sendStatus(200);
@@ -1503,6 +1506,8 @@ function createAPIRouter(client, wss) {
                 { upsert: true }
               );
           }
+
+          await updateStudentTotalScore('_dep_table', std_table.school_year, std_table.mssv, std_table.total, std_table.marker);
         }
 
         return res.sendStatus(200);

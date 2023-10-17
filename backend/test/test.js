@@ -178,15 +178,34 @@ const name_global_databases = "global";
 //   console.log(inet);
 // });
 
-client.db('global').collection('user_info').updateMany(
+// client.db('global').collection('user_info').updateMany(
+//     {
+//       "power.0": { $exists: true },
+//       "total_score": { $exists: false },
+//     },
+//     { 
+//       $set: 
+//       {
+//         total_score: {}
+//       } 
+//     }
+// ).then(console.log('ok'));
+
+const school_year = 'HK1_2022-2023'
+client
+  .db('global')
+  .collection('user_info')
+  .updateOne(
     {
-      "power.0": { $exists: true },
-      "total_score": { $exists: false },
+      _id: '2101085',
+    }, 
+    {
+      $set : {
+        [`total_score.${school_year}.stf`]: 2,
+        [`total_score.${school_year}.marker`]: 'Nguyễn Thị E',
+      }
     },
-    { 
-      $set: 
-      {
-        total_score: {}
-      } 
+    {
+      upsert: true,
     }
-).then(console.log('ok'));
+  ).then(console.log('ok'));;

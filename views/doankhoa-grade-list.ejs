@@ -159,7 +159,7 @@
               </thead>
               <tbody>
                 <% for (let i=0; i < student_list.length; i++) {%>
-                  <% const curr_year_total = data.student_list[i].total_score[curr_year]; %>
+                  <% const curr_year_total = student_list[i].total_score[curr_year]; %>
                   <% if (curr_year_total) { %>
                     <tr>
                       <td>

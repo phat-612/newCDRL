@@ -143,7 +143,6 @@ async function checkIfUserLoginRoute(req, res, next) {
     next();
   }
 }
-
 async function mark(table, user, mssv, data, marker, cls) {
   // data = {
   //   first: [],
@@ -217,63 +216,70 @@ async function mark(table, user, mssv, data, marker, cls) {
         },
         { upsert: true }
       );
-      // update total score list for student
-      switch (table) {
-        case '_std_table':
-          await client
-            .db(name_global_databases)
-            .collection('user_info')
-            .updateOne(
-              {
-                _id: mssv,
-              }, 
-              {
-                $set : {
-                  [`total.${school_year.year}.std`]: data.total,
-                }
-              },
-              {
-                upsert: true,
-              }
-            );
-        case '_stf_table':
-          await client
-            .db(name_global_databases)
-            .collection('user_info')
-            .updateOne(
-              {
-                _id: mssv,
-              }, 
-              {
-                $set : {
-                  [`total.${school_year.year}.stf`]: data.total,
-                  [`total.${school_year.year}.marker`]: marker.last_name + " " + marker.first_name,
-                }
-              },
-              {
-                upsert: true,
-              }
-            );
-        case '_dep_table':
-          await client
-            .db(name_global_databases)
-            .collection('user_info')
-            .updateOne(
-              {
-                _id: mssv,
-              }, 
-              {
-                $set : {
-                  [`total.${school_year.year}.dep`]: data.total,
-                }
-              },
-              {
-                upsert: true,
-              }
-            );
-        }
+    
+      updateStudentTotalScore(table, school_year.year, mssv, data.total, marker.last_name + " " + marker.first_name)
   }
+}
 
+async function updateStudentTotalScore(table, school_year, mssv, total, marker) {
+  // update total score list for student
+  switch (table) {
+    case '_std_table':
+      await client
+        .db(name_global_databases)
+        .collection('user_info')
+        .updateOne(
+          {
+            _id: mssv,
+          },
+          {
+            $set: {
+              [`total_score.${school_year}.std`]: total,
+            }
+          },
+          {
+            upsert: true,
+          }
+        );
+        break;
+    case '_stf_table':
+      await client
+        .db(name_global_databases)
+        .collection('user_info')
+        .updateOne(
+          {
+            _id: mssv,
+          },
+          {
+            $set: {
+              [`total_score.${school_year}.stf`]: total,
+              [`total_score.${school_year}.marker`]: marker,
+            }
+          },
+          {
+            upsert: true,
+          }
+        );
+        break;
+    case '_dep_table':
+      await client
+        .db(name_global_databases)
+        .collection('user_info')
+        .updateOne(
+          {
+            _id: mssv,
+          },
+          {
+            $set: {
+              [`total_score.${school_year}.dep`]: total,
+            }
+          },
+          {
+            upsert: true,
+          }
+        );
+        break;
+  }
 }
 
 async function get_full_id(directoryPath, listName, listdep) {
@@ -443,6 +449,7 @@ module.exports = {
   get_full_id,
   blockUnwantedPaths,
   mark,
+  updateStudentTotalScore,
   randomPassword,
   scheduleFileDeletion,
   sortStudentName,

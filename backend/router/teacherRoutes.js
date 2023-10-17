@@ -44,6 +44,7 @@ function createTeacherRouter(client) {
                   first_name: 1, 
                   last_name: 1,
                   class: 1,
+                  total_score: 1,
                 } 
               }
             )
@@ -54,76 +55,77 @@ function createTeacherRouter(client) {
           header: "global-header",
           footer: "global-footer",
           thongbao: "global-notifications",
-          staff_name: [],
+          // staff_name: [],
           student_list: student_list,
-          student_scores: [],
-          staff_scores: [],
-          department_scores: [],
+          // student_scores: [],
+          // staff_scores: [],
+          // department_scores: [],
           cls: user.cls,
           years: years.years,
           curr_year: school_year.year,
         };
-        for (student of student_list) {
-          const curr_student_score = await client
-            .db(user.dep)
-            .collection(user.cls[0] + "_std_table")
-            .findOne(
-              {
-                mssv: student._id,
-                school_year: school_year.year,
-              },
-              {
-                projection: { total: 1 },
-              }
-            );
-          const curr_staff_score = await client
-            .db(user.dep)
-            .collection(user.cls[0] + "_stf_table")
-            .findOne(
-              {
-                mssv: student._id,
-                school_year: school_year.year,
-              },
-              {
-                projection: {
-                  total: 1,
-                  marker: 1,
-                },
-              }
-            );
-          const curr_department_score = await client
-            .db(user.dep)
-            .collection(user.cls[0] + "_dep_table")
-            .findOne(
-              {
-                mssv: student._id,
-                school_year: school_year.year,
-              },
-              {
-                projection: { total: 1 },
-              }
-            );
-          // student
-          if (curr_student_score) {
-            render.student_scores.push(curr_student_score.total);
-          } else {
-            render.student_scores.push("-");
-          }
-          // staff member
-          if (curr_staff_score) {
-            render.staff_scores.push(curr_staff_score.total);
-            render.staff_name.push(curr_staff_score.marker);
-          } else {
-            render.staff_scores.push("-");
-            render.staff_name.push("-");
-          }
-          // department
-          if (curr_department_score) {
-            render.department_scores.push(curr_department_score.total);
-          } else {
-            render.department_scores.push("-");
-          }
-        }
+        
+        // for (student of student_list) {
+        //   const curr_student_score = await client
+        //     .db(user.dep)
+        //     .collection(user.cls[0] + "_std_table")
+        //     .findOne(
+        //       {
+        //         mssv: student._id,
+        //         school_year: school_year.year,
+        //       },
+        //       {
+        //         projection: { total: 1 },
+        //       }
+        //     );
+        //   const curr_staff_score = await client
+        //     .db(user.dep)
+        //     .collection(user.cls[0] + "_stf_table")
+        //     .findOne(
+        //       {
+        //         mssv: student._id,
+        //         school_year: school_year.year,
+        //       },
+        //       {
+        //         projection: {
+        //           total: 1,
+        //           marker: 1,
+        //         },
+        //       }
+        //     );
+        //   const curr_department_score = await client
+        //     .db(user.dep)
+        //     .collection(user.cls[0] + "_dep_table")
+        //     .findOne(
+        //       {
+        //         mssv: student._id,
+        //         school_year: school_year.year,
+        //       },
+        //       {
+        //         projection: { total: 1 },
+        //       }
+        //     );
+        //   // student
+        //   if (curr_student_score) {
+        //     render.student_scores.push(curr_student_score.total);
+        //   } else {
+        //     render.student_scores.push("-");
+        //   }
+        //   // staff member
+        //   if (curr_staff_score) {
+        //     render.staff_scores.push(curr_staff_score.total);
+        //     render.staff_name.push(curr_staff_score.marker);
+        //   } else {
+        //     render.staff_scores.push("-");
+        //     render.staff_name.push("-");
+        //   }
+        //   // department
+        //   if (curr_department_score) {
+        //     render.department_scores.push(curr_department_score.total);
+        //   } else {
+        //     render.department_scores.push("-");
+        //   }
+        // }
 
         return res.render("teacher-grade-list", render);
       } else {
