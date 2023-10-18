@@ -294,7 +294,7 @@ $(document).on("click", ".button-35-a", async function () {
   
           // add '*' to student have not mark yet
           if (curr_year_total.std || curr_year_total.std == 0) {
-            console.log(curr_year_total.std);
+            // console.log(curr_year_total.std);
             // console.log(i);
             $("table tbody tr")
               .eq(i)

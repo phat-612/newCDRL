@@ -193,11 +193,141 @@ function createStaffRouter(client) {
   });
 
   // ban can su quan ly hoat dong
+  // router.get("/quanlihoatdong", checkIfUserLoginRoute, async (req, res) => {
+  //   return res.render("bancansu-manage-activities", {
+  //     header: "global-header",
+  //     footer: "global-footer",
+  //     thongbao: "global-notifications",
+  //   });
+  // });
   router.get("/quanlihoatdong", checkIfUserLoginRoute, async (req, res) => {
-    return res.render("bancansu-manage-activities", {
-      header: "global-header",
-      footer: "global-footer",
-    });
+    const user = req.session.user;
+
+    const school_year = await client
+      .db(name_global_databases)
+      .collection("school_year")
+      .findOne({}, { projection: { _id: 0, year: 1 } });
+    // check user login:
+    if (user.pow[3] ) {
+      let branch_list = await client
+        .db(name_global_databases)
+        .collection("branchs")
+        .find({ dep: user.dep }, { projection: { _id: 1, name: 1 } })
+        .toArray();
+
+      const classlist = await client
+        .db(name_global_databases)
+        .collection("classes")
+        .find(
+          { branch: { $in: branch_list.map((branch) => branch._id) } },
+          { projection: { _id: 1, branch: 1 } }
+        )
+        .toArray();
+
+      const years = await client
+        .db(name_global_databases)
+        .collection("classes")
+        .findOne({ _id: classlist[0]._id }, { projection: { _id: 0, years: 1 } });
+
+      // get all activities of school
+      const school_atv = await client
+        .db(name_global_databases)
+        .collection("activities")
+        .find(
+          {
+            year: school_year.year
+          },
+          {
+            projection: {
+              name: 1,
+              content: 1,
+              year: 1,
+              start_time: 1
+            },
+          }
+        )
+        .limit(10)
+        .toArray();
+
+      // get all activities of dep
+      const dep_atv = await client
+        .db(user.dep)
+        .collection("activities")
+        .find(
+          {
+            year: school_year.year
+          },
+          {
+            projection: {
+              name: 1,
+              content: 1,
+              year: 1,
+              start_time: 1,
+            },
+          }
+        )
+        .limit(10)
+        .toArray();
+
+      // get all activities of class of department
+      const collections = await client.db(user.dep).listCollections().toArray();
+
+      // Filter collections ending with '_activities'
+      const activityCollections = collections.filter((collection) =>
+        collection.name.endsWith("_activities")
+      );
+
+      // Loop through activity collections and retrieve all documents
+      const cls_atvs = await activityCollections.map(async (collection) => {
+        const dummy = await client
+          .db(user.dep)
+          .collection(collection.name)
+          .find(
+            {
+              year: school_year.year
+            },
+            {
+              projection: {
+                name: 1,
+                content: 1,
+                cls: 1,
+                year: 1,
+                start_time: 1,
+              },
+            }
+          )
+          .limit(10)
+          .toArray();
+        return dummy;
+      });
+      Promise.all(cls_atvs)
+        .then((results) => {
+          // Khi tất cả các promise đã hoàn thành, results sẽ là một mảng chứa kết quả từ mỗi truy vấn.
+          // Bạn có thể làm gì đó với kết quả ở đây.
+          
+          const cls_atv = [].concat(...results); // Kết hợp kết quả từ các truy vấn vào một mảng duy nhất
+          
+          return res.render("bancansu-manage-activities", {
+            header: "global-header",
+            footer: "global-footer",
+            thongbao: "global-notifications",
+            menu: "doankhoa-menu",
+            cls: classlist,
+            years: years.years,
+            curr_year: school_year.year,
+            branch: branch_list,
+            school_atv: school_atv,
+            dep_atv: dep_atv,
+            cls_atv: cls_atv,
+          });
+        })
+        .catch((error) => {
+          // Xử lý lỗi nếu có
+          console.error(error);
+        });
+    } else {
+      return res.sendStatus(403);
+    }
   });
 
   // danh gia hoat dong

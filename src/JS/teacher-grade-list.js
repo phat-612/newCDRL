@@ -121,6 +121,7 @@ $(document).on("click", ".auto_mark_btn", async function () {
   }
  });
 
+
 $(document).on("click", ".load_list_btn", async function () {
   // disabled button until it done start down load
   $('.load_list_btn').prop('disabled', true);
@@ -135,129 +136,171 @@ $(document).on("click", ".load_list_btn", async function () {
     const response = await fetch(`/api/teacher/loadScoresList?year=${year}&cls=${current_class}`, requestOptions);
     if (response.ok) {
       const data = await response.json();
-      
-      const year_available=data.year_available.year
-    
+
+      const year_available = data.year_available.year;
+
+      // console.log(data.year_available);
+      // console.log(year);
 
       // empty old table:
       $('table tbody').empty();
       // load new table:
       for (let i = 0; i < data.student_list.length; i++) {
-        let newdep = "khoa_score",
-          newstf = "first_score",
-          newstd = "zero_score";
-        if (data.department_scores[i] != "-") {
-          newdep = "new_update khoa_score";
-        } else if (data.staff_name[i] != "-") {
-          newstf = "new_update first_score";
-        } else if (data.student_scores[i] != "-") {
-          newstd = "new_update zero_score";
-        } else {
-          newstd = "zero_score";
-        }
-        let std_score_html = `<td class="${newstd}">${data.student_scores[i]}</td>`;
-        let stf_score_html = `<td class="${newstf}">${data.staff_scores[i]}</td>`;
-        let dep_score_html = `<td class="${newdep}">${data.department_scores[i]}</td>`;
 
-        if (data.student_scores[i] != "-" && data.student_scores[i] != 0) {
-          if (data.department_scores[i] != "-") {
-            $("table tbody").append(`
-          <tr>
-            <td>
-              <div class="checkbox-wrapper-4">
-                <input type="checkbox" id="row${i + 1}" class="inp-cbx" value="${data.student_list[i]._id
-              }" />
-                <label for="row${i + 1
-              }" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                </label>
-              </div>
-            </td>
-            <td>${i + 1}</td>
-            <td>${data.student_list[i]._id}</td>
-            <td class='std_name_row'>${data.student_list[i].last_name +
-              " " +
-              data.student_list[i].first_name
-              }</td>
-            ${std_score_html}
-            ${stf_score_html}
-            <td>${data.staff_name[i]}</td>
-            ${dep_score_html}
-            <td><a href="/hocsinh/xembangdiem?schoolYear=${curr_tb_year}&mssv=${data.student_list[i]._id}" class="view_score_btn">Xem điểm</a></td>
-          </tr>
-          `);
+        const curr_year_total = data.student_list[i].total_score[year];
+
+        if (curr_year_total) {
+          let newdep = "khoa_score",
+            newstf = "first_score",
+            newstd = "zero_score";
+          if (curr_year_total.dep) {
+            newdep = "new_update khoa_score";
+          } else if (curr_year_total.stf) {
+            newstf = "new_update first_score";
+          } else if (curr_year_total.std) {
+            newstd = "new_update zero_score";
           } else {
-            $("table tbody").append(`
-        <tr>
-          <td>
-            <div class="checkbox-wrapper-4">
-              <input type="checkbox" id="row${i + 1}" class="inp-cbx" value="${data.student_list[i]._id
-              }" />
-              <label for="row${i + 1
-              }" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-              </label>
-            </div>
-          </td>
-          <td>${i + 1}</td>
-          <td>${data.student_list[i]._id}</td>
-          <td class='std_name_row'>${data.student_list[i].last_name +
-              " " +
-              data.student_list[i].first_name
-              }</td>
-          ${std_score_html}
-          ${stf_score_html}
-          <td>${data.staff_name[i]}</td>
-          ${dep_score_html}
-          <td><a class="set_score_btn">Chấm điểm</a></td>
-        </tr>
-        `);
+            newstd = "zero_score";
           }
-        } 
-        else {
-          $("table tbody").append(`
-        <tr>
-          <td>
-            <div class="checkbox-wrapper-4">
-              <input type="checkbox" id="row${i + 1}" class="inp-cbx" value="${
-            data.student_list[i]._id
-          }" />
-              <label for="row${
-                i + 1
-              }" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-              </label>
-            </div>
-          </td>
-          <td>${i + 1}</td>
-          <td>${data.student_list[i]._id}</td>
-          <td class='std_name_row'>${
-            data.student_list[i].last_name +
-            " " +
-            data.student_list[i].first_name
-          }</td>
-          ${std_score_html}
-          ${stf_score_html}
-          <td>${data.staff_name[i]}</td>
-          ${dep_score_html}
-          <td>-</td>
-        </tr>
-        `);
+
+          const std_score_html = curr_year_total.std ? `<td class="${newstd}">${curr_year_total.std}</td>`: `<td class="${newstd}">-</td>`;
+          const stf_score_html = curr_year_total.stf ? `<td class="${newstf}">${curr_year_total.stf}</td>`: `<td class="${newstf}">-</td>`;
+          const dep_score_html = curr_year_total.dep ? `<td class="${newdep}">${curr_year_total.dep}</td>`: `<td class="${newdep}">-</td>`;  
+          const maker_html = curr_year_total.marker ?  `<td>${curr_year_total.marker}</td>` : `<td>-</td>` 
+
+          if (curr_year_total.std && curr_year_total.std !== 0) {
+            if (curr_year_total.dep) {
+              $("table tbody").append(`
+                <tr>
+                  <td>
+                    <div class="checkbox-wrapper-4">
+                      <input type="checkbox" id="row${i + 1}" class="inp-cbx" value="${data.student_list[i]._id
+                    }" />
+                      <label for="row${i + 1
+                    }" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                      </label>
+                    </div>
+                  </td>
+                  <td>${i + 1}</td>
+                  <td>${data.student_list[i]._id}</td>
+                  <td class='std_name_row'>${data.student_list[i].last_name +
+                    " " +
+                    data.student_list[i].first_name
+                    }</td>
+                  ${std_score_html}
+                  ${stf_score_html}
+                  ${maker_html}
+                  ${dep_score_html}
+                  <td><a href="/hocsinh/xembangdiem?schoolYear=${curr_tb_year}&mssv=${data.student_list[i]._id}">Xem điểm</a></td>
+                </tr>
+              `);
+            } else {
+              $("table tbody").append(`
+              <tr>
+                <td>
+                  <div class="checkbox-wrapper-4">
+                    <input type="checkbox" id="row${i + 1}" class="inp-cbx" value="${data.student_list[i]._id
+                    }" />
+                    <label for="row${i + 1
+                    }" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                    </label>
+                  </div>
+                </td>
+                <td>${i + 1}</td>
+                <td>${data.student_list[i]._id}</td>
+                <td class='std_name_row'>${data.student_list[i].last_name +
+                    " " +
+                    data.student_list[i].first_name
+                    }</td>
+                ${std_score_html}
+                ${stf_score_html}
+                ${maker_html}
+                ${dep_score_html}
+                <td><a class="set_score_btn">Chấm điểm</a></td>
+              </tr>
+              `);
+            }
+          } 
+          else {
+            $("table tbody").append(`
+            <tr>
+              <td>
+                <div class="checkbox-wrapper-4">
+                  <input type="checkbox" id="row${i + 1}" class="inp-cbx" value="${
+                data.student_list[i]._id
+              }" />
+                  <label for="row${
+                    i + 1
+                  }" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                  </label>
+                </div>
+              </td>
+              <td>${i + 1}</td>
+              <td>${data.student_list[i]._id}</td>
+              <td class='std_name_row'>${
+                data.student_list[i].last_name +
+                " " +
+                data.student_list[i].first_name
+              }</td>
+              ${std_score_html}
+              ${stf_score_html}
+              ${maker_html}
+              ${dep_score_html}
+              <td>-</td>
+            </tr>
+          `);
         }
 
         // add '*' to student have not mark yet
-        if (data.student_scores[i] == "-" || data.student_scores[i] == 0) {
-          console.log(data.student_scores[i]);
-          console.log(i);
+        if (curr_year_total.std || curr_year_total.std === 0) {
+          $("table tbody tr")
+            .eq(i)
+            .find(".std_name_row")
+            .append(`<span class="dau_sao">*</span>`);
+        }
+
+        } else {
+          $("table tbody").append(`
+            <tr>
+              <td>
+                <div class="checkbox-wrapper-4">
+                  <input type="checkbox" id="row${i + 1}" class="inp-cbx" value="${
+                data.student_list[i]._id
+              }" />
+                  <label for="row${
+                    i + 1
+                  }" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                  </label>
+                </div>
+              </td>
+              <td>${i + 1}</td>
+              <td>${data.student_list[i]._id}</td>
+              <td class='std_name_row'>${
+                data.student_list[i].last_name +
+                " " +
+                data.student_list[i].first_name
+              }</td>
+              <td class="zero_score">-</td>
+              <td class="first_score">-</td>
+              <td>-</td>
+              <td class="khoa_score">-</td>
+              <td>-</td>
+            </tr>
+          `);
+
           $("table tbody tr")
             .eq(i)
             .find(".std_name_row")
             .append(`<span class="dau_sao">*</span>`);
         }
       }
+
       $('.set_score_btn').click(function() {
         if(year_available===curr_tb_year){
           const studentId = $(this).closest('tr').find('td:nth-child(3)').text();
           const lop = $(".selectbox.lop select").val()
 
-          alert(lop)
+          // alert(lop)
           this.href = `/bancansu/nhapdiemdanhgia?schoolYear=${curr_tb_year}&studentId=${studentId}&current_class=${lop}`;
         }
         else{

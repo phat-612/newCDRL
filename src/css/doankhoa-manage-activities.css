@@ -213,10 +213,12 @@ label {
 
 .copy_box {
   display: none;
+  /* transition: all 2s; */
 }
 
-.copy_box:hover {
-}
+/* .copy_box:hover {
+  display: block;
+} */
 
 .activity-board {
   text-align: center;

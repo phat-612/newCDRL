@@ -146,10 +146,13 @@ $(".close_modal").click(function () {
 // show and hide copy link box
 $(document).on("mouseenter", ".atv_box", async function () {
   $(this).next().show();
+  $(this).next().css("transition", "all 2s");
+
 });
 
 $(document).on("mouseenter", ".copy_box", async function () {
   $(this).show();
+  $(this).css("transition", "all 2s");
 });
 
 $(document).on("mouseleave", ".atv_box", async function () {
