@@ -751,6 +751,7 @@ function createDepRouter(client) {
         }
         // get all students information joined current activity
         let students_data = [];
+        let bonus_true;
         let all_true = true; // check does all student is yes or not
         if (curr_act.student_list) {
           for (const [key, value] of Object.entries(curr_act.student_list)) {
@@ -786,6 +787,7 @@ function createDepRouter(client) {
           students_data: students_data,
           all_true: all_true,
           bonus_true: bonus_true,
+          idact: req.params.id,
         });
       } else {
         return res.redirect("/");

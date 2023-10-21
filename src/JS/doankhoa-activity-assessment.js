@@ -66,7 +66,7 @@ $("#save-change").on("click", async () => {
     let postData = JSON.stringify({
       _id: _id,
       level: level,
-      dataUpdate: dataApproval
+      dataUpdate: dataApproval,
     });
 
     const requestOptions = {
@@ -103,7 +103,6 @@ $("#delete-student").on("click", async () => {
 
   notify("n", "Đang xóa sinh viên...");
 
-
   if (tableDelete.length > 0) {
     try {
       let postData = JSON.stringify({
@@ -123,7 +122,7 @@ $("#delete-student").on("click", async () => {
         for (let i = 0; i < tableDelete.length; i++) {
           tableDelete[i].parentNode.parentNode.parentNode.remove();
         }
-        notify("n", "Xóa sinh viên thành công!"); 
+        notify("n", "Xóa sinh viên thành công!");
       } else {
         notify("!", "Xóa sinh viên thất bại!");
       }
@@ -213,7 +212,7 @@ $(document).on("change", ".approval-cbx", async function () {
   });
 
   if (!this.checked) {
-    $(this).parent().parent().parent().find('.bonus-cbx').prop('checked', false);
+    $(this).parent().parent().parent().find(".bonus-cbx").prop("checked", false);
   }
 
   if (check) {
@@ -247,8 +246,6 @@ $(document).on("change", ".bonus-cbx", async function () {
   }
 });
 
-
-
 // show img
 
 const show_btns = document.querySelectorAll(".show_img_btn");
@@ -259,7 +256,7 @@ show_btns.forEach(function (show_btn) {
   show_btn.addEventListener("click", function (event) {
     event.preventDefault();
     show_element.classList.add("show_img");
-  })
+  });
 });
 
 show_element.addEventListener("click", function (event) {
@@ -270,23 +267,52 @@ popup_show.addEventListener("click", function (event) {
   event.stopPropagation();
 });
 
-
-
-
 var viewLinks = document.querySelectorAll("#school_tb tbody tr.atv_box td.show_img_btn a");
 viewLinks.forEach(function (link) {
-  link.addEventListener("click", function (event) {
+  link.addEventListener("click", async function (event) {
+    const divElement = document.querySelector(".main_img_item");
+
+    divElement.textContent = "Đang tải hình ảnh...";
+
     event.preventDefault();
     var row = this.closest("tr");
     var stt = row.querySelector("td:nth-child(2)").textContent.trim();
     var mssv = row.querySelector("td.mssv").textContent.trim();
     var a_name = row.querySelector("td.a_name").textContent.trim();
     var class_student = row.querySelector("td.class_student").textContent.trim();
+
     console.log("STT: " + stt);
     console.log("MSSV: " + mssv);
     console.log("Họ và Tên: " + a_name);
     console.log("Lớp: " + class_student);
+    let postData = JSON.stringify({
+      _id: mssv,
+      year: curryear,
+      class: class_student,
+      idact: idActiv,
+      XyzAbCd123: a_name,
+    });
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: postData,
+    };
+    const response = await fetch("/api/getImgActivities", requestOptions);
+    if (response.ok) {
+      const dataimg = await response.json();
+      divElement.textContent = "";
+      for (const i of dataimg) {
+        const imgElement = document.createElement("img");
+        imgElement.src = i.fileLink;
+        divElement.appendChild(imgElement);
+      }
+    } else if (response.status == 404) {
+      // Thay đổi nội dung của phần tử div
+      divElement.textContent = "Không có hình!";
+    } else if (response.status == 500) {
+      notify("x", "Có lỗi xảy ra!");
+    }
   });
 });
-
-

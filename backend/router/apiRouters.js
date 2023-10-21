@@ -6,6 +6,8 @@ const path = require("path");
 const fs = require("fs");
 const uploadDirectory = path.join("../../upload_temp");
 const multer = require("multer");
+const server = require("../lib/csdl_google_lib");
+
 const { ObjectId } = require("mongodb");
 const { getNameGlobal } = require("../lib/mogodb_lib");
 const name_global_databases = getNameGlobal();
@@ -881,7 +883,7 @@ function createAPIRouter(client, wss) {
           class: [dataStudent["cls"]],
           displayName: `${dataStudent["ho"]} ${dataStudent["ten"]}`,
           email: email,
-          total_score: {}
+          total_score: {},
         };
         let dataInsertLogin = {
           _id: dataStudent["mssv"].toString(),
@@ -1115,7 +1117,151 @@ function createAPIRouter(client, wss) {
       return res.sendStatus(500);
     }
   });
+   // Export students score report --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   router.get("/exportStudentsScore", checkIfUserLoginAPI, async (req, res) => {
+    try {
+      const user = req.session.user;
+      if (user.pow[1] || user.pow[2]) {
+        const data = req.query;
+        //data = {year: "HK1_2022-2023", cls: '1'}
+        const school_year = data.year;
+        let cls = data.cls;
+        // create uuid for download file
+        const uuid = uuidv4();
 
+        // check for post data.cls if class define this mean they choose class so that must
+
+        let student_list = [];
+        if (user.pow[1]) {
+          student_list = sortStudentName(
+            await client
+              .db(name_global_databases)
+              .collection("user_info")
+              .find(
+                { class: user.cls[0], "power.0": { $exists: true } },
+                { projection: { first_name: 1, last_name: 1 } }
+              )
+              .toArray()
+          );
+        } else {
+          student_list = sortStudentName(
+            await client
+              .db(name_global_databases)
+              .collection("user_info")
+              .find(
+                { class: cls, "power.0": { $exists: true } },
+                { projection: { first_name: 1, last_name: 1 } }
+              )
+              .toArray()
+          );
+        }
+
+        // get all student total score from themself:
+        let scores = [];
+
+        if (student_list.length !== 0) {
+          for (let i = 0; i < student_list.length; i++) {
+            // [stt, mssv. ho, ten, lop,
+            // 1.0, 1.1, 1.2, 1.3, 1.4,
+            // 2.0, 2.1,
+            // 3.0, 3.1, 3.2,
+            // 4.0, 4.1, 4.2,
+            // 5.0, 5.1, 5.2, 5.3,
+            // "", total, conduct, ""]
+            let curr_score = [
+              i + 1,
+              student_list[i]._id,
+              student_list[i].last_name,
+              student_list[i].first_name,
+              cls,
+            ];
+
+            const curr_departmentt_score = await client
+              .db(user.dep)
+              .collection(cls + "_dep_table")
+              .findOne(
+                {
+                  mssv: student_list[i]._id,
+                  school_year: school_year,
+                },
+                {
+                  projection: {
+                    first: 1,
+                    second: 1,
+                    third: 1,
+                    fourth: 1,
+                    fifth: 1,
+                    total: 1,
+                  },
+                }
+              );
+
+            if (curr_departmentt_score) {
+              curr_score.push(...curr_departmentt_score.first);
+              curr_score.push(...curr_departmentt_score.second);
+              curr_score.push(...curr_departmentt_score.third);
+              curr_score.push(...curr_departmentt_score.fourth);
+              curr_score.push(...curr_departmentt_score.fifth);
+            } else {
+              for (let j = 0; j < 17; j++) {
+                curr_score.push(null);
+              }
+            }
+
+            curr_score.push(null);
+
+            if (curr_departmentt_score) {
+              curr_score.push(curr_departmentt_score.total);
+              // set kind of conduct:
+              if (curr_departmentt_score.total >= 90) {
+                curr_score.push("xuất sắc");
+              } else if (curr_departmentt_score.total >= 80) {
+                curr_score.push("tốt");
+              } else if (curr_departmentt_score.total >= 65) {
+                curr_score.push("khá");
+              } else if (curr_departmentt_score.total >= 50) {
+                curr_score.push("trung bình");
+              } else if (curr_departmentt_score.total >= 35) {
+                curr_score.push("yếu");
+              } else {
+                curr_score.push("kém");
+              }
+            }
+
+            // add curr_score to scores
+            scores.push(curr_score);
+            // console.log(scores);
+          }
+        } else {
+        }
+
+        // Load an existing workbook
+        const workbook = await XlsxPopulate.fromFileAsync(
+          "./src/excelTemplate/Bang_diem_ca_lop_xuat_tu_he_thong.xlsx"
+        );
+
+        if (scores.length != 0) {
+          await workbook.sheet(0).cell("A7").value(scores);
+        }
+        // Write to file.
+
+        await workbook.toFileAsync(path.join(".downloads", uuid + ".xlsx"));
+
+        // tải file xlsx về máy người dùng
+        // res.download(path.join('.downloads', uuid + ".xlsx"));
+
+        res.download(path.join(".downloads", uuid + ".xlsx"));
+
+        // delete file after 12 hours
+        scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
+      } else {
+        return res.sendStatus(403);
+      }
+    } catch (err) {
+      console.log("SYSTEM | EXPORT_CLASS_SCORE | ERROR | ", err);
+      return res.sendStatus(500);
+    }
+  });
   // Load score list of student in specific class at specific time ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
   router.get("/loadScoresList", checkIfUserLoginAPI, async (req, res) => {
     try {
@@ -1146,12 +1292,12 @@ function createAPIRouter(client, wss) {
             .collection("user_info")
             .find(
               { class: user.cls[0], "power.0": { $exists: true } },
-              { 
-                projection: { 
-                  first_name: 1, 
+              {
+                projection: {
+                  first_name: 1,
                   last_name: 1,
-                  total_score: 1 
-                } 
+                  total_score: 1,
+                },
               }
             )
             .toArray()
@@ -1285,12 +1431,12 @@ function createAPIRouter(client, wss) {
             .collection("user_info")
             .find(
               { class: cls, "power.0": { $exists: true } },
-              { 
-                projection: { 
-                  first_name: 1, 
+              {
+                projection: {
+                  first_name: 1,
                   last_name: 1,
                   total_score: 1,
-                } 
+                },
               }
             )
             .toArray()
@@ -1445,7 +1591,13 @@ function createAPIRouter(client, wss) {
               );
           }
 
-          await updateStudentTotalScore('_stf_table', std_table.school_year, std_table.mssv, std_table.total, std_table.marker);
+          await updateStudentTotalScore(
+            "_stf_table",
+            std_table.school_year,
+            std_table.mssv,
+            std_table.total,
+            std_table.marker
+          );
         }
 
         return res.sendStatus(200);
@@ -1481,7 +1633,7 @@ function createAPIRouter(client, wss) {
               },
             }
           );
-        
+
         // check if table is exist or not
         // update or add new table copy from std_table to staff_table
         for (let i = 0; i < data.std_list.length; i++) {
@@ -1513,7 +1665,13 @@ function createAPIRouter(client, wss) {
               );
           }
 
-          await updateStudentTotalScore('_dep_table', std_table.school_year, std_table.mssv, std_table.total, std_table.marker);
+          await updateStudentTotalScore(
+            "_dep_table",
+            std_table.school_year,
+            std_table.mssv,
+            std_table.total,
+            std_table.marker
+          );
         }
 
         return res.sendStatus(200);
@@ -2637,7 +2795,6 @@ function createAPIRouter(client, wss) {
             });
         });
 
-        
         return res.sendStatus(200);
       } else {
         return res.sendStatus(403); // send user to 403 page
@@ -2677,12 +2834,12 @@ function createAPIRouter(client, wss) {
             .collection("user_info")
             .find(
               { class: data.cls, "power.0": { $exists: true } },
-              { 
-                projection: { 
-                  first_name: 1, 
+              {
+                projection: {
+                  first_name: 1,
                   last_name: 1,
-                  total_score: 1
-                } 
+                  total_score: 1,
+                },
               }
             )
             .toArray()
@@ -2987,6 +3144,45 @@ function createAPIRouter(client, wss) {
       }
     } catch (err) {
       console.log("SYSTEM | DELETE_CLASS | ERROR | ", err);
+      return res.sendStatus(500);
+    }
+  });
+
+  // api get img acti student
+  router.post("/getImgActivities", checkIfUserLoginAPI, async (req, res) => {
+    try {
+      const user = req.session.user;
+      const data = req.body; // data = {curr_load_branch: 1 (next index to load), branchs: [KTPM, CNTT, ...] (all branch in department)}
+
+      // must be department to use this api
+      if (user.pow[3]) {
+        imglist = await client
+          .db(user.dep)
+          .collection(data.class + "_std_table")
+          .findOne(
+            {
+              mssv: data._id,
+              school_year: data.year,
+            },
+            {
+              projection: {
+                img_ids: 1,
+              },
+            }
+          );
+        if (data.idact in imglist.img_ids) {
+          let imginfo =[];
+          for (const i of imglist.img_ids[data.idact]) {
+            imginfo.push(await server.getDriveFileLinkAndDescription(i));
+          }
+
+          return res.status(200).json(imginfo);
+        } else return res.status(404).json();
+      } else {
+        return res.sendStatus(403); // back to home
+      }
+    } catch (err) {
+      console.log("SYSTEM | LOAD_IMG_STUDENTS | ERROR | ", err);
       return res.sendStatus(500);
     }
   });
