@@ -317,9 +317,8 @@ $(".save_btn").click(async function () {
               <td class="index">${cls_length + 1}</td>
               <td class="a_name">${atv_name}</td>
               <td class="c_name">${cls_id.val()}</td>
-              <td class="school_year">${year_cur.split("_")[0]} ${
-            year_cur.split("_")[1]
-          }</td>
+              <td class="school_year">${year_cur.split("_")[0]} ${year_cur.split("_")[1]
+            }</td>
               <td><a href="/doankhoa/quanlihoatdong/${cls_id.val()}/${atv_id}" target="blank">Chi tiết</a></td>
               <td><a class="more_list" id="cls_edit" href="#">Sửa</a></td>
             </tr>
@@ -346,9 +345,8 @@ $(".save_btn").click(async function () {
               </td>
               <td class="index">${dep_length + 1}</td>
               <td class="a_name">${atv_name}</td>
-              <td class="school_year">${year_cur.split("_")[0]} ${
-            year_cur.split("_")[1]
-          }</td>
+              <td class="school_year">${year_cur.split("_")[0]} ${year_cur.split("_")[1]
+            }</td>
               <td><a href="/doankhoa/quanlihoatdong/Khoa/${atv_id}" target="blank">Chi tiết</a></td>
               <td><a class="more_list" id="dep_edit" href="#">Sửa</a></td>
             </tr>
@@ -374,9 +372,8 @@ $(".save_btn").click(async function () {
               </td>
               <td class="index">${school_length + 1}</td>
               <td class="a_name">${atv_name}</td>
-              <td class="school_year">${year_cur.split("_")[0]} ${
-            year_cur.split("_")[1]
-          }</td>
+              <td class="school_year">${year_cur.split("_")[0]} ${year_cur.split("_")[1]
+            }</td>
               <td><a href="/doankhoa/quanlihoatdong/Truong/${atv_id}" target="blank">Chi tiết</a></td>
               <td><a class="more_list" id="school_edit" href="#">Sửa</a></td>
             </tr>
@@ -413,6 +410,17 @@ $(".save_btn").click(async function () {
 
 // year choise button:
 $("#year_choice").click(async function () {
+  // show loading animation
+  $('#school-loader').css("display", "flex");
+  $('#school-loader').show();
+  $('#dep-loader').css("display", "flex");
+  $('#dep-loader').show();
+  $('#cls-loader').css("display", "flex");
+  $('#cls-loader').show();
+  $('#school_tb').hide();
+  $('#dep_tb').hide();
+  $('#cls_tb').hide();
+
   // disable this btn
   $(this).prop("disabled", true);
 
@@ -448,20 +456,17 @@ $("#year_choice").click(async function () {
                 <tr class="atv_box">
                   <td>
                     <div class="checkbox-wrapper-4">
-                      <input type="checkbox" id="row__0__${i}" class="inp-cbx" value="${
-          school_atv[i]._id
-        }" />
+                      <input type="checkbox" id="row__0__${i}" class="inp-cbx" value="${school_atv[i]._id
+          }" />
                       <label for="row__0__${i}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                       </label>
                   </td>
                   <td class="index">${i + 1}</td>
                   <td class="a_name">${school_atv[i].name}</td>
-                  <td class="school_year">${school_atv[i].year.split("_")[0]} ${
-          school_atv[i].year.split("_")[1]
-        }</td>
-                  <td><a href="/doankhoa/quanlihoatdong/Truong/${
-                    school_atv[i]._id
-                  }">Chi tiết</a></td>
+                  <td class="school_year">${school_atv[i].year.split("_")[0]} ${school_atv[i].year.split("_")[1]
+          }</td>
+                  <td><a href="/doankhoa/quanlihoatdong/Truong/${school_atv[i]._id
+          }">Chi tiết</a></td>
                   <td><a class="more_list" href="#">Sửa</a></td>
                 </tr>
                 <tr class="copy_box">
@@ -476,20 +481,17 @@ $("#year_choice").click(async function () {
               <tr class="atv_box">
                 <td>
                   <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__1__${i}" class="inp-cbx" value="${
-          dep_atv[i]._id
-        }" />
+                    <input type="checkbox" id="row__1__${i}" class="inp-cbx" value="${dep_atv[i]._id
+          }" />
                     <label for="row__1__${i}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                     </label>
                 </td>
                 <td class="index">${i + 1}</td>
                 <td class="a_name">${dep_atv[i].name}</td>
-                <td class="school_year">${dep_atv[i].year.split("_")[0]} ${
-          dep_atv[i].year.split("_")[1]
-        }</td>
-                <td><a href="/doankhoa/quanlihoatdong/Khoa/${
-                  dep_atv[i]._id
-                }">Chi tiết</a></td>
+                <td class="school_year">${dep_atv[i].year.split("_")[0]} ${dep_atv[i].year.split("_")[1]
+          }</td>
+                <td><a href="/doankhoa/quanlihoatdong/Khoa/${dep_atv[i]._id
+          }">Chi tiết</a></td>
                 <td><a class="more_list" id="dep_edit" href="#">Sửa</a></td>
               </tr>
               <tr class="copy_box">
@@ -504,21 +506,18 @@ $("#year_choice").click(async function () {
               <tr class="atv_box">
                 <td>
                   <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__2__${i}" class="inp-cbx" value="${
-          cls_atv[i]._id
-        }" />
+                    <input type="checkbox" id="row__2__${i}" class="inp-cbx" value="${cls_atv[i]._id
+          }" />
                     <label for="row__2__${i}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                     </label>
                 </td>
                 <td class="index">${i + 1}</td>
                 <td class="a_name">${cls_atv[i].name}</td>
                 <td class="c_name">${cls_atv[i].cls}</td>
-                <td class="school_year">${cls_atv[i].year.split("_")[0]} ${
-          cls_atv[i].year.split("_")[1]
-        }</td>
-                <td><a href="/doankhoa/quanlihoatdong/${cls_atv[i].cls}/${
-          cls_atv[i]._id
-        }">Chi tiết</a></td>
+                <td class="school_year">${cls_atv[i].year.split("_")[0]} ${cls_atv[i].year.split("_")[1]
+          }</td>
+                <td><a href="/doankhoa/quanlihoatdong/${cls_atv[i].cls}/${cls_atv[i]._id
+          }">Chi tiết</a></td>
                 <td><a class="more_list" id="cls_edit" href="#">Sửa</a></td>
               </tr>
               <tr class="copy_box">
@@ -528,16 +527,36 @@ $("#year_choice").click(async function () {
             `);
       }
     });
+
+    // able curr button
+    $(this).prop("disabled", false);
+    // hide loading animation
+    $('.loader-parent').hide();
+    $('#school_tb').show();
+    $('#dep_tb').show();
+    $('#cls_tb').show();
   } else if (response.status == 500) {
+
+    // able curr button
+    $(this).prop("disabled", false);
+
+    // hide loading animation
+    $('.loader-parent').hide();
+    $('#school_tb').show();
+    $('#dep_tb').show();
+    $('#cls_tb').show();
+    
     // Error occurred during upload
     notify("x", "Có lỗi xảy ra!");
   }
-  // able curr button
-  $(this).prop("disabled", false);
 });
 
 // subjects choise button:
 $("#subject_choice").click(async function () {
+  // show loading animation for class table
+  $('#cls-loader').css("display", "flex");
+  $('#cls-loader').show();
+  $('#cls_tb').hide();
   // disable this btn
   $(this).prop("disabled", true);
   // get semester
@@ -566,21 +585,18 @@ $("#subject_choice").click(async function () {
               <tr class="atv_box">
                 <td>
                   <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__2__${i}" class="inp-cbx" value="${
-          result[i]._id
-        }" />
+                    <input type="checkbox" id="row__2__${i}" class="inp-cbx" value="${result[i]._id
+          }" />
                     <label for="row__2__${i}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                     </label>
                 </td>
                 <td class="index">${i + 1}</td>
                 <td class="a_name">${result[i].name}</td>
                 <td class="c_name">${result[i].cls}</td>
-                <td class="school_year">${result[i].year.split("_")[0]} ${
-          result[i].year.split("_")[1]
-        }</td>
-                <td><a href="/doankhoa/quanlihoatdong/${result[i].cls}/${
-          result[i]._id
-        }">Chi tiết</a></td>
+                <td class="school_year">${result[i].year.split("_")[0]} ${result[i].year.split("_")[1]
+          }</td>
+                <td><a href="/doankhoa/quanlihoatdong/${result[i].cls}/${result[i]._id
+          }">Chi tiết</a></td>
                 <td><a class="more_list" id="cls_edit" href="#">Sửa</a></td>
               </tr>
               <tr class="copy_box">
@@ -590,12 +606,23 @@ $("#subject_choice").click(async function () {
             `);
       }
     });
+
+    // hide loading animation
+    $('#cls-loader').hide();
+    $('#cls_tb').show();
+
+    // able curr button
+    $(this).prop("disabled", false);
+
   } else if (response.status == 500) {
+    // hide loading animation
+    $('#cls-loader').hide();
+    $('#cls_tb').show();
+    // able curr button
+    $(this).prop("disabled", false);
     // Error occurred during upload
     notify("x", "Có lỗi xảy ra!");
   }
-  // able curr button
-  $(this).prop("disabled", false);
 });
 
 // delete button
@@ -625,7 +652,7 @@ $("#delete__activity").click(async function () {
   });
 
   // add all checked line in class activities to class activities remove list
-  $("#cls_tb tbody .inp-cbx").each( function () {
+  $("#cls_tb tbody .inp-cbx").each(function () {
     if (this.checked) {
       cls_rmatv.push(this.value);
     }

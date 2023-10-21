@@ -2265,7 +2265,7 @@ function createAPIRouter(client, wss) {
       const user = req.session.user;
       const data = req.body; // data = {year: '2022-2023', semester: '1'}
       const curr_year = "HK" + data.semester + "_" + data.year;
-      if (user.pow[3] && user.pow[11]) {
+      if (user.pow[3]) {
         // find all activities in this year:
         // get all activities of school
         const school_atv = await client
@@ -2363,7 +2363,7 @@ function createAPIRouter(client, wss) {
     try {
       const user = req.session.user;
       const data = req.body; // data = {cls: 'KTPM0121'}
-      if (user.pow[3] && user.pow[11]) {
+      if (user.pow[3]) {
         // get all activities in that class:
         const cls_act = await client
           .db(user.dep)

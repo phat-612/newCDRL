@@ -166,6 +166,8 @@ $(document).on("click", ".auto_mark_btn", async function () {
           "Đã hoàn tất chấm điểm tự động những sinh viên được đánh dấu!"
         );
       } else if (response.status == 500) {
+        $(".auto_mark_btn").prop("disabled", false);
+        $(".auto_mark_btn").text("Duyệt bảng điểm đã chọn");
         // Error occurred during upload
         notify("x", "Có lỗi xảy ra!");
       }
@@ -180,6 +182,11 @@ $(document).on("click", ".auto_mark_btn", async function () {
 });
 
 $(document).on("click", ".button-35-a", async function () {
+  // show loading animation
+  $('.loader-parent').css("display", "flex");
+  $('.loader-parent').show();
+  $('.table_container').hide();
+
   // disabled button until it done start down load
   $(".load_list_btn").prop("disabled", true);
   $(".load_list_btn").text("Loading...");
@@ -216,7 +223,7 @@ $(document).on("click", ".button-35-a", async function () {
       for (let i = 0; i < data.student_list.length; i++) {
 
         const curr_year_total = data.student_list[i].total_score[year_available];
-        
+
         if (curr_year_total) {
           let newdep = "khoa_score",
             newstf = "first_score",
@@ -233,28 +240,25 @@ $(document).on("click", ".button-35-a", async function () {
           const std_score_html = curr_year_total.std ? `<td class="${newstd}">${curr_year_total.std}</td>` : `<td class="${newstd}">-</td>`;
           const stf_score_html = curr_year_total.stf ? `<td class="${newstf}">${curr_year_total.stf}</td>` : `<td class="${newstf}">-</td>`;
           const dep_score_html = curr_year_total.dep ? `<td class="${newdep}">${curr_year_total.dep}</td>` : `<td class="${newdep}">-</td>`;
-          const maker_html = curr_year_total.marker ?  `<td>${curr_year_total.marker}</td>` : `<td>-</td>` 
+          const maker_html = curr_year_total.marker ? `<td>${curr_year_total.marker}</td>` : `<td>-</td>`
           if (curr_year_total.std != "-" && curr_year_total.std != 0) {
             $("table tbody").append(`
           <tr>
             <td>
               <div class="checkbox-wrapper-4">
-                <input type="checkbox" id="row${i + 1}" class="inp-cbx" value="${
-              data.student_list[i]._id
-            }" />
-                <label for="row${
-                  i + 1
-                }" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                <input type="checkbox" id="row${i + 1}" class="inp-cbx" value="${data.student_list[i]._id
+              }" />
+                <label for="row${i + 1
+              }" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                 </label>
               </div>
             </td>
             <td>${i + 1}</td>
             <td>${data.student_list[i]._id}</td>
-            <td class='std_name_row'>${
-              data.student_list[i].last_name +
+            <td class='std_name_row'>${data.student_list[i].last_name +
               " " +
               data.student_list[i].first_name
-            }</td>
+              }</td>
             ${std_score_html}
             ${stf_score_html}
             ${maker_html}
@@ -267,22 +271,19 @@ $(document).on("click", ".button-35-a", async function () {
           <tr>
             <td>
               <div class="checkbox-wrapper-4">
-                <input type="checkbox" id="row${i + 1}" class="inp-cbx" value="${
-                  data.student_list[i]._id
-                }" />
-                <label for="row${
-                  i + 1
-                }" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                <input type="checkbox" id="row${i + 1}" class="inp-cbx" value="${data.student_list[i]._id
+              }" />
+                <label for="row${i + 1
+              }" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                 </label>
               </div>
             </td>
             <td>${i + 1}</td>
             <td>${data.student_list[i]._id}</td>
-            <td class='std_name_row'>${
-              data.student_list[i].last_name +
+            <td class='std_name_row'>${data.student_list[i].last_name +
               " " +
               data.student_list[i].first_name
-            }</td>
+              }</td>
             ${std_score_html}
             ${stf_score_html}
             ${maker_html}
@@ -291,7 +292,7 @@ $(document).on("click", ".button-35-a", async function () {
           </tr>
           `);
           }
-  
+
           // add '*' to student have not mark yet
           if (curr_year_total.std || curr_year_total.std == 0) {
             // console.log(curr_year_total.std);
@@ -307,21 +308,18 @@ $(document).on("click", ".button-35-a", async function () {
           <tr>
             <td>
               <div class="checkbox-wrapper-4">
-                <input type="checkbox" id="row${i + 1}" class="inp-cbx" value="${
-                  data.student_list[i]._id
-                }" />
-                <label for="row${
-                  i + 1
-                }" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                <input type="checkbox" id="row${i + 1}" class="inp-cbx" value="${data.student_list[i]._id
+            }" />
+                <label for="row${i + 1
+            }" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                 </label>
               </div>
             </td>
             <td>${i + 1}</td>
             <td>${data.student_list[i]._id}</td>
-            <td class='std_name_row'>${
-              data.student_list[i].last_name +
-              " " +
-              data.student_list[i].first_name
+            <td class='std_name_row'>${data.student_list[i].last_name +
+            " " +
+            data.student_list[i].first_name
             }</td>
             <td class="zero_score">-</td>
             <td class="first_score">-</td>
@@ -332,9 +330,9 @@ $(document).on("click", ".button-35-a", async function () {
           `);
 
           $("table tbody tr")
-              .eq(i)
-              .find(".std_name_row")
-              .append(`<span class="dau_sao">*</span>`);
+            .eq(i)
+            .find(".std_name_row")
+            .append(`<span class="dau_sao">*</span>`);
         }
       }
       $(".chamdiem").click(function () {
@@ -366,15 +364,33 @@ $(document).on("click", ".button-35-a", async function () {
       // update current table school year
       curr_tb_year = year;
 
+      // hide loading animation
+      $('.loader-parent').hide();
+      $('.table_container').show();
+
       // reset export button to clickable
       $(".load_list_btn").prop("disabled", false);
       $(".load_list_btn").text("Chọn");
       notify("n", "Đã hoàn tất tải bảng điểm.");
     } else if (response.status == 500) {
+      // hide loading animation
+      $('.loader-parent').hide();
+      $('.table_container').show();
+
+      // reset export button to clickable
+      $(".load_list_btn").prop("disabled", false);
+      $(".load_list_btn").text("Chọn");
       // Error occurred during upload
       notify("x", "Có lỗi xảy ra!");
     }
   } catch (error) {
+    // hide loading animation
+    $('.loader-parent').hide();
+    $('.table_container').show();
+
+    // reset export button to clickable
+    $(".load_list_btn").prop("disabled", false);
+    $(".load_list_btn").text("Chọn");
     console.log(error);
     notify("x", "Có lỗi xảy ra!");
   }

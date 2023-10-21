@@ -28,12 +28,12 @@
                   <div class="select">
                     <select>
                       <% for (let i = 1; i <= years[cy[1]].length; i++) {%>
-                        <% if (i == parseInt(cy[0].slice(2))) {%>
-                          <option value="<%= i %>" selected="selected"><%= i %></option>
-                          <%global_year = `HK${i}_`%>
-                        <% } else { %>
-                          <option value="<%= i %>"><%= i %></option>
-                        <% } %>
+                      <% if (i == parseInt(cy[0].slice(2))) {%>
+                      <option value="<%= i %>" selected="selected"><%= i %></option>
+                      <%global_year = `HK${i}_`%>
+                      <% } else { %>
+                      <option value="<%= i %>"><%= i %></option>
+                      <% } %>
                       <% } %>
                     </select>
                   </div>
@@ -43,12 +43,12 @@
                   <div class="select">
                     <select>
                       <% for (const key of Object.keys(years)) {%>
-                        <% if (key == cy[1]) {%>
-                          <option selected="selected"><%= key %></option>
-                          <%global_year += key%>
-                        <% } else { %>
-                          <option><%= key %></option>
-                        <% } %>
+                      <% if (key == cy[1]) {%>
+                      <option selected="selected"><%= key %></option>
+                      <%global_year += key%>
+                      <% } else { %>
+                      <option><%= key %></option>
+                      <% } %>
                       <% } %>
                     </select>
                   </div>
@@ -89,85 +89,90 @@
                   <th style="width: 25%">Họ Tên</th>
                   <th style="width: 15%">Điểm Tự Chấm</th>
                   <th style="width: 14%">Tổng điểm Lần 1</th>
-                  <th >Chấm Lần 1</th>
+                  <th>Chấm Lần 1</th>
                   <th style="width: 17%">Tổng Điểm Chính Thức</th>
                   <th style="width: 24%"></th>
-                </tr
-              </thead>
+                </tr </thead>
               <tbody>
                 <% for (let i = 0; i < student_list.length; i++)  { %>
-                  <% const curr_year_total = student_list[i].total_score[curr_year]; %>
-                  <% if (curr_year_total) { %>
-                    <tr>
-                      <td>
-                        <div class="checkbox-wrapper-4">
-                          <input type="checkbox" id="row<%=i+1%>" class="inp-cbx" value="<%= student_list[i]._id %>" />
-                          <label for="row<%=i+1%>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                          </label>
-                        </div>
-                      </td>
-                      <td><%= i + 1 %></td>
-                      <td><%= student_list[i]._id %></td>
-                      <td><%= student_list[i].last_name + " " +  student_list[i].first_name%>
-                      <% if( curr_year_total.std ||  curr_year_total.std === 0){%>
-                      <span class="dau_sao">*</span>
-                      <%}%>
+                <% const curr_year_total = student_list[i].total_score[curr_year]; %>
+                <% if (curr_year_total) { %>
+                <tr>
+                  <td>
+                    <div class="checkbox-wrapper-4">
+                      <input type="checkbox" id="row<%=i+1%>" class="inp-cbx" value="<%= student_list[i]._id %>" />
+                      <label for="row<%=i+1%>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                      </label>
+                    </div>
+                  </td>
+                  <td><%= i + 1 %></td>
+                  <td><%= student_list[i]._id %></td>
+                  <td><%= student_list[i].last_name + " " +  student_list[i].first_name%>
+                    <% if( curr_year_total.std ||  curr_year_total.std === 0){%>
+                    <span class="dau_sao">*</span>
+                    <%}%>
                       </td>
                       <%if(curr_year_total.dep){%>
-                        <td class="zero_score"><%= curr_year_total.std %></td>
-                        <td class="first_score"><%= curr_year_total.dep %></td>
-                        <td class="marker_name"><%= curr_year_total.marker %></td>
-                        <td class="new_update khoa_score"><%= curr_year_total.dep %></td>
-                        <td><a href="/hocsinh/xembangdiem?schoolYear=<%=global_year%>&mssv=<%=student_list[i]._id%>">Xem điểm</a></td>
-                        
-                      <% } else {%>
-                        <% if(curr_year_total.stf) { %>
-                          <td class="zero_score"><%= curr_year_total.std %></td>
-                          <td class="new_update first_score"><%= curr_year_total.stf %></td>
-                          <td class="marker_name"><%= curr_year_total.marker %></td>
-                        <% } else {%>
-                          <% if(curr_year_total.std) { %>
-                            <td class="new_update zero_score"><%= curr_year_total.std %></td>
-                            <td class="first_score">-</td>
-                          <% } else { %>
-                            <td class="zero_score">-</td>
-                            <td class="first_score">-</td>
-                          <% } %>
-                          <td class="marker_name">-</td>
-                        <% } %>
-                        <td class="last_score">-</td>
-                        <%if(curr_year_total.std &&  curr_year_total.std !== 0){%>
-                          <td><a href="/bancansu/nhapdiemdanhgia?schoolYear=<%=global_year%>&studentId=<%=student_list[i]._id%>&class=<%=cls%>" class="set_score_btn">Chấm điểm</a></td>
-                        <% } else {%>
-                          <td>-</td>
-                        <% } %>
-                    </tr>
-                    <% } %>
+                  <td class="zero_score"><%= curr_year_total.std %></td>
+                  <td class="first_score"><%= curr_year_total.dep %></td>
+                  <td class="marker_name"><%= curr_year_total.marker %></td>
+                  <td class="new_update khoa_score"><%= curr_year_total.dep %></td>
+                  <td><a href="/hocsinh/xembangdiem?schoolYear=<%=global_year%>&mssv=<%=student_list[i]._id%>">Xem điểm</a></td>
+
+                  <% } else {%>
+                  <% if(curr_year_total.stf) { %>
+                  <td class="zero_score"><%= curr_year_total.std %></td>
+                  <td class="new_update first_score"><%= curr_year_total.stf %></td>
+                  <td class="marker_name"><%= curr_year_total.marker %></td>
+                  <% } else {%>
+                  <% if(curr_year_total.std) { %>
+                  <td class="new_update zero_score"><%= curr_year_total.std %></td>
+                  <td class="first_score">-</td>
                   <% } else { %>
-                    <tr>
-                      <td>
-                        <div class="checkbox-wrapper-4">
-                          <input type="checkbox" id="row<%=i+1%>" class="inp-cbx" value="<%= student_list[i]._id %>" />
-                          <label for="row<%=i+1%>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                          </label>
-                        </div>
-                      </td>
-                      <td><%= i + 1 %></td>
-                      <td><%= student_list[i]._id %></td>
-                      <td><%= student_list[i].last_name + " " +  student_list[i].first_name%>
-                        <span class="dau_sao">*</span>
-                      </td>
-                        <td class="zero_score">-</td>
-                        <td class="first_score">-</td>
-                        <td class="marker_name">-</td>
-                        <td class="khoa_score">-</td>
-                        <td>-</td>
-                    </tr>
+                  <td class="zero_score">-</td>
+                  <td class="first_score">-</td>
                   <% } %>
+                  <td class="marker_name">-</td>
+                  <% } %>
+                  <td class="last_score">-</td>
+                  <%if(curr_year_total.std &&  curr_year_total.std !== 0){%>
+                  <td><a href="/bancansu/nhapdiemdanhgia?schoolYear=<%=global_year%>&studentId=<%=student_list[i]._id%>&class=<%=cls%>" class="set_score_btn">Chấm điểm</a></td>
+                  <% } else {%>
+                  <td>-</td>
+                  <% } %>
+                </tr>
+                <% } %>
+                <% } else { %>
+                <tr>
+                  <td>
+                    <div class="checkbox-wrapper-4">
+                      <input type="checkbox" id="row<%=i+1%>" class="inp-cbx" value="<%= student_list[i]._id %>" />
+                      <label for="row<%=i+1%>" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+                      </label>
+                    </div>
+                  </td>
+                  <td><%= i + 1 %></td>
+                  <td><%= student_list[i]._id %></td>
+                  <td><%= student_list[i].last_name + " " +  student_list[i].first_name%>
+                    <span class="dau_sao">*</span>
+                  </td>
+                  <td class="zero_score">-</td>
+                  <td class="first_score">-</td>
+                  <td class="marker_name">-</td>
+                  <td class="khoa_score">-</td>
+                  <td>-</td>
+                </tr>
+                <% } %>
                 <% } %>
               </tbody>
             </table>
           </div>
+        </div>
+      </div>
+      <div class="loader-parent">
+        <div class="loader">
+          <div class="square-1 square"></div>
+          <div class="square-2 square"></div>
         </div>
       </div>
     </div>
@@ -175,4 +180,5 @@
   <%- include(footer) %>
 </body>
 <script src="/src/JS/bancansu-grade-list.js"></script>
+
 </html>

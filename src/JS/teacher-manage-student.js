@@ -1,3 +1,5 @@
+// const { data } = require("node-persist");
+
 $(document).ready(() => {
   const inpMssv = $("#md_mssv")
   const inpHo = $("#md_ho")
@@ -18,12 +20,31 @@ $(document).ready(() => {
   let dataStudents = {
     0: {},
   }
+
+  // time load now structure like
+  let skip = {
+  };
+
+  let loading = false;
   // chon lop
   async function getStudentList() {
-    console.log('goi len sv');
+    // console.log('goi len sv');
+
+    // update skip time for student list
+    if (skip[cls] || skip[cls] == 0) {
+      skip[cls] += 1;
+    } else {
+      skip[cls] = 0;
+    }
+
     try {
+      // show loading animation
+      $('.loader-parent').css("display", "flex");
+      $('.loader-parent').show();
+
       let postData = JSON.stringify({
-        class: cls
+        class: cls,
+        skip: skip[cls]
       });
       const requestOptions = {
         method: 'POST',
@@ -35,19 +56,31 @@ $(document).ready(() => {
       const response = await fetch('/api/getStudentList', requestOptions);
       if (response.ok) {
         const students = await response.json();
-        dataStudents[cls] = students;
+
+        if (students.length == 0) {
+          skip[cls] = -1;
+          return false;
+        }
+
+        if (dataStudents[cls] && skip[cls] != -1) {
+          dataStudents[cls] = dataStudents[cls].concat(students); // if it is old one 
+        } else {
+          dataStudents[cls] = students; // if this is new one
+        }
+
+        return dataStudents[cls]; // for promise
       }
     } catch (error) {
       console.log(error);
+      return false;
     }
   }
-  async function loadStudents(students) {
-    $('.js_tbody').empty()
-    if (dataStudents.hasOwnProperty(cls)) {
-      if (students.length != 0) {
-        let htmls = [];
-        for (let i = 0; i < students.length; i++) {
-          htmls.push(`
+
+  async function renderTable(students, start) {
+    if (students.length - start != 0) {
+      let htmls = [];
+      for (let i = start; i < students.length; i++) {
+        htmls.push(`
         <tr>
           <td>
             <div class="checkbox-wrapper-4">
@@ -71,23 +104,43 @@ $(document).ready(() => {
           <td>${students[i].lap_hoat_dong ? 'X' : ''}</td>
           <td><a href="#">Chỉnh sửa</a></td>
         </tr>
-      `)
-        }
-        $('.js_tbody').append(htmls.join(''))
-        $('tr a').on('click', (event) => {
-          editStudent(event);
-          $(".modal.add").show();
-        })
+        `)
       }
-      else {
-        $('.js_tbody').empty()
-      }
-      handleCheckboxChange()
-    } else {
-      await getStudentList()
-      loadStudents(dataStudents[cls])
+      $('.js_tbody').append(htmls.join(''));
+      $('tr a').on('click', (event) => {
+        editStudent(event);
+        $(".modal.add").show();
+      });
     }
+    else {
+      $('.js_tbody').empty()
+    }
+    handleCheckboxChange();
+    loading = false;
   }
+
+  async function loadStudents(new_one) {
+    if (new_one) {
+      $('.js_tbody').empty();
+    }
+
+    if (dataStudents.hasOwnProperty(cls)) {
+      await getStudentList().then((students) => {
+        console.log(dataStudents[cls] == students)
+        renderTable(students, 30 * (skip[cls]));
+      }, (err) => {
+        console.log(err);
+      });
+    } else {
+      await getStudentList().then((students) => {
+        renderTable(students, 0);
+      }, (err) => {
+        console.log(err);
+      });
+    }
+    $('.loader-parent').hide();
+  }
+
   function sortStudentName(std_list) {
     std_list.sort((a, b) => {
       const lastFirstNameWordA = a.first_name.split(' ').pop();
@@ -101,7 +154,6 @@ $(document).ready(() => {
       return a.last_name.localeCompare(b.last_name, 'vi', { sensitivity: 'base' });
     });
     return std_list;
-
   }
   function clearModal() {
     inpMssv.val('');
@@ -144,6 +196,7 @@ $(document).ready(() => {
       }
     });
   }
+
   function editStudent(event) {
     event.preventDefault();
     const row = event.target.closest('tr');
@@ -158,11 +211,18 @@ $(document).ready(() => {
     inpLbhd.prop('checked', studentInfo.lap_hoat_dong);
     $('.js_md_add').text('Cập nhật');
   }
+
   $('.js_lop').on('change', async (event) => {
     cls = event.target.value;
     $("#row0")[0].checked = false;
-    loadStudents(dataStudents[cls])
-  })
+    if (skip[cls] == -1) {
+      $('.js_tbody').empty();
+      renderTable(dataStudents[cls], 0); // class is full dont need to load it any more
+    } else {
+      loadStudents(true); // this class not full need to load more
+    }
+  });
+
   $("#add-student").click(function () {
     $(".modal.add").show();
   });
@@ -189,7 +249,6 @@ $(document).ready(() => {
     }
     try {
       let updateStudent = $('.js_md_add').text() == 'Cập nhật';
-      console.log($('.js_md_add').text() == 'Cập nhật')
       let postData = JSON.stringify({
         mssv: inpMssv.val(),
         ho: inpHo.val(),
@@ -211,18 +270,26 @@ $(document).ready(() => {
       const response = await fetch('/api/createAccount', requestOptions);
       if (response.ok) {
         if (!updateStudent) {
-          dataStudents[cls].push({
-            _id: inpMssv.val(),
-            last_name: inpHo.val(),
-            first_name: inpTen.val(),
-            role: inpCd.prop('checked') || inpLbhd.prop('checked') ? 'Ban cán sự' : 'Sinh viên',
-            dang_vien: inpDv.prop('checked'),
-            cham_diem: inpCd.prop('checked'),
-            lap_hoat_dong: inpLbhd.prop('checked'),
-          })
-          dataStudents[cls] = sortStudentName(dataStudents[cls])
-          loadStudents(dataStudents[cls])
-          notify('n', 'Thêm sinh viên thành công')
+          // dataStudents[cls].push({
+          //   _id: inpMssv.val(),
+          //   last_name: inpHo.val(),
+          //   first_name: inpTen.val(),
+          //   role: inpCd.prop('checked') || inpLbhd.prop('checked') ? 'Ban cán sự' : 'Sinh viên',
+          //   dang_vien: inpDv.prop('checked'),
+          //   cham_diem: inpCd.prop('checked'),
+          //   lap_hoat_dong: inpLbhd.prop('checked'),
+          // })
+          // dataStudents[cls] = sortStudentName(dataStudents[cls]);
+
+          new Promise(() => {
+            delete dataStudents[cls]; // clear data
+            delete skip[cls]; // reset to load again
+            return true;
+          }).then(
+            loadStudents(true),
+            (err) => console.log(err)
+          )
+          notify('n', 'Thêm sinh viên thành công');
           const blobUrl = URL.createObjectURL(await response.blob());
           // Tạo một thẻ <a> ẩn để tải xuống và nhấn vào nó
           // const downloadLink = document.createElement('a');
@@ -235,23 +302,34 @@ $(document).ready(() => {
           URL.revokeObjectURL(blobUrl);
           $('.js_md_add').text('Thêm');
         } else {
-          dataStudents[cls] = dataStudents[cls].map((student) => {
-            if (student['_id'] == inpMssv.val()) {
-              return {
-                _id: inpMssv.val(),
-                last_name: inpHo.val(),
-                first_name: inpTen.val(),
-                role: inpCd.prop('checked') || inpLbhd.prop('checked') ? 'Ban cán sự' : 'Sinh viên',
-                dang_vien: inpDv.prop('checked'),
-                cham_diem: inpCd.prop('checked'),
-                lap_hoat_dong: inpLbhd.prop('checked'),
-              }
-            } else {
-              return student
-            }
-          })
-          console.log(dataStudents[cls]);
-          loadStudents(dataStudents[cls])
+          // dataStudents[cls] = dataStudents[cls].map((student) => {
+          //   if (student['_id'] == inpMssv.val()) {
+          //     return {
+          //       _id: inpMssv.val(),
+          //       last_name: inpHo.val(),
+          //       first_name: inpTen.val(),
+          //       role: inpCd.prop('checked') || inpLbhd.prop('checked') ? 'Ban cán sự' : 'Sinh viên',
+          //       dang_vien: inpDv.prop('checked'),
+          //       cham_diem: inpCd.prop('checked'),
+          //       lap_hoat_dong: inpLbhd.prop('checked'),
+          //     }
+          //   } else {
+          //     return student
+          //   }
+          // })
+
+          // console.log(skip[cls]);
+          // loadStudents(true);
+
+          new Promise(() => {
+            delete dataStudents[cls]; // clear data
+            delete skip[cls]; // reset to load again
+            return true;
+          }).then(
+            loadStudents(true),
+            (err) => console.log(err)
+          )
+
           notify('n', 'Cập nhật sinh viên thành công')
         }
       } else {
@@ -300,10 +378,10 @@ $(document).ready(() => {
   });
   // up file
   $(".btn_upload").on("click", async () => {
-    if ($('.js_lop').val()!== '0') {
+    if ($('.js_lop').val() !== '0') {
       quest("Câu hỏi").then(async (result) => {
-        if(result) {
-  
+        if (result) {
+
           if (selectedFile) {
             const formData = new FormData();
             formData.append('file', selectedFile);
@@ -315,8 +393,10 @@ $(document).ready(() => {
                 body: formData,
               });
               if (response.ok) {
+                console.log('hihi3');
+
                 await getStudentList()
-                loadStudents(dataStudents[cls])
+                loadStudents(true);
                 notify('n', 'Thêm sinh viên thành công')
                 const blobUrl = URL.createObjectURL(await response.blob());
                 // // Tạo một thẻ <a> ẩn để tải xuống và nhấn vào nó
@@ -328,7 +408,7 @@ $(document).ready(() => {
                 // downloadLink.click();
                 // // Giải phóng URL tạm thời sau khi tải xuống hoàn thành
                 URL.revokeObjectURL(blobUrl);
-      
+
               }
               else if (response.status == 404) {
                 notify('!', 'File không có đủ dữ liệu !')
@@ -345,7 +425,7 @@ $(document).ready(() => {
           }
           else {
             notify('!', 'Bạn chưa chọn file để tải lên !')
-      
+
           }
         }
         else {
@@ -360,8 +440,9 @@ $(document).ready(() => {
                 body: formData,
               });
               if (response.ok) {
+                console.log('hihi4');
                 await getStudentList()
-                loadStudents(dataStudents[cls])
+                loadStudents(true);
                 notify('n', 'Thêm sinh viên thành công')
                 const blobUrl = URL.createObjectURL(await response.blob());
                 // // Tạo một thẻ <a> ẩn để tải xuống và nhấn vào nó
@@ -373,7 +454,7 @@ $(document).ready(() => {
                 // downloadLink.click();
                 // // Giải phóng URL tạm thời sau khi tải xuống hoàn thành
                 URL.revokeObjectURL(blobUrl);
-      
+
               } else {
                 notify('!', 'Thêm sinh viên thất bại ')
               }
@@ -383,20 +464,20 @@ $(document).ready(() => {
           }
           else {
             notify('!', 'Bạn chưa chọn file để tải lên !')
-      
+
           }
         }
-          // true nếu nhấn OK, false nếu nhấn Not
-  
-  
-        
+        // true nếu nhấn OK, false nếu nhấn Not
+
+
+
       });
     }
     else {
       notify('!', 'Bạn chưa chọn lớp!')
 
     }
-    
+
   })
   // delete students
   $('#delete-student').on('click', async () => {
@@ -421,9 +502,14 @@ $(document).ready(() => {
         };
         const response = await fetch('/api/deleteAccount', requestOptions);
         if (response.ok) {
-          dataStudents[cls] = dataStudents[cls].filter(item => !dataDelete.includes(item['_id']))
-          loadStudents(dataStudents[cls])
-          notify('n', 'Xóa sinh viên thành công')
+          dataStudents[cls] = dataStudents[cls].filter(item => !dataDelete.includes(item['_id']));
+          if (skip[cls] == -1) {
+            $('.js_tbody').empty();
+            renderTable(dataStudents[cls], 0);
+          } else {
+            loadStudents(true);
+          }
+          notify('n', 'Xóa sinh viên thành công');
         } else {
           notify('!', 'Xóa sinh viên thất bại')
         }
@@ -463,4 +549,13 @@ $(document).ready(() => {
       console.log(error);
     }
   });
+
+  // Scroll to the end of page 
+  $(window).scroll(async function () {
+    if (($(window).scrollTop() + $(window).height() > $(document).height() - 10) && skip[cls] != -1 && !loading) {
+      loading = true;
+      loadStudents(false);
+    }
+  });
 });
+
