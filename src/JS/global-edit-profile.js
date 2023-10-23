@@ -1,3 +1,4 @@
+
 // gia tri mac dinh
 const displayName_d = $(".display_name").val();
 const avt_d = $(".up-img").attr("src");

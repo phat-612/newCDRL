@@ -15,6 +15,10 @@
   <div class="main">
     <%- include(header) %>
       <%- include(thongbao) %>
+      <%if (quyen.pow[5]){%>
+        <%- include(menu) %>
+        
+        <%}%>
 
         <div class="container">
           <div class="profile_title">
@@ -38,9 +42,18 @@
             </div>
             <div class="right_container">
               <div class="porfile_container_item">
-                <label class="info_lable" for="">Mã Số Sinh Viên </label><input type="text" disabled value="<%=mssv%>"
+                <label class="info_lable" for="">
+                <% if (quyen.pow[5]) { %>
+                  <p>Mã Đoàn Khoa</p>
+                <% } else if (quyen.pow[0]) { %>
+                  <p>Mã Sinh Viên</p>
+                <% }  else if (quyen.pow[3]) { %>
+                  <p>Mã Giáo Viên</p>
+                <% } %></label> </label><input type="text" disabled value="<%=mssv%>"
                   class="mssv info_input" />
               </div>
+              
+              
               <div class="porfile_container_item">
                 <label class="info_lable" for="">Họ Và Tên</label><input type="text" disabled value="<%=name%>"
                   class="full_name info_input" />
@@ -65,6 +78,7 @@
         </div>
   </div>
   <%- include(footer) %>
+
     <script src="/src/JS/global-edit-profile.js"></script>
 </body>
 

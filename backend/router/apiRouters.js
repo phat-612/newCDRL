@@ -1444,7 +1444,7 @@ function createAPIRouter(client, wss) {
 
         // get all student total score from themself:
         let result = {
-          staff_name: [],
+          // staff_name: [],
           student_list: student_list,
           // student_scores: [],
           // staff_scores: [],

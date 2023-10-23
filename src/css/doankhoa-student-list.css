@@ -23,6 +23,7 @@
 }
 
 .file_input {
+  margin: 0 1rem;
   position: relative;
   display: inline-block;
 }

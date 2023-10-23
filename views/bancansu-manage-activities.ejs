@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -106,7 +106,7 @@
                 </tr>
                 <tr class="copy_box">
 
-                  <td colspan="2"> COPY </td>
+                  <td> COPY </td>
                   <td colspan="6"><a href="/dangkyhoatdong?id=<%= school_atv[i]._id %>&level=truong" target="_blank">Link đăng kí và điểm danh hoạt động</a></td>
                 </tr>
                 <% } %>
@@ -152,7 +152,7 @@
                 </tr>
                 <tr class="copy_box">
                   <!-- fill link google forn here NTHL xấu trai -->
-                  <td colspan="2"> COPY </td>
+                  <td> COPY </td>
                   <td colspan="6"><a href="/dangkyhoatdong?id=<%= dep_atv[i]._id %>&level=khoa" target="_blank">Link đăng kí và điểm danh hoạt động</a></td>
                 </tr>
                 <% } %>
@@ -237,7 +237,7 @@
                 </tr>
                 <tr class="copy_box">
                   <!-- fill link google forn here NTHL xấu trai -->
-                  <td colspan="2"> COPY </td>
+                  <td> COPY </td>
                   <td colspan="6"><a href="/dangkyhoatdong?id=<%= cls_atv[i]._id %>&level=lop" target="_blank">Link đăng kí và điểm danh hoạt động</a></td>
                 </tr>
                 <% } %>
@@ -275,6 +275,6 @@
   const cls_st = <%- JSON.stringify(cls_atv.map((avt) => avt.start_time)) %>;
 </script>
 <!-- <script src="/src/JS/bancansu-manage-activities.js"></script> -->
-<script src="/src/JS/doankhoa-manage-activities.js"></script>
+<script src="/src/JS/bancansu-manage-activities.js"></script>
 
 </html>

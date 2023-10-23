@@ -213,16 +213,13 @@ $(document).on("click", ".button-35-a", async function () {
     if (response.ok) {
       const data = await response.json();
       const year_available = data.year_available.year;
-      // console.log(data.year_available);
-      // console.log(year);
-      // console.log(data.student_list[2].total_score[year_available].dep, year_available);
 
       // empty old table:
       $("table tbody").empty();
       // load new table:
       for (let i = 0; i < data.student_list.length; i++) {
 
-        const curr_year_total = data.student_list[i].total_score[year_available];
+        const curr_year_total = data.student_list[i].total_score[year];
 
         if (curr_year_total) {
           let newdep = "khoa_score",
@@ -336,12 +333,6 @@ $(document).on("click", ".button-35-a", async function () {
         }
       }
       $(".chamdiem").click(function () {
-        // console.log(year_available);
-        // console.log(curr_tb_year);
-
-        // console.log(
-        //   $(".selectbox--hocky select option:selected").text().trim()
-        // );
         const cur_tb_year =
           "HK" +
           $(".selectbox--hocky select option:selected").text().trim() +
