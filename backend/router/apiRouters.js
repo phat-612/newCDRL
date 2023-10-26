@@ -1117,45 +1117,34 @@ function createAPIRouter(client, wss) {
       return res.sendStatus(500);
     }
   });
-   // Export students score report --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-   router.get("/exportStudentsScore", checkIfUserLoginAPI, async (req, res) => {
+  // Export students score report --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  router.get("/exportStudentsScore", checkIfUserLoginAPI, async (req, res) => {
     try {
+      ///sdadsasđâsđâs nthl dang lam
       const user = req.session.user;
       if (user.pow[1] || user.pow[2]) {
         const data = req.query;
-        //data = {year: "HK1_2022-2023", cls: '1'}
+        //data = {year: "HK1_2022-2023", cls: '1', stdlist: []}
         const school_year = data.year;
         let cls = data.cls;
         // create uuid for download file
         const uuid = uuidv4();
-
+        const stdlist = JSON.parse(data.stdlist);
         // check for post data.cls if class define this mean they choose class so that must
-
+        console.log(stdlist);
         let student_list = [];
-        if (user.pow[1]) {
-          student_list = sortStudentName(
-            await client
-              .db(name_global_databases)
-              .collection("user_info")
-              .find(
-                { class: user.cls[0], "power.0": { $exists: true } },
-                { projection: { first_name: 1, last_name: 1 } }
-              )
-              .toArray()
-          );
-        } else {
-          student_list = sortStudentName(
-            await client
-              .db(name_global_databases)
-              .collection("user_info")
-              .find(
-                { class: cls, "power.0": { $exists: true } },
-                { projection: { first_name: 1, last_name: 1 } }
-              )
-              .toArray()
-          );
-        }
 
+        student_list = sortStudentName(
+          await client
+            .db(name_global_databases)
+            .collection("user_info")
+            .find(
+              { class: cls, "power.0": { $exists: true }, _id: { $in: stdlist } },
+              { projection: { first_name: 1, last_name: 1 } }
+            )
+            .toArray()
+        );
+        console.log(student_list);
         // get all student total score from themself:
         let scores = [];
 
@@ -1233,24 +1222,25 @@ function createAPIRouter(client, wss) {
             // console.log(scores);
           }
         } else {
+          return res.statusCode(402);
         }
+        console.log(scores);
+        // // Load an existing workbook
+        // const workbook = await XlsxPopulate.fromFileAsync(
+        //   "./src/excelTemplate/Bang_diem_ca_lop_xuat_tu_he_thong.xlsx"
+        // );
 
-        // Load an existing workbook
-        const workbook = await XlsxPopulate.fromFileAsync(
-          "./src/excelTemplate/Bang_diem_ca_lop_xuat_tu_he_thong.xlsx"
-        );
+        // if (scores.length != 0) {
+        //   await workbook.sheet(0).cell("A7").value(scores);
+        // }
+        // // Write to file.
 
-        if (scores.length != 0) {
-          await workbook.sheet(0).cell("A7").value(scores);
-        }
-        // Write to file.
+        // await workbook.toFileAsync(path.join(".downloads", uuid + ".xlsx"));
 
-        await workbook.toFileAsync(path.join(".downloads", uuid + ".xlsx"));
+        // // tải file xlsx về máy người dùng
+        // // res.download(path.join('.downloads', uuid + ".xlsx"));
 
-        // tải file xlsx về máy người dùng
-        // res.download(path.join('.downloads', uuid + ".xlsx"));
-
-        res.download(path.join(".downloads", uuid + ".xlsx"));
+        // res.download(path.join(".downloads", uuid + ".xlsx"));
 
         // delete file after 12 hours
         scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
@@ -3171,7 +3161,7 @@ function createAPIRouter(client, wss) {
             }
           );
         if (data.idact in imglist.img_ids) {
-          let imginfo =[];
+          let imginfo = [];
           for (const i of imglist.img_ids[data.idact]) {
             imginfo.push(await server.getDriveFileLinkAndDescription(i));
           }

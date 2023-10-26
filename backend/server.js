@@ -29,11 +29,15 @@ databaseLib
     const certificate = fs.readFileSync(path.join(".certificate", "localhost.crt"), "utf8");
     const credentials = { key: privateKey, cert: certificate };
     // ----------------------------------------------------------------
-    const port = 8181; // port la 443 khong phai 433 dau
+    const port = 443; // port la 443 khong phai 433 dau
     const secretKey = "5gB#2L1!8*1!0)$7vF@9";
     const authenticationKey = Buffer.from(secretKey.padEnd(32, "0"), "utf8").toString("hex");
     // ----------------------------------------------------------------
     // mongodb database name
+    if (!fs.existsSync(".downloads")) {
+      // Nếu thư mục không tồn tại, tạo thư mục mới
+      fs.mkdirSync(".downloads");
+  }
     const name_global_databases = "global";
     // -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     app.use(blockUnwantedPaths);
