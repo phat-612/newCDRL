@@ -1131,7 +1131,7 @@ function createAPIRouter(client, wss) {
         const uuid = uuidv4();
         const stdlist = JSON.parse(data.stdlist);
         // check for post data.cls if class define this mean they choose class so that must
-        console.log(stdlist);
+        // console.log(stdlist);
         let student_list = [];
 
         student_list = sortStudentName(
@@ -1158,10 +1158,9 @@ function createAPIRouter(client, wss) {
             // 5.0, 5.1, 5.2, 5.3,
             // "", total, conduct, ""]
             let curr_score = [
-              i + 1,
+              school_year,
               student_list[i]._id,
-              student_list[i].last_name,
-              student_list[i].first_name,
+              student_list[i].last_name+" "+student_list[i].first_name,
               cls,
             ];
 
@@ -1222,7 +1221,7 @@ function createAPIRouter(client, wss) {
             // console.log(scores);
           }
         } else {
-          return res.statusCode(402);
+          return res.sendStatus(402);
         }
         console.log(scores);
         // // Load an existing workbook
