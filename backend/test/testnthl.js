@@ -1,71 +1,119 @@
 const path = require("path");
 const archiver = require("archiver");
+const { v4: uuidv4 } = require("uuid");
+const fs = require("fs");
+const PdfPrinter = require("pdfmake");
+const util = require("util");
 
-const testvar = [
-  [
-    "HK1_2022-2023",
-    "2100498",
-    "Nguyễn Trần Hoàng Long",
-    "KTPM0122",
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-  ],
-  [
-    "HK1_2022-2023",
-    "2100238",
-    "Nguyễn Thị Hồng Nguyên",
-    "KTPM0122",
-    7,
-    2,
-    4,
-    2,
-    5,
-    15,
-    10,
-    8,
-    6,
-    6,
-    10,
-    5,
-    10,
-    3,
-    3,
-    0,
-    0,
-    null,
-    96,
-    "xuất sắc",
-  ],
-];
+const testvar =[
+  {
+    year: 'HK1_2022-2023',
+    mssv: '2100498',
+    name: 'Nguyễn Trần Hoàng Long',
+    class: 'KTPM0122',
+    std: [
+      'N/A', 'N/A',
+      'N/A', 'N/A',
+      'N/A', 'N/A',
+      'N/A', 'N/A',
+      'N/A', 'N/A',
+      'N/A', 'N/A',
+      'N/A', 'N/A',
+      'N/A', 'N/A',
+      'N/A', 'N/A'
+    ],
+    stf: [
+      'N/A', 'N/A',
+      'N/A', 'N/A',
+      'N/A', 'N/A',
+      'N/A', 'N/A',
+      'N/A', 'N/A',
+      'N/A', 'N/A',
+      'N/A', 'N/A',
+      'N/A', 'N/A',
+      'N/A', 'N/A'
+    ],
+    dep: [
+      'N/A', 'N/A',
+      'N/A', 'N/A',
+      'N/A', 'N/A',
+      'N/A', 'N/A',
+      'N/A', 'N/A',
+      'N/A', 'N/A',
+      'N/A', 'N/A',
+      'N/A', 'N/A',
+      'N/A', 'N/A'
+    ]
+  },
+  {
+    year: 'HK1_2022-2023',
+    mssv: '2100238',
+    name: 'Nguyễn Thị Hồng Nguyên',
+    class: 'KTPM0122',
+    std: [
+      7, 2, 4,  2, 5, 15, 10,
+      8, 6, 6, 10, 5, 10,  3,
+      3, 0, 0, 96
+    ],
+    stf: [
+      7, 2, 4,  2, 5, 15, 10,
+      8, 6, 6, 10, 5, 10,  3,
+      3, 0, 0, 96
+    ],
+    dep: [
+      7, 2, 4,  2, 5, 15, 10,
+      8, 6, 6, 10, 5, 10,  3,
+      3, 0, 0, 96
+    ],
+    rank: 'xuất sắc'
+  }
+]
 
-function createPdf(path_save, scorce) {
-  const output = fs.createWriteStream("example.zip");
-  const archive = archiver("zip", {
-    zlib: { level: 9 }, // Mức nén, có thể là 0-9 (9 là mức nén cao nhất)
-  });
+async function createPdf(path_save, scorce) {
+  function sum(arr, start, end) {
+    if (arr[0]=="N/A"){
+      return "N/A"
+    }
+    // Đảm bảo start và end không vượt qua giới hạn của mảng
+    if (start < 0) start = 0;
+    if (end >= arr.length) end = arr.length - 1;
+
+    // Kiểm tra nếu start lớn hơn end hoặc mảng rỗng
+    if (start > end || arr.length === 0) return 0;
+
+    // Sử dụng slice và reduce để tính tổng
+    const subArray = arr.slice(start, end + 1);
+    const total = subArray.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+
+    return total;
+  }
   let name_zip;
+  let output;
+  let archive;
   if (scorce.length > 1) {
     name_zip = uuidv4();
+    output = fs.createWriteStream(path.join(path_save, name_zip + ".zip"));
+    archive = archiver("zip", {
+      zlib: { level: 2 }, // Mức nén, có thể là 0-9 (9 là mức nén cao nhất)
+    });
+    if (!fs.existsSync(path.join(path_save, name_zip))) {
+      // Nếu thư mục không tồn tại, tạo thư mục mới
+      fs.mkdirSync(path.join(path_save, name_zip));
+    }
   }
+  const createPdfAsync = util.promisify((printer, pdfDoc, outputPath, callback) => {
+    pdfDoc.pipe(fs.createWriteStream(outputPath));
+    pdfDoc.end();
+    pdfDoc.on("end", () => {
+      callback();
+    });
+  });
   for (let index = 0; index < scorce.length; index++) {
     // Define font files
-    const namefile = uuidv4();
+    const std_score = scorce[index].std;
+    const stf_score = scorce[index].stf;
+    const dep_score = scorce[index].dep;
+    const namefile = uuidv4() + ".pdf";
 
     const fonts = {
       Roboto: {
@@ -75,22 +123,22 @@ function createPdf(path_save, scorce) {
         bolditalics: "backend/font/Roboto-MediumItalic.ttf",
       },
     };
-
-    const PdfPrinter = require("pdfmake");
     const printer = new PdfPrinter(fonts);
-    const fs = require("fs");
 
     const docDefinition = {
       content: [
         { text: "Bảng điểm cá nhân", style: "header" },
         {
-          columns: [{ text: "Tên:", bold: true }, scorce[index][2]],
+          columns: [{ text: "Tên:", bold: true }, scorce[index].name],
         },
         {
-          columns: [{ text: "MSSV:", bold: true }, scorce[index][1]],
+          columns: [{ text: "MSSV:", bold: true }, scorce[index].mssv],
         },
         {
-          columns: [{ text: "Học kỳ:", bold: true }, scorce[index][0]],
+          columns: [{ text: "Lớp:", bold: true }, scorce[index].class],
+        },
+        {
+          columns: [{ text: "Học kỳ:", bold: true }, scorce[index].year],
         },
 
         // 		{text: 'Defining column widths', style: 'subheader'},
@@ -114,9 +162,9 @@ function createPdf(path_save, scorce) {
                   style: "tableSubSubHeader",
                 },
                 { text: "7 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
+                { text: `${std_score[0]} điểm`, style: "tablepoint" },
+                { text: `${stf_score[0]} điểm`, style: "tablepoint" },
+                { text: `${dep_score[0]} điểm`, style: "tablepoint" },
               ],
               [
                 {
@@ -124,9 +172,9 @@ function createPdf(path_save, scorce) {
                   style: "tableSubSubHeader",
                 },
                 { text: "2 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
+                { text: `${std_score[1]} điểm`, style: "tablepoint" },
+                { text: `${stf_score[1]} điểm`, style: "tablepoint" },
+                { text: `${dep_score[1]} điểm`, style: "tablepoint" },
               ],
               [
                 {
@@ -134,26 +182,26 @@ function createPdf(path_save, scorce) {
                   style: "tableSubSubHeader",
                 },
                 { text: "4 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
+                { text: `${std_score[2]} điểm`, style: "tablepoint" },
+                { text: `${stf_score[2]} điểm`, style: "tablepoint" },
+                { text: `${dep_score[2]} điểm`, style: "tablepoint" },
               ],
               [
                 { text: "- Bị nhắc nhở khi thi, kiểm tra", style: "tableSubSubSubHeader" },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
+                { text: "2 điểm", style: "tablepoint" },
+                { text: std_score[2] == 2 ? "•" : "", style: "tablepoint" },
+                { text: stf_score[2] == 2 ? "•" : "", style: "tablepoint" },
+                { text: dep_score[2] == 2 ? "•" : "", style: "tablepoint" },
               ],
               [
                 {
                   text: "- Bị lập biên bản xử lý khi thi và kiểm tra",
                   style: "tableSubSubSubHeader",
                 },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
+                { text: "0 điểm", style: "tablepoint" },
+                { text: std_score[2] == 0 ? "•" : "", style: "tablepoint" },
+                { text: stf_score[2] == 0 ? "•" : "", style: "tablepoint" },
+                { text: dep_score[2] == 0 ? "•" : "", style: "tablepoint" },
               ],
               [
                 {
@@ -161,16 +209,16 @@ function createPdf(path_save, scorce) {
                   style: "tableSubSubHeader",
                 },
                 { text: "2 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
+                { text: `${std_score[3]} điểm`, style: "tablepoint" },
+                { text: `${stf_score[3]} điểm`, style: "tablepoint" },
+                { text: `${dep_score[3]} điểm`, style: "tablepoint" },
               ],
               [
                 { text: "đ. Đạt kết quả cao trong học tập", style: "tableSubSubHeader" },
                 { text: "5 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
+                { text: `${std_score[4]} điểm`, style: "tablepoint" },
+                { text: `${stf_score[4]} điểm`, style: "tablepoint" },
+                { text: `${dep_score[4]} điểm`, style: "tablepoint" },
               ],
 
               [
@@ -179,39 +227,39 @@ function createPdf(path_save, scorce) {
                   style: "tableSubSubSubHeader",
                 },
                 { text: "2 điểm", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
+                { text: std_score[4] == 2 ? "•" : "", style: "tablepoint" },
+                { text: stf_score[4] == 2 ? "•" : "", style: "tablepoint" },
+                { text: dep_score[4] == 2 ? "•" : "", style: "tablepoint" },
               ],
 
               [
                 { text: "- Loại Khá: Điểm số từ 2.5 đến 3.19", style: "tableSubSubSubHeader" },
                 { text: "3 điểm", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
+                { text: std_score[4] == 3 ? "•" : "", style: "tablepoint" },
+                { text: stf_score[4] == 3 ? "•" : "", style: "tablepoint" },
+                { text: dep_score[4] == 3 ? "•" : "", style: "tablepoint" },
               ],
 
               [
                 { text: "- Loại Giỏi: Điểm số từ 3.2 đến 3.59", style: "tableSubSubSubHeader" },
                 { text: "4 điểm", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
+                { text: std_score[4] == 4 ? "•" : "", style: "tablepoint" },
+                { text: stf_score[4] == 4 ? "•" : "", style: "tablepoint" },
+                { text: dep_score[4] == 4 ? "•" : "", style: "tablepoint" },
               ],
               [
                 { text: "- Loại Xuất sắc: Điểm số từ 3.6 đến 4.0", style: "tableSubSubSubHeader" },
                 { text: "5 điểm", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
+                { text: std_score[4] == 5 ? "•" : "", style: "tablepoint" },
+                { text: stf_score[4] == 5 ? "•" : "", style: "tablepoint" },
+                { text: dep_score[4] == 5 ? "•" : "", style: "tablepoint" },
               ],
               [
                 { text: "Điểm tối đa nội dung 1 là", style: "tableSubHeaderTotal" },
                 { text: "20 điểm", style: "tableSubPointTotal" },
-                { text: "0 điểm", style: "tableSubPointTotal" },
-                { text: "0 điểm", style: "tableSubPointTotal" },
-                { text: "0 điểm", style: "tableSubPointTotal" },
+                { text: `${sum(std_score, 0, 4)} điểm`, style: "tableSubPointTotal" },
+                { text: `${sum(stf_score, 0, 4)} điểm`, style: "tableSubPointTotal" },
+                { text: `${sum(dep_score, 0, 4)} điểm`, style: "tableSubPointTotal" },
               ],
               [
                 {
@@ -229,16 +277,16 @@ function createPdf(path_save, scorce) {
                   style: "tableSubSubHeader",
                 },
                 { text: "15 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
+                { text: `${std_score[5]} điểm`, style: "tablepoint" },
+                { text: `${stf_score[5]} điểm`, style: "tablepoint" },
+                { text: `${dep_score[5]} điểm`, style: "tablepoint" },
               ],
               [
                 { text: "- Bị nhắc nhở trong việc thực hiện", style: "tableSubSubSubHeader" },
                 { text: "10 điểm", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
+                { text: std_score[5] == 10 ? "•" : "", style: "tablepoint" },
+                { text: stf_score[5] == 10 ? "•" : "", style: "tablepoint" },
+                { text: dep_score[5] == 10 ? "•" : "", style: "tablepoint" },
               ],
               [
                 {
@@ -246,9 +294,9 @@ function createPdf(path_save, scorce) {
                   style: "tableSubSubSubHeader",
                 },
                 { text: "0 điểm", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
+                { text: std_score[5] == 0 ? "•" : "", style: "tablepoint" },
+                { text: stf_score[5] == 0 ? "•" : "", style: "tablepoint" },
+                { text: dep_score[5] == 0 ? "•" : "", style: "tablepoint" },
               ],
 
               [
@@ -257,16 +305,16 @@ function createPdf(path_save, scorce) {
                   style: "tableSubSubHeader",
                 },
                 { text: "10 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
+                { text: `${std_score[6]} điểm`, style: "tablepoint" },
+                { text: `${stf_score[6]} điểm`, style: "tablepoint" },
+                { text: `${dep_score[6]} điểm`, style: "tablepoint" },
               ],
               [
                 { text: "- Bị nhắc nhở trong việc thực hiện", style: "tableSubSubSubHeader" },
                 { text: "5 điểm", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
+                { text: std_score[6] == 5 ? "•" : "", style: "tablepoint" },
+                { text: stf_score[6] == 5 ? "•" : "", style: "tablepoint" },
+                { text: dep_score[6] == 5 ? "•" : "", style: "tablepoint" },
               ],
               [
                 {
@@ -274,16 +322,16 @@ function createPdf(path_save, scorce) {
                   style: "tableSubSubSubHeader",
                 },
                 { text: "0 điểm", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
+                { text: std_score[6] == 0 ? "•" : "", style: "tablepoint" },
+                { text: stf_score[6] == 0 ? "•" : "", style: "tablepoint" },
+                { text: dep_score[6] == 0 ? "•" : "", style: "tablepoint" },
               ],
               [
                 { text: "Điểm tối đa nội dung 2 là", style: "tableSubHeaderTotal" },
                 { text: "25 điểm", style: "tableSubPointTotal" },
-                { text: "0 điểm", style: "tableSubPointTotal" },
-                { text: "0 điểm", style: "tableSubPointTotal" },
-                { text: "0 điểm", style: "tableSubPointTotal" },
+                { text: `${sum(std_score, 5, 6)} điểm`, style: "tableSubPointTotal" },
+                { text: `${sum(stf_score, 5, 6)} điểm`, style: "tableSubPointTotal" },
+                { text: `${sum(dep_score, 5, 6)} điểm`, style: "tableSubPointTotal" },
               ],
 
               //////////////
@@ -303,9 +351,9 @@ function createPdf(path_save, scorce) {
                   style: "tableSubSubHeader",
                 },
                 { text: "8 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
+                { text: `${std_score[7]} điểm`, style: "tablepoint" },
+                { text: `${stf_score[7]} điểm`, style: "tablepoint" },
+                { text: `${dep_score[7]} điểm`, style: "tablepoint" },
               ],
               [
                 {
@@ -313,9 +361,9 @@ function createPdf(path_save, scorce) {
                   style: "tableSubSubSubHeader",
                 },
                 { text: "5 điểm", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
+                { text: std_score[7] == 5 ? "•" : "", style: "tablepoint" },
+                { text: stf_score[7] == 5 ? "•" : "", style: "tablepoint" },
+                { text: dep_score[7] == 5 ? "•" : "", style: "tablepoint" },
               ],
               [
                 {
@@ -323,9 +371,9 @@ function createPdf(path_save, scorce) {
                   style: "tableSubSubSubHeader",
                 },
                 { text: "8 điểm", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
+                { text: std_score[7] == 8 ? "•" : "", style: "tablepoint" },
+                { text: stf_score[7] == 8 ? "•" : "", style: "tablepoint" },
+                { text: dep_score[7] == 8 ? "•" : "", style: "tablepoint" },
               ],
 
               [
@@ -334,9 +382,9 @@ function createPdf(path_save, scorce) {
                   style: "tableSubSubHeader",
                 },
                 { text: "6 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
+                { text: `${std_score[8]} điểm`, style: "tablepoint" },
+                { text: `${stf_score[8]} điểm`, style: "tablepoint" },
+                { text: `${dep_score[8]} điểm`, style: "tablepoint" },
               ],
               [
                 {
@@ -344,17 +392,17 @@ function createPdf(path_save, scorce) {
                   style: "tableSubSubHeader",
                 },
                 { text: "6 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
+                { text: `${std_score[9]} điểm`, style: "tablepoint" },
+                { text: `${stf_score[9]} điểm`, style: "tablepoint" },
+                { text: `${dep_score[9]} điểm`, style: "tablepoint" },
               ],
 
               [
                 { text: "Điểm tối đa nội dung 3 là", style: "tableSubHeaderTotal" },
                 { text: "20 điểm", style: "tableSubPointTotal" },
-                { text: "0 điểm", style: "tableSubPointTotal" },
-                { text: "0 điểm", style: "tableSubPointTotal" },
-                { text: "0 điểm", style: "tableSubPointTotal" },
+                { text: `${sum(std_score, 7, 9)} điểm`, style: "tableSubPointTotal" },
+                { text: `${sum(stf_score, 7, 9)} điểm`, style: "tableSubPointTotal" },
+                { text: `${sum(dep_score, 7, 9)} điểm`, style: "tableSubPointTotal" },
               ],
               //////////
               [
@@ -373,9 +421,9 @@ function createPdf(path_save, scorce) {
                   style: "tableSubSubHeader",
                 },
                 { text: "10 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
+                { text: `${std_score[10]} điểm`, style: "tablepoint" },
+                { text: `${stf_score[10]} điểm`, style: "tablepoint" },
+                { text: `${dep_score[10]} điểm`, style: "tablepoint" },
               ],
 
               [
@@ -384,9 +432,9 @@ function createPdf(path_save, scorce) {
                   style: "tableSubSubHeader",
                 },
                 { text: "5 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
+                { text: `${std_score[11]} điểm`, style: "tablepoint" },
+                { text: `${stf_score[11]} điểm`, style: "tablepoint" },
+                { text: `${dep_score[11]} điểm`, style: "tablepoint" },
               ],
               [
                 {
@@ -394,17 +442,17 @@ function createPdf(path_save, scorce) {
                   style: "tableSubSubHeader",
                 },
                 { text: "10 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
+                { text: `${std_score[12]} điểm`, style: "tablepoint" },
+                { text: `${stf_score[12]} điểm`, style: "tablepoint" },
+                { text: `${dep_score[12]} điểm`, style: "tablepoint" },
               ],
 
               [
                 { text: "Điểm tối đa nội dung 4 là", style: "tableSubHeaderTotal" },
                 { text: "25 điểm", style: "tableSubPointTotal" },
-                { text: "0 điểm", style: "tableSubPointTotal" },
-                { text: "0 điểm", style: "tableSubPointTotal" },
-                { text: "0 điểm", style: "tableSubPointTotal" },
+                { text: `${sum(std_score, 10, 12)} điểm`, style: "tableSubPointTotal" },
+                { text: `${sum(stf_score, 10, 12)} điểm`, style: "tableSubPointTotal" },
+                { text: `${sum(dep_score, 10, 12)} điểm`, style: "tableSubPointTotal" },
               ],
               ////////
               [
@@ -423,9 +471,9 @@ function createPdf(path_save, scorce) {
                   style: "tableSubSubHeader",
                 },
                 { text: "3 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
+                { text: `${std_score[13]} điểm`, style: "tablepoint" },
+                { text: `${stf_score[13]} điểm`, style: "tablepoint" },
+                { text: `${dep_score[13]} điểm`, style: "tablepoint" },
               ],
 
               [
@@ -434,9 +482,9 @@ function createPdf(path_save, scorce) {
                   style: "tableSubSubHeader",
                 },
                 { text: "3 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
+                { text: `${std_score[14]} điểm`, style: "tablepoint" },
+                { text: `${stf_score[14]} điểm`, style: "tablepoint" },
+                { text: `${dep_score[14]} điểm`, style: "tablepoint" },
               ],
               [
                 {
@@ -444,9 +492,9 @@ function createPdf(path_save, scorce) {
                   style: "tableSubSubHeader",
                 },
                 { text: "2 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
+                { text: `${std_score[15]} điểm`, style: "tablepoint" },
+                { text: `${stf_score[15]} điểm`, style: "tablepoint" },
+                { text: `${dep_score[15]} điểm`, style: "tablepoint" },
               ],
               [
                 {
@@ -454,32 +502,39 @@ function createPdf(path_save, scorce) {
                   style: "tableSubSubHeader",
                 },
                 { text: "2 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
-                { text: "0 điểm", style: "tablepoint" },
+                { text: `${std_score[16]} điểm`, style: "tablepoint" },
+                { text: `${stf_score[16]} điểm`, style: "tablepoint" },
+                { text: `${dep_score[16]} điểm`, style: "tablepoint" },
               ],
 
               [
                 { text: "- Cấp khoa", style: "tableSubSubSubHeader" },
                 { text: "1 điểm", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
+                { text: std_score[16] == 1 ? "•" : "", style: "tablepoint" },
+                { text: stf_score[16] == 1 ? "•" : "", style: "tablepoint" },
+                { text: dep_score[16] == 1 ? "•" : "", style: "tablepoint" },
               ],
               [
                 { text: "- Cấp trường trở lên", style: "tableSubSubSubHeader" },
                 { text: "2 điểm", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
-                { text: "", style: "tablepoint" },
+                { text: std_score[16] == 2 ? "•" : "", style: "tablepoint" },
+                { text: stf_score[16] == 2 ? "•" : "", style: "tablepoint" },
+                { text: dep_score[16] == 2 ? "•" : "", style: "tablepoint" },
               ],
 
               [
                 { text: "Điểm tối đa nội dung 5 là", style: "tableSubHeaderTotal" },
                 { text: "10 điểm", style: "tableSubPointTotal" },
-                { text: "0 điểm", style: "tableSubPointTotal" },
-                { text: "0 điểm", style: "tableSubPointTotal" },
-                { text: "0 điểm", style: "tableSubPointTotal" },
+                { text: `${sum(std_score, 13, 16)} điểm`, style: "tableSubPointTotal" },
+                { text: `${sum(stf_score, 13, 16)} điểm`, style: "tableSubPointTotal" },
+                { text: `${sum(dep_score, 13, 16)} điểm`, style: "tableSubPointTotal" },
+              ],
+              [
+                { text: "Tổng điểm tối đa", style: "tableSubHeaderTotal" },
+                { text: "100 điểm", style: "tableSubPointTotal" },
+                { text: `${std_score[17]} điểm`, style: "tableSubPointTotal" },
+                { text: `${stf_score[17]} điểm`, style: "tableSubPointTotal" },
+                { text: `${dep_score[17]} điểm`, style: "tableSubPointTotal" },
               ],
             ],
           },
@@ -559,14 +614,43 @@ function createPdf(path_save, scorce) {
 
     const pdfDoc = printer.createPdfKitDocument(docDefinition, options);
     if (scorce.length > 1) {
-      pdfDoc.pipe(fs.createWriteStream(path.join(path_save, name_zip, namefile)));
-      pdfDoc.end();
-      return name_zip;
+      await createPdfAsync(printer, pdfDoc, path.join(path_save, name_zip, namefile));
     } else {
-      pdfDoc.pipe(fs.createWriteStream(path.join(path_save, namefile)));
-      pdfDoc.end();
+      await createPdfAsync(printer, pdfDoc, path.join(path_save, namefile));
       return namefile;
     }
   }
+  if (scorce.length > 1) {
+    archive.pipe(output);
+    archive.directory(path.join(path_save, name_zip), false);
+    archive.finalize();
+  }
+
+  if (scorce.length > 1) {
+    return new Promise((resolve, reject) => {
+      output.on("close", () => {
+        console.log("Nén hoàn tất, kích thước:", archive.pointer() + " bytes");
+        fs.rm(path.join(path_save, name_zip), { recursive: true }, (err) => {
+          if (err) {
+            console.error("Lỗi khi xóa thư mục:", err);
+            reject(err);
+          } else {
+            console.log("Đã xóa thư mục thành công.");
+            resolve(name_zip + ".zip");
+          }
+        });
+      });
+
+      archive.on("error", (err) => {
+        reject(err);
+      });
+    });
+  }
 }
-createPdf("backend/test/nthldaoday", "hongnguyen.pdf", testvar);
+createPdf("backend/test/nthldaoday", testvar)
+  .then((result) => {
+    console.log("Hoàn tất, tệp kết quả:", result);
+  })
+  .catch((error) => {
+    console.error("Lỗi:", error);
+  });

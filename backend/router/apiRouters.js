@@ -22,6 +22,7 @@ const {
   createId,
   get_full_id,
   deleteClassApi,
+  createPdf,
 } = require("../lib/function_lib");
 
 if (!fs.existsSync(uploadDirectory)) {
@@ -1144,7 +1145,7 @@ function createAPIRouter(client, wss) {
             )
             .toArray()
         );
-        console.log(student_list);
+        // console.log(student_list);
         // get all student total score from themself:
         let scores = [];
 
@@ -1157,12 +1158,55 @@ function createAPIRouter(client, wss) {
             // 4.0, 4.1, 4.2,
             // 5.0, 5.1, 5.2, 5.3,
             // "", total, conduct, ""]
-            let curr_score = [
-              school_year,
-              student_list[i]._id,
-              student_list[i].last_name+" "+student_list[i].first_name,
-              cls,
-            ];
+            let curr_score = {
+              year: school_year,
+              mssv: student_list[i]._id,
+              name: student_list[i].last_name + " " + student_list[i].first_name,
+              class: cls,
+              std: [],
+              stf: [],
+              dep: [],
+            };
+
+            const curr_students_score = await client
+              .db(user.dep)
+              .collection(cls + "_std_table")
+              .findOne(
+                {
+                  mssv: student_list[i]._id,
+                  school_year: school_year,
+                },
+                {
+                  projection: {
+                    first: 1,
+                    second: 1,
+                    third: 1,
+                    fourth: 1,
+                    fifth: 1,
+                    total: 1,
+                  },
+                }
+              );
+
+            const curr_staff_score = await client
+              .db(user.dep)
+              .collection(cls + "_stf_table")
+              .findOne(
+                {
+                  mssv: student_list[i]._id,
+                  school_year: school_year,
+                },
+                {
+                  projection: {
+                    first: 1,
+                    second: 1,
+                    third: 1,
+                    fourth: 1,
+                    fifth: 1,
+                    total: 1,
+                  },
+                }
+              );
 
             const curr_departmentt_score = await client
               .db(user.dep)
@@ -1184,70 +1228,64 @@ function createAPIRouter(client, wss) {
                 }
               );
 
-            if (curr_departmentt_score) {
-              curr_score.push(...curr_departmentt_score.first);
-              curr_score.push(...curr_departmentt_score.second);
-              curr_score.push(...curr_departmentt_score.third);
-              curr_score.push(...curr_departmentt_score.fourth);
-              curr_score.push(...curr_departmentt_score.fifth);
+            if (curr_students_score) {
+              curr_score.std.push(...curr_students_score.first);
+              curr_score.std.push(...curr_students_score.second);
+              curr_score.std.push(...curr_students_score.third);
+              curr_score.std.push(...curr_students_score.fourth);
+              curr_score.std.push(...curr_students_score.fifth);
+              curr_score.std.push(curr_students_score.total);
             } else {
-              for (let j = 0; j < 17; j++) {
-                curr_score.push(null);
+              for (let j = 0; j < 18; j++) {
+                curr_score.std.push("N/A");
               }
             }
-
-            curr_score.push(null);
+            if (curr_staff_score) {
+              curr_score.stf.push(...curr_staff_score.first);
+              curr_score.stf.push(...curr_staff_score.second);
+              curr_score.stf.push(...curr_staff_score.third);
+              curr_score.stf.push(...curr_staff_score.fourth);
+              curr_score.stf.push(...curr_staff_score.fifth);
+              curr_score.stf.push(curr_staff_score.total);
+            } else {
+              for (let j = 0; j < 18; j++) {
+                curr_score.stf.push("N/A");
+              }
+            }
 
             if (curr_departmentt_score) {
-              curr_score.push(curr_departmentt_score.total);
-              // set kind of conduct:
-              if (curr_departmentt_score.total >= 90) {
-                curr_score.push("xuất sắc");
-              } else if (curr_departmentt_score.total >= 80) {
-                curr_score.push("tốt");
-              } else if (curr_departmentt_score.total >= 65) {
-                curr_score.push("khá");
-              } else if (curr_departmentt_score.total >= 50) {
-                curr_score.push("trung bình");
-              } else if (curr_departmentt_score.total >= 35) {
-                curr_score.push("yếu");
-              } else {
-                curr_score.push("kém");
+              curr_score.dep.push(...curr_departmentt_score.first);
+              curr_score.dep.push(...curr_departmentt_score.second);
+              curr_score.dep.push(...curr_departmentt_score.third);
+              curr_score.dep.push(...curr_departmentt_score.fourth);
+              curr_score.dep.push(...curr_departmentt_score.fifth);
+              curr_score.dep.push(curr_departmentt_score.total);
+            } else {
+              for (let j = 0; j < 18; j++) {
+                curr_score.dep.push("N/A");
               }
             }
 
-            // add curr_score to scores
             scores.push(curr_score);
-            // console.log(scores);
           }
         } else {
           return res.sendStatus(402);
         }
-        console.log(scores);
-        // // Load an existing workbook
-        // const workbook = await XlsxPopulate.fromFileAsync(
-        //   "./src/excelTemplate/Bang_diem_ca_lop_xuat_tu_he_thong.xlsx"
-        // );
 
-        // if (scores.length != 0) {
-        //   await workbook.sheet(0).cell("A7").value(scores);
-        // }
-        // // Write to file.
+        const temp_namefile = await createPdf(".downloads", scores);
+        // tải file xlsx về máy người dùng
+        res.setHeader('Content-Type', 'application/pdf');
 
-        // await workbook.toFileAsync(path.join(".downloads", uuid + ".xlsx"));
-
-        // // tải file xlsx về máy người dùng
-        // // res.download(path.join('.downloads', uuid + ".xlsx"));
-
-        // res.download(path.join(".downloads", uuid + ".xlsx"));
+        res.download(path.join(".downloads", temp_namefile));
 
         // delete file after 12 hours
-        scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
+
+        scheduleFileDeletion(path.join(".downloads", temp_namefile));
       } else {
         return res.sendStatus(403);
       }
     } catch (err) {
-      console.log("SYSTEM | EXPORT_CLASS_SCORE | ERROR | ", err);
+      console.log("SYSTEM | EXPORT_STUDENTS_SCORE | ERROR | ", err);
       return res.sendStatus(500);
     }
   });
