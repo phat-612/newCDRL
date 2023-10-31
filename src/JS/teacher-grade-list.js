@@ -39,6 +39,80 @@ $(document).on("click", ".export_btn", async function () {
     notify('x', 'Có lỗi xảy ra!');
   }
 });
+$(document).on("click", ".export_one_btn", async function () {
+  // disabled button until it done start down load
+  let mssv_list = [];
+  $("table tbody .inp-cbx").each(function () {
+    if (this.checked) {
+      mssv_list.push(this.value);
+    }
+  });
+  if (mssv_list.length == 0) {
+    return notify("x", "Chưa chọn học sinh!");
+  } else {
+    $(".export_one_btn").prop("disabled", true);
+    $(".export_one_btn").text("Downloading...");
+    notify("!", "Đợi chút đang xuất bảng điểm!");
+    const cls = $(".lop option:selected").text().trim();
+    try {
+      const requestOptions = {
+        method: "GET",
+
+      };
+      const response = await fetch(
+        `/api/exportStudentsScore?year=${curr_tb_year}&cls=${cls}&stdlist=${JSON.stringify(
+          mssv_list
+        )}`,
+        requestOptions
+      );
+      if (response.ok) {
+        // reset export button to clickable
+        $(".export_one_btn").prop("disabled", false);
+        $(".export_one_btn").text("Xuất báo cáo cá nhân");
+        notify("n", "Đã xuất bảng điểm thành công");
+        // Tạo URL tạm thời cho dữ liệu Blob
+        let blobUrl;
+        response
+          .blob()
+          .then((blob) => {
+            blobUrl = URL.createObjectURL(blob);
+            // Tiếp tục xử lý
+            const downloadLink = document.createElement("a");
+            downloadLink.href = blobUrl;
+            downloadLink.style.display = "none";
+            downloadLink.target = "_blank";
+            document.body.appendChild(downloadLink);
+
+            downloadLink.click();
+            downloadLink.remove();
+
+            URL.revokeObjectURL(blobUrl);
+          })
+          .catch((error) => {
+            console.error("Lỗi trong quá trình tải dữ liệu:", error);
+          });
+
+        // Giải phóng URL tạm thời sau khi tải xuống hoàn thành
+      } else if (response.status == 402) {
+        $(".export_one_btn").prop("disabled", false);
+        $(".export_one_btn").text("Xuất báo cáo cá nhân");
+        // Error occurred during upload
+        notify("x", "Chưa chọn học sinh hoặc dữ liệu không hợp lệ!");
+      } else if (response.status == 500) {
+        $(".export_one_btn").prop("disabled", false);
+        $(".export_one_btn").text("Xuất báo cáo cá nhân");
+        // Error occurred during upload
+        notify("x", "Có lỗi xảy ra!");
+      }
+    } catch (error) {
+      $(".export_one_btn").prop("disabled", false);
+      $(".export_one_btn").text("Xuất báo cáo cá nhân");
+      console.log(error);
+      notify("x", "Có lỗi xảy ra!");
+    }
+  }
+});
+
 
 $(document).on("click", ".auto_mark_btn", async function () {
   // disabled button until it done start down load

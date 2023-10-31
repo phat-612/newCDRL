@@ -475,17 +475,17 @@ async function createPdf(path_save, scorce) {
   let name_zip;
   let output;
   let archive;
-  if (scorce.length > 1) {
-    name_zip = uuidv4();
-    output = fs.createWriteStream(path.join(path_save, name_zip + ".zip"));
-    archive = archiver("zip", {
-      zlib: { level: 2 }, // Mức nén, có thể là 0-9 (9 là mức nén cao nhất)
-    });
-    if (!fs.existsSync(path.join(path_save, name_zip))) {
-      // Nếu thư mục không tồn tại, tạo thư mục mới
-      fs.mkdirSync(path.join(path_save, name_zip));
-    }
+  // if (scorce.length > 1) {
+  name_zip = uuidv4();
+  output = fs.createWriteStream(path.join(path_save, name_zip + ".zip"));
+  archive = archiver("zip", {
+    zlib: { level: 2 }, // Mức nén, có thể là 0-9 (9 là mức nén cao nhất)
+  });
+  if (!fs.existsSync(path.join(path_save, name_zip))) {
+    // Nếu thư mục không tồn tại, tạo thư mục mới
+    fs.mkdirSync(path.join(path_save, name_zip));
   }
+  // }
   const createPdfAsync = util.promisify((printer, pdfDoc, outputPath, callback) => {
     pdfDoc.pipe(fs.createWriteStream(outputPath));
     pdfDoc.end();
@@ -499,11 +499,11 @@ async function createPdf(path_save, scorce) {
     const stf_score = scorce[index].stf;
     const dep_score = scorce[index].dep;
     let namefile;
-    if (scorce.length > 1) {
-      namefile = scorce[index].name + "-" + scorce[index].mssv + ".pdf";
-    } else {
-      namefile = uuidv4() + ".pdf";
-    }
+    // if (scorce.length > 1) {
+    namefile = scorce[index].name + "-" + scorce[index].mssv + ".pdf";
+    // } else {
+    //   namefile = uuidv4() + ".pdf";
+    // }
     const fonts = {
       Roboto: {
         normal: "backend/font/Roboto-Regular.ttf",
@@ -1002,40 +1002,40 @@ async function createPdf(path_save, scorce) {
     options = {};
 
     const pdfDoc = printer.createPdfKitDocument(docDefinition, options);
-    if (scorce.length > 1) {
-      await createPdfAsync(printer, pdfDoc, path.join(path_save, name_zip, namefile));
-    } else {
-      await createPdfAsync(printer, pdfDoc, path.join(path_save, namefile));
-      return namefile;
-    }
+    // if (scorce.length > 1) {
+    await createPdfAsync(printer, pdfDoc, path.join(path_save, name_zip, namefile));
+    // } else {
+    //   await createPdfAsync(printer, pdfDoc, path.join(path_save, namefile));
+    //   return namefile;
+    // }
   }
-  if (scorce.length > 1) {
-    archive.pipe(output);
-    archive.directory(path.join(path_save, name_zip), false);
-    archive.finalize();
-  }
+  // if (scorce.length > 1) {
+  archive.pipe(output);
+  archive.directory(path.join(path_save, name_zip), false);
+  archive.finalize();
+  // }
 
-  if (scorce.length > 1) {
-    return new Promise((resolve, reject) => {
-      output.on("close", () => {
-        // console.log("Nén hoàn tất, kích thước:", archive.pointer() + " bytes");
-        fs.rm(path.join(path_save, name_zip), { recursive: true }, (err) => {
-          if (err) {
-            console.error("Lỗi khi xóa thư mục:", err);
-            reject(err);
-          } else {
-            // console.log("Đã xóa thư mục thành công.");
-            resolve(name_zip + ".zip");
-          }
-        });
-      });
-
-      archive.on("error", (err) => {
-        console.log("Lỗi khi nén");
-        reject(err);
+  // if (scorce.length > 1) {
+  return new Promise((resolve, reject) => {
+    output.on("close", () => {
+      // console.log("Nén hoàn tất, kích thước:", archive.pointer() + " bytes");
+      fs.rm(path.join(path_save, name_zip), { recursive: true }, (err) => {
+        if (err) {
+          console.error("Lỗi khi xóa thư mục:", err);
+          reject(err);
+        } else {
+          // console.log("Đã xóa thư mục thành công.");
+          resolve(name_zip + ".zip");
+        }
       });
     });
-  }
+
+    archive.on("error", (err) => {
+      console.log("Lỗi khi nén");
+      reject(err);
+    });
+  });
+  // }
 }
 
 module.exports = {

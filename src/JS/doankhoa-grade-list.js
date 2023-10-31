@@ -87,7 +87,6 @@ $(document).on("click", ".export_one_btn", async function () {
   // disabled button until it done start down load
   let mssv_list = [];
   $("table tbody .inp-cbx").each(function () {
-    let score = $(this).parent().parent().parent().find(".first_score").text().trim();
     if (this.checked) {
       mssv_list.push(this.value);
     }
@@ -102,6 +101,7 @@ $(document).on("click", ".export_one_btn", async function () {
     try {
       const requestOptions = {
         method: "GET",
+
       };
       const response = await fetch(
         `/api/exportStudentsScore?year=${curr_tb_year}&cls=${cls}&stdlist=${JSON.stringify(
@@ -149,6 +149,8 @@ $(document).on("click", ".export_one_btn", async function () {
         notify("x", "Có lỗi xảy ra!");
       }
     } catch (error) {
+      $(".export_one_btn").prop("disabled", false);
+      $(".export_one_btn").text("Xuất báo cáo cá nhân");
       console.log(error);
       notify("x", "Có lỗi xảy ra!");
     }

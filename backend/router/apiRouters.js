@@ -58,12 +58,18 @@ function createAPIRouter(client, wss) {
           .db(name_global_databases)
           .collection("user_info")
           .findOne({ _id: data.mssv });
-        if (user === null || user_info_check === null) {
+        if (user === null || user_info_check === null || user_info_check.class == []) {
           // kiểm tra nếu bên login có info mà bên user k có thì xoá bên login (ghost account)
           if (user) {
             await client
               .db(name_global_databases)
               .collection("login_info")
+              .deleteOne({ _id: data.mssv });
+          }
+          if (user_info_check) {
+            await client
+              .db(name_global_databases)
+              .collection("user_info")
               .deleteOne({ _id: data.mssv });
           }
           // Đăng nhập không thành công
@@ -1274,8 +1280,6 @@ function createAPIRouter(client, wss) {
 
         const temp_namefile = await createPdf(".downloads", scores);
         // tải file xlsx về máy người dùng
-        res.setHeader('Content-Type', 'application/pdf');
-
         res.download(path.join(".downloads", temp_namefile));
 
         // delete file after 12 hours
