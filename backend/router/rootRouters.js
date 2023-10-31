@@ -304,6 +304,7 @@ function createRootRouter(client) {
   // Quen mat khau
   router.get("/quenmatkhau", checkIfUserLoginRoute, async (req, res) => {
     const user = req.session.user;
+    console.log(user);
     if (user) {
       return res.redirect("/");
     }
@@ -355,6 +356,7 @@ function createRootRouter(client) {
             activitie_info = await client.db(user.dep).collection("activities").findOne({
               _id: query.id,
             });
+            break;
           case "truong":
             activitie_info = await client
               .db(name_global_databases)
@@ -362,6 +364,8 @@ function createRootRouter(client) {
               .findOne({
                 _id: query.id,
               });
+              break;
+
         }
         if (!activitie_info) {
           return res.status(404).send("Not Found");

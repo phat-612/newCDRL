@@ -393,7 +393,6 @@ $(document).ready(() => {
                 body: formData,
               });
               if (response.ok) {
-                console.log('hihi3');
 
                 await getStudentList()
                 loadStudents(true);
@@ -440,7 +439,6 @@ $(document).ready(() => {
                 body: formData,
               });
               if (response.ok) {
-                console.log('hihi4');
                 await getStudentList()
                 loadStudents(true);
                 notify('n', 'Thêm sinh viên thành công')

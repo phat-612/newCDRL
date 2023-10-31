@@ -653,10 +653,54 @@ function createDepRouter(client) {
       }
       let link_img = [];
 
-      if (studentTotalScore) {
-        for (const i of studentTotalScore.img_ids) {
-          link_img.push(await server.getDriveFileLinkAndDescription(i));
-        }
+      if (studentTotalScore && studentTotalScore.img_ids) {
+          for (const [key, value] of Object.entries(studentTotalScore.img_ids)) {
+            if (key == "global") {
+              for (const i of value) {
+                link_img.push(await server.getDriveFileLinkAndDescription(i));
+              }
+            } else {
+              let activitie_info;
+              activitie_info = await client
+                .db(user.dep)
+                .collection(`${cls}_activities`)
+                .findOne(
+                  {
+                    _id: key,
+                  },
+                  { projection: { name: 1 } }
+                );
+              if (!activitie_info) {
+                activitie_info = await client
+                  .db(user.dep)
+                  .collection("activities")
+                  .findOne(
+                    {
+                      _id: key,
+                    },
+                    { projection: { name: 1 } }
+                  );
+                if (!activitie_info) {
+                  activitie_info = await client
+                    .db(name_global_databases)
+                    .collection("activities")
+                    .findOne(
+                      {
+                        _id: key,
+                      },
+                      { projection: { name: 1 } }
+                    );
+                }
+              }
+              for (const i of value) {
+                let imginfo = await server.getDriveFileLinkAndDescription(i);
+                if (imginfo) {
+                  imginfo.fileDescription = activitie_info.name + "-" + imginfo.fileDescription;
+                  link_img.push(imginfo);
+                }
+              }
+            }
+          }
         return res.render("doankhoa-manage-grades", {
           header: "global-header",
           thongbao: "global-notifications",

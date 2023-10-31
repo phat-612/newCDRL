@@ -357,6 +357,8 @@ setInterval(() => {
   if (
     timestart < new Date() &&
     $(".post-btn").length <= 0 &&
+    isST
+    &&
     $(".activeregistration_btn").length <= 0 &&
     !["Cảm ơn bạn đã tham gia hoạt động!", "Rất tiết hoạt động này đã kết thúc!"].includes(
       $(".activity_body_studentname h1").text()

@@ -324,7 +324,7 @@ $(".save_btn").click(async function () {
             </tr>
             <tr class="copy_box">
               <td colspan="2"> COPY </td>
-              <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
+              <td colspan="6"><a href="/dangkyhoatdong?id=${atv_id}&class=${cls_id.val()}&level=lop">Link đăng kí và điểm danh hoạt động</a></td>
             </tr>
           `);
 
@@ -352,7 +352,7 @@ $(".save_btn").click(async function () {
             </tr>
             <tr class="copy_box">
               <td colspan="2"> COPY </td>
-              <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
+              <td colspan="6"><a href="/dangkyhoatdong?id=${atv_id}&level=khoa">Link đăng kí và điểm danh hoạt động</a></td>
             </tr>
           `);
           // add content and start time to dep list
@@ -379,7 +379,7 @@ $(".save_btn").click(async function () {
             </tr>
             <tr class="copy_box">
               <td colspan="2"> COPY </td>
-              <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
+              <td colspan="6"><a href="/dangkyhoatdong?id=${atv_id}&level=truong">Link đăng kí và điểm danh hoạt động</a></td>
             </tr>
           `);
 

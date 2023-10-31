@@ -655,6 +655,8 @@ function createAPIRouter(client, wss) {
 
             if (hasValue) {
               console.log(`Hàng ${row}: Có giá trị`);
+              break;
+
             } else {
               console.log(`Hàng ${row}: Không có giá trị`);
               havevalue = false;
