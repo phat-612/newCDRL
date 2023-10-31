@@ -79,6 +79,8 @@ async function handle_otp() {
     };
     const response = await fetch('/api/resetpassword', requestOptions);
     if (response.ok) {
+      sessionStorage.removeItem("otp");
+
       window.location.href = "/login/firstlogin?tile=ok";
     } else if (response.status == 403) {
       notify('x', 'Sai OTP hoặc OTP đã hết hạn!');

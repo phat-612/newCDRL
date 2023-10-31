@@ -302,7 +302,7 @@ function createRootRouter(client) {
   });
 
   // Quen mat khau
-  router.get("/quenmatkhau", checkIfUserLoginRoute, async (req, res) => {
+  router.get("/quenmatkhau", async (req, res) => {
     const user = req.session.user;
     console.log(user);
     if (user) {

@@ -266,16 +266,16 @@ function createAPIRouter(client, wss) {
         .collection("OTP")
         .findOne({ _id: data.mssv }, { projection: { _id: 0 } });
       if (OTP && OTP.otpcode === data.otp) {
-        await client.db(name_global_databases).collection("OTP").deleteOne({ _id: data.mssv });
-        const user = await client
+        await client
           .db(name_global_databases)
           .collection("login_info")
-          .findOneAndUpdate(
-            { _id: data.mssv },
-            { $set: { first: "otp" } },
-            { returnDocument: "after" }
-          );
-        // Đăng nhập thành công, lưu thông tin người dùng vào phiên
+          .updateOne({ _id: data.mssv }, { $set: { first: "otp" } });
+        //(log in database)
+        let user = await client
+          .db(name_global_databases)
+          .collection("login_info")
+          .findOne({ _id: data.mssv });
+        await client.db(name_global_databases).collection("OTP").deleteOne({ _id: data.mssv });
         let seasionIDs = await client
           .db(name_global_databases)
           .collection("sessions_manager")
@@ -296,21 +296,26 @@ function createAPIRouter(client, wss) {
               .updateOne({ _id: data.mssv }, { $pull: { sessionId: { $in: idsToDelete } } });
           }
         }
+
         // get user class(cls), power and department(dep)
         const cls = await client
           .db(name_global_databases)
           .collection("user_info")
           .findOne({ _id: data.mssv }, { projection: { _id: 0, class: 1, power: 1, dep: 1 } });
+        // console.log(cls);
+
         if (!cls.power[2]) {
           const branch = await client
             .db(name_global_databases)
             .collection("classes")
             .findOne({ _id: cls.class[0] }, { projection: { _id: 0, branch: 1 } });
+          // console.log(branch);
           if (branch) {
             const dep = await client
               .db(name_global_databases)
               .collection("branchs")
               .findOne({ _id: branch.branch }, { projection: { _id: 0, dep: 1 } });
+
             user.dep = dep.dep;
           }
           user.cls = cls.class;
@@ -321,10 +326,13 @@ function createAPIRouter(client, wss) {
         // Đăng nhập thành công, lưu thông tin người dùng vào phiên
         req.session.user = user;
         // Kiểm tra xem người dùng có chọn "Remember me" không
-
-        // Thiết lập thời gian sống cookie lại về mặc định (1 giờ)
-        req.session.cookie.maxAge = 3600000; // 1 hour
-
+        if (data.remember) {
+          // Thiết lập thời gian sống cookie lâu hơn để lưu thông tin đăng nhập trong 30 ngày
+          req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days
+        } else {
+          // Thiết lập thời gian sống cookie lại về mặc định (1 giờ)
+          req.session.cookie.maxAge = 3600000; // 1 hour
+        }
         const sessionId = req.session.id;
         await client
           .db(name_global_databases)
@@ -656,7 +664,6 @@ function createAPIRouter(client, wss) {
             if (hasValue) {
               console.log(`Hàng ${row}: Có giá trị`);
               break;
-
             } else {
               console.log(`Hàng ${row}: Không có giá trị`);
               havevalue = false;
