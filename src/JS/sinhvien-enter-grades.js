@@ -168,12 +168,12 @@ async function autoCheck() {
   let infoMark = await response.json();
   if (infoMark["dang_vien"]) {
     $("#morning12").prop('checked', true);
-    // $("#morning12").trigger('change');
+
     document.querySelector("#morning12").dispatchEvent(new Event("change"));
   }
   if (infoMark["cham_diem"] || infoMark["lap_hoat_dong"]) {
     $("#mySelect14").val('3');
-    // $("#mySelect14").trigger('change');
+
     document.querySelector("#mySelect14").dispatchEvent(new Event("change"));
   }
 }

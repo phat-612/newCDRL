@@ -98,7 +98,7 @@ td {
 .modal_main {
   padding: 1rem;
   height: 36.5rem;
-  /* overflow: auto; */
+
 }
 
 .content.title {
@@ -153,10 +153,9 @@ textarea {
   border-radius: 0.8rem;
 }
 
-/* Tùy chỉnh chú mờ */
 textarea::placeholder {
   color: rgba(128, 128, 128, 0.5);
-  /* Xám mờ với alpha 0.5 */
+
   font-style: italic;
 }
 
@@ -167,8 +166,7 @@ textarea::placeholder {
 label {
   display: flex;
   align-items: center;
-  /* margin-right: 10px; */
-  /* Để tạo khoảng cách giữa label và select */
+
   font-size: 1.8rem;
 }
 
@@ -196,16 +194,7 @@ label {
     display: flex;
     gap: 2rem;
   }
-  /* .button-35{
-    margin: 1rem 0 0 auto !important;
-  } */
-  /* #button-main{
-    margin: 2rem 0px;
-    flex-direction: column;
-  }
-  #button-main div{
-    width: 100%;
-  } */
+
   #button-main div .button-35{
     width: 100%;
   }
@@ -220,19 +209,4 @@ label {
   }
 }
 
-/* 
-.button {
-    padding: 1rem;
-    background-color: white;
-}
 
-.button .button-1 {
-    margin-top: 2rem;
-    padding: 0.5rem;
-}
-
-.nien-khoa {
-    margin-left: 2rem;
-} */
-
-/* sub-box */

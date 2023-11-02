@@ -76,7 +76,7 @@ body {
 }
 
 .modal_wrap_img_item {
-  /* margin-top: 3rem; */
+
   width: 20rem;
   height: 20rem;
   position: relative;
@@ -158,7 +158,7 @@ body {
 
 .drop_img {
   width: 4.5rem;
-  /* height: 100%; */
+
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -238,9 +238,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* margin-bottom: 17rem; */
+
   justify-content: space-around;
-  /* margin-top: -2rem; */
+
 }
 
 .profile_btn_gr {

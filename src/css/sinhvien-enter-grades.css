@@ -111,7 +111,7 @@ td .title{
   height: 100%;
   background: transparent;
   border-radius: 0.8rem;
-  /* border: 0.2rem dashed black; */
+
   outline: none;
   cursor: pointer;
   margin: 0;
@@ -259,7 +259,6 @@ td .title{
 
 .up-img-description {
   width: 68%;
-  /* height: 40%; */
   border: 0.1rem solid;
   border-radius: 0.8rem;
   padding: 1rem 2rem;
@@ -433,7 +432,7 @@ td .select::after{
   background: #98caea;
   border-radius: 100%;
   cursor: pointer;
-  /* box-shadow: 7px 7px 15px rgba(55, 84, 170, 0.15), -7px -7px 20px white, inset 0px 0px 4px rgba(255, 255, 255, 0.2), inset 7px 7px 15px rgba(55, 84, 170, 0), inset -7px -7px 20px rgba(255, 255, 255, 0), 0px 0px 4px rgba(255, 255, 255, 0); */
+  
 }
 .menu1::before, .menu1::after {
   content: "";
@@ -467,7 +466,7 @@ td .select::after{
   pointer-events: auto;
   font-size: 2rem;
   background:  #98caea;
-  /* display: block; */
+
 
 }
 .menu1.open .hope_star.now{

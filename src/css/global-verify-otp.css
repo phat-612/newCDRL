@@ -61,7 +61,7 @@ body {
     font-size: 3rem;
     background-color: var(--otp-input);
     border-bottom: 0.29rem solid;
-    /* Firefox */
+
     transition: ease-in-out 0.3s;
     color: black;
 }
@@ -85,7 +85,7 @@ body {
 .result {
     max-width: 500px;
     margin: auto;
-    /* padding: 24px; */
+
     text-align: center;
 }
 
@@ -172,7 +172,7 @@ body {
 }
 
 .times {
-    /* margin-top: 0.5rem; */
+
     padding-left: 23px;
     font-size: 15px;
     color: #ec5b5b;

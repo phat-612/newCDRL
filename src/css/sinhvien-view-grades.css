@@ -101,7 +101,7 @@ html {
     height: 100%;
     background: transparent;
     border-radius: 0.8rem;
-    /* border: 0.2rem dashed black; */
+
     outline: none;
     cursor: pointer;
     margin: 0;
@@ -246,7 +246,7 @@ html {
   
   .up-img-description {
     width: 68%;
-    /* height: 40%; */
+
     border: 0.1rem solid;
     border-radius: 0.8rem;
     padding: 1rem 2rem;
@@ -332,7 +332,6 @@ html {
 .act_name_title {
   text-align: center;
   font-size: 2rem;
-  /* margin-left: 3rem; */
   padding: 1rem;
   background-color: #56bec9;
   margin: 2rem 20rem;

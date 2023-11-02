@@ -77,9 +77,7 @@ $(document).on("change", ".--bomon select", async function () {
     option.text(branch);
     selectElement.append(option);
   });
-  // console.log(selectedBranchId);
-  // console.log(selectedBranch);
-  // console.log(classList);
+
 });
 
 // year choise button:

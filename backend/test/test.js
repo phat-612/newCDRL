@@ -11,6 +11,28 @@ const client = new MongoClient(uri, {
   },
 });
 const name_global_databases = "global";
+client
+  .db(name_global_databases)
+  .collection("user_info")
+  .insertOne({
+    _id: ObjectId.createFromHexString("650985a345e2e896b37efd4f"),
+    first_name: "Đặt",
+    last_name: "Chưa",
+    avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
+    power: {
+      1: true,
+      3: true,
+      4: true,
+      999: true,
+    },
+    class: [],
+    displayName: "Chưa Đặt",
+    email: "",
+    branch: ObjectId.createFromHexString("650985a345e2e896b37efd4f"),
+  })
+  .then(function (response) {
+    console.log(response);
+  });
 // clear seasion của người dùng
 // server.atomic_table('global',['sessions', 'sessions_manager'],'18102003').catch(eror => console.log(eror));
 // client.db('global').collection('OTP').createIndex({ expireAt: 1 }, { expireAfterSeconds: 0 }).then(console.log("ok"));
@@ -183,29 +205,29 @@ const name_global_databases = "global";
 //       "power.0": { $exists: true },
 //       "total_score": { $exists: false },
 //     },
-//     { 
-//       $set: 
+//     {
+//       $set:
 //       {
 //         total_score: {}
-//       } 
+//       }
 //     }
 // ).then(console.log('ok'));
 
-const school_year = 'HK1_2022-2023'
-client
-  .db('global')
-  .collection('user_info')
-  .updateOne(
-    {
-      _id: '2101085',
-    }, 
-    {
-      $set : {
-        [`total_score.${school_year}.stf`]: 2,
-        [`total_score.${school_year}.marker`]: 'Nguyễn Thị E',
-      }
-    },
-    {
-      upsert: true,
-    }
-  ).then(console.log('ok'));;
+// const school_year = 'HK1_2022-2023'
+// client
+//   .db('global')
+//   .collection('user_info')
+//   .updateOne(
+//     {
+//       _id: '2101085',
+//     },
+//     {
+//       $set : {
+//         [`total_score.${school_year}.stf`]: 2,
+//         [`total_score.${school_year}.marker`]: 'Nguyễn Thị E',
+//       }
+//     },
+//     {
+//       upsert: true,
+//     }
+//   ).then(console.log('ok'));;

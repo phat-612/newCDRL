@@ -137,14 +137,10 @@ $(document).on("click", ".auto_mark_btn", async function () {
         .text()
         .trim();
       if (cdiem == 'Chấm điểm' && score != "-" && score != "" && this.checked) {
-        console.log('gaga')
-        // $(this).parent().parent().parent().find(".first_score").text(score);
+        
         mssv_list.push(this.value);
       }
-      // else {
-      //   mssv_list = []
-      //   return false;
-      // }
+    
     });
 
     const requestOptions = {
@@ -217,8 +213,7 @@ $(document).on("click", ".load_list_btn", async function () {
 
       const year_available = data.year_available.year;
 
-      // console.log(data.year_available);
-      // console.log(year);
+
 
       // empty old table:
       $('table tbody').empty();
@@ -372,7 +367,6 @@ $(document).on("click", ".load_list_btn", async function () {
           const studentId = $(this).closest('tr').find('td:nth-child(3)').text();
           const lop = $(".selectbox.lop select").val()
 
-          // alert(lop)
           this.href = `/bancansu/nhapdiemdanhgia?schoolYear=${curr_tb_year}&studentId=${studentId}&current_class=${lop}`;
         }
         else {

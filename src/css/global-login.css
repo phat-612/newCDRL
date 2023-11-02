@@ -10,7 +10,7 @@
   width: 40rem;
   padding: 4rem;
   transform: translate(-50%, -50%);
-  /* background: rgba(24, 20, 20, 0.987); */
+
   box-sizing: border-box;
   box-shadow: 0 0.5rem 2.5rem var(--login-boxshadow);
   border-radius: 1rem;

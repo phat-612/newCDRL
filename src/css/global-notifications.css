@@ -46,7 +46,7 @@
   color: var(--color_i);
 }
 .button{
-  /* display: flex; */
+
   gap: 1rem;
   justify-content: flex-end;
   display: none;
@@ -117,9 +117,7 @@
   background-color: rgb(161, 161, 161);
 }
 
-/* .active:before {
-  animation: progress 5s linear forwards;
-} */
+
 
 @keyframes progress {
   100% {

@@ -281,10 +281,7 @@ viewLinks.forEach(function (link) {
     var a_name = row.querySelector("td.a_name").textContent.trim();
     var class_student = row.querySelector("td.class_student").textContent.trim();
 
-    console.log("STT: " + stt);
-    console.log("MSSV: " + mssv);
-    console.log("Họ và Tên: " + a_name);
-    console.log("Lớp: " + class_student);
+
     let postData = JSON.stringify({
       _id: mssv,
       year: curryear,

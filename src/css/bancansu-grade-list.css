@@ -3,29 +3,13 @@
   margin: 0;
   box-sizing: content-box;
 }
-/* .content {
-  margin-top: 2rem;
-  max-width: 91rem;
-  margin-left: auto;
-  margin-right: auto;
-}
-.content .hk_nk {
-  font-size: 2rem;
-  padding: 1rem;
-} */
 
-/* .hk_nk .select select{
-  font-size: inherit;
-}
-.hk_nk .select select option{
-  text-align: center;
-} */
 .content {
   margin-top: 2rem;
   max-width: 91rem;
   margin-left: auto;
   margin-right: auto;
-  /* padding: 1.5rem; */
+
 }
 
 
@@ -37,7 +21,7 @@
   justify-content: flex-start !important;
 }
 .year_full {
-  /* display: flex; */
+
   padding-bottom: 1rem;
 }
 .hk{

@@ -45,7 +45,6 @@ function createAPIRouter(client, wss) {
     const data = req.body;
     // 403: sai thong tin dang nhap
     // data = {mssv: bbp, password: 1234567890, remember: true}
-    // console.log("SYSTEM | LOG_IN | Dữ liệu nhận được: ", data);
     try {
       const user = req.session.user;
       if (!user) {
@@ -101,14 +100,12 @@ function createAPIRouter(client, wss) {
             .db(name_global_databases)
             .collection("user_info")
             .findOne({ _id: data.mssv }, { projection: { _id: 0, class: 1, power: 1, dep: 1 } });
-          // console.log(cls);
 
           if (!cls.power[2]) {
             const branch = await client
               .db(name_global_databases)
               .collection("classes")
               .findOne({ _id: cls.class[0] }, { projection: { _id: 0, branch: 1 } });
-            // console.log(branch);
             if (branch) {
               const dep = await client
                 .db(name_global_databases)
@@ -162,7 +159,7 @@ function createAPIRouter(client, wss) {
     const mssv = req.session.user._id;
     req.session.destroy((err) => {
       if (err) {
-        console.error("SYSTEM | LOG_OUT | Failed to logout:", err);
+        console.log("SYSTEM | LOG_OUT | Failed to logout:", err);
         return res.sendStatus(500);
       } else {
         let seasionIDs;
@@ -192,7 +189,7 @@ function createAPIRouter(client, wss) {
 
             return res.redirect("/login"); // Chạy hàm dưới sau khi đã xử lý xong
           } catch (error) {
-            console.error("SYSTEM | LOG_OUT | Failed to clean up sessions:", error);
+            console.log("SYSTEM | LOG_OUT | Failed to clean up sessions:", error);
             return res.sendStatus(500);
           }
         }
@@ -236,7 +233,6 @@ function createAPIRouter(client, wss) {
   router.post("/updateInfo", checkIfUserLoginAPI, async (req, res) => {
     try {
       const data = req.body;
-      // console.log(`SYSTEM | UPDATE_INFO | Dữ liệu nhận được`, data);
       await client
         .db(name_global_databases)
         .collection("user_info")
@@ -260,7 +256,6 @@ function createAPIRouter(client, wss) {
   router.post("/resetpassword", async (req, res) => {
     try {
       const data = req.body;
-      // console.log(`SYSTEM | RESET_PASSWORD | Dữ liệu nhận được`, data);
       const OTP = await client
         .db(name_global_databases)
         .collection("OTP")
@@ -302,14 +297,12 @@ function createAPIRouter(client, wss) {
           .db(name_global_databases)
           .collection("user_info")
           .findOne({ _id: data.mssv }, { projection: { _id: 0, class: 1, power: 1, dep: 1 } });
-        // console.log(cls);
 
         if (!cls.power[2]) {
           const branch = await client
             .db(name_global_databases)
             .collection("classes")
             .findOne({ _id: cls.class[0] }, { projection: { _id: 0, branch: 1 } });
-          // console.log(branch);
           if (branch) {
             const dep = await client
               .db(name_global_databases)
@@ -386,7 +379,6 @@ function createAPIRouter(client, wss) {
   router.post("/change_pass", checkIfUserLoginAPI, async (req, res) => {
     try {
       const data = req.body;
-      // console.log(`SYSTEM | CHANGE_PASSWORD | Dữ liệu nhận được`, data);
       const old_pass = await client
         .db(name_global_databases)
         .collection("login_info")
@@ -414,7 +406,6 @@ function createAPIRouter(client, wss) {
   router.post("/first_login", checkIfUserLoginAPI, async (req, res) => {
     try {
       const data = req.body;
-      // console.log(`SYSTEM | CHANGE_PASSWORD | Dữ liệu nhận được`, data);
       const old_pass = await client
         .db(name_global_databases)
         .collection("login_info")
@@ -580,7 +571,6 @@ function createAPIRouter(client, wss) {
       }
 
       // Xử lý các tệp đã tải lên ở đây
-      // console.log('SYSTEM | UPLOAD_FILE | Files uploaded:', req.files);
       res.writeHead(200, { "Content-Type": "applicaiton/json" });
       return res.end(JSON.stringify(await get_full_id(uploadDirectory, list_name, list_dep)));
     }
@@ -591,7 +581,6 @@ function createAPIRouter(client, wss) {
     const user = req.session.user;
     if (user.pow[4] || user.pow[7]) {
       const fileStudents = req.file;
-      // console.log(req.body);
       async function generateEmail(str) {
         let s1 =
           "ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠạẢảẤấẦầẨẩẪẫẬậẮắẰằẲẳẴẵẶặẸẹẺẻẼẽẾếỀềỂểỄễỆệỈỉỊịỌọỎỏỐốỒồỔổỖỗỘộỚớỜờỞởỠỡỢợỤụỦủỨứỪừỬửỮữỰựỲỳỴỵỶỷỸỹ";
@@ -642,15 +631,12 @@ function createAPIRouter(client, wss) {
         }
 
         if (isCorrect) {
-          // console.log("Các giá trị đúng theo thứ tự");
 
           let havevalue = true;
 
           for (let row = 2; row <= 5; row++) {
             let hasValue = false;
-            // console.log("ok");
             for (let column = 1; column <= columnCount; column++) {
-              // console.log("ko");
 
               const cell = sheet.cell(row, column);
               const value = cell.value();
@@ -662,17 +648,13 @@ function createAPIRouter(client, wss) {
             }
 
             if (hasValue) {
-              console.log(`Hàng ${row}: Có giá trị`);
               break;
             } else {
-              console.log(`Hàng ${row}: Không có giá trị`);
               havevalue = false;
-              // console.log(havevalue);
               break;
             }
           }
           if (havevalue) {
-            console.log("Tệp Excel chứa dữ liệu");
             if (req.body.status == "true") {
               try {
                 // read excel file:
@@ -748,7 +730,6 @@ function createAPIRouter(client, wss) {
               }
             } else {
               try {
-                // console.log("ngu");
                 // read excel file:
                 // create all account
                 const workbook = await XlsxPopulate.fromFileAsync(fileStudents.path);
@@ -761,27 +742,7 @@ function createAPIRouter(client, wss) {
                 sheet.cell("E1").value("Password");
                 for (let i = 1; i < values.length; i++) {
                   let studentIdToCheck = values[i][0].toString(); // Mã số sinh viên cần kiểm tra
-                  console.log(studentIdToCheck);
 
-                  // client.db("global")
-                  // .collection("user_info").findOne(
-                  //   {
-                  //     _id: studentIdToCheck
-                  //   },
-                  //   function (err, result) {
-                  //     if (err) {
-                  //       console.error(err);
-                  //       return;
-                  //     }
-
-                  //     var isStudentIdExists = result !== null; // Kiểm tra kết quả trả về
-
-                  //     console.log(
-                  //       "Mã số sinh viên có tồn tại trong cơ sở dữ liệu:",
-                  //       isStudentIdExists
-                  //     );
-                  //   }
-                  // );
                   const marker = await client
                     .db(name_global_databases)
                     .collection("user_info")
@@ -795,9 +756,7 @@ function createAPIRouter(client, wss) {
                         },
                       }
                     );
-                  console.log(marker);
                   if (!marker) {
-                    console.log("k có trong DB");
                     let pw = await randomPassword();
                     let email = await generateEmail(
                       `${values[i][1]} ${values[i][2]} ${values[i][0].toString()}`
@@ -855,9 +814,7 @@ function createAPIRouter(client, wss) {
                     res.download(path.join(".downloads", uuid + ".xlsx"));
                     // xoa file sau khi xu ly
                     scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
-                  } else {
-                    console.log("có trong DB");
-                  }
+                  } 
                 }
               } catch (err) {
                 console.log("SYSTEM | CREATE_ACCOUNT | ERROR | ", err);
@@ -865,18 +822,14 @@ function createAPIRouter(client, wss) {
               }
             }
           } else {
-            // console.log("ngu hon nua");
 
             return res.sendStatus(404);
           }
         } else {
-          // console.log("Các giá trị không đúng theo thứ tự");
           return res.sendStatus(405);
         }
       } else {
-        // console.log("them 1 sinh vien");
         const dataStudent = req.body;
-        // console.log(dataStudent);
         let pw = await randomPassword();
         let email = await generateEmail(
           `${dataStudent["ho"]} ${dataStudent["ten"]} ${dataStudent["mssv"].toString()}`
@@ -1101,7 +1054,6 @@ function createAPIRouter(client, wss) {
 
             // add curr_score to scores
             scores.push(curr_score);
-            // console.log(scores);
           }
         } else {
         }
@@ -1136,7 +1088,6 @@ function createAPIRouter(client, wss) {
   // Export students score report --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   router.get("/exportStudentsScore", checkIfUserLoginAPI, async (req, res) => {
     try {
-      ///sdadsasđâsđâs nthl dang lam
       const user = req.session.user;
       if (user.pow[1] || user.pow[2]) {
         const data = req.query;
@@ -1147,7 +1098,6 @@ function createAPIRouter(client, wss) {
         const uuid = uuidv4();
         const stdlist = JSON.parse(data.stdlist);
         // check for post data.cls if class define this mean they choose class so that must
-        // console.log(stdlist);
         let student_list = [];
 
         student_list = sortStudentName(
@@ -1160,7 +1110,6 @@ function createAPIRouter(client, wss) {
             )
             .toArray()
         );
-        // console.log(student_list);
         // get all student total score from themself:
         let scores = [];
 
@@ -1310,7 +1259,6 @@ function createAPIRouter(client, wss) {
         const data = req.query;
         //data = {year: "HK1_2022-2023", cls: "1"}
         const school_year = data.year;
-        // console.log(school_year);
         const year_available = await client
           .db(name_global_databases)
           .collection("school_year")
@@ -1352,77 +1300,6 @@ function createAPIRouter(client, wss) {
           // department_scores: [],
           year_available: year_available,
         };
-        // console.log(student_list);
-        // console.log(user.cls[0]);
-        // for (student of student_list) {
-        //   const curr_student_score = await client
-        //     .db(user.dep)
-        //     .collection(user.cls[0] + "_std_table")
-        //     .findOne(
-        //       {
-        //         mssv: student._id,
-        //         school_year: school_year,
-        //       },
-        //       {
-        //         projection: {
-        //           _id: 0,
-        //           total: 1,
-        //         },
-        //       }
-        //     );
-        //   // console.log("khoa" + user.dep);
-        //   const curr_staff_score = await client
-        //     .db(user.dep)
-        //     .collection(user.cls[0] + "_stf_table")
-        //     .findOne(
-        //       {
-        //         mssv: student._id,
-        //         school_year: school_year,
-        //       },
-        //       {
-        //         projection: {
-        //           _id: 0,
-        //           total: 1,
-        //           marker: 1,
-        //         },
-        //       }
-        //     );
-        //   const curr_departmentt_score = await client
-        //     .db(user.dep)
-        //     .collection(user.cls[0] + "_dep_table")
-        //     .findOne(
-        //       {
-        //         mssv: student._id,
-        //         school_year: school_year,
-        //       },
-        //       {
-        //         projection: {
-        //           _id: 0,
-        //           total: 1,
-        //         },
-        //       }
-        //     );
-        //   // student
-        //   if (curr_student_score) {
-        //     result.student_scores.push(curr_student_score.total);
-        //   } else {
-        //     result.student_scores.push("-");
-        //   }
-        //   // staff member
-        //   if (curr_staff_score) {
-        //     result.staff_scores.push(curr_staff_score.total);
-        //     result.staff_name.push(curr_staff_score.marker);
-        //   } else {
-        //     result.staff_scores.push("-");
-        //     result.staff_name.push("-");
-        //   }
-        //   // department
-        //   if (curr_departmentt_score) {
-        //     result.department_scores.push(curr_departmentt_score.total);
-        //   } else {
-        //     result.department_scores.push("-");
-        //   }
-        // }
 
         return res.status(200).json(result);
       } else {
@@ -1492,74 +1369,6 @@ function createAPIRouter(client, wss) {
           year_available: year_available,
         };
 
-        // for (student of student_list) {
-        //   const curr_student_score = await client
-        //     .db(user.dep)
-        //     .collection(cls + "_std_table")
-        //     .findOne(
-        //       {
-        //         mssv: student._id,
-        //         school_year: school_year,
-        //       },
-        //       {
-        //         projection: {
-        //           _id: 0,
-        //           total: 1,
-        //         },
-        //       }
-        //     );
-        //   const curr_staff_score = await client
-        //     .db(user.dep)
-        //     .collection(cls + "_stf_table")
-        //     .findOne(
-        //       {
-        //         mssv: student._id,
-        //         school_year: school_year,
-        //       },
-        //       {
-        //         projection: {
-        //           _id: 0,
-        //           total: 1,
-        //           marker: 1,
-        //         },
-        //       }
-        //     );
-        //   const curr_departmentt_score = await client
-        //     .db(user.dep)
-        //     .collection(cls + "_dep_table")
-        //     .findOne(
-        //       {
-        //         mssv: student._id,
-        //         school_year: school_year,
-        //       },
-        //       {
-        //         projection: {
-        //           _id: 0,
-        //           total: 1,
-        //         },
-        //       }
-        //     );
-        //   // student
-        //   if (curr_student_score) {
-        //     result.student_scores.push(curr_student_score.total);
-        //   } else {
-        //     result.student_scores.push("-");
-        //   }
-        //   // staff member
-        //   if (curr_staff_score) {
-        //     result.staff_scores.push(curr_staff_score.total);
-        //     result.staff_name.push(curr_staff_score.marker);
-        //   } else {
-        //     result.staff_scores.push("-");
-        //     result.staff_name.push("-");
-        //   }
-        //   // department
-        //   if (curr_departmentt_score) {
-        //     result.department_scores.push(curr_departmentt_score.total);
-        //   } else {
-        //     result.department_scores.push("-");
-        //   }
-        // }
 
         return res.status(200).json(result);
       } else {
@@ -1656,7 +1465,6 @@ function createAPIRouter(client, wss) {
       if (user.pow[2]) {
         const data = req.body;
         let cls = data.cls;
-        // console.log(cls);
         //data = {year: "HK1_2022-2023", cls: "1", std_list = []}
 
         // get staff member info :
@@ -2545,7 +2353,7 @@ function createAPIRouter(client, wss) {
           })
           .catch((error) => {
             // Xử lý lỗi nếu có
-            console.error(error);
+            console.log("SYSTEM | LOAD_YEAR_ACTIVITIES | ERROR |",error);
           });
       } else {
         return res.sendStatus(403);
@@ -2689,34 +2497,6 @@ function createAPIRouter(client, wss) {
             );
         }
 
-        // // update student activities list
-        // for (const key of Object.keys(data.dataUpdate)) {
-        //   if (data.defaultApproval[key] != data.dataUpdate[key]) {// only update if it different
-        //     if (data.dataUpdate[key] == 0) { // remove from list
-        //       await client.db(name_global_databases).collection("user_info").updateOne(
-        //         {
-        //           _id: key
-        //         },
-        //         {
-        //           $unset: { [`act_list.${data._id}`]: "" }
-        //         }
-        //       );
-        //     } else { // update from list
-        //       await client.db(name_global_databases).collection("user_info").updateOne(
-        //         {
-        //           _id: key
-        //         },
-        //         {
-        //           $set: { [`act_list.${data._id}`]: data.dataUpdate[key] },
-        //         },
-        //         {
-        //           upsert: true
-        //         },
-        //       );
-        //     }
-        //   }
-        // }
-
         return res.sendStatus(200);
       } else {
         return res.sendStatus(403); // send user to 403 page
@@ -2770,18 +2550,7 @@ function createAPIRouter(client, wss) {
             );
         }
 
-        // // remove activity in actlist of all students join in:
-        // for (let i = 0; i < data.studentDelete; i++) {
-        //   await client.db(name_global_databases).collection("user_info").updateOne(
-        //     {
-        //       _id: data.studentDelete[i]
-        //     },
-        //     {
-        //       $unset: { [`act_list.${data._id}`]: "" }
-        //     }
-        //   );
-        // }
-
+     
         return res.sendStatus(200);
       } else {
         return res.sendStatus(403); // send user to 403 page
@@ -2894,74 +2663,6 @@ function createAPIRouter(client, wss) {
           // department_scores: [],
           year_available: year_available,
         };
-        // for (student of student_list) {
-        //   const curr_student_score = await client
-        //     .db(user.dep)
-        //     .collection(data.cls + "_std_table")
-        //     .findOne(
-        //       {
-        //         mssv: student._id,
-        //         school_year: school_year,
-        //       },
-        //       {
-        //         projection: {
-        //           _id: 0,
-        //           total: 1,
-        //         },
-        //       }
-        //     );
-        //   const curr_staff_score = await client
-        //     .db(user.dep)
-        //     .collection(data.cls + "_stf_table")
-        //     .findOne(
-        //       {
-        //         mssv: student._id,
-        //         school_year: school_year,
-        //       },
-        //       {
-        //         projection: {
-        //           _id: 0,
-        //           total: 1,
-        //           marker: 1,
-        //         },
-        //       }
-        //     );
-        //   const curr_departmentt_score = await client
-        //     .db(user.dep)
-        //     .collection(data.cls + "_dep_table")
-        //     .findOne(
-        //       {
-        //         mssv: student._id,
-        //         school_year: school_year,
-        //       },
-        //       {
-        //         projection: {
-        //           _id: 0,
-        //           total: 1,
-        //         },
-        //       }
-        //     );
-        //   // student
-        //   if (curr_student_score) {
-        //     result.student_scores.push(curr_student_score.total);
-        //   } else {
-        //     result.student_scores.push("-");
-        //   }
-        //   // staff member
-        //   if (curr_staff_score) {
-        //     result.staff_scores.push(curr_staff_score.total);
-        //     result.staff_name.push(curr_staff_score.marker);
-        //   } else {
-        //     result.staff_scores.push("-");
-        //     result.staff_name.push("-");
-        //   }
-        //   // department
-        //   if (curr_departmentt_score) {
-        //     result.department_scores.push(curr_departmentt_score.total);
-        //   } else {
-        //     result.department_scores.push("-");
-        //   }
-        // }
 
         return res.status(200).json(result);
       } else {

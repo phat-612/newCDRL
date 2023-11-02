@@ -9,7 +9,7 @@
   max-width: 91rem;
   margin-left: auto;
   margin-right: auto;
-  /* padding: 1.5rem; */
+
 }
 
 .activity-board {
@@ -136,8 +136,6 @@ tr:hover {
 label {
   display: flex;
   align-items: center;
-  /* margin-right: 10px; */
-  /* Để tạo khoảng cách giữa label và select */
   font-size: 1.8rem;
 }
 
@@ -210,7 +208,6 @@ label {
   height: 100%;
   background: transparent;
   border-radius: 0.8rem;
-  /* border: 0.2rem dashed black; */
   outline: none;
   cursor: pointer;
   margin: 0;
@@ -353,7 +350,6 @@ label {
 
 .up-img-description {
   width: 68%;
-  /* height: 40%; */
   border: 0.1rem solid;
   border-radius: 0.8rem;
   padding: 1rem 2rem;
@@ -388,7 +384,7 @@ textarea::placeholder {
   max-width: 91rem;
   margin-left: auto;
   margin-right: auto;
-  /* padding: 1.5rem; */
+
 }
 
 .activity-board {
@@ -515,8 +511,6 @@ tr:hover {
 label {
   display: flex;
   align-items: center;
-  /* margin-right: 10px; */
-  /* Để tạo khoảng cách giữa label và select */
   font-size: 1.8rem;
 }
 
@@ -589,7 +583,6 @@ label {
   height: 100%;
   background: transparent;
   border-radius: 0.8rem;
-  /* border: 0.2rem dashed black; */
   outline: none;
   cursor: pointer;
   margin: 0;
@@ -732,7 +725,6 @@ label {
 
 .up-img-description {
   width: 68%;
-  /* height: 40%; */
   border: 0.1rem solid;
   border-radius: 0.8rem;
   padding: 1rem 2rem;

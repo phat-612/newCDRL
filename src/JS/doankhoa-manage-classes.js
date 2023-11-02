@@ -92,7 +92,7 @@ $(".save_btn").click(async function () {
     const curr_branchs = $(this).parent().parent().parent().parent().find('.select_branch :selected');
     const curr_teacher = $(this).parent().parent().parent().parent().find('.select_teacher :selected');
 
-    console.log(curr_branchs.text(), curr_teacher.text());
+
     // disable curr button
     $(this).prop('disabled', true);
 
@@ -197,7 +197,7 @@ $("#delete__class").click(async function () {
   $('table tbody .inp-cbx').each(function () {
     if (this.checked) {
       rm_cls.push(this.value);
-      console.log($(this).val())
+
       rm_ts.push($(this).parent().parent().parent().find('.t_name').attr('id'))
     }
   });

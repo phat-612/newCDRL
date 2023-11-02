@@ -32,8 +32,7 @@ async function getNewAccessTokenUsingRefreshToken(refreshToken) {
     const refreshedTokens = await auth.getAccessToken();
     return refreshedTokens.res.data;
   } catch (error) {
-    console.error("Lỗi làm mới mã truy cập:", error);
-    throw error;
+    console.log("SYSTEM | DRIVE | Lỗi làm mới mã truy cập:", error);
   }
 }
 // Generate an access token and refresh token if not available
@@ -51,7 +50,7 @@ const getAccessToken = async () => {
         token = new_tokens.access_token;
         await storage.setItem("tokens", new_tokens);
       } catch (error) {
-        console.error("Error refreshing access token:", error);
+        console.log("SYSTEM | DRIVE | Error refreshing access token:", error);
       }
     }
   }
@@ -66,7 +65,6 @@ const getAccessToken = async () => {
 
     const code = await getCodeFromUser();
     tokens = await getAccessTokenFromCode(code);
-    console.log(tokens);
     await storage.setItem("tokens", tokens);
   }
 
@@ -133,10 +131,9 @@ exports.uploadFileToDrive = async (
 
     fs.unlink(filePath, (err) => {
       if (err) {
-        console.error("SYSTEM | DRIVE | ERR |", err);
+        console.log("SYSTEM | DRIVE | ERR |", err);
         return;
       }
-      // console.log('SYSTEM | DRIVE | File local deleted successfully');
     });
     const permission = {
       role: "reader", // Quyền truy cập đọc
@@ -152,7 +149,7 @@ exports.uploadFileToDrive = async (
 
     return res.data.id;
   } catch (err) {
-    console.error("SYSTEM | DRIVE | ERR | uploading file:", err);
+    console.log("SYSTEM | DRIVE | ERR | uploading file:", err);
   }
 };
 
@@ -166,10 +163,9 @@ const getFileName = async (fileId) => {
     });
 
     const fileName = response.data.name;
-    // console.log('File name:', fileName);
     return fileName;
   } catch (error) {
-    console.error("Error retrieving file name:", error);
+    console.log("SYSTEM | DRIVE | Error retrieving file name:", error);
   }
 };
 
@@ -191,17 +187,15 @@ exports.downloadFileFromDrive = async (fileId) => {
         chunks.push(chunk);
       })
       .on("end", () => {
-        // console.log('SYSTEM | DRIVE | File downloaded successfully!');
         const fileContent = Buffer.concat(chunks).toString("utf8");
         resolve(fileContent);
       })
       .on("error", (err) => {
-        console.error("SYSTEM | DRIVE | Error downloading file:", err);
+        console.log("SYSTEM | DRIVE | Error downloading file:", err);
         reject(err);
       });
     // .pipe(destFile);
 
-    // console.log('SYSTEM | DRIVE | File reading successfully!');
   });
 };
 
@@ -224,15 +218,13 @@ exports.downloadFileFromDriveforUser = async (fileId, res) => {
       res.write(chunk);
     })
     .on("end", () => {
-      // console.log('SYSTEM | DRIVE | File sent successfully!');
       res.end();
     })
     .on("error", (err) => {
-      console.error("SYSTEM | DRIVE | Error sending file:", err);
+      console.log("SYSTEM | DRIVE | Error sending file:", err);
       res.status(500).end(); // Or handle the error in an appropriate way
     });
 
-  // console.log('SYSTEM | DRIVE | File reading successfully!');
 };
 
 exports.getDriveFileLinkAndDescription = async (fileId) => {
@@ -251,9 +243,8 @@ exports.deleteFileFromDrive = async (fileId) => {
       fileId: fileId,
       auth: auth,
     });
-    // console.log('SYSTEM | DRIVE | File deleted successfully!');
   } catch (err) {
-    console.error("SYSTEM | DRIVE | Error deleting file:", err);
+    console.log("SYSTEM | DRIVE | Error deleting file:", err);
   }
 };
 // ------------------------------------------------------------------------------------------------------

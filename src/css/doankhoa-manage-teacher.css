@@ -145,11 +145,7 @@ label {
   transition: box-shadow 0.1s linear;
 }
 
-/* content department */
-/* .content__department {
-  font-size: 1.8rem;
-  margin-top: 2rem;
-} */
+
 
 .content--button {
   display: flex;

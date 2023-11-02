@@ -60,9 +60,7 @@ input {
   color: var(--black-color);
 }
 
-/* :root{
-  var
-} */
+
 
 .header {
   background-color: var(--white-color);
@@ -71,7 +69,7 @@ input {
 
 .header-content {
   display: flex;
-  /* max-width: 115rem; */
+
   width: 100%;
   justify-content: space-around;
   align-items: center;
@@ -358,12 +356,12 @@ td .select select option {
   min-width: 8rem;
   border-radius: 0.25em;
   align-items: center;
-  /* overflow: hidden; */
+
 }
 
 .select_branch_cn::after {
   font-size: 1.2rem;
-  /* color: #000; */
+
   content: "\25BC";
   position: absolute;
   top: 33%;
@@ -374,7 +372,7 @@ td .select select option {
 }
 .select::after {
   font-size: 1.2rem;
-  /* color: #000; */
+
   content: "\25BC";
   position: absolute;
   top: 33%;
@@ -443,9 +441,7 @@ td a:hover {
   font-weight: 600;
 }
 
-/* .content_top {
-  text-align: center;
-} */
+
 
 .content_top h2 {
   border-bottom: 1px solid;
@@ -604,7 +600,7 @@ textarea {
   }
   .select::after {
     font-size: 1.2rem;
-    /* color: #000; */
+
     content: "";
     position: absolute;
     top: 33%;
@@ -620,7 +616,7 @@ textarea {
   }
   select{
     display: block;
-    /* width: 100%; */
+
     margin: 0 auto !important;
   }
   .subtitle {
@@ -652,10 +648,7 @@ textarea {
   .button-35{
     margin: 1rem 0 0 0 ;
   }
-  /* #button-main{
-    margin: 2rem 0px;
-    flex-direction: column;
-  } */
+
   #button-main div{
     width: 100%;
   }

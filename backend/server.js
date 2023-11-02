@@ -93,14 +93,13 @@ databaseLib
     app.use("/hocsinh", studentRouter);
 
     // Xử lý đường link không có -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    // app.get("*", async function (req, res) {
-    //   return res.sendStatus(404);
-    // });
+    app.get("*", async function (req, res) {
+      return res.sendStatus(404);
+    });
     // // WEBSOCKET SPACE ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     wss.on("connection", async (ws, req) => {
       // Kiểm tra địa chỉ đích của kết nối WebSocket
       if (req.url === "/howtosavealife?") {
-        // console.log(`SYSTEM | WEBSOCKET | A new WebSocket connection is established.`);
         // Gán id cho ws
         if (req.headers.cookie) {
           const cookie_seasion = cookie.parse(req.headers.cookie);
@@ -109,13 +108,11 @@ databaseLib
             // Xử lý khi client gửi dữ liệu
             ws.on("message", (message) => {
               const messDecode = message.toString("utf-8");
-              // console.log('SYSTEM | WEBSOCKET | Received message: ', message.toString('utf-8'));
               if (console == "logout") {
                 ws.close();
               } else if (messDecode == "ok ko e?") {
                 ws.send("Ok a");
               } else if (messDecode.startsWith("anhiuem")) {
-                // console.log(messDecode.slice(7));
                 ws.actId = messDecode.slice(7);
                 ws.send("gotta!");
               }  else if (messDecode == "clearID") {
@@ -126,7 +123,6 @@ databaseLib
 
             // Xử lý khi client đóng kết nối
             ws.on("close", () => {
-              // console.log('SYSTEM | WEBSOCKET | WebSocket connection closed for ' + ws.id);
             });
           } else {
             ws.send("Ko a");
@@ -150,5 +146,6 @@ databaseLib
     // -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   })
   .catch((error) => {
-    console.error("Error connecting to MongoDB:", error);
+    console.log("SYSTEM | LOG | Error connecting to MongoDB:", error);
+    throw error;
   });

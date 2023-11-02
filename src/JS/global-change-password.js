@@ -61,7 +61,7 @@ $('.old_password_input, .password_input, .again_password_input').on('keydown', f
 const password_input = document.querySelector('.password_input')
 password_input.oninput = () => {
     if (password_input.value === '') {
-        console.log('password_input')
+
         password_input.parentElement.querySelector('.eye').style.display = 'none'
 
     } else {
@@ -72,7 +72,7 @@ password_input.oninput = () => {
 const old_password_input = document.querySelector('.old_password_input')
 old_password_input.oninput = () => {
     if (old_password_input.value === '') {
-        console.log('password_input')
+
         old_password_input.parentElement.querySelector('.eye').style.display = 'none'
 
     } else {

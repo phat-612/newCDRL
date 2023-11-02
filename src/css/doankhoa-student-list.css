@@ -87,7 +87,7 @@ tr td:nth-child(4) {
 
 #md_vt {
   background-color: var(--select-bg);
-  /* box-shadow: none; */
+
 }
 
 .modal_wrap {
@@ -169,9 +169,8 @@ tr td:nth-child(4) {
 }
 
 .modal_main .button-35 {
-  /* position: absolute; */
-  /* right: 0; */
-  /* right: 5rem; */
+
+
   padding: 12px 30px;
 }
 

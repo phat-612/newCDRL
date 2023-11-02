@@ -14,7 +14,6 @@ function createRootRouter(client) {
           .collection("school_year")
           .findOne({}, { projection: { _id: 0, year: 1 } });
         if (user.cls[0]) {
-          console.log(user);
           const schoolYear_all = await client
             .db(name_global_databases)
             .collection("classes")
@@ -70,7 +69,6 @@ function createRootRouter(client) {
             const studentActivities = await Promise.all(
               schoolYearsToSearch.map(async (year) => {
                 info_search = `student_list.${user._id}`;
-                console.log(info_search);
                 let activitie_info_lop = await client
                   .db(user.dep)
                   .collection(`${user.cls[0]}_activities`)
@@ -255,7 +253,6 @@ function createRootRouter(client) {
             menu: "doankhoa-menu",
           });
         }
-        //cc
       }
     } catch (err) {
       console.log("SYSTEM | INDEX_ROUTE | ERROR | ", err);
@@ -304,7 +301,6 @@ function createRootRouter(client) {
   // Quen mat khau
   router.get("/quenmatkhau", async (req, res) => {
     const user = req.session.user;
-    console.log(user);
     if (user) {
       return res.redirect("/");
     }
@@ -321,7 +317,6 @@ function createRootRouter(client) {
       const query = req.query;
       const user = req.session.user;
       let activitie_info;
-      // console.log(user);
       if (query.id && query.level) {
         switch (query.level) {
           case "lop":
@@ -385,7 +380,7 @@ function createRootRouter(client) {
                     _id: list_student[i],
                   },
                   { projection: { first_name: 1, last_name: 1, class: 1 } }
-                ) // khò khò
+                )
             );
           }
           activitie_info.info_student = info_student;
@@ -396,7 +391,7 @@ function createRootRouter(client) {
             activitie_info.diemdanh = true;
           }
         }
-        // console.log(activitie_info);
+
         return res.render("sinhvien-activeregistration", {
           header: "global-header",
           thongbao: "global-notifications",

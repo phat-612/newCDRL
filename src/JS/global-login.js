@@ -5,7 +5,7 @@ $('.login_btn').on('click', async function (e) {
         notify("!", "Vui lòng nhập mssv!");
     } else if (password == "") {
         notify("!", "Vui lòng nhập password!");
-        // thong bao: n, chu y: !, loi: x
+
     } else {
         try {
             let postData = JSON.stringify({
@@ -53,7 +53,7 @@ const password_input = document.querySelector('.password_input')
 const eye = document.querySelector('.eye')
 password_input.oninput = () => {
     if (password_input.value === '') {
-        console.log('password_input')
+
         password_input.parentElement.querySelector('.eye').style.display = 'none'
 
     } else {

@@ -7,13 +7,7 @@ function dropItem() {
   }
 }
 
-// if (lastSegment == "logout") {
-//   item[0].querySelector("i").classList.add("active");
-// } else if (lastSegment == "nhapdiemdanhgia") {
-//   item[1].querySelector("i").classList.add("active");
-// } else if (lastSegment == "profile") {
-//   item[3].querySelector("i").classList.add("active");
-// }
+
 
 var isMenuOpen = false;
 

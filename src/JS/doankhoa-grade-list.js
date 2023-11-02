@@ -3,13 +3,11 @@ let curr_tb_year =
   $(".selectbox--hocky select option:selected").text().trim() +
   "_" +
   $(".nien_khoa select option:selected").text().trim();
-// console.log(branch_list);
-// console.log(class_list);
-// console.log(year_cur);
+
 
 $(document).on("change", ".--bomon select", async function () {
   const selectedBranch = $(".--bomon select option:selected").text().trim();
-  //  const selectedBranch = "Công Nghệ Thông Tin";
+
   let selectedBranchId;
   let selectedClassName;
   let classList = [];
@@ -36,9 +34,7 @@ $(document).on("change", ".--bomon select", async function () {
     option.text(branch);
     selectElement.append(option);
   });
-  // console.log(selectedBranchId);
-  // console.log(selectedBranch);
-  // console.log(classList);
+
 });
 
 $(document).on("click", ".export_btn", async function () {
@@ -167,13 +163,10 @@ $(document).on("click", ".auto_mark_btn", async function () {
     $("table tbody .inp-cbx").each(function () {
       let score = $(this).parent().parent().parent().find(".first_score").text().trim();
       if (score != "-" && score != "" && this.checked) {
-        // $(this).parent().parent().parent().find(".khoa_score").text(score);
+
         mssv_list.push(this.value);
       }
-      // else {
-      //   mssv_list = []
-      //   return false;
-      // }
+
     });
 
     const requestOptions = {
@@ -234,7 +227,6 @@ $(document).on("click", ".button-35-a", async function () {
   $(".load_list_btn").prop("disabled", true);
   $(".load_list_btn").text("Loading...");
   notify("!", "Đợi chút đang tải bảng điểm!");
-  // console.log(curr_tb_year);
   try {
     const year =
       "HK" +
@@ -344,8 +336,6 @@ $(document).on("click", ".button-35-a", async function () {
 
           // add '*' to student have not mark yet
           if (curr_year_total.std || curr_year_total.std == 0) {
-            // console.log(curr_year_total.std);
-            // console.log(i);
             $("table tbody tr")
               .eq(i)
               .find(".std_name_row")
@@ -435,7 +425,6 @@ $(document).on("click", ".button-35-a", async function () {
 });
 
 $(".chamdiem").click(function () {
-  console.log($(".selectbox--hocky select option:selected").text().trim());
   const cur_tb_year =
     "HK" +
     $(".selectbox--hocky select option:selected").text().trim() +
@@ -451,12 +440,7 @@ $(".chamdiem").click(function () {
     notify("!", "chưa mở chấm điểm vui lòng chọn năm khác.");
   }
 });
-// auto click
-// $(document).ready(function() {
-//   // Tự động kích hoạt sự kiện click khi trang đã tải xong
-//   $('.button-35-a').click();
-// });
-// all checkbox set (if all-cbx tick all checkboxs will tick otherwise untick all)
+
 $(document).on("change", ".all-cbx", async function () {
   if ($(".all-cbx")[0].checked) {
     $("table tbody .inp-cbx").prop("checked", true);

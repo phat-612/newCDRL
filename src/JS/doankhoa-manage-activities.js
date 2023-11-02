@@ -209,9 +209,7 @@ $(document).on("change", ".--bomon select", async function () {
     option.text(branch);
     selectElement.append(option);
   });
-  // console.log(selectedBranchId);
-  // console.log(selectedBranch);
-  // console.log(classList);
+
 });
 
 //save button
@@ -331,7 +329,7 @@ $(".save_btn").click(async function () {
           // add content and start time to cls list
           cls_content.push(atv_content);
           cls_st.push(new Date([start_date, start_hour]));
-          console.log(cls_content);
+
           break;
         case "khoa":
           let dep_length = $("#dep_tb tbody tr").length / 2;
@@ -358,7 +356,7 @@ $(".save_btn").click(async function () {
           // add content and start time to dep list
           dep_content.push(atv_content);
           dep_st.push(new Date([start_date, start_hour]));
-          console.log(dep_content);
+     
           break;
         case "truong":
           let school_length = $("#school_tb tbody tr").length / 2;
@@ -386,7 +384,7 @@ $(".save_btn").click(async function () {
           // add content and start time to cls list
           school_content.push(atv_content);
           school_st.push(new Date([start_date, start_hour]));
-          console.log(school_content);
+
           break;
       }
 

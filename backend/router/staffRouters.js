@@ -158,7 +158,6 @@ function createStaffRouter(client) {
                 if (activitie_info) {
                   for (const i of value) {
                     let imginfo = await server.getDriveFileLinkAndDescription(i);
-                    console.log(activitie_info.name);
                     if (dep_act_img[activitie_info.name] && imginfo) {
                       dep_act_img[activitie_info.name].push(imginfo);
                     } else if (imginfo) {
@@ -192,14 +191,6 @@ function createStaffRouter(client) {
     }
   });
 
-  // ban can su quan ly hoat dong
-  // router.get("/quanlihoatdong", checkIfUserLoginRoute, async (req, res) => {
-  //   return res.render("bancansu-manage-activities", {
-  //     header: "global-header",
-  //     footer: "global-footer",
-  //     thongbao: "global-notifications",
-  //   });
-  // });
   router.get("/quanlihoatdong", checkIfUserLoginRoute, async (req, res) => {
     const user = req.session.user;
 
@@ -323,7 +314,7 @@ function createStaffRouter(client) {
         })
         .catch((error) => {
           // Xử lý lỗi nếu có
-          console.error(error);
+          console.log(error);
         });
     } else {
       return res.sendStatus(403);
@@ -369,77 +360,11 @@ function createStaffRouter(client) {
           header: "global-header",
           footer: "global-footer",
           thongbao: "global-notifications",
-          // staff_name: [],
           student_list: student_list,
-          // student_scores: [],
-          // staff_scores: [],
-          // department_scores: [],
           cls: user.cls,
           years: years.years,
           curr_year: school_year.year,
         };
-
-        // for (student of student_list) {
-        //   const curr_student_score = await client
-        //     .db(user.dep)
-        //     .collection(user.cls[0] + "_std_table")
-        //     .findOne(
-        //       {
-        //         mssv: student._id,
-        //         school_year: school_year.year,
-        //       },
-        //       {
-        //         projection: { total: 1 },
-        //       }
-        //     );
-        //   const curr_staff_score = await client
-        //     .db(user.dep)
-        //     .collection(user.cls[0] + "_stf_table")
-        //     .findOne(
-        //       {
-        //         mssv: student._id,
-        //         school_year: school_year.year,
-        //       },
-        //       {
-        //         projection: {
-        //           total: 1,
-        //           marker: 1,
-        //         },
-        //       }
-        //     );
-        //   const curr_department_score = await client
-        //     .db(user.dep)
-        //     .collection(user.cls[0] + "_dep_table")
-        //     .findOne(
-        //       {
-        //         mssv: student._id,
-        //         school_year: school_year.year,
-        //       },
-        //       {
-        //         projection: { total: 1 },
-        //       }
-        //     );
-        //   // student
-        //   if (curr_student_score) {
-        //     render.student_scores.push(curr_student_score.total);
-        //   } else {
-        //     render.student_scores.push("-");
-        //   }
-        //   // staff member
-        //   if (curr_staff_score) {
-        //     render.staff_scores.push(curr_staff_score.total);
-        //     render.staff_name.push(curr_staff_score.marker);
-        //   } else {
-        //     render.staff_scores.push("-");
-        //     render.staff_name.push("-");
-        //   }
-        //   // department
-        //   if (curr_department_score) {
-        //     render.department_scores.push(curr_department_score.total);
-        //   } else {
-        //     render.department_scores.push("-");
-        //   }
-        // }
 
         return res.render("bancansu-grade-list", render);
       } else {

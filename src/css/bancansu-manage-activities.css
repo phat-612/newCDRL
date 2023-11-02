@@ -166,7 +166,7 @@ textarea {
 textarea::placeholder {
   color: var(--black-color);
   opacity: 0.5;
-  /* Xám mờ với alpha 0.5 */
+
   font-style: italic;
 }
 
@@ -178,8 +178,7 @@ label {
   display: flex;
   align-items: center;
   margin-right: 10px;
-  /* Để tạo khoảng cách giữa label và select */
-  font-size: 1.8rem;
+font-size: 1.8rem;
 }
 
 #select-main {

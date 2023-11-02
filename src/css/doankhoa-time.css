@@ -104,7 +104,7 @@
   background-color: var(--white-color);
   width: 50rem;
   margin: 5rem auto;
-  /* padding: 2rem 2rem; */
+
   border-radius: 0.5rem;
   position: relative;
   display: grid;
@@ -274,7 +274,7 @@ input[type="date"] {
 
 ::-webkit-calendar-picker-indicator {
   background-color: #fff;
-  /* background-color: var(--white-color); */
+
   padding: 0.5rem;
   cursor: pointer;
   border-radius: 3px;
@@ -336,7 +336,7 @@ input[type="date"] {
 /* CSS cho dialog thêm ảnh */
 .modal_wrap {
   position: relative;
-  /* bottom: 45rem; */
+
   top: 50%;
   left: 50%;
   position: absolute;
@@ -391,7 +391,7 @@ input[type="date"] {
   }
   .modal_wrap {
     width: 90vw;
-    /* height: auto; */
+
   }
   .time_auto {
     padding: 0;

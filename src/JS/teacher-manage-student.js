@@ -1,4 +1,4 @@
-// const { data } = require("node-persist");
+
 
 $(document).ready(() => {
   const inpMssv = $("#md_mssv")
@@ -8,13 +8,7 @@ $(document).ready(() => {
   const inpDv = $("#md_dv")
   const inpCd = $("#md_cd")
   const inpLbhd = $("#md_lbhd")
-  // console.log(inpMssv.val());
-  // console.log(inpHo.val());
-  // console.log(inpTen.val());
-  // console.log(inpVt.val());
-  // console.log(inpDv.prop('checked'));
-  // console.log(inpCd.prop('checked'));
-  // console.log(inpLbhd.prop('checked'));
+
   let selectedFile
   let cls
   let dataStudents = {
@@ -28,7 +22,7 @@ $(document).ready(() => {
   let loading = false;
   // chon lop
   async function getStudentList() {
-    // console.log('goi len sv');
+   
 
     // update skip time for student list
     if (skip[cls] || skip[cls] == 0) {
@@ -126,7 +120,7 @@ $(document).ready(() => {
 
     if (dataStudents.hasOwnProperty(cls)) {
       await getStudentList().then((students) => {
-        console.log(dataStudents[cls] == students)
+
         renderTable(students, 30 * (skip[cls]));
       }, (err) => {
         console.log(err);
@@ -270,16 +264,7 @@ $(document).ready(() => {
       const response = await fetch('/api/createAccount', requestOptions);
       if (response.ok) {
         if (!updateStudent) {
-          // dataStudents[cls].push({
-          //   _id: inpMssv.val(),
-          //   last_name: inpHo.val(),
-          //   first_name: inpTen.val(),
-          //   role: inpCd.prop('checked') || inpLbhd.prop('checked') ? 'Ban cán sự' : 'Sinh viên',
-          //   dang_vien: inpDv.prop('checked'),
-          //   cham_diem: inpCd.prop('checked'),
-          //   lap_hoat_dong: inpLbhd.prop('checked'),
-          // })
-          // dataStudents[cls] = sortStudentName(dataStudents[cls]);
+          
 
           new Promise(() => {
             delete dataStudents[cls]; // clear data
@@ -291,35 +276,11 @@ $(document).ready(() => {
           )
           notify('n', 'Thêm sinh viên thành công');
           const blobUrl = URL.createObjectURL(await response.blob());
-          // Tạo một thẻ <a> ẩn để tải xuống và nhấn vào nó
-          // const downloadLink = document.createElement('a');
-          // downloadLink.href = blobUrl;
-          // downloadLink.download = `${inpMssv.val()}.xlsx`; // Đặt tên cho tệp tải xuống
-          // downloadLink.style.display = 'none';
-          // document.body.appendChild(downloadLink);
-          // downloadLink.click();
-          // Giải phóng URL tạm thời sau khi tải xuống hoàn thành
+          
           URL.revokeObjectURL(blobUrl);
           $('.js_md_add').text('Thêm');
         } else {
-          // dataStudents[cls] = dataStudents[cls].map((student) => {
-          //   if (student['_id'] == inpMssv.val()) {
-          //     return {
-          //       _id: inpMssv.val(),
-          //       last_name: inpHo.val(),
-          //       first_name: inpTen.val(),
-          //       role: inpCd.prop('checked') || inpLbhd.prop('checked') ? 'Ban cán sự' : 'Sinh viên',
-          //       dang_vien: inpDv.prop('checked'),
-          //       cham_diem: inpCd.prop('checked'),
-          //       lap_hoat_dong: inpLbhd.prop('checked'),
-          //     }
-          //   } else {
-          //     return student
-          //   }
-          // })
-
-          // console.log(skip[cls]);
-          // loadStudents(true);
+         
 
           new Promise(() => {
             delete dataStudents[cls]; // clear data
@@ -393,20 +354,13 @@ $(document).ready(() => {
                 body: formData,
               });
               if (response.ok) {
-                console.log('hihi3');
+
 
                 await getStudentList()
                 loadStudents(true);
                 notify('n', 'Thêm sinh viên thành công')
                 const blobUrl = URL.createObjectURL(await response.blob());
-                // // Tạo một thẻ <a> ẩn để tải xuống và nhấn vào nó
-                // const downloadLink = document.createElement('a');
-                // downloadLink.href = blobUrl;
-                // downloadLink.download = 'Danh_sach_sinh_vien.xlsx'; // Đặt tên cho tệp tải xuống
-                // downloadLink.style.display = 'none';
-                // document.body.appendChild(downloadLink);
-                // downloadLink.click();
-                // // Giải phóng URL tạm thời sau khi tải xuống hoàn thành
+             
                 URL.revokeObjectURL(blobUrl);
 
               }
@@ -440,19 +394,12 @@ $(document).ready(() => {
                 body: formData,
               });
               if (response.ok) {
-                console.log('hihi4');
+
                 await getStudentList()
                 loadStudents(true);
                 notify('n', 'Thêm sinh viên thành công')
                 const blobUrl = URL.createObjectURL(await response.blob());
-                // // Tạo một thẻ <a> ẩn để tải xuống và nhấn vào nó
-                // const downloadLink = document.createElement('a');
-                // downloadLink.href = blobUrl;
-                // downloadLink.download = 'Danh_sach_sinh_vien.xlsx'; // Đặt tên cho tệp tải xuống
-                // downloadLink.style.display = 'none';
-                // document.body.appendChild(downloadLink);
-                // downloadLink.click();
-                // // Giải phóng URL tạm thời sau khi tải xuống hoàn thành
+         
                 URL.revokeObjectURL(blobUrl);
 
               } else {

@@ -9,14 +9,13 @@
   max-width: 91rem;
   margin-left: auto;
   margin-right: auto;
-  /* padding: 1.5rem; */
 }
 
 .content .hk_nk {
   font-size: 2rem;
   position: relative;
 
-  /* padding: 1rem; */
+
 }
 
 .year_full {
@@ -35,17 +34,7 @@
   align-items: center;
 }
 
-/* .hk span {
-  width: 30%;
-} */
 
-/* activity-board */
-
-/* .button-35-a {
-  position: absolute !important;
-  top: 10%;
-  right: 13%;
-} */
 
 .activity-board {
   margin-top: 2rem;
@@ -180,7 +169,6 @@ textarea {
 textarea::placeholder {
   color: var(--black-color);
   opacity: 0.5;
-  /* Xám mờ với alpha 0.5 */
   font-style: italic;
 }
 
@@ -191,8 +179,7 @@ textarea::placeholder {
 label {
   display: flex;
   align-items: center;
-  /* margin-right: 10px; */
-  /* Để tạo khoảng cách giữa label và select */
+
   font-size: 1.8rem;
 }
 
@@ -213,12 +200,10 @@ label {
 
 .copy_box {
   display: none;
-  /* transition: all 2s; */
+
 }
 
-/* .copy_box:hover {
-  display: block;
-} */
+
 
 .activity-board {
   text-align: center;
@@ -242,7 +227,7 @@ label {
   display: flex;
   gap: 1rem;
   margin: 2rem 0 3rem;
-  /* justify-content: center; */
+
   align-items: center;
 }
 

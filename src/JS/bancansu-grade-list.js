@@ -126,14 +126,11 @@ $(document).on("click", ".auto_mark_btn", async function () {
       let cdiem = $(this).parent().parent().parent().find(".set_score_btn").text().trim();
       let score = $(this).parent().parent().parent().find(".zero_score").text().trim();
       if (cdiem == "Chấm điểm" && score != "-" && score != "" && this.checked) {
-        console.log("gaga");
-        // $(this).parent().parent().parent().find(".first_score").text(score);
+  
+
         mssv_list.push(this.value);
       }
-      // else {
-      //   mssv_list = []
-      //   return false;
-      // }
+
     });
 
     const requestOptions = {
@@ -206,8 +203,7 @@ $(document).on("click", ".load_list_btn", async function () {
 
       const year_available = data.year_available.year;
 
-      // console.log(data.year_available);
-      // console.log(year);
+
 
       // empty old table:
       $("table tbody").empty();

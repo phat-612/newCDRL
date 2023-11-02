@@ -1,7 +1,5 @@
 const url = window.location.href
-// var regex = /studentId=([^&]+)/; // Biểu thức chính quy để tìm chuỗi "studentId=" và các ký tự sau đó
-// var match = url.match(regex); // Tìm kiếm sự khớp trong chuỗi
-// var mssv = match[1]
+
 
 // Extract studentId value using regex
 const studentIdRegex = /studentId=([^&]+)/;
@@ -118,17 +116,9 @@ const showUploadImg = () => {
   if (
     !require_upload_img.every((element) => element === 0 || element === "0")
   ) {
-    // if (!$(".post-btn").is(":visible")) {
-    //   notify(
-    //     "!",
-    //     "Hãy upload ảnh chứng minh bạn tham gia sự kiện nhé!"
-    //   );
-    // }
-    // $(".post-btn").show();
+    
   }
-  // else {
-  //   $(".post-btn").hide();
-  // }
+
 };
 
 function handleCheckboxChange(event) {

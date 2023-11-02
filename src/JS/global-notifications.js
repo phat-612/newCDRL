@@ -43,7 +43,7 @@ function notify(type, text_2) {
 
   timer1 = setTimeout(() => {
     toast.classList.remove("active");
-  }, 5000); //1s = 1000 milliseconds
+  }, 5000); 
 }
 
 function quest(text_2) {

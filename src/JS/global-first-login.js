@@ -42,7 +42,7 @@ const password_input = document.querySelector('.password_input')
 const eye = document.querySelector('.eye')
 password_input.oninput = () => {
     if (password_input.value === '') {
-        console.log('password_input')
+
         password_input.parentElement.querySelector('.eye').style.display = 'none'
 
     } else {

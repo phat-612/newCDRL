@@ -128,8 +128,6 @@ function createDepRouter(client) {
       )
       .toArray();
 
-    console.log(class_teachers);
-
     // get all teacher's name of classes
     for (let i = 0; i < class_teachers.length; i++) {
       // replace current teacher's _id with teacher's name
@@ -150,7 +148,7 @@ function createDepRouter(client) {
           }
         );
     }
-    console.log(class_teachers);
+
     return res.render("doankhoa-manage-classes", {
       header: "global-header",
       footer: "global-footer",
@@ -225,75 +223,12 @@ function createDepRouter(client) {
           menu: "doankhoa-menu",
           staff_name: [],
           student_list: student_list,
-          // student_scores: [],
-          // staff_scores: [],
-          // department_scores: [],
           cls: classlist,
           years: years.years,
           curr_year: school_year.year,
           branch: branch_list,
         };
-        // for (student of student_list) {
-        //   const curr_student_score = await client
-        //     .db(user.dep)
-        //     .collection(classlist[0]._id + "_std_table")
-        //     .findOne(
-        //       {
-        //         mssv: student._id,
-        //         school_year: school_year.year,
-        //       },
-        //       {
-        //         projection: { total: 1 },
-        //       }
-        //     );
-        //   const curr_staff_score = await client
-        //     .db(user.dep)
-        //     .collection(classlist[0]._id + "_stf_table")
-        //     .findOne(
-        //       {
-        //         mssv: student._id,
-        //         school_year: school_year.year,
-        //       },
-        //       {
-        //         projection: {
-        //           total: 1,
-        //           marker: 1,
-        //         },
-        //       }
-        //     );
-        //   const curr_department_score = await client
-        //     .db(user.dep)
-        //     .collection(classlist[0]._id + "_dep_table")
-        //     .findOne(
-        //       {
-        //         mssv: student._id,
-        //         school_year: school_year.year,
-        //       },
-        //       {
-        //         projection: { total: 1 },
-        //       }
-        //     );
-        //   // student
-        //   if (curr_student_score) {
-        //     render.student_scores.push(curr_student_score.total);
-        //   } else {
-        //     render.student_scores.push("-");
-        //   }
-        //   // staff member
-        //   if (curr_staff_score) {
-        //     render.staff_scores.push(curr_staff_score.total);
-        //     render.staff_name.push(curr_staff_score.marker);
-        //   } else {
-        //     render.staff_scores.push("-");
-        //     render.staff_name.push("-");
-        //   }
-        //   // department
-        //   if (curr_department_score) {
-        //     render.department_scores.push(curr_department_score.total);
-        //   } else {
-        //     render.department_scores.push("-");
-        //   }
-        // }
+
         return res.render("doankhoa-grade-list", render);
       } else {
         // user not staff members
@@ -325,7 +260,6 @@ function createDepRouter(client) {
           }
         )
         .toArray();
-      // console.log(all_branchs);
       // get user name and class in dep
       const teachers = await client
         .db(name_global_databases)
@@ -351,7 +285,6 @@ function createDepRouter(client) {
           }
         )
         .toArray();
-      // console.log(teachers);
       let branch_list = [];
       for (let i = 0; i < teachers.length; i++) {
         const branch = await client
@@ -368,7 +301,6 @@ function createDepRouter(client) {
           );
         branch_list.push(branch.name);
       }
-      // console.log(branch_list);
       return res.render("doankhoa-manage-teacher", {
         header: "global-header",
         footer: "global-footer",
@@ -506,7 +438,7 @@ function createDepRouter(client) {
         })
         .catch((error) => {
           // Xử lý lỗi nếu có
-          console.error(error);
+          console.log(error);
         });
     } else {
       return res.sendStatus(403);
@@ -748,7 +680,7 @@ function createDepRouter(client) {
       cbx = "Đã kết thúc";
     }
 
-    // check if end day is foreverday or not
+    // check if end day is forever or not
     if (school_year.end_day.toISOString() == "2003-10-18T00:00:00.000Z") {
       school_year.end_day = undefined;
     }

@@ -40,7 +40,6 @@ async function sendEmail(password, email) {
     };
 
     const info = await transporter.sendMail(mailOptions);
-    // console.log(`SYSTEM | SEND_EMAIL | ${info.response}`);
     // Thực hiện các hoạt động hữu ích khác sau khi gửi email thành công.
   } catch (error) {
     console.log("SYSTEM | SEND_EMAIL | ", error);
@@ -305,7 +304,7 @@ async function get_full_id(directoryPath, listName, listdep) {
     }
     return list_id;
   } catch (err) {
-    console.error("SYSTEM | GET_ID | ERR | ", err);
+    console.log("SYSTEM | GET_ID | ERR | ", err);
   }
 }
 
@@ -346,7 +345,6 @@ function randomPassword() {
       while (password.length < 6) {
         password += allChars[Math.floor(Math.random() * allChars.length)];
       }
-      // console.log('SYSTEM | GEN_PASSWORD | OK')
       resolve(password);
     } catch (error) {
       reject(error);
@@ -358,10 +356,8 @@ function randomPassword() {
 function deleteFile(filePath) {
   fs.unlink(filePath, (err) => {
     if (err) {
-      console.error("Error deleting file:", err);
-    } else {
-      // console.log('File deleted successfully.');
-    }
+      console.log("FUNCITON | LOG | Error deleting file:", err);
+    } 
   });
 }
 
@@ -404,7 +400,6 @@ function sortStudentName(std_list) {
 
 // xoá class
 async function deleteClassApi(data, user) {
-  // console.log(data);
   for (let i = 0; i < data.rm_cls.length; i++) {
     await client
       .db(name_global_databases)
@@ -416,7 +411,6 @@ async function deleteClassApi(data, user) {
     for (const collection of collections) {
       if (collection.name.startsWith(data.rm_cls[i])) {
         await client.db(user.dep).collection(collection.name).drop();
-        // console.log(`Đã xoá collection: ${collection.name}`);
       }
     }
     // xoá học sinh đang thuộc class bên user_info (chuyển sang ghost account)
@@ -453,6 +447,7 @@ function createId(str) {
   }
   return id;
 }
+
 
 async function createPdf(path_save, scorce) {
   function sum(arr, start, end) {
@@ -1021,7 +1016,7 @@ async function createPdf(path_save, scorce) {
       // console.log("Nén hoàn tất, kích thước:", archive.pointer() + " bytes");
       fs.rm(path.join(path_save, name_zip), { recursive: true }, (err) => {
         if (err) {
-          console.error("Lỗi khi xóa thư mục:", err);
+          console.log("CREATE_PDF | LOG | Lỗi khi xóa thư mục:", err);
           reject(err);
         } else {
           // console.log("Đã xóa thư mục thành công.");
@@ -1031,7 +1026,7 @@ async function createPdf(path_save, scorce) {
     });
 
     archive.on("error", (err) => {
-      console.log("Lỗi khi nén");
+      console.log("CREATE_PDF | LOG | Lỗi khi nén");
       reject(err);
     });
   });
