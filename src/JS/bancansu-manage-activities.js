@@ -132,8 +132,8 @@ $("#year_choice").click(async function () {
                   <td><a href="/doankhoa/quanlihoatdong/Truong/${school_atv[i]._id}">Chi tiết</a></td>
                 </tr>
                 <tr class="copy_box">
-                  <td> COPY </td>
-                  <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
+                  <td> <a class="copy_btn">COPY</a> </td>
+                  <td colspan="6"><a class="copy_link" href="/dangkyhoatdong?id=${school_atv[i]._id}&level=truong">Link đăng kí và điểm danh hoạt động</a></td>
                 </tr>
               `);
       }
@@ -147,8 +147,8 @@ $("#year_choice").click(async function () {
                 <td><a href="/doankhoa/quanlihoatdong/Khoa/${dep_atv[i]._id}">Chi tiết</a></td>
               </tr>
               <tr class="copy_box">
-                <td> COPY </td>
-                <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
+                <td> <a class="copy_btn">COPY</a> </td>
+                <td colspan="6"><a class="copy_link" href="/dangkyhoatdong?id=${dep_atv[i]._id}&level=khoa">Link đăng kí và điểm danh hoạt động</a></td>
               </tr>
             `);
       }
@@ -163,8 +163,8 @@ $("#year_choice").click(async function () {
                 <td><a href="/doankhoa/quanlihoatdong/${cls_atv[i].cls}/${cls_atv[i]._id}">Chi tiết</a></td>
               </tr>
               <tr class="copy_box">
-                <td> COPY </td>
-                <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
+                <td> <a class="copy_btn">COPY</a> </td>
+                <td colspan="6"><a class="copy_link" href="/dangkyhoatdong?id=${cls_atv[i]._id}&class=${cls_atv[i].cls}&level=lop">Link đăng kí và điểm danh hoạt động</a></td>
               </tr>
             `);
       }
