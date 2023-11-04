@@ -162,6 +162,11 @@ $(document).on("mouseleave", ".atv_box", async function () {
 $(document).on("mouseleave", ".copy_box", async function () {
   $(this).hide();
 });
+
+$(document).on("click", ".copy_btn", async function () {
+  console.log('haha');
+  navigator.clipboard.writeText($(this).parent().parent().find('.copy_link').prop('href'));
+})
 // ----------------------------------------------------------------
 
 $(document).on("change", "#select-level1", async function () {
@@ -322,7 +327,7 @@ $(".save_btn").click(async function () {
             </tr>
             <tr class="copy_box">
               <td colspan="2"> COPY </td>
-              <td colspan="6"><a href="/dangkyhoatdong?id=${atv_id}&class=${cls_id.val()}&level=lop">Link đăng kí và điểm danh hoạt động</a></td>
+              <td colspan="6"><a class="copy_link" href="/dangkyhoatdong?id=${atv_id}&class=${cls_id.val()}&level=lop">Link đăng kí và điểm danh hoạt động</a></td>
             </tr>
           `);
 
@@ -349,14 +354,14 @@ $(".save_btn").click(async function () {
               <td><a class="more_list" id="dep_edit" href="#">Sửa</a></td>
             </tr>
             <tr class="copy_box">
-              <td colspan="2"> COPY </td>
-              <td colspan="6"><a href="/dangkyhoatdong?id=${atv_id}&level=khoa">Link đăng kí và điểm danh hoạt động</a></td>
+              <td colspan="2"> <a class="copy_btn">COPY</a> </td>
+              <td colspan="6"><a class="copy_link" href="/dangkyhoatdong?id=${atv_id}&level=khoa">Link đăng kí và điểm danh hoạt động</a></td>
             </tr>
           `);
           // add content and start time to dep list
           dep_content.push(atv_content);
           dep_st.push(new Date([start_date, start_hour]));
-     
+
           break;
         case "truong":
           let school_length = $("#school_tb tbody tr").length / 2;
@@ -376,8 +381,8 @@ $(".save_btn").click(async function () {
               <td><a class="more_list" id="school_edit" href="#">Sửa</a></td>
             </tr>
             <tr class="copy_box">
-              <td colspan="2"> COPY </td>
-              <td colspan="6"><a href="/dangkyhoatdong?id=${atv_id}&level=truong">Link đăng kí và điểm danh hoạt động</a></td>
+              <td colspan="2"> <a class="copy_btn">COPY</a> </td>
+              <td colspan="6"><a class="copy_link" href="/dangkyhoatdong?id=${atv_id}&level=truong">Link đăng kí và điểm danh hoạt động</a></td>
             </tr>
           `);
 
@@ -468,8 +473,8 @@ $("#year_choice").click(async function () {
                   <td><a class="more_list" href="#">Sửa</a></td>
                 </tr>
                 <tr class="copy_box">
-                  <td colspan="2"> COPY </td>
-                  <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
+                  <td colspan="2"> <a class="copy_btn">COPY</a> </td>
+                  <td colspan="6"><a class="copy_link" href="/dangkyhoatdong?id=${school_atv[i]._id}&level=truong">Link đăng kí và điểm danh hoạt động</a></td>
                 </tr>
               `);
       }
@@ -493,8 +498,8 @@ $("#year_choice").click(async function () {
                 <td><a class="more_list" id="dep_edit" href="#">Sửa</a></td>
               </tr>
               <tr class="copy_box">
-                <td colspan="2"> COPY </td>
-                <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
+                <td colspan="2"> <a class="copy_btn">COPY</a> </td>
+                <td colspan="6"><a class="copy_link" href="/dangkyhoatdong?id=${dep_atv[i]._id}&level=khoa">Link đăng kí và điểm danh hoạt động</a></td>
               </tr>
             `);
       }
@@ -519,8 +524,8 @@ $("#year_choice").click(async function () {
                 <td><a class="more_list" id="cls_edit" href="#">Sửa</a></td>
               </tr>
               <tr class="copy_box">
-                <td colspan="2"> COPY </td>
-                <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
+                <td colspan="2"> <a class="copy_btn">COPY</a> </td>
+                <td colspan="6"><a class="copy_link" href="/dangkyhoatdong?id=${cls_atv[i]._id}&class=${cls_atv[i].cls}&level=lop">Link đăng kí và điểm danh hoạt động</a></td>
               </tr>
             `);
       }
@@ -543,7 +548,7 @@ $("#year_choice").click(async function () {
     $('#school_tb').show();
     $('#dep_tb').show();
     $('#cls_tb').show();
-    
+
     // Error occurred during upload
     notify("x", "Có lỗi xảy ra!");
   }
@@ -598,8 +603,8 @@ $("#subject_choice").click(async function () {
                 <td><a class="more_list" id="cls_edit" href="#">Sửa</a></td>
               </tr>
               <tr class="copy_box">
-                <td colspan="2"> COPY </td>
-                <td colspan="6"><a href="#">Link đăng kí và điểm danh hoạt động</a></td>
+                <td colspan="2"> <a class="copy_btn">COPY</a> </td>
+                <td colspan="6"><a class="copy_link" href="#">Link đăng kí và điểm danh hoạt động</a></td>
               </tr>
             `);
       }
