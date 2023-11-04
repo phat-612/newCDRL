@@ -3,7 +3,9 @@ const router = express.Router();
 const { checkIfUserLoginRoute } = require("../lib/function_lib");
 const { getNameGlobal } = require("../lib/mogodb_lib");
 const name_global_databases = getNameGlobal();
-function createRootRouter(client) {
+const path = require("path");
+
+function createRootRouter(client,parentDirectory) {
   // index route
   router.get("/", checkIfUserLoginRoute, async (req, res) => {
     try {
@@ -359,8 +361,7 @@ function createRootRouter(client) {
               .findOne({
                 _id: query.id,
               });
-              break;
-
+            break;
         }
         if (!activitie_info) {
           return res.status(404).send("Not Found");
@@ -409,7 +410,7 @@ function createRootRouter(client) {
 
   // 403 route
   router.get("/403", async (req, res) => {
-    return res.render("index.ejs", {});
+    return res.sendFile(path.join(parentDirectory, "dPage", "403.html"));
   });
 
   return router;

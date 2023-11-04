@@ -74,7 +74,7 @@ databaseLib
     const httpsServer = https.createServer(credentials, app);
     const wss = new WebSocket.Server({ server: httpsServer });
     // -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    const rootRouter = createRootRouter(client);
+    const rootRouter = createRootRouter(client,parentDirectory);
     const loginRouters = createLoginRouter(client);
     const profileRouter = createProfileRouter(client);
     const apiRouter = createApiRouter(client,wss);

@@ -2,7 +2,7 @@ const currentUrl = window.location.href;
 const currentURLbase = window.location.protocol + "//" + window.location.host;
 const currentURLsub = currentUrl.replace(currentURLbase, "");
 const urlParams = new URLSearchParams(currentURLsub.split("?")[1]);
-
+// ws
 function connectWebSocket() {
   const wss = new WebSocket(
     `${currentURLbase.replace("https", "wss").replace("http", "ws")}/howtosavealife?`
@@ -31,6 +31,23 @@ function connectWebSocket() {
   };
 }
 connectWebSocket();
+
+// block devtools
+function blockDevTool() {
+  setTimeout(console.clear.bind(console));
+  setTimeout(() => {
+    console.log("%cTắt f12 đi bạn oi!!!", "color:red;font-family:system-ui;font-size:100px");
+  }, 200);
+  window.location.href = "/403";
+}
+
+class DevChecker extends Error {
+  toString() {}
+  get message() {
+    blockDevTool();
+  }
+}
+console.log(new DevChecker());
 
 // theme
 const theme_btn = document.querySelector(".theme_check");
@@ -77,7 +94,6 @@ function setDark() {
   rootStyle.setProperty("--btn-delete", "#50575b");
   rootStyle.setProperty("--no-img", "#313537");
   rootStyle.setProperty("--modal_img_btn", "#464c4f");
-
 }
 if (themes) {
   if (themes === "dark") {
