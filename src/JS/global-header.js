@@ -33,21 +33,21 @@ function connectWebSocket() {
 connectWebSocket();
 
 // block devtools
-function blockDevTool() {
-  setTimeout(console.clear.bind(console));
-  setTimeout(() => {
-    console.log("%cTắt f12 đi bạn oi!!!", "color:red;font-family:system-ui;font-size:100px");
-  }, 200);
-  window.location.href = "/403";
-}
+// function blockDevTool() {
+//   setTimeout(console.clear.bind(console));
+//   setTimeout(() => {
+//     console.log("%cTắt f12 đi bạn oi!!!", "color:red;font-family:system-ui;font-size:100px");
+//   }, 200);
+//   window.location.href = "/403";
+// }
 
-class DevChecker extends Error {
-  toString() {}
-  get message() {
-    blockDevTool();
-  }
-}
-console.log(new DevChecker());
+// class DevChecker extends Error {
+//   toString() {}
+//   get message() {
+//     blockDevTool();
+//   }
+// }
+// console.log(new DevChecker());
 
 // theme
 const theme_btn = document.querySelector(".theme_check");
