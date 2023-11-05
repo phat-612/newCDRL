@@ -302,7 +302,6 @@ function createStaffRouter(client) {
             header: "global-header",
             footer: "global-footer",
             thongbao: "global-notifications",
-            menu: "doankhoa-menu",
             cls: classlist,
             years: years.years,
             curr_year: school_year.year,

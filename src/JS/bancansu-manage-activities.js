@@ -30,6 +30,11 @@ $(document).on("mouseleave", ".atv_box", async function () {
 $(document).on("mouseleave", ".copy_box", async function () {
   $(this).hide();
 });
+
+$(document).on("click", ".copy_btn", async function () {
+  notify('n', 'Đã copy link đãng kí và điểm danh hoạt động.');
+  navigator.clipboard.writeText($(this).parent().parent().find('.copy_link').prop('href'));
+})
 // ----------------------------------------------------------------
 
 $(document).on("change", "#select-level1", async function () {

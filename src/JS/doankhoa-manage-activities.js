@@ -164,7 +164,7 @@ $(document).on("mouseleave", ".copy_box", async function () {
 });
 
 $(document).on("click", ".copy_btn", async function () {
-  console.log('haha');
+  notify('n', 'Đã copy link đãng kí và điểm danh hoạt động.');
   navigator.clipboard.writeText($(this).parent().parent().find('.copy_link').prop('href'));
 })
 // ----------------------------------------------------------------
