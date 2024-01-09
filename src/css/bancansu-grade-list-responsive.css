@@ -19,13 +19,13 @@
     flex-direction: column;
   }
   .load_list_btn {
-    width: 15rem;
-    height: 5rem;
+    width: 12.5rem;
+    height: 4rem;
   }
   .load_list_btn_container{
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
   }
   .first_child{
     display: flex;
@@ -36,5 +36,8 @@
   }
   .control{
     flex-direction: column;
+  }
+  .button-35{
+    margin: 1rem 5rem !important;
   }
 }

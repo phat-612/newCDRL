@@ -112,6 +112,7 @@ table tr td:nth-child(9) a {
   }
   .hk{
     width: 100%;
+    margin-bottom:0;
   }
   .danh_sach_bang_diem{
     overflow: auto;
@@ -141,12 +142,6 @@ table tr td:nth-child(9) a {
   }
   .hk {
     width: 100%;
-    justify-content: space-between;
-  }
-  .hocky {
-  }
-  .selectbox--hocky {
-  }
-  .button-35 {
+    justify-content: space-around;
   }
 }

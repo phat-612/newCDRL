@@ -88,55 +88,57 @@
           <div class="activity-board dsdangky">
             <h2>DANH SÁCH SINH VIÊN ĐÃ ĐĂNG KÝ</h2>
             <%if (activitie_info.student_list){%>
-            <table class="table" id="school_tb">
-              <thead>
-                <tr>
-                  <th style="width: 1%">Điểm danh</th>
-                  <th style="width: 2%">MSSV</th>
-                  <th style="width: 40%">Họ Và Tên</th>
-                  <th style="width: 10%">Lớp</th>
-                </tr>
-              </thead>
-              <tbody>
-                <%const data_student=activitie_info.info_student%> <% for (let i=0; i <
-                data_student.length; i++) {%>
-
-                <tr class="atv_box">
-                  <td>
-                    <div class="checkbox-wrapper-4">
-                      <%if (activitie_info.student_list[data_student[i]._id] == 0){%>
-                      <input
-                        type="checkbox"
-                        id="row__0__0"
-                        class="inp-cbx"
-                        value="18101911"
-                        disabled
-                      />
-                      <%} else {%>
-                      <input
-                        type="checkbox"
-                        id="row__0__0"
-                        class="inp-cbx"
-                        value="18101911"
-                        checked
-                        disabled
-                      />
-                      <%}%>
-                      <label for="row__0__0" class="cbx"
-                        ><span> <svg height="10px" width="12px"></svg></span>
-                      </label>
-                    </div>
-                  </td>
-                  <td><%=data_student[i]._id%></td>
-                  <td class="a_name">
-                    <%=`${data_student[i].last_name} ${data_student[i].first_name}`%>
-                  </td>
-                  <td class="class_student"><%=data_student[i].class[0]%></td>
-                </tr>
-
-                <%}%>
-              </tbody>
-            </table>
+              <div class="container__table">
+                <table class="table" id="school_tb">
+                  <thead>
+                    <tr>
+                      <th style="width: 1%">Điểm danh</th>
+                      <th style="width: 2%">MSSV</th>
+                      <th style="width: 40%">Họ Và Tên</th>
+                      <th style="width: 10%">Lớp</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <%const data_student=activitie_info.info_student%> <% for (let i=0; i <
+                    data_student.length; i++) {%>
+    
+                    <tr class="atv_box">
+                      <td>
+                        <div class="checkbox-wrapper-4">
+                          <%if (activitie_info.student_list[data_student[i]._id] == 0){%>
+                          <input
+                            type="checkbox"
+                            id="row__0__0"
+                            class="inp-cbx"
+                            value="18101911"
+                            disabled
+                          />
+                          <%} else {%>
+                          <input
+                            type="checkbox"
+                            id="row__0__0"
+                            class="inp-cbx"
+                            value="18101911"
+                            checked
+                            disabled
+                          />
+                          <%}%>
+                          <label for="row__0__0" class="cbx"
+                            ><span> <svg height="10px" width="12px"></svg></span>
+                          </label>
+                        </div>
+                      </td>
+                      <td><%=data_student[i]._id%></td>
+                      <td class="a_name">
+                        <%=`${data_student[i].last_name} ${data_student[i].first_name}`%>
+                      </td>
+                      <td class="class_student"><%=data_student[i].class[0]%></td>
+                    </tr>
+    
+                    <%}%>
+                  </tbody>
+                </table>
+              </div>
             <%} else {%>
             <h1>Không có học sinh nào!</h1>
             <%}%>
