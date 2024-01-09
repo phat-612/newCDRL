@@ -5,6 +5,7 @@ const closeIcon = document.getElementById("close_thongbao");
 const progress = document.querySelector(".progress");
 const ok_btn = document.querySelector(".ok");
 const not_btn = document.querySelector(".not");
+let timer1; // Đặt biến timer ngoài hàm notify để có thể sử dụng ở nhiều lần gọi
 
 
 closeIcon.addEventListener("click", () => {
@@ -12,6 +13,9 @@ closeIcon.addEventListener("click", () => {
 });
 
 function notify(type, text_2) {
+  if (timer1) {
+    clearTimeout(timer1);
+  }
   const button = document.querySelector(".button");
   button.style.display = "none";
   switch (type) {
