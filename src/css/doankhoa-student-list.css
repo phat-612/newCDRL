@@ -187,7 +187,10 @@ tr td:nth-child(4) {
 .js_md_add {
   float: right;
 }
-
+.control_btn{
+  display: flex;
+  align-items: center;
+}
 @media screen and (max-width: 600px) {
   table {
     width: 85rem;
@@ -227,6 +230,8 @@ tr td:nth-child(4) {
     width: 100%;
     display: flex;
     gap: 20px;
+    justify-content: space-around;
+    
   }
 
   .left {
@@ -234,6 +239,8 @@ tr td:nth-child(4) {
     margin: 20px 0;
     width: 100%;
     gap: 20px;
+    justify-content: space-around;
+    
   }
 
   .modal_wrap .title-box {
@@ -267,5 +274,14 @@ tr td:nth-child(4) {
   .file_input button {
     width: 14rem;
     overflow: hidden;
+  }
+  .file_input{
+    width: 40% !important;
+  }
+  #add-student{
+    width: 40% !important;
+  }
+  #delete-student{
+    width: 40% !important;
   }
 }
