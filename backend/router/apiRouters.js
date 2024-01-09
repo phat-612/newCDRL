@@ -57,7 +57,11 @@ function createAPIRouter(client, wss) {
           .db(name_global_databases)
           .collection("user_info")
           .findOne({ _id: data.mssv });
-        if (user === null || user_info_check === null || user_info_check.class == []) {
+        if (
+          user === null ||
+          user_info_check === null ||
+          user_info_check.class == []
+        ) {
           // kiểm tra nếu bên login có info mà bên user k có thì xoá bên login (ghost account)
           if (user) {
             await client
@@ -86,12 +90,17 @@ function createAPIRouter(client, wss) {
               .find({ _id: { $in: seasionIDs } })
               .toArray();
             const existingIDs = existingDocs.map((doc) => doc._id);
-            const idsToDelete = seasionIDs.filter((id) => !existingIDs.includes(id));
+            const idsToDelete = seasionIDs.filter(
+              (id) => !existingIDs.includes(id)
+            );
             if (idsToDelete.length > 0) {
               await client
                 .db(name_global_databases)
                 .collection("sessions_manager")
-                .updateOne({ _id: data.mssv }, { $pull: { sessionId: { $in: idsToDelete } } });
+                .updateOne(
+                  { _id: data.mssv },
+                  { $pull: { sessionId: { $in: idsToDelete } } }
+                );
             }
           }
 
@@ -99,18 +108,27 @@ function createAPIRouter(client, wss) {
           const cls = await client
             .db(name_global_databases)
             .collection("user_info")
-            .findOne({ _id: data.mssv }, { projection: { _id: 0, class: 1, power: 1, dep: 1 } });
+            .findOne(
+              { _id: data.mssv },
+              { projection: { _id: 0, class: 1, power: 1, dep: 1 } }
+            );
 
           if (!cls.power[2]) {
             const branch = await client
               .db(name_global_databases)
               .collection("classes")
-              .findOne({ _id: cls.class[0] }, { projection: { _id: 0, branch: 1 } });
+              .findOne(
+                { _id: cls.class[0] },
+                { projection: { _id: 0, branch: 1 } }
+              );
             if (branch) {
               const dep = await client
                 .db(name_global_databases)
                 .collection("branchs")
-                .findOne({ _id: branch.branch }, { projection: { _id: 0, dep: 1 } });
+                .findOne(
+                  { _id: branch.branch },
+                  { projection: { _id: 0, dep: 1 } }
+                );
 
               user.dep = dep.dep;
             }
@@ -133,7 +151,11 @@ function createAPIRouter(client, wss) {
           await client
             .db(name_global_databases)
             .collection("sessions_manager")
-            .updateOne({ _id: user._id }, { $push: { sessionId: sessionId } }, { upsert: true });
+            .updateOne(
+              { _id: user._id },
+              { $push: { sessionId: sessionId } },
+              { upsert: true }
+            );
 
           if (user.first == "new_user") {
             return res.status(200).json({ check: true });
@@ -177,19 +199,27 @@ function createAPIRouter(client, wss) {
                 .find({ _id: { $in: seasionIDs } })
                 .toArray();
               const existingIDs = existingDocs.map((doc) => doc._id);
-              const idsToDelete = seasionIDs.filter((id) => !existingIDs.includes(id));
+              const idsToDelete = seasionIDs.filter(
+                (id) => !existingIDs.includes(id)
+              );
 
               if (idsToDelete.length > 0) {
                 await client
                   .db(name_global_databases)
                   .collection("sessions_manager")
-                  .updateOne({ _id: mssv }, { $pull: { sessionId: { $in: idsToDelete } } });
+                  .updateOne(
+                    { _id: mssv },
+                    { $pull: { sessionId: { $in: idsToDelete } } }
+                  );
               }
             }
 
             return res.redirect("/login"); // Chạy hàm dưới sau khi đã xử lý xong
           } catch (error) {
-            console.log("SYSTEM | LOG_OUT | Failed to clean up sessions:", error);
+            console.log(
+              "SYSTEM | LOG_OUT | Failed to clean up sessions:",
+              error
+            );
             return res.sendStatus(500);
           }
         }
@@ -270,7 +300,10 @@ function createAPIRouter(client, wss) {
           .db(name_global_databases)
           .collection("login_info")
           .findOne({ _id: data.mssv });
-        await client.db(name_global_databases).collection("OTP").deleteOne({ _id: data.mssv });
+        await client
+          .db(name_global_databases)
+          .collection("OTP")
+          .deleteOne({ _id: data.mssv });
         let seasionIDs = await client
           .db(name_global_databases)
           .collection("sessions_manager")
@@ -283,12 +316,17 @@ function createAPIRouter(client, wss) {
             .find({ _id: { $in: seasionIDs } })
             .toArray();
           const existingIDs = existingDocs.map((doc) => doc._id);
-          const idsToDelete = seasionIDs.filter((id) => !existingIDs.includes(id));
+          const idsToDelete = seasionIDs.filter(
+            (id) => !existingIDs.includes(id)
+          );
           if (idsToDelete.length > 0) {
             await client
               .db(name_global_databases)
               .collection("sessions_manager")
-              .updateOne({ _id: data.mssv }, { $pull: { sessionId: { $in: idsToDelete } } });
+              .updateOne(
+                { _id: data.mssv },
+                { $pull: { sessionId: { $in: idsToDelete } } }
+              );
           }
         }
 
@@ -296,18 +334,27 @@ function createAPIRouter(client, wss) {
         const cls = await client
           .db(name_global_databases)
           .collection("user_info")
-          .findOne({ _id: data.mssv }, { projection: { _id: 0, class: 1, power: 1, dep: 1 } });
+          .findOne(
+            { _id: data.mssv },
+            { projection: { _id: 0, class: 1, power: 1, dep: 1 } }
+          );
 
         if (!cls.power[2]) {
           const branch = await client
             .db(name_global_databases)
             .collection("classes")
-            .findOne({ _id: cls.class[0] }, { projection: { _id: 0, branch: 1 } });
+            .findOne(
+              { _id: cls.class[0] },
+              { projection: { _id: 0, branch: 1 } }
+            );
           if (branch) {
             const dep = await client
               .db(name_global_databases)
               .collection("branchs")
-              .findOne({ _id: branch.branch }, { projection: { _id: 0, dep: 1 } });
+              .findOne(
+                { _id: branch.branch },
+                { projection: { _id: 0, dep: 1 } }
+              );
 
             user.dep = dep.dep;
           }
@@ -330,7 +377,11 @@ function createAPIRouter(client, wss) {
         await client
           .db(name_global_databases)
           .collection("sessions_manager")
-          .updateOne({ _id: user._id }, { $push: { sessionId: sessionId } }, { upsert: true });
+          .updateOne(
+            { _id: user._id },
+            { $push: { sessionId: sessionId } },
+            { upsert: true }
+          );
         return res.sendStatus(200);
       } else {
         res.sendStatus(403);
@@ -382,13 +433,19 @@ function createAPIRouter(client, wss) {
       const old_pass = await client
         .db(name_global_databases)
         .collection("login_info")
-        .findOne({ _id: req.session.user._id }, { projection: { _id: 0, password: 1 } });
+        .findOne(
+          { _id: req.session.user._id },
+          { projection: { _id: 0, password: 1 } }
+        );
       if (old_pass.password == data.old_password) {
         if (old_pass.password !== data.new_password) {
           await client
             .db(name_global_databases)
             .collection("login_info")
-            .updateOne({ _id: req.session.user._id }, { $set: { password: data.new_password } });
+            .updateOne(
+              { _id: req.session.user._id },
+              { $set: { password: data.new_password } }
+            );
           return res.sendStatus(200);
         } else {
           return res.sendStatus(403);
@@ -409,7 +466,10 @@ function createAPIRouter(client, wss) {
       const old_pass = await client
         .db(name_global_databases)
         .collection("login_info")
-        .findOne({ _id: req.session.user._id }, { projection: { _id: 0, password: 1 } });
+        .findOne(
+          { _id: req.session.user._id },
+          { projection: { _id: 0, password: 1 } }
+        );
 
       if (old_pass.password == data.new_password) {
         return res.sendStatus(403);
@@ -422,7 +482,10 @@ function createAPIRouter(client, wss) {
         await client
           .db(name_global_databases)
           .collection("login_info")
-          .updateOne({ _id: req.session.user._id }, { $set: { password: data.new_password } });
+          .updateOne(
+            { _id: req.session.user._id },
+            { $set: { password: data.new_password } }
+          );
         return res.sendStatus(200);
       }
     } catch (err) {
@@ -572,194 +635,110 @@ function createAPIRouter(client, wss) {
 
       // Xử lý các tệp đã tải lên ở đây
       res.writeHead(200, { "Content-Type": "applicaiton/json" });
-      return res.end(JSON.stringify(await get_full_id(uploadDirectory, list_name, list_dep)));
+      return res.end(
+        JSON.stringify(await get_full_id(uploadDirectory, list_name, list_dep))
+      );
     }
   );
 
   // Create new account -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  router.post("/createAccount", upload.single("file"), checkIfUserLoginAPI, async (req, res) => {
-    const user = req.session.user;
-    if (user.pow[4] || user.pow[7]) {
-      const fileStudents = req.file;
-      async function generateEmail(str) {
-        let s1 =
-          "ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠạẢảẤấẦầẨẩẪẫẬậẮắẰằẲẳẴẵẶặẸẹẺẻẼẽẾếỀềỂểỄễỆệỈỉỊịỌọỎỏỐốỒồỔổỖỗỘộỚớỜờỞởỠỡỢợỤụỦủỨứỪừỬửỮữỰựỲỳỴỵỶỷỸỹ";
-        let s0 =
-          "AAAAEEEIIOOOOUUYaaaaeeeiioooouuyAaDdIiUuOoUuAaAaAaAaAaAaAaAaAaAaAaAaEeEeEeEeEeEeEeEeEeIiIiOoOoOoOoOoOoOoOoOoOoOoUuUuUuUuUuUuUuYyYyYyYy";
-        let newStr = "";
-        let listSpace = [];
-        for (let i = 0; i < str.length; i++) {
-          if (s1.indexOf(str[i]) != -1) {
-            newStr += s0[s1.indexOf(str[i])];
-          } else {
-            newStr += str[i];
+  router.post(
+    "/createAccount",
+    upload.single("file"),
+    checkIfUserLoginAPI,
+    async (req, res) => {
+      const user = req.session.user;
+      if (user.pow[4] || user.pow[7]) {
+        const fileStudents = req.file;
+        async function generateEmail(str) {
+          let s1 =
+            "ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠạẢảẤấẦầẨẩẪẫẬậẮắẰằẲẳẴẵẶặẸẹẺẻẼẽẾếỀềỂểỄễỆệỈỉỊịỌọỎỏỐốỒồỔổỖỗỘộỚớỜờỞởỠỡỢợỤụỦủỨứỪừỬửỮữỰựỲỳỴỵỶỷỸỹ";
+          let s0 =
+            "AAAAEEEIIOOOOUUYaaaaeeeiioooouuyAaDdIiUuOoUuAaAaAaAaAaAaAaAaAaAaAaAaEeEeEeEeEeEeEeEeEeIiIiOoOoOoOoOoOoOoOoOoOoOoUuUuUuUuUuUuUuYyYyYyYy";
+          let newStr = "";
+          let listSpace = [];
+          for (let i = 0; i < str.length; i++) {
+            if (s1.indexOf(str[i]) != -1) {
+              newStr += s0[s1.indexOf(str[i])];
+            } else {
+              newStr += str[i];
+            }
+            if (str[i] == " ") {
+              listSpace.push(i);
+            }
           }
-          if (str[i] == " ") {
-            listSpace.push(i);
+          let output = newStr[0];
+          for (let i = 0; i < listSpace.length - 2; i++) {
+            output += newStr.charAt(listSpace[i] + 1);
           }
-        }
-        let output = newStr[0];
-        for (let i = 0; i < listSpace.length - 2; i++) {
-          output += newStr.charAt(listSpace[i] + 1);
-        }
-        output += newStr.slice(listSpace[listSpace.length - 2] + 1).replace(/\s/g, "");
-        return output.toLowerCase() + "@student.ctuet.edu.vn";
-      }
-
-      if (fileStudents) {
-        const workbook = await XlsxPopulate.fromFileAsync(fileStudents.path);
-        const sheet = workbook.sheet(0);
-        // const sheetCount = workbook.sheetCount();
-        const values = sheet.usedRange().value();
-        const usedRange = sheet.usedRange();
-
-        const expectedValues = ["MSSV", "HỌ", "TÊN"];
-        // const columnCount = expectedValues.length;
-        let isCorrect = true;
-        const endCell = usedRange.endCell();
-        const rowCount = endCell.rowNumber();
-        const columnCount = 3;
-
-        for (let column = 1; column <= columnCount; column++) {
-          const cell = sheet.cell(1, column); // Ô đầu tiên trên hàng 1 và cột column
-          const value = cell.value();
-
-          if (value !== expectedValues[column - 1]) {
-            isCorrect = false;
-            break;
-          }
+          output += newStr
+            .slice(listSpace[listSpace.length - 2] + 1)
+            .replace(/\s/g, "");
+          return output.toLowerCase() + "@student.ctuet.edu.vn";
         }
 
-        if (isCorrect) {
+        if (fileStudents) {
+          const workbook = await XlsxPopulate.fromFileAsync(fileStudents.path);
+          const sheet = workbook.sheet(0);
+          // const sheetCount = workbook.sheetCount();
+          const values = sheet.usedRange().value();
+          const usedRange = sheet.usedRange();
 
-          let havevalue = true;
+          const expectedValues = ["MSSV", "HỌ", "TÊN"];
+          // const columnCount = expectedValues.length;
+          let isCorrect = true;
+          const endCell = usedRange.endCell();
+          const rowCount = endCell.rowNumber();
+          const columnCount = 3;
 
-          for (let row = 2; row <= 5; row++) {
-            let hasValue = false;
-            for (let column = 1; column <= columnCount; column++) {
+          for (let column = 1; column <= columnCount; column++) {
+            const cell = sheet.cell(1, column); // Ô đầu tiên trên hàng 1 và cột column
+            const value = cell.value();
 
-              const cell = sheet.cell(row, column);
-              const value = cell.value();
+            if (value !== expectedValues[column - 1]) {
+              isCorrect = false;
+              break;
+            }
+          }
 
-              if (value) {
-                hasValue = true;
+          if (isCorrect) {
+            let havevalue = true;
+
+            for (let row = 2; row <= 5; row++) {
+              let hasValue = false;
+              for (let column = 1; column <= columnCount; column++) {
+                const cell = sheet.cell(row, column);
+                const value = cell.value();
+
+                if (value) {
+                  hasValue = true;
+                  break;
+                }
+              }
+
+              if (hasValue) {
+                break;
+              } else {
+                havevalue = false;
                 break;
               }
             }
+            if (havevalue) {
+              if (req.body.status == "true") {
+                try {
+                  // read excel file:
+                  // create all account
 
-            if (hasValue) {
-              break;
-            } else {
-              havevalue = false;
-              break;
-            }
-          }
-          if (havevalue) {
-            if (req.body.status == "true") {
-              try {
-                // read excel file:
-                // create all account
-
-                let maxWidthEmail = 0;
-                //[['MSSV', 'Họ', 'Tên' ]]
-                sheet.cell("D1").value("Email");
-                sheet.cell("E1").value("Password");
-                for (let i = 1; i < values.length; i++) {
-                  let pw = await randomPassword();
-                  let email = await generateEmail(
-                    `${values[i][1].toString()} ${values[i][2].toString()} ${values[
-                      i
-                    ][0].toString()}`
-                  );
-                  let dataInsertUser = {
-                    _id: values[i][0].toString(),
-                    first_name: values[i][2].toString(),
-                    last_name: values[i][1].toString(),
-                    avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
-                    power: { 0: true },
-                    class: [req.body.cls],
-                    displayName: `${values[i][1].toString()} ${values[i][2].toString()}`,
-                    email: email,
-                    total_score: {},
-                  };
-                  let dataInsertLogin = {
-                    _id: values[i][0].toString(),
-                    password: pw,
-                    first: "new_user",
-                  };
-                  client.db("global").collection("user_info").updateOne(
-                    {
-                      _id: dataInsertUser._id,
-                    },
-                    {
-                      $set: dataInsertUser,
-                    },
-                    {
-                      upsert: true,
-                    }
-                  );
-                  client.db("global").collection("login_info").updateOne(
-                    {
-                      _id: dataInsertLogin._id,
-                    },
-                    {
-                      $set: dataInsertLogin,
-                    },
-                    {
-                      upsert: true,
-                    }
-                  );
-                  await sheet.cell(`D${i + 1}`).value(email);
-                  await sheet.cell(`E${i + 1}`).value(pw);
-                  const range = sheet.range(`D${i + 1}:E${i + 1}`);
-                  range.style({ border: true });
-                  if (email.length > maxWidthEmail) {
-                    maxWidthEmail = email.length;
-                  }
-                }
-                // Write to file.
-                sheet.column("D").width(maxWidthEmail);
-                const uuid = uuidv4();
-                await workbook.toFileAsync(path.join(".downloads", uuid + ".xlsx"));
-                res.download(path.join(".downloads", uuid + ".xlsx"));
-                // xoa file sau khi xu ly
-                scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
-              } catch (err) {
-                console.log("SYSTEM | CREATE_ACCOUNT | ERROR | ", err);
-                return res.sendStatus(500);
-              }
-            } else {
-              try {
-                // read excel file:
-                // create all account
-                const workbook = await XlsxPopulate.fromFileAsync(fileStudents.path);
-                const sheet = workbook.sheet(0);
-
-                const values = sheet.usedRange().value();
-                let maxWidthEmail = 0;
-                //[['MSSV', 'Họ', 'Tên' ]]
-                sheet.cell("D1").value("Email");
-                sheet.cell("E1").value("Password");
-                for (let i = 1; i < values.length; i++) {
-                  let studentIdToCheck = values[i][0].toString(); // Mã số sinh viên cần kiểm tra
-
-                  const marker = await client
-                    .db(name_global_databases)
-                    .collection("user_info")
-                    .findOne(
-                      { _id: studentIdToCheck },
-                      {
-                        projection: {
-                          _id: 0,
-                          last_name: 1,
-                          first_name: 1,
-                        },
-                      }
-                    );
-                  if (!marker) {
+                  let maxWidthEmail = 0;
+                  //[['MSSV', 'Họ', 'Tên' ]]
+                  sheet.cell("D1").value("Email");
+                  sheet.cell("E1").value("Password");
+                  for (let i = 1; i < values.length; i++) {
                     let pw = await randomPassword();
                     let email = await generateEmail(
-                      `${values[i][1]} ${values[i][2]} ${values[i][0].toString()}`
+                      `${values[i][1].toString()} ${values[
+                        i
+                      ][2].toString()} ${values[i][0].toString()}`
                     );
                     let dataInsertUser = {
                       _id: values[i][0].toString(),
@@ -768,7 +747,9 @@ function createAPIRouter(client, wss) {
                       avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
                       power: { 0: true },
                       class: [req.body.cls],
-                      displayName: `${values[i][1].toString()} ${values[i][2].toString()}`,
+                      displayName: `${values[i][1].toString()} ${values[
+                        i
+                      ][2].toString()}`,
                       email: email,
                       total_score: {},
                     };
@@ -806,110 +787,214 @@ function createAPIRouter(client, wss) {
                     if (email.length > maxWidthEmail) {
                       maxWidthEmail = email.length;
                     }
-
-                    // Write to file.
-                    sheet.column("D").width(maxWidthEmail);
-                    const uuid = uuidv4();
-                    await workbook.toFileAsync(path.join(".downloads", uuid + ".xlsx"));
-                    res.download(path.join(".downloads", uuid + ".xlsx"));
-                    // xoa file sau khi xu ly
-                    scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
-                  } 
+                  }
+                  // Write to file.
+                  sheet.column("D").width(maxWidthEmail);
+                  const uuid = uuidv4();
+                  await workbook.toFileAsync(
+                    path.join(".downloads", uuid + ".xlsx")
+                  );
+                  res.download(path.join(".downloads", uuid + ".xlsx"));
+                  // xoa file sau khi xu ly
+                  scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
+                } catch (err) {
+                  console.log("SYSTEM | CREATE_ACCOUNT | ERROR | ", err);
+                  return res.sendStatus(500);
                 }
-              } catch (err) {
-                console.log("SYSTEM | CREATE_ACCOUNT | ERROR | ", err);
-                return res.sendStatus(500);
+              } else {
+                try {
+                  // read excel file:
+                  // create all account
+                  const workbook = await XlsxPopulate.fromFileAsync(
+                    fileStudents.path
+                  );
+                  const sheet = workbook.sheet(0);
+
+                  const values = sheet.usedRange().value();
+                  let maxWidthEmail = 0;
+                  //[['MSSV', 'Họ', 'Tên' ]]
+                  sheet.cell("D1").value("Email");
+                  sheet.cell("E1").value("Password");
+                  for (let i = 1; i < values.length; i++) {
+                    let studentIdToCheck = values[i][0].toString(); // Mã số sinh viên cần kiểm tra
+
+                    const marker = await client
+                      .db(name_global_databases)
+                      .collection("user_info")
+                      .findOne(
+                        { _id: studentIdToCheck },
+                        {
+                          projection: {
+                            _id: 0,
+                            last_name: 1,
+                            first_name: 1,
+                          },
+                        }
+                      );
+                    if (!marker) {
+                      let pw = await randomPassword();
+                      let email = await generateEmail(
+                        `${values[i][1]} ${values[i][2]} ${values[
+                          i
+                        ][0].toString()}`
+                      );
+                      let dataInsertUser = {
+                        _id: values[i][0].toString(),
+                        first_name: values[i][2].toString(),
+                        last_name: values[i][1].toString(),
+                        avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
+                        power: { 0: true },
+                        class: [req.body.cls],
+                        displayName: `${values[i][1].toString()} ${values[
+                          i
+                        ][2].toString()}`,
+                        email: email,
+                        total_score: {},
+                      };
+                      let dataInsertLogin = {
+                        _id: values[i][0].toString(),
+                        password: pw,
+                        first: "new_user",
+                      };
+                      client.db("global").collection("user_info").updateOne(
+                        {
+                          _id: dataInsertUser._id,
+                        },
+                        {
+                          $set: dataInsertUser,
+                        },
+                        {
+                          upsert: true,
+                        }
+                      );
+                      client.db("global").collection("login_info").updateOne(
+                        {
+                          _id: dataInsertLogin._id,
+                        },
+                        {
+                          $set: dataInsertLogin,
+                        },
+                        {
+                          upsert: true,
+                        }
+                      );
+                      await sheet.cell(`D${i + 1}`).value(email);
+                      await sheet.cell(`E${i + 1}`).value(pw);
+                      const range = sheet.range(`D${i + 1}:E${i + 1}`);
+                      range.style({ border: true });
+                      if (email.length > maxWidthEmail) {
+                        maxWidthEmail = email.length;
+                      }
+
+                      // Write to file.
+                      sheet.column("D").width(maxWidthEmail);
+                      const uuid = uuidv4();
+                      await workbook.toFileAsync(
+                        path.join(".downloads", uuid + ".xlsx")
+                      );
+                      res.download(path.join(".downloads", uuid + ".xlsx"));
+                      // xoa file sau khi xu ly
+                      scheduleFileDeletion(
+                        path.join(".downloads", uuid + ".xlsx")
+                      );
+                    }
+                  }
+                } catch (err) {
+                  console.log("SYSTEM | CREATE_ACCOUNT | ERROR | ", err);
+                  return res.sendStatus(500);
+                }
               }
+            } else {
+              return res.sendStatus(404);
             }
           } else {
-
-            return res.sendStatus(404);
+            return res.sendStatus(405);
           }
         } else {
-          return res.sendStatus(405);
+          const dataStudent = req.body;
+          let pw = await randomPassword();
+          let email = await generateEmail(
+            `${dataStudent["ho"]} ${dataStudent["ten"]} ${dataStudent[
+              "mssv"
+            ].toString()}`
+          );
+          let power;
+
+          power = {
+            0: true,
+            1: dataStudent["chamdiem"],
+            3: dataStudent["lbhd"],
+            10: dataStudent["dangvien"],
+          };
+
+          let dataInsertUser = {
+            _id: dataStudent["mssv"].toString(),
+            first_name: dataStudent["ten"],
+            last_name: dataStudent["ho"],
+            avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
+            power: power,
+            class: [dataStudent["cls"]],
+            displayName: `${dataStudent["ho"]} ${dataStudent["ten"]}`,
+            email: email,
+            total_score: {},
+          };
+          let dataInsertLogin = {
+            _id: dataStudent["mssv"].toString(),
+            password: pw,
+            first: "new_user",
+          };
+          client.db("global").collection("user_info").updateOne(
+            {
+              _id: dataInsertUser._id,
+            },
+            {
+              $set: dataInsertUser,
+            },
+            {
+              upsert: true,
+            }
+          );
+          client.db("global").collection("login_info").updateOne(
+            {
+              _id: dataInsertLogin._id,
+            },
+            {
+              $set: dataInsertLogin,
+            },
+            {
+              upsert: true,
+            }
+          );
+          // xu ly sau khi them sinh vien
+          if (!dataStudent["updateStudent"]) {
+            const uuid = uuidv4();
+            const workbook = await XlsxPopulate.fromFileAsync(
+              "./src/excelTemplate/Tao_danh_sach_lop_moi.xlsx"
+            );
+            const sheet = workbook.sheet(0);
+            await sheet.cell(`A2`).value(dataStudent["mssv"].toString());
+            await sheet.cell(`B2`).value(dataStudent["ho"]);
+            await sheet.cell(`C2`).value(dataStudent["ten"]);
+            await sheet.cell(`D1`).value("Email");
+            await sheet.cell(`E1`).value("Password");
+            await sheet.cell(`D2`).value(email);
+            await sheet.cell(`E2`).value(pw);
+            let range = sheet.range(`D2:E2`);
+            range.style({ border: true });
+            sheet.column("D").width(email.length);
+            await workbook.toFileAsync(path.join(".downloads", uuid + ".xlsx"));
+            res.download(path.join(".downloads", uuid + ".xlsx"));
+            // xoa file sau khi xu ly
+            scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
+          } else {
+            return res.sendStatus(200);
+          }
         }
       } else {
-        const dataStudent = req.body;
-        let pw = await randomPassword();
-        let email = await generateEmail(
-          `${dataStudent["ho"]} ${dataStudent["ten"]} ${dataStudent["mssv"].toString()}`
-        );
-        let power;
-
-        power = {
-          0: true,
-          1: dataStudent["chamdiem"],
-          3: dataStudent["lbhd"],
-          10: dataStudent["dangvien"],
-        };
-
-        let dataInsertUser = {
-          _id: dataStudent["mssv"].toString(),
-          first_name: dataStudent["ten"],
-          last_name: dataStudent["ho"],
-          avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
-          power: power,
-          class: [dataStudent["cls"]],
-          displayName: `${dataStudent["ho"]} ${dataStudent["ten"]}`,
-          email: email,
-          total_score: {},
-        };
-        let dataInsertLogin = {
-          _id: dataStudent["mssv"].toString(),
-          password: pw,
-          first: "new_user",
-        };
-        client.db("global").collection("user_info").updateOne(
-          {
-            _id: dataInsertUser._id,
-          },
-          {
-            $set: dataInsertUser,
-          },
-          {
-            upsert: true,
-          }
-        );
-        client.db("global").collection("login_info").updateOne(
-          {
-            _id: dataInsertLogin._id,
-          },
-          {
-            $set: dataInsertLogin,
-          },
-          {
-            upsert: true,
-          }
-        );
-        // xu ly sau khi them sinh vien
-        if (!dataStudent["updateStudent"]) {
-          const uuid = uuidv4();
-          const workbook = await XlsxPopulate.fromFileAsync(
-            "./src/excelTemplate/Tao_danh_sach_lop_moi.xlsx"
-          );
-          const sheet = workbook.sheet(0);
-          await sheet.cell(`A2`).value(dataStudent["mssv"].toString());
-          await sheet.cell(`B2`).value(dataStudent["ho"]);
-          await sheet.cell(`C2`).value(dataStudent["ten"]);
-          await sheet.cell(`D1`).value("Email");
-          await sheet.cell(`E1`).value("Password");
-          await sheet.cell(`D2`).value(email);
-          await sheet.cell(`E2`).value(pw);
-          let range = sheet.range(`D2:E2`);
-          range.style({ border: true });
-          sheet.column("D").width(email.length);
-          await workbook.toFileAsync(path.join(".downloads", uuid + ".xlsx"));
-          res.download(path.join(".downloads", uuid + ".xlsx"));
-          // xoa file sau khi xu ly
-          scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
-        } else {
-          return res.sendStatus(200);
-        }
+        return res.sendStatus(403);
       }
-    } else {
-      return res.sendStatus(403);
     }
-  });
+  );
   router.get(
     "/getTemplateAddStudent",
     upload.single("file"),
@@ -929,8 +1014,14 @@ function createAPIRouter(client, wss) {
       try {
         const listDelete = req.body.dataDelete;
         for (let i = 0; i < listDelete.length; i++) {
-          client.db("global").collection("user_info").deleteOne({ _id: listDelete[i] });
-          client.db("global").collection("login_info").deleteOne({ _id: listDelete[i] });
+          client
+            .db("global")
+            .collection("user_info")
+            .deleteOne({ _id: listDelete[i] });
+          client
+            .db("global")
+            .collection("login_info")
+            .deleteOne({ _id: listDelete[i] });
         }
         return res.sendStatus(200);
       } catch (err) {
@@ -1050,6 +1141,9 @@ function createAPIRouter(client, wss) {
               } else {
                 curr_score.push("kém");
               }
+            } else {
+              curr_score.push(null);
+              curr_score.push(null);
             }
 
             // add curr_score to scores
@@ -1105,7 +1199,11 @@ function createAPIRouter(client, wss) {
             .db(name_global_databases)
             .collection("user_info")
             .find(
-              { class: cls, "power.0": { $exists: true }, _id: { $in: stdlist } },
+              {
+                class: cls,
+                "power.0": { $exists: true },
+                _id: { $in: stdlist },
+              },
               { projection: { first_name: 1, last_name: 1 } }
             )
             .toArray()
@@ -1125,7 +1223,8 @@ function createAPIRouter(client, wss) {
             let curr_score = {
               year: school_year,
               mssv: student_list[i]._id,
-              name: student_list[i].last_name + " " + student_list[i].first_name,
+              name:
+                student_list[i].last_name + " " + student_list[i].first_name,
               class: cls,
               std: [],
               stf: [],
@@ -1313,74 +1412,77 @@ function createAPIRouter(client, wss) {
     }
   });
   // doan khoa load scores
-  router.get("/doan_khoa/loadScoresList", checkIfUserLoginAPI, async (req, res) => {
-    try {
-      const user = req.session.user;
-      if (user.pow[2]) {
-        const data = req.query;
-        //data = {year: "HK1_2022-2023", cls: "1"}
-        const school_year = data.year;
-        let cls = data.class;
-        // const bo_mon = data.bo_mon;
-        // check for post data.cls if class define this mean they choose class so that must
-        if (!cls) {
-          cls = 0;
-        }
+  router.get(
+    "/doan_khoa/loadScoresList",
+    checkIfUserLoginAPI,
+    async (req, res) => {
+      try {
+        const user = req.session.user;
+        if (user.pow[2]) {
+          const data = req.query;
+          //data = {year: "HK1_2022-2023", cls: "1"}
+          const school_year = data.year;
+          let cls = data.class;
+          // const bo_mon = data.bo_mon;
+          // check for post data.cls if class define this mean they choose class so that must
+          if (!cls) {
+            cls = 0;
+          }
 
-        const year_available = await client
-          .db(name_global_databases)
-          .collection("school_year")
-          .findOne(
-            {},
-            {
-              projection: {
-                _id: 0,
-                year: 1,
-                start_day: 1,
-                end_day: 1,
-              },
-            }
-          );
-
-        const student_list = sortStudentName(
-          await client
+          const year_available = await client
             .db(name_global_databases)
-            .collection("user_info")
-            .find(
-              { class: cls, "power.0": { $exists: true } },
+            .collection("school_year")
+            .findOne(
+              {},
               {
                 projection: {
-                  first_name: 1,
-                  last_name: 1,
-                  total_score: 1,
+                  _id: 0,
+                  year: 1,
+                  start_day: 1,
+                  end_day: 1,
                 },
               }
-            )
-            .toArray()
-        );
+            );
 
-        // get all student total score from themself:
-        let result = {
-          // staff_name: [],
-          student_list: student_list,
-          // student_scores: [],
-          // staff_scores: [],
-          // department_scores: [],
-          year_available: year_available,
-        };
+          const student_list = sortStudentName(
+            await client
+              .db(name_global_databases)
+              .collection("user_info")
+              .find(
+                { class: cls, "power.0": { $exists: true } },
+                {
+                  projection: {
+                    first_name: 1,
+                    last_name: 1,
+                    total_score: 1,
+                  },
+                }
+              )
+              .toArray()
+          );
 
+          // get all student total score from themself:
+          let result = {
+            // staff_name: [],
+            student_list: student_list,
+            // student_scores: [],
+            // staff_scores: [],
+            // department_scores: [],
+            year_available: year_available,
+          };
 
-        return res.status(200).json(result);
-      } else {
-        // user not staff members
-        // redirect to home
-        return res.statusCode(403);
+          return res.status(200).json(result);
+        } else {
+          // user not staff members
+          // redirect to home
+          return res.statusCode(403);
+        }
+      } catch (err) {
+        console.log("SYSTEM | DOAN_KHOA_LOAD_SCORE_LIST | ERROR | ", err);
+        return res.sendStatus(500);
       }
-    } catch (err) {
-      console.log("SYSTEM | DOAN_KHOA_LOAD_SCORE_LIST | ERROR | ", err);
-      return res.sendStatus(500);
     }
-  });
+  );
   // Auto mark (copy student mark to staff mark)
   router.post("/autoMark", checkIfUserLoginAPI, async (req, res) => {
     try {
@@ -1603,7 +1705,10 @@ function createAPIRouter(client, wss) {
       if (user.pow[0]) {
         const schoolYearParam = req.query.schoolYear;
 
-        const schoolYearsToSearch = ["HK1_" + schoolYearParam, "HK2_" + schoolYearParam];
+        const schoolYearsToSearch = [
+          "HK1_" + schoolYearParam,
+          "HK2_" + schoolYearParam,
+        ];
         const studentTotalScores = await Promise.all(
           schoolYearsToSearch.map(async (year) => {
             const studentTotalScore = await client
@@ -1620,7 +1725,9 @@ function createAPIRouter(client, wss) {
               );
             return {
               year: year.slice(0, 3),
-              total: studentTotalScore ? studentTotalScore.total : "Chưa có điểm",
+              total: studentTotalScore
+                ? studentTotalScore.total
+                : "Chưa có điểm",
             };
           })
         );
@@ -1688,7 +1795,10 @@ function createAPIRouter(client, wss) {
           const dummy_class = await client
             .db(name_global_databases)
             .collection("classes")
-            .find({ branch: createId(data.rm_bs[i]) }, { projection: { cvht: 1 } })
+            .find(
+              { branch: createId(data.rm_bs[i]) },
+              { projection: { cvht: 1 } }
+            )
             .toArray();
           const cls_rm_data = dummy_class.map((cls) => cls._id);
           const cvht_rm_data = dummy_class.map((cls) => cls.cvht);
@@ -1705,7 +1815,9 @@ function createAPIRouter(client, wss) {
               },
               {
                 $set: {
-                  branch: ObjectId.createFromHexString("650985a345e2e896b37efd4f"),
+                  branch: ObjectId.createFromHexString(
+                    "650985a345e2e896b37efd4f"
+                  ),
                 },
               }
             );
@@ -1797,9 +1909,12 @@ function createAPIRouter(client, wss) {
 
         if (curr_teacher) {
           // remove old teachers
-          await client.db(name_global_databases).collection("user_info").deleteOne({
-            _id: data.old_id,
-          });
+          await client
+            .db(name_global_databases)
+            .collection("user_info")
+            .deleteOne({
+              _id: data.old_id,
+            });
 
           // edit old one
           await client
@@ -1843,20 +1958,29 @@ function createAPIRouter(client, wss) {
         }
 
         if (teacher_pass) {
-          await client.db(name_global_databases).collection("login_info").deleteOne({
-            _id: data.old_id,
-          });
+          await client
+            .db(name_global_databases)
+            .collection("login_info")
+            .deleteOne({
+              _id: data.old_id,
+            });
           // edit old one
-          await client.db(name_global_databases).collection("login_info").insertOne({
-            _id: data.new_id,
-            password: teacher_pass.password,
-          });
+          await client
+            .db(name_global_databases)
+            .collection("login_info")
+            .insertOne({
+              _id: data.new_id,
+              password: teacher_pass.password,
+            });
         } else {
           // add new one
-          await client.db(name_global_databases).collection("login_info").insertOne({
-            _id: data.new_id,
-            password: data.new_id,
-          });
+          await client
+            .db(name_global_databases)
+            .collection("login_info")
+            .insertOne({
+              _id: data.new_id,
+              password: data.new_id,
+            });
         }
       } else {
         return res.sendStatus(403); // back to home
@@ -2151,7 +2275,10 @@ function createAPIRouter(client, wss) {
               .collection("activities")
               .deleteOne({ _id: data.atv_id }); // school
 
-            await client.db(user.dep).collection("activities").deleteOne({ _id: data.atv_id }); // department
+            await client
+              .db(user.dep)
+              .collection("activities")
+              .deleteOne({ _id: data.atv_id }); // department
 
             // create index for new table has just created
             await await client
@@ -2237,7 +2364,10 @@ function createAPIRouter(client, wss) {
               );
 
             // check other databases if this activities in thoese collection remove it
-            await client.db(user.dep).collection("activities").deleteOne({ _id: data.atv_id }); // department
+            await client
+              .db(user.dep)
+              .collection("activities")
+              .deleteOne({ _id: data.atv_id }); // department
             await client
               .db(user.dep)
               .collection(data.cls_id + "_activities")
@@ -2310,7 +2440,10 @@ function createAPIRouter(client, wss) {
           .toArray();
 
         // get all activities of class of department
-        const collections = await client.db(user.dep).listCollections().toArray();
+        const collections = await client
+          .db(user.dep)
+          .listCollections()
+          .toArray();
 
         // Filter collections ending with '_activities'
         const activityCollections = collections.filter((collection) =>
@@ -2353,7 +2486,7 @@ function createAPIRouter(client, wss) {
           })
           .catch((error) => {
             // Xử lý lỗi nếu có
-            console.log("SYSTEM | LOAD_YEAR_ACTIVITIES | ERROR |",error);
+            console.log("SYSTEM | LOAD_YEAR_ACTIVITIES | ERROR |", error);
           });
       } else {
         return res.sendStatus(403);
@@ -2388,159 +2521,160 @@ function createAPIRouter(client, wss) {
   });
 
   // api end activities
-  router.post("/updateActivitiesStatus", checkIfUserLoginAPI, async (req, res) => {
-    try {
-      const user = req.session.user;
-      const data = req.body; // data = {_id: 18102003 (activities' id), level: 'Truong', status: '1' (1: đang diễn ra, 0: đã kết thúc)}
-      // must be department to use this api
-      if (user.pow[3]) {
-        if (data.level == "Truong") {
-          // update status of current activity
-          await client
-            .db(name_global_databases)
-            .collection("activities")
-            .updateOne(
-              {
-                _id: data._id,
-              },
-              {
-                $set: { end: data.status == "1" },
-              }
-            );
-        } else if (data.level == "Khoa") {
-          // update status of current activity
-          await client
-            .db(user.dep)
-            .collection("activities")
-            .updateOne(
-              {
-                _id: data._id,
-              },
-              {
-                $set: { end: data.status == "1" },
-              }
-            );
-        } else {
-          // update status of current activity
-          await client
-            .db(user.dep)
-            .collection(data.level + "_activities")
-            .updateOne(
-              {
-                _id: data._id,
-              },
-              {
-                $set: { end: data.status == "1" },
-              }
-            );
-        }
-        wss.clients.forEach((ws) => {
-          if (ws.actId == data._id) {
-            ws.send("reload");
+  router.post(
+    "/updateActivitiesStatus",
+    checkIfUserLoginAPI,
+    async (req, res) => {
+      try {
+        const user = req.session.user;
+        const data = req.body; // data = {_id: 18102003 (activities' id), level: 'Truong', status: '1' (1: đang diễn ra, 0: đã kết thúc)}
+        // must be department to use this api
+        if (user.pow[3]) {
+          if (data.level == "Truong") {
+            // update status of current activity
+            await client
+              .db(name_global_databases)
+              .collection("activities")
+              .updateOne(
+                {
+                  _id: data._id,
+                },
+                {
+                  $set: { end: data.status == "1" },
+                }
+              );
+          } else if (data.level == "Khoa") {
+            // update status of current activity
+            await client
+              .db(user.dep)
+              .collection("activities")
+              .updateOne(
+                {
+                  _id: data._id,
+                },
+                {
+                  $set: { end: data.status == "1" },
+                }
+              );
+          } else {
+            // update status of current activity
+            await client
+              .db(user.dep)
+              .collection(data.level + "_activities")
+              .updateOne(
+                {
+                  _id: data._id,
+                },
+                {
+                  $set: { end: data.status == "1" },
+                }
+              );
           }
-        });
-        return res.sendStatus(200);
-      } else {
-        return res.sendStatus(403); // send user to 403 page
+          wss.clients.forEach((ws) => {
+            if (ws.actId == data._id) {
+              ws.send("reload");
+            }
+          });
+          return res.sendStatus(200);
+        } else {
+          return res.sendStatus(403); // send user to 403 page
+        }
+      } catch (err) {
+        console.log("SYSTEM | DELETE_TEACHER | ERROR | ", err);
+        return res.sendStatus(500);
       }
-    } catch (err) {
-      console.log("SYSTEM | DELETE_TEACHER | ERROR | ", err);
-      return res.sendStatus(500);
     }
-  });
+  );
 
   // api approval students join in activity
-  router.post("/approvalActivityStudent", checkIfUserLoginAPI, async (req, res) => {
-    try {
-      const user = req.session.user;
-      const data = req.body; // data = {_id: _id, level: level, dataUpdate: list of update students, defaultApproval: old student list}
-      // must be department to use this api
-      if (user.pow[3]) {
-        if (data.level == "Truong") {
-          // update status of current activity
-          await client
-            .db(name_global_databases)
-            .collection("activities")
-            .updateOne(
-              {
-                _id: data._id,
-              },
-              {
-                $set: { student_list: data.dataUpdate },
-              }
-            );
-        } else if (data.level == "Khoa") {
-          // update status of current activity
-          await client
-            .db(user.dep)
-            .collection("activities")
-            .updateOne(
-              {
-                _id: data._id,
-              },
-              {
-                $set: { student_list: data.dataUpdate },
-              }
-            );
-        } else {
-          // update status of current activity
-          await client
-            .db(user.dep)
-            .collection(data.level + "_activities")
-            .updateOne(
-              {
-                _id: data._id,
-              },
-              {
-                $set: { student_list: data.dataUpdate },
-              }
-            );
-        }
+  router.post(
+    "/approvalActivityStudent",
+    checkIfUserLoginAPI,
+    async (req, res) => {
+      try {
+        const user = req.session.user;
+        const data = req.body; // data = {_id: _id, level: level, dataUpdate: list of update students, defaultApproval: old student list}
+        // must be department to use this api
+        if (user.pow[3]) {
+          if (data.level == "Truong") {
+            // update status of current activity
+            await client
+              .db(name_global_databases)
+              .collection("activities")
+              .updateOne(
+                {
+                  _id: data._id,
+                },
+                {
+                  $set: { student_list: data.dataUpdate },
+                }
+              );
+          } else if (data.level == "Khoa") {
+            // update status of current activity
+            await client
+              .db(user.dep)
+              .collection("activities")
+              .updateOne(
+                {
+                  _id: data._id,
+                },
+                {
+                  $set: { student_list: data.dataUpdate },
+                }
+              );
+          } else {
+            // update status of current activity
+            await client
+              .db(user.dep)
+              .collection(data.level + "_activities")
+              .updateOne(
+                {
+                  _id: data._id,
+                },
+                {
+                  $set: { student_list: data.dataUpdate },
+                }
+              );
+          }
 
-        return res.sendStatus(200);
-      } else {
-        return res.sendStatus(403); // send user to 403 page
+          return res.sendStatus(200);
+        } else {
+          return res.sendStatus(403); // send user to 403 page
+        }
+      } catch (err) {
+        console.log("SYSTEM | APPROVAL ACTIVITY STUDENTS | ERROR | ", err);
+        return res.sendStatus(500);
       }
-    } catch (err) {
-      console.log("SYSTEM | APPROVAL ACTIVITY STUDENTS | ERROR | ", err);
-      return res.sendStatus(500);
     }
-  });
+  );
 
   // api delete student join in activity
-  router.post("/deleteActivityStudent", checkIfUserLoginAPI, async (req, res) => {
-    try {
-      const user = req.session.user;
-      const data = req.body; // data = {_id: _id, level: level, dataDelete: dataDelete }
+  router.post(
+    "/deleteActivityStudent",
+    checkIfUserLoginAPI,
+    async (req, res) => {
+      try {
+        const user = req.session.user;
+        const data = req.body; // data = {_id: _id, level: level, dataDelete: dataDelete }
 
-      // must be department to use this api
-      if (user.pow[3]) {
-        if (data.level == "Truong") {
-          // update status of current activity
-          await client.db(name_global_databases).collection("activities").updateOne(
-            {
-              _id: data._id,
-            },
-            {
-              $unset: data.dataDelete,
-            }
-          );
-        } else if (data.level == "Khoa") {
-          // update status of current activity
-          await client.db(user.dep).collection("activities").updateOne(
-            {
-              _id: data._id,
-            },
-            {
-              $unset: data.bonusDelete,
-            }
-          );
-        } else {
-          // update status of current activity
-          await client
-            .db(user.dep)
-            .collection(data.level + "_activities")
-            .updateOne(
+        // must be department to use this api
+        if (user.pow[3]) {
+          if (data.level == "Truong") {
+            // update status of current activity
+            await client
+              .db(name_global_databases)
+              .collection("activities")
+              .updateOne(
+                {
+                  _id: data._id,
+                },
+                {
+                  $unset: data.dataDelete,
+                }
+              );
+          } else if (data.level == "Khoa") {
+            // update status of current activity
+            await client.db(user.dep).collection("activities").updateOne(
               {
                 _id: data._id,
               },
@@ -2548,18 +2682,31 @@ function createAPIRouter(client, wss) {
                 $unset: data.bonusDelete,
               }
             );
-        }
+          } else {
+            // update status of current activity
+            await client
+              .db(user.dep)
+              .collection(data.level + "_activities")
+              .updateOne(
+                {
+                  _id: data._id,
+                },
+                {
+                  $unset: data.bonusDelete,
+                }
+              );
+          }
 
-     
-        return res.sendStatus(200);
-      } else {
-        return res.sendStatus(403); // send user to 403 page
+          return res.sendStatus(200);
+        } else {
+          return res.sendStatus(403); // send user to 403 page
+        }
+      } catch (err) {
+        console.log("SYSTEM | DELETE ACTIVITY STUDENTS | ERROR | ", err);
+        return res.sendStatus(500);
       }
-    } catch (err) {
-      console.log("SYSTEM | DELETE ACTIVITY STUDENTS | ERROR | ", err);
-      return res.sendStatus(500);
     }
-  });
+  );
 
   // api delete activities checked
   router.post("/deleteActivities", checkIfUserLoginAPI, async (req, res) => {
@@ -2587,7 +2734,10 @@ function createAPIRouter(client, wss) {
 
         // remove all checked class activities
         // get all activities of class of department
-        const collections = await client.db(user.dep).listCollections().toArray();
+        const collections = await client
+          .db(user.dep)
+          .listCollections()
+          .toArray();
 
         // Filter collections ending with '_activities'
         const activityCollections = await collections.filter((collection) =>
@@ -2615,66 +2765,70 @@ function createAPIRouter(client, wss) {
   });
 
   // load bang diem cua giao vien------------------------------------------------------------------------------------------------------------------
-  router.get("/teacher/loadScoresList", checkIfUserLoginAPI, async (req, res) => {
-    try {
-      const user = req.session.user;
-      if (user.pow[1]) {
-        const data = req.query;
-        //data = {year: "HK1_2022-2023", cls: "1"}
-        const school_year = data.year;
-        const year_available = await client
-          .db(name_global_databases)
-          .collection("school_year")
-          .findOne(
-            {},
-            {
-              projection: {
-                _id: 0,
-                year: 1,
-                start_day: 1,
-                end_day: 1,
-              },
-            }
-          );
-
-        const student_list = sortStudentName(
-          await client
+  router.get(
+    "/teacher/loadScoresList",
+    checkIfUserLoginAPI,
+    async (req, res) => {
+      try {
+        const user = req.session.user;
+        if (user.pow[1]) {
+          const data = req.query;
+          //data = {year: "HK1_2022-2023", cls: "1"}
+          const school_year = data.year;
+          const year_available = await client
             .db(name_global_databases)
-            .collection("user_info")
-            .find(
-              { class: data.cls, "power.0": { $exists: true } },
+            .collection("school_year")
+            .findOne(
+              {},
               {
                 projection: {
-                  first_name: 1,
-                  last_name: 1,
-                  total_score: 1,
+                  _id: 0,
+                  year: 1,
+                  start_day: 1,
+                  end_day: 1,
                 },
               }
-            )
-            .toArray()
-        );
+            );
 
-        // get all student total score from themself:
-        let result = {
-          // staff_name: [],
-          student_list: student_list,
-          // student_scores: [],
-          // staff_scores: [],
-          // department_scores: [],
-          year_available: year_available,
-        };
+          const student_list = sortStudentName(
+            await client
+              .db(name_global_databases)
+              .collection("user_info")
+              .find(
+                { class: data.cls, "power.0": { $exists: true } },
+                {
+                  projection: {
+                    first_name: 1,
+                    last_name: 1,
+                    total_score: 1,
+                  },
+                }
+              )
+              .toArray()
+          );
 
-        return res.status(200).json(result);
-      } else {
-        // user not staff members
-        // redirect to home (return 403, api khong the chuyenh huong ve trang chu duoc)
-        return res.sendStatus(403);
+          // get all student total score from themself:
+          let result = {
+            // staff_name: [],
+            student_list: student_list,
+            // student_scores: [],
+            // staff_scores: [],
+            // department_scores: [],
+            year_available: year_available,
+          };
+
+          return res.status(200).json(result);
+        } else {
+          // user not staff members
+          // redirect to home (return 403, api khong the chuyenh huong ve trang chu duoc)
+          return res.sendStatus(403);
+        }
+      } catch (err) {
+        console.log("SYSTEM | GIAO_VIEN_LOAD_SCORE_LIST | ERROR | ", err);
+        return res.sendStatus(500);
       }
-    } catch (err) {
-      console.log("SYSTEM | GIAO_VIEN_LOAD_SCORE_LIST | ERROR | ", err);
-      return res.sendStatus(500);
     }
-  });
+  );
 
   // api add and edit new class
   router.post("/addOrEditClasses", checkIfUserLoginAPI, async (req, res) => {
@@ -2724,12 +2878,15 @@ function createAPIRouter(client, wss) {
             .deleteOne({ _id: data.old_id });
 
           // add (edit old_id class)
-          await client.db(name_global_databases).collection("classes").insertOne({
-            _id: data.new_id,
-            years: old_class.years, // years of old_id class
-            branch: data.branch,
-            cvht: data.cvht,
-          });
+          await client
+            .db(name_global_databases)
+            .collection("classes")
+            .insertOne({
+              _id: data.new_id,
+              years: old_class.years, // years of old_id class
+              branch: data.branch,
+              cvht: data.cvht,
+            });
 
           // remove class from old teacher's class
           await client
