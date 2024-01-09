@@ -13,7 +13,7 @@
     .btn_choice{
         margin: 0 auto;
     }
-    #year_choice{
+    #year_choice,#subject_choice{
         padding: 1.5rem 4rem;
         margin-top: 2rem;
     }
