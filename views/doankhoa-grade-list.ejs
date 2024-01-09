@@ -33,7 +33,7 @@
                     <div class="selectbox selectbox--hocky">
                       <div class="select">
                         <select>
-                          <% for (let i=1; i <=years[cy[1]].length; i++) {%>
+                          <% for (let i=1; i <=Object.keys(years[cy[1]]).length; i++) {%>
                           <% if (i==parseInt(cy[0].slice(2))) {%>
                           <option value="<%= i %>" selected="selected">
                             <%= i %>

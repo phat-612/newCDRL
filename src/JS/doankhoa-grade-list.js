@@ -100,7 +100,7 @@ $(document).on("click", ".export_one_btn", async function () {
 
       };
       const response = await fetch(
-        `/api/exportStudentsScore?year=${curr_tb_year}&cls=${cls}&stdlist=${JSON.stringify(
+        `/api/exportStudentsScore?type=all&year=${curr_tb_year}&cls=${cls}&stdlist=${JSON.stringify(
           mssv_list
         )}`,
         requestOptions
