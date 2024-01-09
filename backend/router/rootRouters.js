@@ -24,15 +24,15 @@ function createRootRouter(client, parentDirectory) {
 					if (schoolYear_all.years[schoolYear.year.slice(4)]) {
 						for (
 							let i = 0;
-							i < schoolYear_all.years[schoolYear.year.slice(4)].length;
+							i < Object.keys(schoolYear_all.years[schoolYear.year.slice(4)]).length;
 							i++
 						) {
 							schoolYearsToSearch.push(`HK${i + 1}_` + schoolYear.year.slice(4));
 						}
+						// console.log("xx",schoolYear_all.years[schoolYear.year.slice(4)]);
+
 						const studentTotalScores = await Promise.all(
 							schoolYearsToSearch.map(async (year) => {
-								let studentTotalScore = null;
-
 								// Tìm trong bảng '_dep_table' trước
 								const depCollection = client
 									.db(user.dep)
@@ -80,7 +80,6 @@ function createRootRouter(client, parentDirectory) {
 								};
 							})
 						);
-
 						const studentActivities = await Promise.all(
 							schoolYearsToSearch.map(async (year) => {
 								info_search = `student_list.${user._id}`;

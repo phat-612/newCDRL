@@ -340,7 +340,7 @@ $(document).ready(() => {
   // up file
   $(".btn_upload").on("click", async () => {
     if ($('.js_lop').val() !== '0') {
-      quest("Câu hỏi").then(async (result) => {
+      quest("Bạn Có Chắc Muốn Tải file Lên Không").then(async (result) => {
         if (result) {
 
           if (selectedFile) {

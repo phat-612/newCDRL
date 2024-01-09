@@ -125,6 +125,9 @@
   }
 }
 
+.button{
+  margin-top: 1rem;
+}
 /* popup */
 
 
@@ -132,11 +135,20 @@
   .toast {
     right: 1rem;
     left: 1rem;
-    transform: translateY(calc(100% + -15rem));
+    transform: translateY(calc(100% + -30rem));
     top: -8%;
   }
-
   .toast.active {
     transform: translateY(100%);
+  }
+  .not{
+    width: 11rem;
+  }
+  .ok{
+    width: 11rem;
+  }
+  .button{
+    margin-top: 1rem;
+    justify-content: center;
   }
 }
