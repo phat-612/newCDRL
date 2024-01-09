@@ -48,6 +48,7 @@
                       <th class="column1" style="width: 22%">Học Kỳ I</th>
                       <th class="column2" style="width: 48%">Tổng Điểm Rèn Luyện</th>
                       <th class="column3" style="width: 25rem">Chi Tiết</th>
+                      <th class="column4">Tải Xuống</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -63,13 +64,15 @@
                         <a
                           href="/hocsinh/xembangdiem?schoolYear=<%=bandiem[i].year%>"
                           id="HK<%=i+1%>"
-                          >Xem Bảng Điểm</a
+                          >Xem</a
                         >
                       </td>
                       <%} else {%>
-                      <td><a id="HK<%=i+1%>" style="display: none">Xem Bảng Điểm</a></td>
+                      <td><a id="HK<%=i+1%>" style="display: none">Xem</a></td>
                       <%}%>
+                      <td><a id="HK<%=i+1%>">Tải</a></td>
                     </tr>
+
                     <%}%>
                   </tbody>
                 </table>
