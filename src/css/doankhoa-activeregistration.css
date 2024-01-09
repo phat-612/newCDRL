@@ -839,3 +839,11 @@ textarea::placeholder {
 .show_img {
   display: flex !important;
 }
+.checkbox-wrapper-4{
+  position: relative;
+}
+.checkbox-wrapper-4 .inp-cbx{
+
+    top: 50%;
+    left: 50%;
+}

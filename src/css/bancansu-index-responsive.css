@@ -13,17 +13,25 @@
         width: 26% !important;
     }
 
-    .a_nhapdiemdanhgia{
+    .a_nhapdiemdanhgia {
         visibility: hidden;
         width: 0 !important;
         height: 0;
         padding: 0 !important;
     }
-    .content__info a{
+
+    .content__info a {
         display: block;
-    width: 100%;
+        width: 100%;
     }
-    .content__info a .button-35{
+
+    .content__info a .button-35 {
         width: 75%;
+    }
+
+    .group_btn {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
     }
 }
