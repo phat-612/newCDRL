@@ -1143,8 +1143,8 @@ function createAPIRouter(client, wss) {
 	router.get("/exportStudentsScore", checkIfUserLoginAPI, async (req, res) => {
 		try {
 			const user = req.session.user;
-			if (user.pow[1] || user.pow[2]) {
-				const data = req.query;
+			const data = req.query;
+			if ((data.type === "all") & (user.pow[1] || user.pow[2])) {
 				//data = {year: "HK1_2022-2023", cls: '1', stdlist: []}
 				const school_year = data.year;
 				let cls = data.cls;
