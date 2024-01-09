@@ -932,34 +932,71 @@ function createAPIRouter(client, wss) {
 					}
 				);
 				// xu ly sau khi them sinh vien
-				if (!dataStudent["updateStudent"]) {
-					const uuid = uuidv4();
-					const workbook = await XlsxPopulate.fromFileAsync(
-						"./src/excelTemplate/Tao_danh_sach_lop_moi.xlsx"
-					);
-					const sheet = workbook.sheet(0);
-					await sheet.cell(`A2`).value(dataStudent["mssv"].toString());
-					await sheet.cell(`B2`).value(dataStudent["ho"]);
-					await sheet.cell(`C2`).value(dataStudent["ten"]);
-					await sheet.cell(`D1`).value("Email");
-					await sheet.cell(`E1`).value("Password");
-					await sheet.cell(`D2`).value(email);
-					await sheet.cell(`E2`).value(pw);
-					let range = sheet.range(`D2:E2`);
-					range.style({ border: true });
-					sheet.column("D").width(email.length);
-					await workbook.toFileAsync(path.join(".downloads", uuid + ".xlsx"));
-					res.download(path.join(".downloads", uuid + ".xlsx"));
-					// xoa file sau khi xu ly
-					scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
-				} else {
-					return res.sendStatus(200);
-				}
+				const uuid = uuidv4();
+				const workbook = await XlsxPopulate.fromFileAsync(
+					"./src/excelTemplate/Tao_danh_sach_lop_moi.xlsx"
+				);
+				const sheet = workbook.sheet(0);
+				await sheet.cell(`A2`).value(dataStudent["mssv"].toString());
+				await sheet.cell(`B2`).value(dataStudent["ho"]);
+				await sheet.cell(`C2`).value(dataStudent["ten"]);
+				await sheet.cell(`D1`).value("Email");
+				await sheet.cell(`E1`).value("Password");
+				await sheet.cell(`D2`).value(email);
+				await sheet.cell(`E2`).value(pw);
+				let range = sheet.range(`D2:E2`);
+				range.style({ border: true });
+				sheet.column("D").width(email.length);
+				await workbook.toFileAsync(path.join(".downloads", uuid + ".xlsx"));
+				res.download(path.join(".downloads", uuid + ".xlsx"));
+				// xoa file sau khi xu ly
+				scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
+
+				// return res.sendStatus(200);
 			}
 		} else {
 			return res.sendStatus(403);
 		}
 	});
+
+	// Update student
+	router.post("/updateAccount", checkIfUserLoginAPI, async (req, res) => {
+		const user = req.session.user;
+		if (user.pow[4] || user.pow[7]) {
+				const dataStudent = req.body;
+				let power = {
+					0: true,
+					1: dataStudent["chamdiem"],
+					3: dataStudent["lbhd"],
+					10: dataStudent["dangvien"],
+				};
+
+				let dataInsertUser = {
+					_id: dataStudent["mssv"].toString(),
+					first_name: dataStudent["ten"],
+					last_name: dataStudent["ho"],
+					power: power,
+					displayName: `${dataStudent["ho"]} ${dataStudent["ten"]}`,
+				};
+
+				client.db("global").collection("user_info").updateOne(
+					{
+						_id: dataInsertUser._id,
+					},
+					{
+						$set: dataInsertUser,
+					},
+					{
+						upsert: true,
+					}
+				);
+
+			return res.sendStatus(200);
+		} else {
+			return res.sendStatus(403);
+		}
+	});
+
 	router.get(
 		"/getTemplateAddStudent",
 		upload.single("file"),

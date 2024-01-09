@@ -61,8 +61,6 @@ $(document).on("click", ".setd_btn", () => {
   update_cbx();
 })
 
-
-
 $(document).on("click", ".save-btn", SaveButtonClick);
 async function SaveButtonClick(event) {
   event.preventDefault();
