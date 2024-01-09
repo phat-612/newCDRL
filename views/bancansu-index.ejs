@@ -90,10 +90,12 @@
                         <%if (bandiem[i].total !='Chưa có điểm' ){%>
                           <td><a href="/hocsinh/xembangdiem?schoolYear=<%=bandiem[i].year%>" id="HK<%=i+1%>">Xem</a>
                           </td>
+                          <td><a href="/api/exportStudentsScore?type=singe&year=<%=bandiem[i].year%>" id="HK<%=i+1%>">Tải</a></td>
+
                           <%} else {%>
                             <td><a id="HK<%=i+1%>" style="display: none;">Xem</a></td>
+                            <td></td>
                             <%}%>
-                            <td><a id="HK<%=i+1%>">Tải</a></td>
                       </tr>
                       <%}%>
 

@@ -111,7 +111,6 @@ function createAPIRouter(client, wss) {
 							{ _id: data.mssv },
 							{ projection: { _id: 0, class: 1, power: 1, dep: 1 } }
 						);
-
 					if (!cls.power[2]) {
 						const branch = await client
 							.db(name_global_databases)
@@ -1144,19 +1143,21 @@ function createAPIRouter(client, wss) {
 		try {
 			const user = req.session.user;
 			const data = req.query;
-			let cls = null;
+			let cls = data.cls;
+			let stdlist = [];
+			if (data.stdlist) {
+				stdlist = JSON.parse(data.stdlist);
+			}
+			const school_year = data.year;
 
-			// if ((data.type === "singe") & user.pow[0]) {
-			// 	cls = [user.cls];
-			// }
-
-			if ((data.type === "all") & (user.pow[1] || user.pow[2])) {
+			if ((data.type === "singe") & user.pow[0]) {
+				cls = user.cls[0];
+				stdlist = [user._id];
+			}
+			if (user.pow[1] || user.pow[2]) {
 				//data = {year: "HK1_2022-2023", cls: '1', stdlist: []}
-				const school_year = data.year;
-				cls = data.cls;
 				// create uuid for download file
 				const uuid = uuidv4();
-				const stdlist = JSON.parse(data.stdlist);
 				// check for post data.cls if class define this mean they choose class so that must
 				let student_list = [];
 
