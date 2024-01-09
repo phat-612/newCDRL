@@ -1150,11 +1150,11 @@ function createAPIRouter(client, wss) {
 			}
 			const school_year = data.year;
 
-			if ((data.type === "singe") & user.pow[0]) {
-				cls = user.cls[0];
-				stdlist = [user._id];
-			}
-			if (user.pow[1] || user.pow[2]) {
+			if (user.pow[0] || user.pow[1] || user.pow[2]) {
+				if ((data.type === "singe") & user.pow[0]) {
+					cls = user.cls[0];
+					stdlist = [user._id];
+				}
 				//data = {year: "HK1_2022-2023", cls: '1', stdlist: []}
 				// create uuid for download file
 				const uuid = uuidv4();
