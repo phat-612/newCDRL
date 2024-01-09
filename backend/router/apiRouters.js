@@ -1144,10 +1144,16 @@ function createAPIRouter(client, wss) {
 		try {
 			const user = req.session.user;
 			const data = req.query;
+			let cls = null;
+
+			// if ((data.type === "singe") & user.pow[0]) {
+			// 	cls = [user.cls];
+			// }
+
 			if ((data.type === "all") & (user.pow[1] || user.pow[2])) {
 				//data = {year: "HK1_2022-2023", cls: '1', stdlist: []}
 				const school_year = data.year;
-				let cls = data.cls;
+				cls = data.cls;
 				// create uuid for download file
 				const uuid = uuidv4();
 				const stdlist = JSON.parse(data.stdlist);
