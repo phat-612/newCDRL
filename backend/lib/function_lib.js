@@ -10,7 +10,21 @@ const archiver = require("archiver");
 const { v4: uuidv4 } = require("uuid");
 const PdfPrinter = require("pdfmake");
 const util = require("util");
+
+const bcrypt = require('bcrypt');
+const saltRounds = 10; 
 // ------------------------------------------------------------------------------------------------
+
+// Hàm để hash mật khẩu
+function hashPassword(password) {
+  return bcrypt.hashSync(password, saltRounds);
+}
+
+// Hàm để so sánh mật khẩu đã nhập với mật khẩu đã hash
+function comparePassword(inputPassword, hashedPassword) {
+  return bcrypt.compareSync(inputPassword, hashedPassword);
+}
+
 async function sendEmail(password, email) {
   try {
     const transporter = nodemailer.createTransport({
@@ -1047,4 +1061,6 @@ module.exports = {
   createId,
   deleteClassApi,
   createPdf,
+  comparePassword,
+  hashPassword,
 };
