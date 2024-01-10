@@ -1831,6 +1831,7 @@ function createAPIRouter(client, wss) {
 			if (user.pow[6]) {
 				const data = req.body; // data = {sch_y: "HK1_2022-2023", start_day: '18/10/2023', end_day: '19/11/999999999999999999']}
 
+				console.log(data)
 				// set end day to special date if it is ''
 				if (!data.end_day) {
 					data.end_day = "2003-10-18"; // special date

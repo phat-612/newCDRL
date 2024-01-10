@@ -261,7 +261,7 @@ h2 {
   font-weight: 600;
 }
 
-input[type="date"] {
+input[type="datetime-local"] {
   background-color: var(--button-color);
   padding: 5px;
   font-family: "Roboto Mono", monospace;

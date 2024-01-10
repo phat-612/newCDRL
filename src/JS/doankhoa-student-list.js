@@ -123,7 +123,6 @@ $(document).ready(() => {
         console.log(err);
       });
     } else {
-      console.log('aa');
       await getStudentList().then((students) => {
         renderTable(students, 0);
       }, (err) => {
@@ -211,7 +210,12 @@ $(document).ready(() => {
       $('.js_tbody').empty();
       renderTable(dataStudents[cls], 0); // class is full dont need to load it any more
     } else {
-      if (!!dataStudents[cls]) renderTable(dataStudents[cls], 0);
+      console.log(dataStudents[cls])
+      if ( 
+        dataStudents[cls]
+        && (Object.keys(dataStudents[cls]).length !== 0 
+        || dataStudents[cls].constructor !== Object) 
+      ) renderTable(dataStudents[cls], 0);
       else loadStudents(true); // this class not full need to load more
     }
   });
@@ -497,7 +501,6 @@ $(document).ready(() => {
     skip[cls] != -1 && 
     !loading) {
       loading = true;
-      console.log('bb');
       loadStudents(false);
     }
   });
