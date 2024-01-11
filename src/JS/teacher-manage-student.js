@@ -1,5 +1,3 @@
-
-
 $(document).ready(() => {
   const inpMssv = $("#md_mssv")
   const inpHo = $("#md_ho")
@@ -206,7 +204,7 @@ $(document).ready(() => {
     $('.js_md_add').text('Cập nhật');
   }
 
-  $('.js_lop').on('change', async (event) => {
+  $('.js_lop').change(async (event) => {
     cls = event.target.value;
     $("#row0")[0].checked = false;
     if (skip[cls] == -1) {

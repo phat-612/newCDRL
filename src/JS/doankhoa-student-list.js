@@ -1,5 +1,3 @@
-
-
 $(document).ready(() => {
   const inpMssv = $("#md_mssv")
   const inpHo = $("#md_ho")
@@ -71,7 +69,7 @@ $(document).ready(() => {
   }
 
   async function renderTable(students, start) {
-    if (students.length - start != 0) {
+    if (students && students.length - start != 0) {
       let htmls = [];
       for (let i = start; i < students.length; i++) {
         htmls.push(`
@@ -106,7 +104,7 @@ $(document).ready(() => {
         $(".modal.add").show();
       });
     }
-    else {
+    else if (students && students.length - start == 0) {
       $('.js_tbody').empty()
     }
     handleCheckboxChange();
@@ -117,10 +115,9 @@ $(document).ready(() => {
     if (new_one) {
       $('.js_tbody').empty();
     }
-
+    
     if (dataStudents.hasOwnProperty(cls)) {
       await getStudentList().then((students) => {
-
         renderTable(students, 30 * (skip[cls]));
       }, (err) => {
         console.log(err);
@@ -213,18 +210,31 @@ $(document).ready(() => {
       $('.js_tbody').empty();
       renderTable(dataStudents[cls], 0); // class is full dont need to load it any more
     } else {
-      loadStudents(true); // this class not full need to load more
+      console.log(dataStudents[cls])
+      if ( 
+        dataStudents[cls]
+        && (Object.keys(dataStudents[cls]).length !== 0 
+        || dataStudents[cls].constructor !== Object) 
+      ) renderTable(dataStudents[cls], 0);
+      else loadStudents(true); // this class not full need to load more
     }
   });
 
   $("#add-student").click(function () {
-    $(".modal.add").show();
+    if (cls == 0 || !cls) {
+      notify('!', 'Vui lòng chọn lớp')
+      return;
+    } else {
+      $(".modal.add").show();
+    }
   });
+
   $(".modal.add").click(function () {
     $(".modal.add").hide();
     $('.js_md_add').text('Thêm');
     clearModal();
   });
+
   $(".modal_wrap.add").click(function (e) {
     e.stopPropagation();
   });
@@ -235,75 +245,63 @@ $(document).ready(() => {
     clearModal();
   });
 
-  // them tung sinh vien
+  // them tung sinh vien/ Cap nhat quyen sinh vien
   $('.js_md_add').on('click', async () => {
-    if (cls == 0) {
-      notify('!', 'Vui lòng chọn lớp')
-      return
-    }
-    try {
-      let updateStudent = $('.js_md_add').text() == 'Cập nhật';
-      let postData = JSON.stringify({
-        mssv: inpMssv.val(),
-        ho: inpHo.val(),
-        ten: inpTen.val(),
-        vaitro: inpVt.val(),
-        dangvien: inpDv.prop('checked'),
-        chamdiem: inpCd.prop('checked'),
-        lbhd: inpLbhd.prop('checked'),
-        cls,
-        updateStudent
-      });
-      const requestOptions = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: postData
-      };
-      const response = await fetch('/api/createAccount', requestOptions);
-      if (response.ok) {
+    if (!inpMssv.val() && !inpHo.val() && !inpTen.val()) {
+      notify('!', 'Vui lòng điền đầy đủ thông tin')
+      return;
+    } else {
+      try {
+        let updateStudent = $('.js_md_add').text() == 'Cập nhật';
+        let postData = JSON.stringify({
+          mssv: inpMssv.val(),
+          ho: inpHo.val(),
+          ten: inpTen.val(),
+          vaitro: inpVt.val(),
+          dangvien: inpDv.prop('checked'),
+          chamdiem: inpCd.prop('checked'),
+          lbhd: inpLbhd.prop('checked'),
+          cls
+        });
+        const requestOptions = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: postData
+        };
         if (!updateStudent) {
-
-
-          new Promise(() => {
+          const response = await fetch('/api/createAccount', requestOptions);
+          if (response.ok) {
             delete dataStudents[cls]; // clear data
             delete skip[cls]; // reset to load again
-            return true;
-          }).then(
-            loadStudents(true),
-            (err) => console.log(err)
-          )
-          notify('n', 'Thêm sinh viên thành công');
-          const blobUrl = URL.createObjectURL(await response.blob());
+            await loadStudents(true);
 
-          URL.revokeObjectURL(blobUrl);
-          $('.js_md_add').text('Thêm');
+            notify('n', 'Thêm sinh viên thành công');
+            const blobUrl = URL.createObjectURL(await response.blob());
+
+            URL.revokeObjectURL(blobUrl);
+            $('.js_md_add').text('Thêm');
+          } else {
+            notify('!', 'Thêm sinh viên thất bại')
+          }
         } else {
+          const response = await fetch('/api/updateAccount', requestOptions);
+          if (response.ok) {
+            delete dataStudents[cls]; // clear data
+            delete skip[cls]; // reset to load again
+            await loadStudents(true);
   
-
-          new Promise(() => {
-            delete dataStudents[cls]; // clear data
-            delete skip[cls]; // reset to load again
-            return true;
-          }).then(
-            loadStudents(true),
-            (err) => console.log(err)
-          )
-
-          notify('n', 'Cập nhật sinh viên thành công')
+            notify('n', 'Cập nhật sinh viên thành công');
+          } else {
+            notify('!', 'Cập nhật sinh viên thất bại')
+          }
         }
-      } else {
-        if (updateStudent) {
-          notify('!', 'Thêm sinh viên thất bại')
-        } else {
-          notify('!', 'Cập nhật sinh viên thất bại')
-        }
+        $(".modal.add").hide();
+        clearModal()
+      } catch (error) {
+        console.log(error);
       }
-      $(".modal.add").hide();
-      clearModal()
-    } catch (error) {
-      console.log(error);
     }
   })
 
@@ -316,6 +314,7 @@ $(document).ready(() => {
       $('#md_lbhd').prop('checked', false);
     }
   });
+
   $('#md_cd').change(async function () {
     if ($('#md_cd').prop('checked') || $('#md_lbhd').prop('checked')) {
       $('#md_vt').val('1');
@@ -323,6 +322,7 @@ $(document).ready(() => {
       $('#md_vt').val('0');
     }
   });
+
   $('#md_lbhd').change(async function () {
     if ($('#md_cd').prop('checked') || $('#md_lbhd').prop('checked')) {
       $('#md_vt').val('1');
@@ -496,7 +496,10 @@ $(document).ready(() => {
 
   // Scroll to the end of page 
   $(window).scroll(async function () {
-    if (($(window).scrollTop() + $(window).height() > $(document).height() - 10) && skip[cls] != -1 && !loading) {
+    if (($(window).scrollTop() > 100) && 
+    ($(window).scrollTop() + $(window).height() > $(document).height() - 10) && 
+    skip[cls] != -1 && 
+    !loading) {
       loading = true;
       loadStudents(false);
     }

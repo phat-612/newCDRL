@@ -105,18 +105,18 @@
       <h2>Lên Lịch</h2>
       <div class="content">
         <div class="input-container time_start">
-          <label for="">Thời gian bắt đầu </label>
+          <label for="">Bắt đầu:</label>
           <div class="selectbox">
-            <input type="date" class="time start_time" value="<%= school_year.start_day.toISOString().substring(0,10) %>">
+            <input type="datetime-local" class="time start_time" value="<%= school_year.start_day.toISOString().substring(0,19) %>">
           </div>
         </div>
         <div class="input-container time_end">
-          <label for="">Thời gian kết thúc</label>
+          <label for="">Kết thúc:</label>
           <div class="selectbox">
             <% if (school_year.end_day) {%>
-            <input type="date" class="end_time" value="<%= school_year.end_day.toISOString().substring(0,10) %>">
+              <input type="datetime-local" class="end_time" value="<%= school_year.end_day.toISOString().substring(0,19) %>">
             <% } else { %>
-            <input type="date" class="end_time">
+              <input type="datetime-local" class="end_time">
             <% } %>
           </div>
         </div>

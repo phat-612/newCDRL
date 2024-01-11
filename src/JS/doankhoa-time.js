@@ -4,6 +4,7 @@ function update_cbx() {
   const start_date = new Date($('.start_time').val()).getTime();
   const end_date = new Date($('.end_time').val()).getTime();
 
+
   if (start_date <= end_date || !$('.end_time').val()) {
     if (start_date <= curr_date && (curr_date <= end_date || !$('.end_time').val())) {
       $('.inp-cbx').prop('checked', true);
@@ -25,9 +26,10 @@ function update_cbx() {
 $('.inp-cbx').change(function () {
   // find yesterday
   let now = new Date();
-  let day = ("0" + now.getDate()).slice(-2);
+  let day = ("0" + (now.getDate()-1)).slice(-2);
   let month = ("0" + (now.getMonth() + 1)).slice(-2);
-  let yesterday = now.getFullYear()+"-"+(month)+"-"+(day - 1) ;
+  let yesterday = now.getFullYear()+"-"+(month)+"-"+(day)+"T00:00:00";
+  console.log(yesterday);
 
   if (this.checked) {
     // set start date to yesterday and set end date to foreverday
@@ -61,16 +63,14 @@ $(document).on("click", ".setd_btn", () => {
   update_cbx();
 })
 
-
-
 $(document).on("click", ".save-btn", SaveButtonClick);
 async function SaveButtonClick(event) {
   event.preventDefault();
   try {
     const HK = $('#mySelect1').val();
     const school_year = $('#mySelect2').val();
-    const start_day = $('.start_time').val();
-    const end_day = $('.end_time').val();
+    const start_day = $('.start_time').val()+":00.000Z";
+    const end_day = $('.end_time').val()+":00.000Z";
 
     let data = JSON.stringify({
       sch_y: `HK${HK}_${school_year}`,

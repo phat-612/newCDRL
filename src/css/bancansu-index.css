@@ -73,3 +73,6 @@ td {
   display: flex;
   flex-direction: column;
 }
+.container__table{
+  padding: 1rem;
+}
