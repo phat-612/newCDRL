@@ -1,154 +1,149 @@
 /* popup */
 
 :root {
-  --color_i: #000
+    --color_i: #000;
 }
 
 .toast {
-  z-index: 99999999999999999;
-  display: flex;
-  position: fixed;
-  top: 17%;
-  right: 3rem;
-  border-radius: 1.2rem;
-  background: var(--white-color);
-  padding: 2rem 3.5rem 2rem 2.5rem;
-  box-shadow: 0 0.6rem 2rem -0.5rem rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  transform: translateX(calc(100% + 3rem));
-  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.35);
-  box-shadow: 20px 10px rgba(0, 0, 0, .15);
+    z-index: 99999999999999999;
+    display: flex;
+    position: fixed;
+    top: 17%;
+    right: 3rem;
+    border-radius: 1.2rem;
+    background: var(--white-color);
+    padding: 2rem 3.5rem 2rem 2.5rem;
+    box-shadow: 0 0.6rem 2rem -0.5rem rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transform: translateX(calc(100% + 3rem));
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.35);
+    box-shadow: 20px 10px rgba(0, 0, 0, 0.15);
 }
 
 .toast:hover {
-  box-shadow: 13px 8px rgba(0, 0, 0, .15);
-
+    box-shadow: 13px 8px rgba(0, 0, 0, 0.15);
 }
 
 .toast.active {
-  transform: translateX(0%);
+    transform: translateX(0%);
 }
 
 .toast .toast-content {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 .icon-right {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 3.5rem;
-  min-width: 3.5rem;
-  font-size: 2rem;
-  border-radius: 50%;
-  border: 3px solid var(--color_i);
-  color: var(--color_i);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 3.5rem;
+    min-width: 3.5rem;
+    font-size: 2rem;
+    border-radius: 50%;
+    border: 3px solid var(--color_i);
+    color: var(--color_i);
 }
-.button{
-
-  gap: 1rem;
-  justify-content: flex-end;
-  display: none;
+.button {
+    gap: 1rem;
+    justify-content: flex-end;
+    display: none;
 }
-.button .button-35{
-  margin: 0 !important;
+.button .button-35 {
+    margin: 0 !important;
 }
 
 .toast-content .message {
-  display: flex;
-  flex-direction: column;
-  margin: 0 2rem;
+    display: flex;
+    flex-direction: column;
+    margin: 0 2rem;
 }
 
 .message .text {
-  font-size: 1.6rem;
-  font-weight: 400;
-  color: var(--black-color);
-  opacity: .5;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--black-color);
+    opacity: 0.5;
 }
 
 .text-2 {
-  width: 290px;
+    width: 290px;
 }
 
 .message .text.text-1 {
-  font-weight: 600;
-  color: #333;
-  opacity: 1;
+    font-weight: 600;
+    color: #333;
+    opacity: 1;
 }
 
 .toast .close1 {
-  padding: 0.5rem;
-  cursor: pointer;
-  opacity: 0.7;
-  color: black;
+    padding: 0.5rem;
+    cursor: pointer;
+    opacity: 0.7;
+    color: black;
 }
 
 #close_thongbao {
-  font-size: 17px;
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  cursor: pointer;
-  color: var(--black-color);
+    font-size: 17px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    cursor: pointer;
+    color: var(--black-color);
 }
 
 .toast .close1:hover {
-  opacity: 1;
+    opacity: 1;
 }
 
 .toast .progress {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 0.3rem;
-  width: 100%;
-  background-color: var(--color_i);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 0.3rem;
+    width: 100%;
+    background-color: var(--color_i);
 }
 
 .toast .progress:before {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  right: 200%;
-  height: 100%;
-  width: 100%;
-  background-color: rgb(161, 161, 161);
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 200%;
+    height: 100%;
+    width: 100%;
+    background-color: rgb(161, 161, 161);
 }
-
-
 
 @keyframes progress {
-  100% {
-    right: 0;
-  }
+    100% {
+        right: 0;
+    }
 }
 
-.button{
-  margin-top: 1rem;
+.button {
+    margin-top: 1rem;
 }
 /* popup */
 
-
-@media screen and (max-width:600px) {
-  .toast {
-    right: 1rem;
-    left: 1rem;
-    transform: translateY(calc(100% + -30rem));
-    top: -8%;
-  }
-  .toast.active {
-    transform: translateY(100%);
-  }
-  .not{
-    width: 11rem;
-  }
-  .ok{
-    width: 11rem;
-  }
-  .button{
-    margin-top: 1rem;
-    justify-content: center;
-  }
+@media screen and (max-width: 600px) {
+    .toast {
+        right: 1rem;
+        left: 1rem;
+        transform: translateY(calc(100% + -30rem));
+        top: -8%;
+    }
+    .toast.active {
+        transform: translateY(100%);
+    }
+    .not {
+        width: 11rem;
+    }
+    .ok {
+        width: 11rem;
+    }
+    .button {
+        margin-top: 1rem;
+        justify-content: center;
+    }
 }

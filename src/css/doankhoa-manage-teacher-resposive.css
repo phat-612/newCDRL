@@ -1,5 +1,5 @@
 @media screen and (max-width: 600px) {
-    table{
+    table {
         width: 65rem;
     }
     .content--button {
@@ -10,32 +10,32 @@
     .button-35 {
         width: 100%;
     }
-    .content input{
+    .content input {
         display: block;
         margin: 0 auto;
         width: 75%;
     }
-    .add_teacher_lable{
+    .add_teacher_lable {
         width: 50%;
     }
-    .content.title h2{
+    .content.title h2 {
         padding: 1rem;
     }
-    .content.title{
+    .content.title {
         margin-bottom: 0;
     }
-    .content_main label,.content h3{
+    .content_main label,
+    .content h3 {
         margin-bottom: 1rem;
         display: block;
     }
-    .content{
+    .content {
         margin: 0;
     }
-     .exist_btn{
+    .exist_btn {
         padding: 2rem 4.2rem !important;
-     }
-     .save_btn{
+    }
+    .save_btn {
         padding: 2rem 4.2rem !important;
-     }
-    
+    }
 }

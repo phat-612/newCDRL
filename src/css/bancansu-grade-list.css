@@ -1,147 +1,144 @@
 * {
-  padding: 0;
-  margin: 0;
-  box-sizing: content-box;
+    padding: 0;
+    margin: 0;
+    box-sizing: content-box;
 }
 
 .content {
-  margin-top: 2rem;
-  max-width: 91rem;
-  margin-left: auto;
-  margin-right: auto;
-
+    margin-top: 2rem;
+    max-width: 91rem;
+    margin-left: auto;
+    margin-right: auto;
 }
-
 
 .content .hk_nk {
-  font-size: 2rem;
-  position: relative;
-  padding: 1rem;
-  gap: 70px;
-  justify-content: flex-start !important;
+    font-size: 2rem;
+    position: relative;
+    padding: 1rem;
+    gap: 70px;
+    justify-content: flex-start !important;
 }
 .year_full {
-
-  padding-bottom: 1rem;
+    padding-bottom: 1rem;
 }
-.hk{
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
+.hk {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
 }
-.hk span{
-  width: 100px;
+.hk span {
+    width: 100px;
 }
 .danh_sach_bang_diem {
-  margin-top: 2rem;
-  padding: 1rem;
-  background-color: var(--white-color);
-  font-size: 1.6rem;
-  border-radius: 0.8rem;
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: var(--white-color);
+    font-size: 1.6rem;
+    border-radius: 0.8rem;
 }
 .danh_sach_bang_diem .control {
-  display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
 }
 .danh_sach_bang_diem .chu_thich {
-  margin: 2rem 0;
+    margin: 2rem 0;
 }
 
 .danh_sach_bang_diem .dau_sao {
-  text-align: center;
-  display: inline-block;
-  color: red;
-  width: 1.5rem;
+    text-align: center;
+    display: inline-block;
+    color: red;
+    width: 1.5rem;
 }
 
 .danh_sach_bang_diem .mau_vang {
-  display: inline-block;
-  border-radius: 0.3rem;
-  width: 1.5rem;
-  height: 1.5rem;
-  background-color: var(--mauvang-ne);
+    display: inline-block;
+    border-radius: 0.3rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: var(--mauvang-ne);
 }
 
 .new_update {
-  background-color: var(--mauvang-ne);
+    background-color: var(--mauvang-ne);
 }
 /* css table */
 table,
 th,
 td {
-  border: 1px solid var(--black-color);
-  border-collapse: collapse;
+    border: 1px solid var(--black-color);
+    border-collapse: collapse;
 }
 th {
-  font-size: 2rem;
+    font-size: 2rem;
 }
 td {
-  font-size: 1.6rem;
-  text-align: center;
+    font-size: 1.6rem;
+    text-align: center;
 }
 th,
 td {
-  padding: 1rem;
+    padding: 1rem;
 }
 table tr td:nth-child(4) {
-  text-transform: uppercase;
-  text-align: center;
+    text-transform: uppercase;
+    text-align: center;
 }
 table tr td:nth-child(7) {
-  text-align: center;
+    text-align: center;
 }
 table tr td:nth-child(9) {
-  padding: 0;
+    padding: 0;
 }
 table tr td:nth-child(9) a {
-  text-decoration: none;
-  color: var(--login-a);
-  cursor: pointer;
+    text-decoration: none;
+    color: var(--login-a);
+    cursor: pointer;
 }
-.button-35-a{
-  position: absolute!important;
+.button-35-a {
+    position: absolute !important;
     top: 20%;
     right: 20%;
 }
 
 @media screen and (max-width: 600px) {
-  .year_full{
-    display: block;
-    padding: 0 1rem;
-    width: 100%;
-  }
-  .hk{
-    width: 100%;
-    margin-bottom:0;
-  }
-  .danh_sach_bang_diem{
-    overflow: auto;
-  }
-  .content .hk_nk{
-    padding: 0 0.5rem;
-    gap: 0;
-  }
-  .year_full {
-    flex-direction: column;
-  }
+    .year_full {
+        display: block;
+        padding: 0 1rem;
+        width: 100%;
+    }
+    .hk {
+        width: 100%;
+        margin-bottom: 0;
+    }
+    .danh_sach_bang_diem {
+        overflow: auto;
+    }
+    .content .hk_nk {
+        padding: 0 0.5rem;
+        gap: 0;
+    }
+    .year_full {
+        flex-direction: column;
+    }
 
-  .button-35-a {
-    position: revert !important;
-    width: 95%;
+    .button-35-a {
+        position: revert !important;
+        width: 95%;
 
-    margin: 1rem !important;
-  }
-  .--bomon {
-    width: 80%;
-  }
-  .--class {
-    width: 100%;
-  }
-  .hk span {
-    width: 25%;
-  }
-  .hk {
-    width: 100%;
-    justify-content: space-around;
-  }
+        margin: 1rem !important;
+    }
+    .--bomon {
+        width: 80%;
+    }
+    .--class {
+        width: 100%;
+    }
+    .hk span {
+        width: 25%;
+    }
+    .hk {
+        width: 100%;
+        justify-content: space-around;
+    }
 }

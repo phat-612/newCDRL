@@ -1,171 +1,160 @@
 html {
-  font-size: 62.5%;
+    font-size: 62.5%;
 }
 
 * {
-  padding: 0;
-  margin: 0;
-  box-sizing: content-box;
+    padding: 0;
+    margin: 0;
+    box-sizing: content-box;
 }
-
 
 /* css tra cứu */
 .box-table {
-  margin-top: 2rem;
-  max-width: 90rem;
-  background-color: var(--white-color);
-  margin-left: auto;
-  margin-right: auto;
-  border-radius: 0.8rem;
-  padding-bottom: 20px;
+    margin-top: 2rem;
+    max-width: 90rem;
+    background-color: var(--white-color);
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 0.8rem;
+    padding-bottom: 20px;
 }
-  
 
-
-
-.content{
-  padding: 1rem;
+.content {
+    padding: 1rem;
 }
 
 th {
-  font-size: 2rem;
+    font-size: 2rem;
 }
 
 td {
-  font-size: 1.6rem;
-  text-align: center;
+    font-size: 1.6rem;
+    text-align: center;
 }
 
 th,
 td {
-  padding: 1rem;
+    padding: 1rem;
 }
-
 
 /* css table */
 table,
 th,
 td {
-  border: 1px solid var(--black-color);
-  border-collapse: collapse;
+    border: 1px solid var(--black-color);
+    border-collapse: collapse;
 }
 
 th {
-  font-size: 2rem;
+    font-size: 2rem;
 }
 
 td {
-  font-size: 1.6rem;
-  text-align: center;
+    font-size: 1.6rem;
+    text-align: center;
 }
 
 th,
 td {
-  padding: 1rem;
+    padding: 1rem;
 }
-
 
 .table {
-  margin-top: 3rem;
-
+    margin-top: 3rem;
 }
-table{
-  margin: 0px auto !important;
+table {
+    margin: 0px auto !important;
 }
 /* modal */
 .modal {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: var(--modal-color);
-  display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--modal-color);
+    display: none;
 }
 
 .modal_wrap {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  max-width: 800px;
-  width: 45%;
-  background: var(--white-color);
-  border-radius: 0.8rem;
-  transform: translate(-50%, -50%);
-
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    max-width: 800px;
+    width: 45%;
+    background: var(--white-color);
+    border-radius: 0.8rem;
+    transform: translate(-50%, -50%);
 }
 
 .modal_main {
-  padding: 2.8rem 3.8rem 1.2rem;
-  height: fit-content;
-  overflow: auto;
+    padding: 2.8rem 3.8rem 1.2rem;
+    height: fit-content;
+    overflow: auto;
 }
-
 
 .input--label {
-  width: 20rem;
-  font-size: 2rem;
-  font-weight: 600;
+    width: 20rem;
+    font-size: 2rem;
+    font-weight: 600;
 }
-
 
 /* content title */
 
 .content__title {
-  font-size: 2.8rem;
-  margin-bottom: 2rem;
-  background-color: var(--td-a);
-  display: inline-block;
-  padding: 1.6rem 2.7rem 1.6rem 6rem;
-  border-radius: 0.8rem;
-  left: -4rem;
-  position: absolute;
+    font-size: 2.8rem;
+    margin-bottom: 2rem;
+    background-color: var(--td-a);
+    display: inline-block;
+    padding: 1.6rem 2.7rem 1.6rem 6rem;
+    border-radius: 0.8rem;
+    left: -4rem;
+    position: absolute;
 }
 
 /* content subject */
 .content--subject,
 .content--department {
-  display: flex;
-  align-items: center;
-  margin: 0rem 2rem 2rem 2rem;
+    display: flex;
+    align-items: center;
+    margin: 0rem 2rem 2rem 2rem;
 }
-td a{
-  cursor: pointer;
+td a {
+    cursor: pointer;
 }
-.content--department{
-  justify-content: flex-end;
+.content--department {
+    justify-content: flex-end;
 }
 .content--subject {
-  margin-top: 7rem;
+    margin-top: 7rem;
 }
 
 /* input text */
 .content__subject.subject--input {
-  flex: 1;
-  line-height: 4rem;
-  padding: 0 2rem;
-  border-radius: 0.3em;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  background-color: var(--input-hover);
-  transition: box-shadow 0.1s linear;
+    flex: 1;
+    line-height: 4rem;
+    padding: 0 2rem;
+    border-radius: 0.3em;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    background-color: var(--input-hover);
+    transition: box-shadow 0.1s linear;
 }
 
-
 .content__department {
-  font-size: 1.8rem;
-  margin-top: 2rem;
+    font-size: 1.8rem;
+    margin-top: 2rem;
 }
 
 .content--button {
-  display: flex;
-  margin: 3rem 0rem 0rem 20rem;
-  justify-content: flex-end;
+    display: flex;
+    margin: 3rem 0rem 0rem 20rem;
+    justify-content: flex-end;
 }
 
 .content__subject.subject--input:hover {
-  background-color: var(--white-color);
+    background-color: var(--white-color);
 }
 
 .content__subject.subject--input::placeholder {
-  color: #767676;
+    color: #767676;
 }

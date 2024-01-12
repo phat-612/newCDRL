@@ -1,80 +1,79 @@
 html {
     font-size: 62.5%;
     position: relative;
-  }
-  body {
+}
+body {
     margin: 0;
-  }
-  
-  /* css table */
-  table *{
+}
+
+/* css table */
+table * {
     margin: 0;
     padding: 0;
-  }
-  table, th, td {
+}
+table,
+th,
+td {
     border: 1px solid #aeaeae;
     border-collapse: collapse;
     font-weight: 600;
-  }
-  tr{
+}
+tr {
     min-height: 5rem;
-  }
-  th{
+}
+th {
     font-size: 2rem;
     padding: 1rem;
-  }
-  td{
-  font-size: 1.6rem;
-  text-align: center;
-  
-  }
-  td:nth-child(1){
+}
+td {
+    font-size: 1.6rem;
+    text-align: center;
+}
+td:nth-child(1) {
     text-align: left;
     padding: 1.2rem 1rem 1.2rem 1.5rem;
-  }
-  td:nth-child(2){
+}
+td:nth-child(2) {
     font-weight: bold;
-  }
-  
-  tr:nth-child(13), tr:nth-child(21), tr:nth-child(28), tr:nth-child(33), tr:nth-child(41), tr:nth-child(42){
+}
+
+tr:nth-child(13),
+tr:nth-child(21),
+tr:nth-child(28),
+tr:nth-child(33),
+tr:nth-child(41),
+tr:nth-child(42) {
     color: rgb(255, 75, 75);
     font-size: 1.8rem;
-  }
-  td .title{
+}
+td .title {
     font-size: 2rem;
     font-weight: bold;
-  }
-  
-  
-  
-  
-  
-  .main-content {
+}
+
+.main-content {
     border-radius: 0.8rem;
     background-color: var(--white-color);
     width: 115.5rem;
     max-width: 95%;
     margin-top: 3rem;
     padding: 1rem;
-  }
-  .tittle-table {
+}
+.tittle-table {
     margin: 0;
     padding: 3rem 0;
     font-size: 4rem;
     text-align: center;
-  }
-  
-  
-  
-  
-  .modal_wrap_img_item:hover p {
+}
+
+.modal_wrap_img_item:hover p {
     top: 75%;
-  }
-  .modal_wrap_img_item:hover .up-img-btn {
+}
+.modal_wrap_img_item:hover .up-img-btn {
     z-index: 3;
-  }
-  
-  .modal_wrap_img_item p {
+}
+
+.modal_wrap_img_item p {
     position: absolute;
     z-index: 4;
     top: 100%;
@@ -83,10 +82,9 @@ html {
     transition: 0.3s top ease-in-out;
     background-color: #aeaeae;
     border-radius: 0.8rem;
-  
-  }
-  
-  .modal_wrap_img_item {
+}
+
+.modal_wrap_img_item {
     width: 20rem;
     height: 20rem;
     position: relative;
@@ -94,9 +92,9 @@ html {
     cursor: pointer;
     border: 0.2rem dashed var(--black-color);
     border-radius: 0.8rem;
-  }
-  
-  .up-img {
+}
+
+.up-img {
     width: 100%;
     height: 100%;
     background: transparent;
@@ -107,53 +105,49 @@ html {
     margin: 0;
     z-index: 2;
     position: absolute;
-  }
-  
-  .up-img:active {
+}
+
+.up-img:active {
     background: #9d9d9d;
-  }
-  
-  .button-35.up-btn {
+}
+
+.button-35.up-btn {
     padding: 1rem 4rem;
-  }
-  .post-btn{
+}
+.post-btn {
     display: none;
-  }
-  
-  .up-img i {
+}
+
+.up-img i {
     font-size: 2rem;
     color: #515050;
-  }
-  .row_type_1 {
+}
+.row_type_1 {
     background-color: #f1f1f1;
     font-size: 1.5rem;
-  }
-  
-  .row_type_2 {
+}
+
+.row_type_2 {
     font-size: 1.5rem;
-  }
-  
-  .comboMark {
+}
+
+.comboMark {
     padding: 0;
     justify-content: center;
     border: 0.075rem solid;
-  }
-  
-  
-  
-  
-  
-  .modal {
+}
+
+.modal {
     width: 100%;
     height: 100%;
     position: fixed;
     top: 0;
     display: none;
     background-color: var(--modal-color);
-  }
-  
-  /* CSS cho dialog thêm ảnh */
-  .modal_wrap {
+}
+
+/* CSS cho dialog thêm ảnh */
+.modal_wrap {
     position: relative;
     bottom: 45rem;
     top: 50%;
@@ -164,9 +158,9 @@ html {
     height: 50rem;
     transform: translate(-50%, -50%);
     background-color: var(--modal-color);
-  }
-  
-  .close-dialog {
+}
+
+.close-dialog {
     position: absolute;
     top: 0rem;
     right: 0rem;
@@ -176,9 +170,9 @@ html {
     border: 0;
     background-color: transparent;
     cursor: pointer;
-  }
-  
-  .drop_img {
+}
+
+.drop_img {
     width: 4.5rem;
     cursor: pointer;
     display: flex;
@@ -192,59 +186,59 @@ html {
     color: #5c5c5c;
     border-radius: 0.8rem;
     transition: background 0.3s ease-in-out;
-  }
-  
-  .complete_img {
+}
+
+.complete_img {
     display: flex;
     justify-content: flex-end;
     padding: 1rem 1rem 1rem 0;
-  }
-  
-  .drop_img:hover {
+}
+
+.drop_img:hover {
     background: #9e9e9e;
     color: var(--white-color);
-  }
-  
-  .row-type {
+}
+
+.row-type {
     text-align: center;
-  }
-  
-  .row-type th:first-child {
+}
+
+.row-type th:first-child {
     text-align: left;
     padding-left: 1rem;
     min-height: 5rem;
-  }
-  
-  .modal_wrap {
+}
+
+.modal_wrap {
     border-radius: 0.8rem;
-  }
-  
-  .modal_img {
+}
+
+.modal_img {
     margin-top: 4rem;
     height: 80%;
     overflow: auto;
-  }
-  
-  .no-img {
+}
+
+.no-img {
     text-align: center;
     font-size: 2rem;
     background-color: #d4d1d1;
-  }
-  
-  .modal_wrap_img {
+}
+
+.modal_wrap_img {
     background-color: #f6f6f6;
     display: flex;
     justify-content: space-between;
     padding: 1rem 2rem;
     margin: 0 1rem;
     border-radius: 0.5rem;
-  }
-  
-  .description {
+}
+
+.description {
     width: 50%;
-  }
-  
-  .up-img-description {
+}
+
+.up-img-description {
     width: 68%;
 
     border: 0.1rem solid;
@@ -252,13 +246,13 @@ html {
     padding: 1rem 2rem;
     box-sizing: border-box;
     font-size: 1.7rem;
-  }
-  
-  textarea::placeholder {
+}
+
+textarea::placeholder {
     font-size: 1.5rem;
-  }
-  
-  .up-img-btn {
+}
+
+.up-img-btn {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -267,10 +261,9 @@ html {
     color: #667580;
     cursor: pointer;
     background-color: transparent;
-  
-  }
-  
-  .modal_img_btn {
+}
+
+.modal_img_btn {
     background-color: #aeaeae;
     height: 16%;
     display: flex;
@@ -278,72 +271,67 @@ html {
     align-items: center;
     border-bottom-left-radius: 0.8rem;
     border-bottom-right-radius: 0.8rem;
-  }
-  
-  .modal_img_btn button {
+}
+
+.modal_img_btn button {
     padding: 1rem 4rem;
-  }
-  .done-btn:last-child {
+}
+.done-btn:last-child {
     margin: 0;
-  }
-  
-  
-  
-  /*------------------- combo box -------------------*/
-  td .select select{
+}
+
+/*------------------- combo box -------------------*/
+td .select select {
     background-color: inherit;
     padding: 0;
-  }
-  td .select::after{
+}
+td .select::after {
     top: 6%;
     right: 20%;
-  }
-  
-  .m-auto {
-    margin: 3rem auto 6rem;
-  }
-  .mdl-js {
-    background-color: var(--html-color);
-  }
+}
 
-  .main_img{
+.m-auto {
+    margin: 3rem auto 6rem;
+}
+.mdl-js {
+    background-color: var(--html-color);
+}
+
+.main_img {
     margin-top: 5rem;
     padding: 0 2rem;
-  }
-.main_img_list{
-  margin-top: 3rem;
 }
-  .main_img_item{
+.main_img_list {
+    margin-top: 3rem;
+}
+.main_img_item {
     text-align: center;
     font-size: 2rem;
     padding-bottom: 2rem;
-  }
-  .main_img_item img{
-    border: 1px solid ;
+}
+.main_img_item img {
+    border: 1px solid;
     margin-bottom: 1rem;
     width: 300px;
-  }
-  
+}
+
 .level_title {
-  font-size: 2.5rem;
-  padding: 10px;
-  text-align: center;
+    font-size: 2.5rem;
+    padding: 10px;
+    text-align: center;
 }
 .act_name_title {
-  text-align: center;
-  font-size: 2rem;
-  padding: 1rem;
-  background-color: #56bec9;
-  margin: 2rem 20rem;
-  border-radius: 1rem;
+    text-align: center;
+    font-size: 2rem;
+    padding: 1rem;
+    background-color: #56bec9;
+    margin: 2rem 20rem;
+    border-radius: 1rem;
 }
-.active_con{
-  border: 1px solid var(--black-color);
-  border-radius: 5px;
+.active_con {
+    border: 1px solid var(--black-color);
+    border-radius: 5px;
 }
-.active_item{
-  margin-bottom: 2rem;
+.active_item {
+    margin-bottom: 2rem;
 }
-  
-  
-  
