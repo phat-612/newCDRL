@@ -14,7 +14,7 @@ $(document).on('click', '#edit__class', async function () {
     // set combo box of edit one to curr branch
     const curr_branch = curr_edit.find('.b_name').text();
     $('.modal.edit #select-level option').each(function () {
-        if ($(this).text() == curr_branch) {
+        if ($(this).text().trim() == curr_branch) {
             // check for option that equal to curr branch
             $(this).prop('selected', 'selected'); // sellect this option
         }

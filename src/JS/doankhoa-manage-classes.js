@@ -13,14 +13,14 @@ $(document).on('click', '#edit__class', async function () {
 
     // branch
     $('.bo_mon #select-level option').each(function () {
-        if ($(this).text() == curr_edit.find('.b_name').text()) {
+        if ($(this).val() == curr_edit.find('.b_name').prop('id')) {
             // check for option that equal to curr branch
             $(this).prop('selected', 'selected'); // sellect this option
         }
     });
     // teacher
     $('.co_van #select-level option').each(function () {
-        if ($(this).text() == curr_edit.find('.t_name').text()) {
+        if ($(this).val() == curr_edit.find('.t_name').prop('id')) {
             // check for option that equal to curr branch
             $(this).prop('selected', 'selected'); // sellect this option
         }

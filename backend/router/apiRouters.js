@@ -1615,6 +1615,7 @@ function createAPIRouter(client, wss) {
         };
         return res.status(200).json(result);
     });
+
     router.get('/getuserscore', checkIfUserLoginAPI, async (req, res) => {
         try {
             const user = req.session.user;
@@ -2766,7 +2767,7 @@ function createAPIRouter(client, wss) {
                                 _id: data.cvht,
                             },
                             {
-                                $push: { class: data.new_id },
+                                $addToSet: { class: data.new_id },
                             },
                         );
                 } else {
@@ -2792,7 +2793,7 @@ function createAPIRouter(client, wss) {
                                 _id: data.cvht,
                             },
                             {
-                                $push: { class: data.new_id },
+                                $addToSet: { class: data.new_id },
                             },
                         );
                 }

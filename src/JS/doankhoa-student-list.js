@@ -214,7 +214,6 @@ $(document).ready(() => {
             $('.js_tbody').empty();
             renderTable(dataStudents[cls], 0); // class is full dont need to load it any more
         } else {
-            console.log(dataStudents[cls]);
             if (
                 dataStudents[cls] &&
                 (Object.keys(dataStudents[cls]).length !== 0 || dataStudents[cls].constructor !== Object)
@@ -437,7 +436,13 @@ $(document).ready(() => {
                         $('.js_tbody').empty();
                         renderTable(dataStudents[cls], 0);
                     } else {
-                        loadStudents(true);
+                        if (
+                            dataStudents[cls] &&
+                            (Object.keys(dataStudents[cls]).length !== 0 || dataStudents[cls].constructor !== Object)
+                        ) {
+                            $('.js_tbody').empty();
+                            renderTable(dataStudents[cls], 0);
+                        } else loadStudents(true); // this class not full need to load more
                     }
                     notify('n', 'Xóa sinh viên thành công');
                 } else {
