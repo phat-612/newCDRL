@@ -210,7 +210,6 @@ $(document).ready(() => {
       $('.js_tbody').empty();
       renderTable(dataStudents[cls], 0); // class is full dont need to load it any more
     } else {
-      console.log(dataStudents[cls])
       if ( 
         dataStudents[cls]
         && (Object.keys(dataStudents[cls]).length !== 0 
@@ -506,3 +505,30 @@ $(document).ready(() => {
   });
 });
 
+
+
+// xuất ra cái tài khoản 
+
+$('.export').on('click', async () => {
+  if(document.querySelector('.js_lop').value!='0'){
+    try {
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ class: document.querySelector('.js_lop').value }) // Chuyển đổi thành JSON
+      };
+      const response = await fetch('/api/exportaccount', requestOptions);
+      if (response.status === 200) {
+        notify('n', 'Đang Tạo File')
+      } else {
+        notify('X', 'Có Lỗi Sãy Ra')
+      }
+    } catch (error) {
+      console.log('Error:', error);
+    }
+  }else {
+    notify('!', 'Vui Lòng họn Lớp ')
+  }
+});

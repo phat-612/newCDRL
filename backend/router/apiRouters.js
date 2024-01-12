@@ -7,7 +7,6 @@ const fs = require("fs");
 const uploadDirectory = path.join("../../upload_temp");
 const multer = require("multer");
 const server = require("../lib/csdl_google_lib");
-
 const { ObjectId } = require("mongodb");
 const { getNameGlobal } = require("../lib/mogodb_lib");
 const name_global_databases = getNameGlobal();
@@ -621,6 +620,7 @@ function createAPIRouter(client, wss) {
 	// Create new account -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	router.post("/createAccount", upload.single("file"), checkIfUserLoginAPI, async (req, res) => {
 		const user = req.session.user;
+
 		if (user.pow[4] || user.pow[7]) {
 			const fileStudents = req.file;
 			async function generateEmail(str) {
@@ -729,6 +729,7 @@ function createAPIRouter(client, wss) {
 										password: hashPassword(pw),
 										first: "new_user",
 									};
+									console.log(JSON.stringify(dataInsertLogin))
 									client.db("global").collection("user_info").updateOne(
 										{
 											_id: dataInsertUser._id,
@@ -847,6 +848,7 @@ function createAPIRouter(client, wss) {
 												upsert: true,
 											}
 										);
+
 										await sheet.cell(`D${i + 1}`).value(email);
 										await sheet.cell(`E${i + 1}`).value(pw);
 										const range = sheet.range(`D${i + 1}:E${i + 1}`);
@@ -868,6 +870,7 @@ function createAPIRouter(client, wss) {
 										);
 									}
 								}
+
 							} catch (err) {
 								console.log("SYSTEM | CREATE_ACCOUNT | ERROR | ", err);
 								return res.sendStatus(500);
@@ -882,9 +885,10 @@ function createAPIRouter(client, wss) {
 			} else {
 				const dataStudent = req.body;
 				let pw = await randomPassword();
-				let email = await generateEmail(
+				let email = await generateEmail(XlsxPopulate / exportaccount
 					`${dataStudent["ho"]} ${dataStudent["ten"]} ${dataStudent["mssv"].toString()}`
 				);
+
 				let power;
 
 				power = {
@@ -910,6 +914,7 @@ function createAPIRouter(client, wss) {
 					password: hashPassword(pw),
 					first: "new_user",
 				};
+
 				client.db("global").collection("user_info").updateOne(
 					{
 						_id: dataInsertUser._id,
@@ -954,7 +959,9 @@ function createAPIRouter(client, wss) {
 				scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
 
 				// return res.sendStatus(200);
+
 			}
+
 		} else {
 			return res.sendStatus(403);
 		}
@@ -964,33 +971,33 @@ function createAPIRouter(client, wss) {
 	router.post("/updateAccount", checkIfUserLoginAPI, async (req, res) => {
 		const user = req.session.user;
 		if (user.pow[4] || user.pow[7]) {
-				const dataStudent = req.body;
-				let power = {
-					0: true,
-					1: dataStudent["chamdiem"],
-					3: dataStudent["lbhd"],
-					10: dataStudent["dangvien"],
-				};
+			const dataStudent = req.body;
+			let power = {
+				0: true,
+				1: dataStudent["chamdiem"],
+				3: dataStudent["lbhd"],
+				10: dataStudent["dangvien"],
+			};
 
-				let dataInsertUser = {
-					_id: dataStudent["mssv"].toString(),
-					first_name: dataStudent["ten"],
-					last_name: dataStudent["ho"],
-					power: power,
-					displayName: `${dataStudent["ho"]} ${dataStudent["ten"]}`,
-				};
+			let dataInsertUser = {
+				_id: dataStudent["mssv"].toString(),
+				first_name: dataStudent["ten"],
+				last_name: dataStudent["ho"],
+				power: power,
+				displayName: `${dataStudent["ho"]} ${dataStudent["ten"]}`,
+			};
 
-				client.db("global").collection("user_info").updateOne(
-					{
-						_id: dataInsertUser._id,
-					},
-					{
-						$set: dataInsertUser,
-					},
-					{
-						upsert: true,
-					}
-				);
+			client.db("global").collection("user_info").updateOne(
+				{
+					_id: dataInsertUser._id,
+				},
+				{
+					$set: dataInsertUser,
+				},
+				{
+					upsert: true,
+				}
+			);
 
 			return res.sendStatus(200);
 		} else {
@@ -2996,6 +3003,86 @@ function createAPIRouter(client, wss) {
 			return res.sendStatus(500);
 		}
 	});
+
+
+	router.post("/exportaccount", checkIfUserLoginAPI, async (req, res) => {
+		try {
+			const user = req.session.user;
+			const Class = req.body.class;
+			if (true) {
+				const studentList = sortStudentName(
+					await client
+						.db(name_global_databases)
+						.collection("user_info")
+						.find(
+							{ class: Class, "power.0": { $exists: true } },
+							{
+								projection: {
+									_id: 1,
+									last_name: 1,
+									first_name: 1,
+								},
+							}
+						)
+						.toArray()
+				);
+
+				const workbook = await XlsxPopulate.fromFileAsync(
+					"./src/excelTemplate/FILE_TAO_ACC.xlsx"
+				);
+
+				const dataRows = [];
+
+				for (const student of studentList) {
+					const loginInfo = await client
+						.db(name_global_databases)
+						.collection("login_info")
+						.findOne(
+							{ _id: student._id },
+							{
+								projection: {
+									_id: 1,
+									password: 1,
+								},
+							}
+						);
+
+					if (loginInfo) {
+						const dataRow = [
+							student._id,
+							loginInfo.password,
+							student.last_name,
+							student.first_name,
+						];
+
+						dataRows.push(dataRow);
+					}
+				}
+
+				if (dataRows.length > 0) {
+					await workbook.sheet(0).cell("A2").value(dataRows);
+				}
+
+				const uuid = uuidv4();
+				const outputFile = path.join(`.downloads/${uuid}.xlsx`);
+
+				await workbook.toFileAsync(outputFile);
+
+				res.download(path.join(".downloads", uuid + ".xlsx"))
+				// delete file after 12 hours
+				scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
+			} else {
+				return res.sendStatus(403);
+			}
+		} catch (err) {
+			console.log("SYSTEM | EXPORT ACCOUNT | ERROR | ", err);
+			return res.sendStatus(500);
+		}
+	});
+
+
+
+
 
 	// api get img acti student
 	router.post("/getImgActivities", checkIfUserLoginAPI, async (req, res) => {
