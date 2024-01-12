@@ -1,64 +1,62 @@
 .content {
-  max-width: 90rem;
-  width: 95%;
-  margin: 0 auto;
-  margin-top: 2rem;
-  box-sizing: border-box;
+    max-width: 90rem;
+    width: 95%;
+    margin: 0 auto;
+    margin-top: 2rem;
+    box-sizing: border-box;
 }
 
 .content .lop {
-  font-size: 2rem;
+    font-size: 2rem;
 }
 
 .chitiet {
-  background-color: var(--white-color);
-  padding: 1rem;
-  border-radius: 0.8rem;
+    background-color: var(--white-color);
+    padding: 1rem;
+    border-radius: 0.8rem;
 }
 
 .chitiet .control {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .file_input {
-  margin: 0 1rem;
-  position: relative;
-  display: inline-block;
+    margin: 0 1rem;
+    position: relative;
+    display: inline-block;
 }
 
 .file_input button {
-  margin: 0;
+    margin: 0;
 }
 
 .file_input input {
-  position: absolute;
-  left: 0;
-  top: 0;
-  opacity: 0;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
 }
 
 .file_input input:hover {
-  box-shadow:
-    var(--black-color) 0 0 0 0.3rem,
-    transparent 0 0 0 0;
+    box-shadow: var(--black-color) 0 0 0 0.3rem, transparent 0 0 0 0;
 }
 
 th {
-  font-size: 2rem;
+    font-size: 2rem;
 }
 
 td {
-  font-size: 1.6rem;
+    font-size: 1.6rem;
 }
 
 th,
 td {
-  padding: 1rem;
+    padding: 1rem;
 }
 
 tr td:nth-child(1),
@@ -67,221 +65,216 @@ tr td:nth-child(6),
 tr td:nth-child(7),
 tr td:nth-child(8),
 tr td:nth-child(9) {
-  text-align: center;
+    text-align: center;
 }
 
 tr td:nth-child(4) {
-  text-transform: uppercase;
+    text-transform: uppercase;
 }
 
 /* modal */
 .modal {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: var(--model-color);
-  display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--model-color);
+    display: none;
 }
 
 #md_vt {
-  background-color: var(--select-bg);
-
+    background-color: var(--select-bg);
 }
 
 .modal_wrap {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  max-width: 80rem;
-  width: 95%;
-  background: var(--white-color);
-  border-radius: 0.8rem;
-  transform: translate(-50%, -50%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    max-width: 80rem;
+    width: 95%;
+    background: var(--white-color);
+    border-radius: 0.8rem;
+    transform: translate(-50%, -50%);
 }
 
 .modal_main {
-  padding: 2.8rem 3.8rem 2.8rem;
-  height: 55rem;
-  overflow: auto;
+    padding: 2.8rem 3.8rem 2.8rem;
+    height: 55rem;
+    overflow: auto;
 }
 
 .modal_main .title-box {
-  font-size: 2.8rem;
-  margin-bottom: 1.6rem;
-  background-color: var(--td-a);
-  display: inline-block;
-  padding: 1.6rem 2.7rem 1.6rem 10rem;
-  border-radius: 0.8rem;
-  left: -4rem;
-  position: absolute;
+    font-size: 2.8rem;
+    margin-bottom: 1.6rem;
+    background-color: var(--td-a);
+    display: inline-block;
+    padding: 1.6rem 2.7rem 1.6rem 10rem;
+    border-radius: 0.8rem;
+    left: -4rem;
+    position: absolute;
 }
 
 .modal_content {
-  margin-top: 7.3rem;
+    margin-top: 7.3rem;
 }
 
 .modal_content > :nth-child(n + 4) {
-  background-color: var(--input-hover);
-  padding: 0.4rem;
-  align-items: center;
-  border-radius: 0.8rem;
+    background-color: var(--input-hover);
+    padding: 0.4rem;
+    align-items: center;
+    border-radius: 0.8rem;
 }
 
 .porfile_container_item {
-  display: flex;
-  justify-content: space-between;
-  margin: 1.5rem 2rem;
-  min-height: 4rem;
+    display: flex;
+    justify-content: space-between;
+    margin: 1.5rem 2rem;
+    min-height: 4rem;
 }
 
 .porfile_container_item .checkbox-wrapper-4 {
-  margin-right: 1rem;
+    margin-right: 1rem;
 }
 
 .porfile_container {
-  display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
 }
 
 .info_lable {
-  padding-left: 1rem;
-  font-size: 2rem;
-  line-height: 2;
-  font-weight: 600;
-  display: flex;
-  justify-content: space-around;
+    padding-left: 1rem;
+    font-size: 2rem;
+    line-height: 2;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-around;
 }
 
 .info_input {
-  padding: 0 2rem;
-  width: 50%;
-  border-radius: 0.3em;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  background-color: var(--input-hover);
-  transition: box-shadow 0.1s linear;
+    padding: 0 2rem;
+    width: 50%;
+    border-radius: 0.3em;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    background-color: var(--input-hover);
+    transition: box-shadow 0.1s linear;
 }
 
 .info_input:hover {
-  cursor: pointer;
-  background-color: #ffffff82;
+    cursor: pointer;
+    background-color: #ffffff82;
 }
 
 .modal_main .button-35 {
-
-
-  padding: 12px 30px;
+    padding: 12px 30px;
 }
 
 .controlbtn {
-  display: flex;
-  flex-direction: row-reverse;
-  gap: 2rem;
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 2rem;
 }
 
 .js_md_cancel {
-  right: 18rem !important;
+    right: 18rem !important;
 }
 
 .js_md_add {
-  float: right;
+    float: right;
 }
-.control_btn{
-  display: flex;
-  align-items: center;
+.control_btn {
+    display: flex;
+    align-items: center;
 }
 @media screen and (max-width: 600px) {
-  table {
-    width: 85rem;
-  }
-  .chitiet {
-    padding: 0;
-    margin-bottom: 100px;
-  }
+    table {
+        width: 85rem;
+    }
+    .chitiet {
+        padding: 0;
+        margin-bottom: 100px;
+    }
 
-  .control_btn {
-    display: flex;
-    flex-direction: column-reverse;
-  }
+    .control_btn {
+        display: flex;
+        flex-direction: column-reverse;
+    }
 
-  .control {
-    flex-direction: column;
-    margin-bottom: 20px !important;
+    .control {
+        flex-direction: column;
+        margin-bottom: 20px !important;
 
-    padding: 0 20px;
-  }
+        padding: 0 20px;
+    }
 
-  .button-35 {
-    margin: 0 !important;
-    width: 100%;
-  }
+    .button-35 {
+        margin: 0 !important;
+        width: 100%;
+    }
 
-  .class_select {
-    margin-top: 1rem;
-  }
+    .class_select {
+        margin-top: 1rem;
+    }
 
-  .table_container {
-    overflow: auto;
-  }
+    .table_container {
+        overflow: auto;
+    }
 
-  .file_input,
-  .right {
-    width: 100%;
-    display: flex;
-    gap: 20px;
-    justify-content: space-around;
-    
-  }
+    .file_input,
+    .right {
+        width: 100%;
+        display: flex;
+        gap: 20px;
+        justify-content: space-around;
+    }
 
-  .left {
-    display: flex;
-    margin: 20px 0;
-    width: 100%;
-    gap: 20px;
-    justify-content: space-around;
-    
-  }
+    .left {
+        display: flex;
+        margin: 20px 0;
+        width: 100%;
+        gap: 20px;
+        justify-content: space-around;
+    }
 
-  .modal_wrap .title-box {
-    width: 100%;
-    padding: 1rem;
-    text-align: center;
-    box-sizing: border-box;
-    position: unset;
-  }
-  .modal_main {
-    padding: 1rem;
-  }
-  .modal_content {
-    margin-top: 0;
-  }
+    .modal_wrap .title-box {
+        width: 100%;
+        padding: 1rem;
+        text-align: center;
+        box-sizing: border-box;
+        position: unset;
+    }
+    .modal_main {
+        padding: 1rem;
+    }
+    .modal_content {
+        margin-top: 0;
+    }
 
-  .modal_wrap label {
-    justify-content: flex-start;
-    padding: 0;
-  }
-  .modal_wrap input {
-    width: 60%;
-  }
-  .modal_content > :nth-child(n + 4) {
-    background-color: unset;
-  }
-  .container__button {
-    justify-content: center;
-  }
+    .modal_wrap label {
+        justify-content: flex-start;
+        padding: 0;
+    }
+    .modal_wrap input {
+        width: 60%;
+    }
+    .modal_content > :nth-child(n + 4) {
+        background-color: unset;
+    }
+    .container__button {
+        justify-content: center;
+    }
 
-  .file_input button {
-    width: 14rem;
-    overflow: hidden;
-  }
-  .file_input{
-    width: 40% !important;
-  }
-  #add-student{
-    width: 40% !important;
-  }
-  #delete-student{
-    width: 40% !important;
-  }
+    .file_input button {
+        width: 14rem;
+        overflow: hidden;
+    }
+    .file_input {
+        width: 40% !important;
+    }
+    #add-student {
+        width: 40% !important;
+    }
+    #delete-student {
+        width: 40% !important;
+    }
 }

@@ -1,78 +1,78 @@
 html {
-  font-size: 62.5%;
+    font-size: 62.5%;
 }
 * {
-  padding: 0;
-  margin: 0;
-  box-sizing: content-box;
+    padding: 0;
+    margin: 0;
+    box-sizing: content-box;
 }
 
 /* css tra cứu */
 .tra_cuu,
 .manager,
 .submit-mark {
-  margin-top: 2rem;
-  max-width: 90rem;
-  background-color: var(--white-color);
-  margin-left: auto;
-  margin-right: auto;
-  border-radius: 0.8rem;
+    margin-top: 2rem;
+    max-width: 90rem;
+    background-color: var(--white-color);
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 0.8rem;
 }
 
 .tra_cuu .content,
 .manager .content,
 .submit-mark .content {
-  padding: 1rem;
+    padding: 1rem;
 }
 
 .tra_cuu .content h2,
 .manager .content h2,
 .submit-mark .content h2 {
-  font-size: 2rem;
-  padding: 1rem;
+    font-size: 2rem;
+    padding: 1rem;
 }
 
 .tra_cuu .content p {
-  display: inline-block;
-  font-size: 1.8rem;
+    display: inline-block;
+    font-size: 1.8rem;
 }
 
 .nien-khoa {
-  margin-left: 2rem;
+    margin-left: 2rem;
 }
 
 .sub-container {
-  margin-bottom: 5rem;
-  margin-top: 1.5rem;
+    margin-bottom: 5rem;
+    margin-top: 1.5rem;
 }
 
 table {
-  text-align: center;
+    text-align: center;
 }
 
 th,
 td {
-  padding: 1rem;
-  font-size: 1.5rem;
+    padding: 1rem;
+    font-size: 1.5rem;
 }
 
 .mark-box {
-  margin-bottom: 2rem;
+    margin-bottom: 2rem;
 }
 
 .content_top .group_btn {
-  text-align: center;
+    text-align: center;
 }
 .content_top .nien-khoa {
-  text-align: center;
+    text-align: center;
 }
 .content_top a {
-  text-align: center;
+    text-align: center;
 }
 .content_top {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
-.container__table{
-  padding: 1rem;
+.container__table {
+    padding: 1rem;
 }

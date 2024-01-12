@@ -1,7 +1,5 @@
 /* responsive */
 @media screen and (max-width: 600px) {
-
-
     th:nth-child(4),
     th:nth-child(5),
     td:nth-child(4),
@@ -19,7 +17,6 @@
     }
 
     .modal_wrap_img {
-
         flex-wrap: wrap;
     }
 
@@ -47,19 +44,18 @@
 
     .modal_wrap_img_item {
         width: 40%;
-        height: 14rem
+        height: 14rem;
     }
 
     .m-auto {
         margin: 3rem auto 9rem auto;
     }
 
-
     .menu1 {
         top: 75%;
         right: 83%;
     }
-    .menu1.open{
+    .menu1.open {
         opacity: 1;
     }
 
@@ -82,16 +78,16 @@
         right: -3rem;
         transition-delay: 0.1s;
     }
-    .tr-title td:nth-of-type(1n+0){
+    .tr-title td:nth-of-type(1n + 0) {
         border: 0;
     }
-    .tr-title td:first-child{
+    .tr-title td:first-child {
         border: 1px solid #aeaeae;
     }
 
-    .foot_modal .modal_wrap{
+    .foot_modal .modal_wrap {
         background-color: var(--primColor);
-        height: auto!important;
+        height: auto !important;
         width: 100%;
         position: absolute;
 
@@ -110,15 +106,14 @@
         background-color: rgb(255, 255, 255);
         padding-bottom: 50px;
     }
-    .complete_img{
+    .complete_img {
         gap: 20px;
     }
-    .button-35{
+    .button-35 {
         margin: 0 !important;
     }
 
-    .modal_img_btn{
+    .modal_img_btn {
         justify-content: space-evenly;
     }
-
 }

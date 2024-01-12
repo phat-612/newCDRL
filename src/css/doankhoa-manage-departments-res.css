@@ -1,37 +1,36 @@
-@media screen and (max-width:600px) {
-    .content--department{
-            margin: 0;
+@media screen and (max-width: 600px) {
+    .content--department {
+        margin: 0;
     }
-    .modal_wrap{
+    .modal_wrap {
         width: 90%;
     }
-    .modal_main{
+    .modal_main {
         padding: 2.8rem 1.8rem 1.2rem;
     }
 
-    .content--subject{
+    .content--subject {
         margin: 0;
         margin-top: 1rem;
         align-items: flex-start;
         flex-direction: column;
-
     }
-    .content__subject{
+    .content__subject {
         margin-bottom: 1rem;
     }
-    .subject--name input{
+    .subject--name input {
         margin: 0;
     }
-    .content--button{
+    .content--button {
         margin: 0;
         gap: 20px;
         justify-content: center;
     }
-    .content--button .button-35{
+    .content--button .button-35 {
         padding: 2rem 4.2rem;
     }
 
-    .content__title{
+    .content__title {
         width: 100%;
         padding: 1rem;
         box-sizing: border-box;

@@ -1,95 +1,92 @@
 * {
-  padding: 0;
-  margin: 0;
+    padding: 0;
+    margin: 0;
 }
 .login-box {
-  background-color: var(--white-color);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 40rem;
-  padding: 4rem;
-  transform: translate(-50%, -50%);
+    background-color: var(--white-color);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40rem;
+    padding: 4rem;
+    transform: translate(-50%, -50%);
 
-  box-sizing: border-box;
-  box-shadow: 0 0.5rem 2.5rem rgba(0, 0, 0, 0.6);
-  border-radius: 1rem;
+    box-sizing: border-box;
+    box-shadow: 0 0.5rem 2.5rem rgba(0, 0, 0, 0.6);
+    border-radius: 1rem;
 }
 
 .login-box .user-box {
-  position: relative;
+    position: relative;
 }
 
 .login-box .user-box input {
-  width: 100%;
-  padding: 1rem 0;
-  font-size: 1.6rem;
-  color: var(--black-color);
-  margin-bottom: 3rem;
-  border: none;
-  border-bottom: 0.1rem solid var(--black-color);
-  outline: none;
-  background: transparent;
+    width: 100%;
+    padding: 1rem 0;
+    font-size: 1.6rem;
+    color: var(--black-color);
+    margin-bottom: 3rem;
+    border: none;
+    border-bottom: 0.1rem solid var(--black-color);
+    outline: none;
+    background: transparent;
 }
 
 .login-box .user-box label {
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: 1rem 0;
-  font-size: 1.6rem;
-  color: var(--black-color);
-  pointer-events: none;
-  transition: 0.5s;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 1rem 0;
+    font-size: 1.6rem;
+    color: var(--black-color);
+    pointer-events: none;
+    transition: 0.5s;
 }
 
 .login-box .user-box input:focus ~ label,
 .login-box .user-box input:valid ~ label {
-  top: -2rem;
-  left: 0;
-  color: #bdb8b8;
-  font-size: 1.2rem;
+    top: -2rem;
+    left: 0;
+    color: #bdb8b8;
+    font-size: 1.2rem;
 }
 
 .login-box form a {
-  position: relative;
-  display: inline-block;
-  padding: 1rem 2rem;
-  color: rgb(98, 98, 232);
-  font-size: 1.6rem;
-  text-decoration: none;
-  text-transform: uppercase;
-  overflow: hidden;
-  transition: 0.5s;
-  margin-top: 4rem;
-  letter-spacing: 0.4rem;
-  cursor: pointer;
+    position: relative;
+    display: inline-block;
+    padding: 1rem 2rem;
+    color: rgb(98, 98, 232);
+    font-size: 1.6rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    overflow: hidden;
+    transition: 0.5s;
+    margin-top: 4rem;
+    letter-spacing: 0.4rem;
+    cursor: pointer;
 }
 
 .login-box a:hover {
-  border-radius: 0.5rem;
-  background: #c2c2c2;
+    border-radius: 0.5rem;
+    background: #c2c2c2;
 }
 
 .login-box a span {
-  position: absolute;
-  display: block;
+    position: absolute;
+    display: block;
 }
-.eye{
-  color: var(--black-color);
-  position: absolute;
-  right: 1rem;
-  top: 20%;
-  font-size: 15px;
-  cursor: pointer;
-  display: none;
+.eye {
+    color: var(--black-color);
+    position: absolute;
+    right: 1rem;
+    top: 20%;
+    font-size: 15px;
+    cursor: pointer;
+    display: none;
 }
-
 
 @media screen and (max-width: 600px) {
-  .login-box{
-    width: 90vw;
-  }
+    .login-box {
+        width: 90vw;
+    }
 }
-
-

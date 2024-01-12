@@ -1,247 +1,239 @@
 * {
-  padding: 0;
-  margin: 0;
-  box-sizing: content-box;
+    padding: 0;
+    margin: 0;
+    box-sizing: content-box;
 }
 
 .content {
-  margin-top: 2rem;
-  max-width: 91rem;
-  margin-left: auto;
-  margin-right: auto;
+    margin-top: 2rem;
+    max-width: 91rem;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .content .hk_nk {
-  font-size: 2rem;
-  position: relative;
-
-
+    font-size: 2rem;
+    position: relative;
 }
 
 .year_full {
-  width: 107rem;
-  display: flex;
-  gap: 2rem;
-  padding-bottom: 1rem;
+    width: 107rem;
+    display: flex;
+    gap: 2rem;
+    padding-bottom: 1rem;
 }
 
 #year_full2 {
-  margin-top: 3rem;
+    margin-top: 3rem;
 }
 
 .hk {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
-
-
 .activity-board {
-  margin-top: 2rem;
-  padding: 1rem;
-  background-color: var(--white-color);
-  font-size: 1.6rem;
-  border-radius: 0.8rem;
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: var(--white-color);
+    font-size: 1.6rem;
+    border-radius: 0.8rem;
 }
 
 .table {
-  margin-top: 3rem;
+    margin-top: 3rem;
 }
 
 th {
-  font-size: 2rem;
+    font-size: 2rem;
 }
 
 td {
-  font-size: 1.6rem;
-  text-align: center;
+    font-size: 1.6rem;
+    text-align: center;
 }
 
 th,
 td {
-  padding: 1rem;
+    padding: 1rem;
 }
 
 a {
-  color: black;
+    color: black;
 }
 
 /* css table */
 table,
 th,
 td {
-  border: 1px solid black;
-  border-collapse: collapse;
+    border: 1px solid black;
+    border-collapse: collapse;
 }
 
 th {
-  font-size: 2rem;
+    font-size: 2rem;
 }
 
 td {
-  font-size: 1.6rem;
-  text-align: center;
+    font-size: 1.6rem;
+    text-align: center;
 }
 
 th,
 td {
-  padding: 1rem;
+    padding: 1rem;
 }
 
 table tr td:nth-child(7) {
-  text-align: center;
+    text-align: center;
 }
 
 table tr td:nth-child(9) {
-  padding: 0;
+    padding: 0;
 }
 
 table tr td:nth-child(9) a {
-  text-decoration: none;
-  color: rgb(117, 117, 255);
+    text-decoration: none;
+    color: rgb(117, 117, 255);
 }
 
 th {
-  background-color: rgb(241, 241, 241);
+    background-color: rgb(241, 241, 241);
 }
 
 tr:hover {
-  background-color: rgba(158, 158, 158, 0.507);
+    background-color: rgba(158, 158, 158, 0.507);
 }
 
 /* modal */
 .modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: var(--modal-color);
-  display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--modal-color);
+    display: none;
 }
 
 .subject--input {
-  margin-top: 0.5rem;
-  width: 100%;
-  box-sizing: border-box;
-  line-height: 4rem;
-  padding: 0 2rem;
-  border-radius: 0.3em;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  background-color: var(--input-hover);
-  transition: box-shadow 0.1s linear;
+    margin-top: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
+    line-height: 4rem;
+    padding: 0 2rem;
+    border-radius: 0.3em;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    background-color: var(--input-hover);
+    transition: box-shadow 0.1s linear;
 }
 
 .modal_wrap {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  max-width: 80rem;
-  width: 95%;
-  background: var(--white-color);
-  border-radius: 0.8rem;
-  transform: translate(-50%, -50%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    max-width: 80rem;
+    width: 95%;
+    background: var(--white-color);
+    border-radius: 0.8rem;
+    transform: translate(-50%, -50%);
 }
 
 .modal_main {
-  padding: 2.8rem;
-  height: 63rem;
-  overflow: auto;
-
+    padding: 2.8rem;
+    height: 63rem;
+    overflow: auto;
 }
 
 .title-box {
-  font-size: 2rem;
+    font-size: 2rem;
 }
 
 .sub-title {
-  font-size: 1.5rem;
+    font-size: 1.5rem;
 }
 
 textarea {
-  width: 97%;
-  padding: 1rem;
-  margin: 1rem 1rem 0rem 0rem;
-  border-radius: 0.8rem;
+    width: 97%;
+    padding: 1rem;
+    margin: 1rem 1rem 0rem 0rem;
+    border-radius: 0.8rem;
 }
 
 /* Tùy chỉnh chú mờ */
 textarea::placeholder {
-  color: var(--black-color);
-  opacity: 0.5;
-  font-style: italic;
+    color: var(--black-color);
+    opacity: 0.5;
+    font-style: italic;
 }
 
 .content.selection {
-  display: flex;
+    display: flex;
 }
 
 label {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 
-  font-size: 1.8rem;
+    font-size: 1.8rem;
 }
 
 #select-main {
-  display: flex;
-  gap: 5rem;
+    display: flex;
+    gap: 5rem;
 }
 
 #button-main {
-  display: flex;
-  gap: 1rem;
-  margin: 1rem 0rem 0rem 57rem;
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0rem 0rem 57rem;
 }
 
 .select_year {
-  margin-top: 1rem;
+    margin-top: 1rem;
 }
 
 .copy_box {
-  display: none;
-
+    display: none;
 }
 
-
-
 .activity-board {
-  text-align: center;
+    text-align: center;
 }
 
 .activity-board h2 {
-  border-bottom: 1px solid;
-  margin-bottom: 1rem;
-  font-size: 2rem;
-  background: rgb(27 87 198);
-  border-radius: 0.8rem;
-  color: #ffffff;
-  padding: 1rem;
+    border-bottom: 1px solid;
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    background: rgb(27 87 198);
+    border-radius: 0.8rem;
+    color: #ffffff;
+    padding: 1rem;
 }
 
 .model-lb {
-  margin-right: 2rem;
+    margin-right: 2rem;
 }
 
 .choise_date {
-  display: flex;
-  gap: 1rem;
-  margin: 2rem 0 3rem;
+    display: flex;
+    gap: 1rem;
+    margin: 2rem 0 3rem;
 
-  align-items: center;
+    align-items: center;
 }
 
 .choise_date input {
-  background-color: var(--button-color);
-  padding: 5px 10px;
-  font-family: "Inter";
-  color: var(--black-color);
-  font-size: 1.8rem;
-  border: none;
-  outline: none;
-  border-radius: 0.8rem;
+    background-color: var(--button-color);
+    padding: 5px 10px;
+    font-family: 'Inter';
+    color: var(--black-color);
+    font-size: 1.8rem;
+    border: none;
+    outline: none;
+    border-radius: 0.8rem;
 }
 .timechosse {
-  display: flex;
-  padding-left: 1rem;
+    display: flex;
+    padding-left: 1rem;
 }

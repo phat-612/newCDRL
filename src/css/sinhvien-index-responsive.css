@@ -1,13 +1,13 @@
-@media screen and (max-width:820px) and (min-width:601px){
+@media screen and (max-width: 820px) and (min-width: 601px) {
 }
-@media screen and (max-width:600px){
-    .container{
-      padding-bottom: 10rem;
-    } 
-    .column1{
-        width:11%;
+@media screen and (max-width: 600px) {
+    .container {
+        padding-bottom: 10rem;
     }
-    .column2{
-        width:26%;
+    .column1 {
+        width: 11%;
+    }
+    .column2 {
+        width: 26%;
     }
 }

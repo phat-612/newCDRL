@@ -15,7 +15,6 @@
     }
     .content {
         padding: 0;
-
     }
     .select::after {
         right: 0%;
@@ -71,9 +70,9 @@
     .content .hk_nk {
         display: flex;
         flex-direction: column;
-        padding: 0!important;
+        padding: 0 !important;
     }
-    .control{
+    .control {
         display: flex;
         justify-content: space-between;
     }

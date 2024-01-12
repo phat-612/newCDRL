@@ -1,10 +1,10 @@
-@media screen and (max-width:600px) {
+@media screen and (max-width: 600px) {
     .otp-input-fields input {
         height: 5rem;
         width: 5rem;
     }
-    .otp-input-fields{
-        width:80%;
+    .otp-input-fields {
+        width: 80%;
     }
     .title p.msg {
         margin-left: 2rem;
@@ -16,7 +16,7 @@
     .content {
         width: 100%;
     }
-    .otp-form{
+    .otp-form {
         width: 95%;
     }
     .no_sv {
