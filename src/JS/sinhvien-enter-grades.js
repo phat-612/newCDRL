@@ -477,7 +477,8 @@ function remarksellect() {
 }
 
 function removeNow() {
-    $('.menu .button').removeClass('now');
+    console.log('hahah')
+    $('.menu1 .hope_star').removeClass('now');
 }
 $(document).on('click', '.button_medium', function () {
     console.log($(this));

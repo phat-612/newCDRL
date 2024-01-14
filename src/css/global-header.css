@@ -147,7 +147,7 @@ input {
 .setting::before {
     content: '';
     width: 100%;
-    height: 20%;
+    height: 12%;
     position: absolute;
     top: -1rem;
     left: 0rem;
@@ -596,6 +596,9 @@ textarea {
     }
 }
 @media screen and (max-width: 600px) {
+    .main-content {
+        margin: 3rem auto 10.3rem auto;
+    }
     .container__table {
         overflow: auto;
     }
