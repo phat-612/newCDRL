@@ -68,17 +68,23 @@
 
         margin: 1rem !important;
     }
-    .--bomon {
-        width: 80%;
-    }
-    .--class {
-        width: 100%;
-    }
     .hk span {
         width: 25%;
     }
     .hk {
         width: 100%;
-        justify-content: space-around;
+        justify-content: space-between;
+    }
+    .btn_choice {
+        margin: 0 auto;
+        display: flex;
+    justify-content: center;
+    }
+    .button-35-a{
+        width: auto;
+        padding: 1.5rem 4rem !important;
+        display: block;
+    margin-top: 2rem!important;
+    position: unset!important;
     }
 }

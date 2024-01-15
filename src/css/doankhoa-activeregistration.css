@@ -844,3 +844,9 @@ textarea::placeholder {
 .show_img {
     display: flex !important;
 }
+@media screen and (max-width: 600px) {
+    .foot_modal .modal_wrap{
+        bottom: auto;
+        height: auto ;
+    }
+}
