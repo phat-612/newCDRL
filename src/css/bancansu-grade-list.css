@@ -21,6 +21,12 @@
 .year_full {
     padding-bottom: 1rem;
 }
+.first_child{
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+}
 .hk {
     display: flex;
     align-items: center;

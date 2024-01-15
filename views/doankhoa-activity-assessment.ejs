@@ -75,9 +75,12 @@
               <div class="activity-board">
                 <h2>DANH SÁCH SINH VIÊN ĐÃ ĐĂNG KÝ</h2>
                 <%if (curr_act.student_list){%>
-                  <button class="button-35 " id="save-change">Lưu cập nhật</button>
+                  <div class="hk_nk">
+                    <button class="button-35 " id="save-change">Lưu cập nhật</button>
                   <button class="button-35 " id="delete-student">Xoá sinh viên</button>
+                  </div>
 
+                 <div class="container__table">
                   <table class="table" id="school_tb">
                     <thead>
                       <tr>
@@ -183,6 +186,7 @@
                           <%}%>
                     </tbody>
                   </table>
+                 </div>
                   <%} else {%>
                     <h1>Không có học sinh nào!</h1>
                     <%}%>

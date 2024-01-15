@@ -93,7 +93,7 @@ function createAPIRouter(client, wss) {
                         .db(name_global_databases)
                         .collection('user_info')
                         .findOne({ _id: data.mssv }, { projection: { _id: 0, class: 1, power: 1, dep: 1 } });
-
+                    
                     if (!cls.power[2]) {
                         const branch = await client
                             .db(name_global_databases)
@@ -561,35 +561,35 @@ function createAPIRouter(client, wss) {
         return res.end(JSON.stringify(await get_full_id(uploadDirectory, list_name, list_dep)));
     });
 
-	// Create new account -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	router.post("/createAccount", upload.single("file"), checkIfUserLoginAPI, async (req, res) => {
-		const user = req.session.user;
-		if (user.pow[4] || user.pow[7]) {
-			const fileStudents = req.file;
-			async function generateEmail(str) {
-				let s1 =
-					"ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠạẢảẤấẦầẨẩẪẫẬậẮắẰằẲẳẴẵẶặẸẹẺẻẼẽẾếỀềỂểỄễỆệỈỉỊịỌọỎỏỐốỒồỔổỖỗỘộỚớỜờỞởỠỡỢợỤụỦủỨứỪừỬửỮữỰựỲỳỴỵỶỷỸỹ";
-				let s0 =
-					"AAAAEEEIIOOOOUUYaaaaeeeiioooouuyAaDdIiUuOoUuAaAaAaAaAaAaAaAaAaAaAaAaEeEeEeEeEeEeEeEeEeIiIiOoOoOoOoOoOoOoOoOoOoOoUuUuUuUuUuUuUuYyYyYyYy";
-				let newStr = "";
-				let listSpace = [];
-				for (let i = 0; i < str.length; i++) {
-					if (s1.indexOf(str[i]) != -1) {
-						newStr += s0[s1.indexOf(str[i])];
-					} else {
-						newStr += str[i];
-					}
-					if (str[i] == " ") {
-						listSpace.push(i);
-					}
-				}
-				let output = newStr[0];
-				for (let i = 0; i < listSpace.length - 2; i++) {
-					output += newStr.charAt(listSpace[i] + 1);
-				}
-				output += newStr.slice(listSpace[listSpace.length - 2] + 1).replace(/\s/g, "");
-				return output.toLowerCase() + "@student.ctuet.edu.vn";
-			}
+    // Create new account -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    router.post("/createAccount", upload.single("file"), checkIfUserLoginAPI, async (req, res) => {
+        const user = req.session.user;
+        if (user.pow[4] || user.pow[7]) {
+            const fileStudents = req.file;
+            async function generateEmail(str) {
+                let s1 =
+                    "ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠạẢảẤấẦầẨẩẪẫẬậẮắẰằẲẳẴẵẶặẸẹẺẻẼẽẾếỀềỂểỄễỆệỈỉỊịỌọỎỏỐốỒồỔổỖỗỘộỚớỜờỞởỠỡỢợỤụỦủỨứỪừỬửỮữỰựỲỳỴỵỶỷỸỹ";
+                let s0 =
+                    "AAAAEEEIIOOOOUUYaaaaeeeiioooouuyAaDdIiUuOoUuAaAaAaAaAaAaAaAaAaAaAaAaEeEeEeEeEeEeEeEeEeIiIiOoOoOoOoOoOoOoOoOoOoOoUuUuUuUuUuUuUuYyYyYyYy";
+                let newStr = "";
+                let listSpace = [];
+                for (let i = 0; i < str.length; i++) {
+                    if (s1.indexOf(str[i]) != -1) {
+                        newStr += s0[s1.indexOf(str[i])];
+                    } else {
+                        newStr += str[i];
+                    }
+                    if (str[i] == " ") {
+                        listSpace.push(i);
+                    }
+                }
+                let output = newStr[0];
+                for (let i = 0; i < listSpace.length - 2; i++) {
+                    output += newStr.charAt(listSpace[i] + 1);
+                }
+                output += newStr.slice(listSpace[listSpace.length - 2] + 1).replace(/\s/g, "");
+                return output.toLowerCase() + "@student.ctuet.edu.vn";
+            }
 
             if (fileStudents) {
                 const workbook = await XlsxPopulate.fromFileAsync(fileStudents.path);
@@ -643,84 +643,84 @@ function createAPIRouter(client, wss) {
                                 // read excel file:
                                 // create all account
 
-								let maxWidthEmail = 0;
-								//[['MSSV', 'Họ', 'Tên' ]]
-								sheet.cell("D1").value("Email");
-								sheet.cell("E1").value("Password");
-								for (let i = 1; i < values.length; i++) {
-									let pw = await randomPassword();
-									let email = await generateEmail(
-										`${values[i][1].toString()} ${values[
-											i
-										][2].toString()} ${values[i][0].toString()}`
-									);
-									let dataInsertUser = {
-										_id: values[i][0].toString(),
-										first_name: values[i][2].toString(),
-										last_name: values[i][1].toString(),
-										avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
-										power: { 0: true },
-										class: [req.body.cls],
-										displayName: `${values[i][1].toString()} ${values[
-											i
-										][2].toString()}`,
-										email: email,
-										total_score: {},
-									};
-									let dataInsertLogin = {
-										_id: values[i][0].toString(),
-										password: hashPassword(pw),
-										first: "new_user",
-									};
-									client.db("global").collection("user_info").updateOne(
-										{
-											_id: dataInsertUser._id,
-										},
-										{
-											$set: dataInsertUser,
-										},
-										{
-											upsert: true,
-										}
-									);
-									client.db("global").collection("login_info").updateOne(
-										{
-											_id: dataInsertLogin._id,
-										},
-										{
-											$set: dataInsertLogin,
-										},
-										{
-											upsert: true,
-										}
-									);
-									await sheet.cell(`D${i + 1}`).value(email);
-									await sheet.cell(`E${i + 1}`).value(pw);
-									const range = sheet.range(`D${i + 1}:E${i + 1}`);
-									range.style({ border: true });
-									if (email.length > maxWidthEmail) {
-										maxWidthEmail = email.length;
-									}
-								}
-								// Write to file.
-								sheet.column("D").width(maxWidthEmail);
-								const uuid = uuidv4();
-								await workbook.toFileAsync(path.join(".downloads", uuid + ".xlsx"));
-								res.download(path.join(".downloads", uuid + ".xlsx"));
-								// xoa file sau khi xu ly
-								scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
-							} catch (err) {
-								console.log("SYSTEM | CREATE_ACCOUNT | ERROR | ", err);
-								return res.sendStatus(500);
-							}
-						} else {
-							try {
-								// read excel file:
-								// create all account
-								const workbook = await XlsxPopulate.fromFileAsync(
-									fileStudents.path
-								);
-								const sheet = workbook.sheet(0);
+                                let maxWidthEmail = 0;
+                                //[['MSSV', 'Họ', 'Tên' ]]
+                                sheet.cell("D1").value("Email");
+                                sheet.cell("E1").value("Password");
+                                for (let i = 1; i < values.length; i++) {
+                                    let pw = await randomPassword();
+                                    let email = await generateEmail(
+                                        `${values[i][1].toString()} ${values[
+                                            i
+                                        ][2].toString()} ${values[i][0].toString()}`
+                                    );
+                                    let dataInsertUser = {
+                                        _id: values[i][0].toString(),
+                                        first_name: values[i][2].toString(),
+                                        last_name: values[i][1].toString(),
+                                        avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
+                                        power: { 0: true },
+                                        class: [req.body.cls],
+                                        displayName: `${values[i][1].toString()} ${values[
+                                            i
+                                        ][2].toString()}`,
+                                        email: email,
+                                        total_score: {},
+                                    };
+                                    let dataInsertLogin = {
+                                        _id: values[i][0].toString(),
+                                        password: hashPassword(pw),
+                                        first: "new_user",
+                                    };
+                                    client.db("global").collection("user_info").updateOne(
+                                        {
+                                            _id: dataInsertUser._id,
+                                        },
+                                        {
+                                            $set: dataInsertUser,
+                                        },
+                                        {
+                                            upsert: true,
+                                        }
+                                    );
+                                    client.db("global").collection("login_info").updateOne(
+                                        {
+                                            _id: dataInsertLogin._id,
+                                        },
+                                        {
+                                            $set: dataInsertLogin,
+                                        },
+                                        {
+                                            upsert: true,
+                                        }
+                                    );
+                                    await sheet.cell(`D${i + 1}`).value(email);
+                                    await sheet.cell(`E${i + 1}`).value(pw);
+                                    const range = sheet.range(`D${i + 1}:E${i + 1}`);
+                                    range.style({ border: true });
+                                    if (email.length > maxWidthEmail) {
+                                        maxWidthEmail = email.length;
+                                    }
+                                }
+                                // Write to file.
+                                sheet.column("D").width(maxWidthEmail);
+                                const uuid = uuidv4();
+                                await workbook.toFileAsync(path.join(".downloads", uuid + ".xlsx"));
+                                res.download(path.join(".downloads", uuid + ".xlsx"));
+                                // xoa file sau khi xu ly
+                                scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
+                            } catch (err) {
+                                console.log("SYSTEM | CREATE_ACCOUNT | ERROR | ", err);
+                                return res.sendStatus(500);
+                            }
+                        } else {
+                            try {
+                                // read excel file:
+                                // create all account
+                                const workbook = await XlsxPopulate.fromFileAsync(
+                                    fileStudents.path
+                                );
+                                const sheet = workbook.sheet(0);
 
                                 const values = sheet.usedRange().value();
                                 let maxWidthEmail = 0;
@@ -730,105 +730,105 @@ function createAPIRouter(client, wss) {
                                 for (let i = 1; i < values.length; i++) {
                                     let studentIdToCheck = values[i][0].toString(); // Mã số sinh viên cần kiểm tra
 
-									const marker = await client
-										.db(name_global_databases)
-										.collection("user_info")
-										.findOne(
-											{ _id: studentIdToCheck },
-											{
-												projection: {
-													_id: 0,
-													last_name: 1,
-													first_name: 1,
-												},
-											}
-										);
-									if (!marker) {
-										let pw = await randomPassword();
-										let email = await generateEmail(
-											`${values[i][1]} ${values[i][2]} ${values[
-												i
-											][0].toString()}`
-										);
-										let dataInsertUser = {
-											_id: values[i][0].toString(),
-											first_name: values[i][2].toString(),
-											last_name: values[i][1].toString(),
-											avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
-											power: { 0: true },
-											class: [req.body.cls],
-											displayName: `${values[i][1].toString()} ${values[
-												i
-											][2].toString()}`,
-											email: email,
-											total_score: {},
-										};
-										let dataInsertLogin = {
-											_id: values[i][0].toString(),
-											password: hashPassword(pw),
-											first: "new_user",
-										};
-										client.db("global").collection("user_info").updateOne(
-											{
-												_id: dataInsertUser._id,
-											},
-											{
-												$set: dataInsertUser,
-											},
-											{
-												upsert: true,
-											}
-										);
-										client.db("global").collection("login_info").updateOne(
-											{
-												_id: dataInsertLogin._id,
-											},
-											{
-												$set: dataInsertLogin,
-											},
-											{
-												upsert: true,
-											}
-										);
-										await sheet.cell(`D${i + 1}`).value(email);
-										await sheet.cell(`E${i + 1}`).value(pw);
-										const range = sheet.range(`D${i + 1}:E${i + 1}`);
-										range.style({ border: true });
-										if (email.length > maxWidthEmail) {
-											maxWidthEmail = email.length;
-										}
+                                    const marker = await client
+                                        .db(name_global_databases)
+                                        .collection("user_info")
+                                        .findOne(
+                                            { _id: studentIdToCheck },
+                                            {
+                                                projection: {
+                                                    _id: 0,
+                                                    last_name: 1,
+                                                    first_name: 1,
+                                                },
+                                            }
+                                        );
+                                    if (!marker) {
+                                        let pw = await randomPassword();
+                                        let email = await generateEmail(
+                                            `${values[i][1]} ${values[i][2]} ${values[
+                                                i
+                                            ][0].toString()}`
+                                        );
+                                        let dataInsertUser = {
+                                            _id: values[i][0].toString(),
+                                            first_name: values[i][2].toString(),
+                                            last_name: values[i][1].toString(),
+                                            avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
+                                            power: { 0: true },
+                                            class: [req.body.cls],
+                                            displayName: `${values[i][1].toString()} ${values[
+                                                i
+                                            ][2].toString()}`,
+                                            email: email,
+                                            total_score: {},
+                                        };
+                                        let dataInsertLogin = {
+                                            _id: values[i][0].toString(),
+                                            password: hashPassword(pw),
+                                            first: "new_user",
+                                        };
+                                        client.db("global").collection("user_info").updateOne(
+                                            {
+                                                _id: dataInsertUser._id,
+                                            },
+                                            {
+                                                $set: dataInsertUser,
+                                            },
+                                            {
+                                                upsert: true,
+                                            }
+                                        );
+                                        client.db("global").collection("login_info").updateOne(
+                                            {
+                                                _id: dataInsertLogin._id,
+                                            },
+                                            {
+                                                $set: dataInsertLogin,
+                                            },
+                                            {
+                                                upsert: true,
+                                            }
+                                        );
+                                        await sheet.cell(`D${i + 1}`).value(email);
+                                        await sheet.cell(`E${i + 1}`).value(pw);
+                                        const range = sheet.range(`D${i + 1}:E${i + 1}`);
+                                        range.style({ border: true });
+                                        if (email.length > maxWidthEmail) {
+                                            maxWidthEmail = email.length;
+                                        }
 
-										// Write to file.
-										sheet.column("D").width(maxWidthEmail);
-										const uuid = uuidv4();
-										await workbook.toFileAsync(
-											path.join(".downloads", uuid + ".xlsx")
-										);
-										res.download(path.join(".downloads", uuid + ".xlsx"));
-										// xoa file sau khi xu ly
-										scheduleFileDeletion(
-											path.join(".downloads", uuid + ".xlsx")
-										);
-									}
-								}
-							} catch (err) {
-								console.log("SYSTEM | CREATE_ACCOUNT | ERROR | ", err);
-								return res.sendStatus(500);
-							}
-						}
-					} else {
-						return res.sendStatus(404);
-					}
-				} else {
-					return res.sendStatus(405);
-				}
-			} else {
-				const dataStudent = req.body;
-				let pw = await randomPassword();
-				let email = await generateEmail(
-					`${dataStudent["ho"]} ${dataStudent["ten"]} ${dataStudent["mssv"].toString()}`
-				);
-				let power;
+                                        // Write to file.
+                                        sheet.column("D").width(maxWidthEmail);
+                                        const uuid = uuidv4();
+                                        await workbook.toFileAsync(
+                                            path.join(".downloads", uuid + ".xlsx")
+                                        );
+                                        res.download(path.join(".downloads", uuid + ".xlsx"));
+                                        // xoa file sau khi xu ly
+                                        scheduleFileDeletion(
+                                            path.join(".downloads", uuid + ".xlsx")
+                                        );
+                                    }
+                                }
+                            } catch (err) {
+                                console.log("SYSTEM | CREATE_ACCOUNT | ERROR | ", err);
+                                return res.sendStatus(500);
+                            }
+                        }
+                    } else {
+                        return res.sendStatus(404);
+                    }
+                } else {
+                    return res.sendStatus(405);
+                }
+            } else {
+                const dataStudent = req.body;
+                let pw = await randomPassword();
+                let email = await generateEmail(
+                    `${dataStudent["ho"]} ${dataStudent["ten"]} ${dataStudent["mssv"].toString()}`
+                );
+                let power;
 
                 power = {
                     0: true,
@@ -837,103 +837,103 @@ function createAPIRouter(client, wss) {
                     10: dataStudent['dangvien'],
                 };
 
-				let dataInsertUser = {
-					_id: dataStudent["mssv"].toString(),
-					first_name: dataStudent["ten"],
-					last_name: dataStudent["ho"],
-					avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
-					power: power,
-					class: [dataStudent["cls"]],
-					displayName: `${dataStudent["ho"]} ${dataStudent["ten"]}`,
-					email: email,
-					total_score: {},
-				};
-				let dataInsertLogin = {
-					_id: dataStudent["mssv"].toString(),
-					password: hashPassword(pw),
-					first: "new_user",
-				};
-				client.db("global").collection("user_info").updateOne(
-					{
-						_id: dataInsertUser._id,
-					},
-					{
-						$set: dataInsertUser,
-					},
-					{
-						upsert: true,
-					}
-				);
-				client.db("global").collection("login_info").updateOne(
-					{
-						_id: dataInsertLogin._id,
-					},
-					{
-						$set: dataInsertLogin,
-					},
-					{
-						upsert: true,
-					}
-				);
-				// xu ly sau khi them sinh vien
-				const uuid = uuidv4();
-				const workbook = await XlsxPopulate.fromFileAsync(
-					"./src/excelTemplate/Tao_danh_sach_lop_moi.xlsx"
-				);
-				const sheet = workbook.sheet(0);
-				await sheet.cell(`A2`).value(dataStudent["mssv"].toString());
-				await sheet.cell(`B2`).value(dataStudent["ho"]);
-				await sheet.cell(`C2`).value(dataStudent["ten"]);
-				await sheet.cell(`D1`).value("Email");
-				await sheet.cell(`E1`).value("Password");
-				await sheet.cell(`D2`).value(email);
-				await sheet.cell(`E2`).value(pw);
-				let range = sheet.range(`D2:E2`);
-				range.style({ border: true });
-				sheet.column("D").width(email.length);
-				await workbook.toFileAsync(path.join(".downloads", uuid + ".xlsx"));
-				res.download(path.join(".downloads", uuid + ".xlsx"));
-				// xoa file sau khi xu ly
-				scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
+                let dataInsertUser = {
+                    _id: dataStudent["mssv"].toString(),
+                    first_name: dataStudent["ten"],
+                    last_name: dataStudent["ho"],
+                    avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
+                    power: power,
+                    class: [dataStudent["cls"]],
+                    displayName: `${dataStudent["ho"]} ${dataStudent["ten"]}`,
+                    email: email,
+                    total_score: {},
+                };
+                let dataInsertLogin = {
+                    _id: dataStudent["mssv"].toString(),
+                    password: hashPassword(pw),
+                    first: "new_user",
+                };
+                client.db("global").collection("user_info").updateOne(
+                    {
+                        _id: dataInsertUser._id,
+                    },
+                    {
+                        $set: dataInsertUser,
+                    },
+                    {
+                        upsert: true,
+                    }
+                );
+                client.db("global").collection("login_info").updateOne(
+                    {
+                        _id: dataInsertLogin._id,
+                    },
+                    {
+                        $set: dataInsertLogin,
+                    },
+                    {
+                        upsert: true,
+                    }
+                );
+                // xu ly sau khi them sinh vien
+                const uuid = uuidv4();
+                const workbook = await XlsxPopulate.fromFileAsync(
+                    "./src/excelTemplate/Tao_danh_sach_lop_moi.xlsx"
+                );
+                const sheet = workbook.sheet(0);
+                await sheet.cell(`A2`).value(dataStudent["mssv"].toString());
+                await sheet.cell(`B2`).value(dataStudent["ho"]);
+                await sheet.cell(`C2`).value(dataStudent["ten"]);
+                await sheet.cell(`D1`).value("Email");
+                await sheet.cell(`E1`).value("Password");
+                await sheet.cell(`D2`).value(email);
+                await sheet.cell(`E2`).value(pw);
+                let range = sheet.range(`D2:E2`);
+                range.style({ border: true });
+                sheet.column("D").width(email.length);
+                await workbook.toFileAsync(path.join(".downloads", uuid + ".xlsx"));
+                res.download(path.join(".downloads", uuid + ".xlsx"));
+                // xoa file sau khi xu ly
+                scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
 
-				// return res.sendStatus(200);
-			}
-		} else {
-			return res.sendStatus(403);
-		}
-	});
+                // return res.sendStatus(200);
+            }
+        } else {
+            return res.sendStatus(403);
+        }
+    });
 
-	// Update student
-	router.post("/updateAccount", checkIfUserLoginAPI, async (req, res) => {
-		const user = req.session.user;
-		if (user.pow[4] || user.pow[7]) {
-				const dataStudent = req.body;
-				let power = {
-					0: true,
-					1: dataStudent["chamdiem"],
-					3: dataStudent["lbhd"],
-					10: dataStudent["dangvien"],
-				};
+    // Update student
+    router.post("/updateAccount", checkIfUserLoginAPI, async (req, res) => {
+        const user = req.session.user;
+        if (user.pow[4] || user.pow[7]) {
+            const dataStudent = req.body;
+            let power = {
+                0: true,
+                1: dataStudent["chamdiem"],
+                3: dataStudent["lbhd"],
+                10: dataStudent["dangvien"],
+            };
 
-				let dataInsertUser = {
-					_id: dataStudent["mssv"].toString(),
-					first_name: dataStudent["ten"],
-					last_name: dataStudent["ho"],
-					power: power,
-					displayName: `${dataStudent["ho"]} ${dataStudent["ten"]}`,
-				};
+            let dataInsertUser = {
+                _id: dataStudent["mssv"].toString(),
+                first_name: dataStudent["ten"],
+                last_name: dataStudent["ho"],
+                power: power,
+                displayName: `${dataStudent["ho"]} ${dataStudent["ten"]}`,
+            };
 
-				client.db("global").collection("user_info").updateOne(
-					{
-						_id: dataInsertUser._id,
-					},
-					{
-						$set: dataInsertUser,
-					},
-					{
-						upsert: true,
-					}
-				);
+            client.db("global").collection("user_info").updateOne(
+                {
+                    _id: dataInsertUser._id,
+                },
+                {
+                    $set: dataInsertUser,
+                },
+                {
+                    upsert: true,
+                }
+            );
 
             return res.sendStatus(200);
         } else {
@@ -1118,14 +1118,17 @@ function createAPIRouter(client, wss) {
     router.get('/exportStudentsScore', checkIfUserLoginAPI, async (req, res) => {
         try {
             const user = req.session.user;
+            console.log(req.session.pow)
             if (user.pow[1] || user.pow[2]) {
                 const data = req.query;
+                console.log(data)
                 //data = {year: "HK1_2022-2023", cls: '1', stdlist: []}
                 const school_year = data.year;
                 let cls = data.cls;
                 // create uuid for download file
                 const uuid = uuidv4();
                 const stdlist = JSON.parse(data.stdlist);
+                console.log(stdlist)
                 // check for post data.cls if class define this mean they choose class so that must
                 let student_list = [];
 
@@ -1276,7 +1279,167 @@ function createAPIRouter(client, wss) {
                 // delete file after 12 hours
 
                 scheduleFileDeletion(path.join('.downloads', temp_namefile));
-            } else {
+            }
+            else if (user.pow['0']) {
+                const data = req.query;
+                //data = {year: "HK1_2022-2023", cls: '1', stdlist: []}
+                const school_year = data.year;
+                let cls = user.cls[0];
+                // create uuid for download file
+                const stdlist = [`${user._id}`];
+                // check for post data.cls if class define this mean they choose class so that must
+                let student_list = [];
+
+                student_list = sortStudentName(
+                    await client
+                        .db(name_global_databases)
+                        .collection('user_info')
+                        .find(
+                            {
+                                class: cls,
+                                'power.0': { $exists: true },
+                                _id: { $in: stdlist },
+                            },
+                            { projection: { first_name: 1, last_name: 1 } },
+                        )
+                        .toArray(),
+                );
+                // get all student total score from themself:
+                let scores = [];
+
+                if (student_list.length !== 0) {
+                    for (let i = 0; i < student_list.length; i++) {
+                        // [stt, mssv. ho, ten, lop,
+                        // 1.0, 1.1, 1.2, 1.3, 1.4,
+                        // 2.0, 2.1,
+                        // 3.0, 3.1, 3.2,
+                        // 4.0, 4.1, 4.2,
+                        // 5.0, 5.1, 5.2, 5.3,
+                        // "", total, conduct, ""]
+                        let curr_score = {
+                            year: school_year,
+                            mssv: student_list[i]._id,
+                            name: student_list[i].last_name + ' ' + student_list[i].first_name,
+                            class: cls,
+                            std: [],
+                            stf: [],
+                            dep: [],
+                        };
+
+                        const curr_students_score = await client
+                            .db(user.dep)
+                            .collection(cls + '_std_table')
+                            .findOne(
+                                {
+                                    mssv: student_list[i]._id,
+                                    school_year: school_year,
+                                },
+                                {
+                                    projection: {
+                                        first: 1,
+                                        second: 1,
+                                        third: 1,
+                                        fourth: 1,
+                                        fifth: 1,
+                                        total: 1,
+                                    },
+                                },
+                            );
+
+                        const curr_staff_score = await client
+                            .db(user.dep)
+                            .collection(cls + '_stf_table')
+                            .findOne(
+                                {
+                                    mssv: student_list[i]._id,
+                                    school_year: school_year,
+                                },
+                                {
+                                    projection: {
+                                        first: 1,
+                                        second: 1,
+                                        third: 1,
+                                        fourth: 1,
+                                        fifth: 1,
+                                        total: 1,
+                                    },
+                                },
+                            );
+
+                        const curr_departmentt_score = await client
+                            .db(user.dep)
+                            .collection(cls + '_dep_table')
+                            .findOne(
+                                {
+                                    mssv: student_list[i]._id,
+                                    school_year: school_year,
+                                },
+                                {
+                                    projection: {
+                                        first: 1,
+                                        second: 1,
+                                        third: 1,
+                                        fourth: 1,
+                                        fifth: 1,
+                                        total: 1,
+                                    },
+                                },
+                            );
+
+                        if (curr_students_score) {
+                            curr_score.std.push(...curr_students_score.first);
+                            curr_score.std.push(...curr_students_score.second);
+                            curr_score.std.push(...curr_students_score.third);
+                            curr_score.std.push(...curr_students_score.fourth);
+                            curr_score.std.push(...curr_students_score.fifth);
+                            curr_score.std.push(curr_students_score.total);
+                        } else {
+                            for (let j = 0; j < 18; j++) {
+                                curr_score.std.push('N/A');
+                            }
+                        }
+                        if (curr_staff_score) {
+                            curr_score.stf.push(...curr_staff_score.first);
+                            curr_score.stf.push(...curr_staff_score.second);
+                            curr_score.stf.push(...curr_staff_score.third);
+                            curr_score.stf.push(...curr_staff_score.fourth);
+                            curr_score.stf.push(...curr_staff_score.fifth);
+                            curr_score.stf.push(curr_staff_score.total);
+                        } else {
+                            for (let j = 0; j < 18; j++) {
+                                curr_score.stf.push('N/A');
+                            }
+                        }
+
+                        if (curr_departmentt_score) {
+                            curr_score.dep.push(...curr_departmentt_score.first);
+                            curr_score.dep.push(...curr_departmentt_score.second);
+                            curr_score.dep.push(...curr_departmentt_score.third);
+                            curr_score.dep.push(...curr_departmentt_score.fourth);
+                            curr_score.dep.push(...curr_departmentt_score.fifth);
+                            curr_score.dep.push(curr_departmentt_score.total);
+                        } else {
+                            for (let j = 0; j < 18; j++) {
+                                curr_score.dep.push('N/A');
+                            }
+                        }
+
+                        scores.push(curr_score);
+                    }
+                } else {
+                    return res.sendStatus(402);
+                }
+
+                const temp_namefile = await createPdf('.downloads', scores);
+                // tải file xlsx về máy người dùng
+                res.download(path.join('.downloads', temp_namefile));
+
+                // delete file after 12 hours
+
+                scheduleFileDeletion(path.join('.downloads', temp_namefile));
+                    
+            } 
+            else {
                 return res.sendStatus(403);
             }
         } catch (err) {

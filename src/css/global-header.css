@@ -54,6 +54,9 @@ body {
     margin: 0;
     padding: 0;
 }
+.container{
+    margin-bottom: 3rem;
+}
 
 input {
     color: var(--black-color);

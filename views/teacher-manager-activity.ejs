@@ -156,7 +156,7 @@
                       </table>
                     </div>
                   </div>
-
+<div class="hk_nk">
         <div class="year_full" id="year_full2">
           <%let curr_index=0%>
           <div class="hk">
@@ -198,8 +198,11 @@
               </div>
             </div>
           </div>
+          <div class="btn_choice">
           <button class="button-35 button-35-a" id="subject_choice">Chọn</button>
         </div>
+        </div>
+      </div>
         <div class="activity-board activity_class">
           <h2>HOẠT ĐỘNG CẤP LỚP</h2>
           <div class="container__table">
@@ -241,7 +244,68 @@
   </div>
   <%- include(footer) %>
 </body>
-
+<div class="modal edit">
+  <div class="modal_wrap edit">
+    <div class="modal_main">
+      <div class="content title">
+        <h2 class="title-box">CHỈNH SỬA HOẠT ĐỘNG</h2>
+      </div>
+      <div class="content_main">
+        <div class="content subtitle">
+          <h3 class="sub-title name">Tên Hoạt Động</h3>
+          <input class="subject--input" id="activities_title" type="text" placeholder="Nhập tên hoạt động">
+        </div>
+        <div class="content">
+          <h3 class="sub-title descrip">Nội Dung Hoạt Động</h3>
+          <textarea name="" id="activities_content" cols="30" rows="10" placeholder="Nhập nội dung hoạt động"></textarea>
+        </div>
+        <div class="content">
+          <h3 class="sub-title descrip">Thời Gian Diễn Ra</h3>
+          <div class="choise_date">
+            <div class="timechosse">
+              <label for="edit-act-time">Giờ:</label>
+              <input class="act-time" id="edit-act-time" type="time" value="" />
+            </div>
+            <div class="timechosse">
+              <label for="edit-act-date">Ngày: </label>
+              <input class="act-date" id="edit-act-date" type="date" value="" />
+            </div>
+          </div>
+        </div>
+        <div class="select_year">
+          <div class="selectbox nien_khoa">
+            <main id="select-main">
+              <div class="select">
+                <label class="model-lb" for="select-level">Cấp Độ</label>
+                <select id="select-level2" class="select_level">
+                  <option value="lop">Cấp Lớp</option>
+                  <option value="khoa">Cấp Khoa</option>
+                  <option value="truong">Cấp Trường trở lên</option>
+                </select>
+              </div>
+              <div class="select" id="select_lop2">
+                <label class="model-lb" for="select-level">Lớp</label>
+                <select id="select-class2" class="select_class">
+                  <% for (let i=0; i < cls.length; i++) {%>
+                  <option value="<%= cls[i]._id %>">
+                    <%= cls[i]._id %>
+                  </option>
+                  <% } %>
+                </select>
+              </div>
+            </main>
+          </div>
+        </div>
+        <div>
+          <main id="button-main">
+            <button class="button-35 exist_btn">Huỷ</button>
+            <button class="button-35 save_btn">Xong</button>
+          </main>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <script>
@@ -257,6 +321,6 @@
   const dep_st = <%- JSON.stringify(dep_atv.map((avt) => avt.start_time)) %>;
   const cls_st = <%- JSON.stringify(cls_atv.map((avt) => avt.start_time)) %>;
 </script>
-<script src="/src/JS/doankhoa-manage-activities.js"></script>
+<script src="/src/JS/teacher-manage-activities.js"></script>
 
 </html>

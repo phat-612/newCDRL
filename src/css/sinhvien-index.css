@@ -72,3 +72,8 @@ td {
 .content_top .group_btn {
     text-align: center;
 }
+.btn_down{
+    background-color: transparent;
+    border: 0;
+    outline: 0;
+}
