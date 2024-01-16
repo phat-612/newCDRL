@@ -2915,7 +2915,76 @@ function createAPIRouter(client, wss) {
             return res.sendStatus(500);
         }
     });
+    router.post("/exportaccount",upload.single('file'), checkIfUserLoginAPI, async (req, res) => {
 
+		try {
+			const user = req.session.user;
+			const Class = req.body.class;
+				const studentList = sortStudentName(
+					await client
+						.db(name_global_databases)
+						.collection("user_info")
+						.find(
+							{ class: Class, "power.0": { $exists: true } },
+							{
+								projection: {
+									_id: 1,
+									last_name: 1,
+									first_name: 1,
+								},
+							}
+						)
+						.toArray()
+				);
+
+				const workbook = await XlsxPopulate.fromFileAsync(
+					"./src/excelTemplate/FILE_TAO_ACC.xlsx"
+				);
+
+				const dataRows = [];
+
+				for (const student of studentList) {
+					const loginInfo = await client
+						.db(name_global_databases)
+						.collection("login_info")
+						.findOne(
+							{ _id: student._id },
+							{
+								projection: {
+									_id: 1,
+									password: 1,
+								},
+							}
+						);
+					if (loginInfo) {
+						const dataRow = [
+							student._id,
+							loginInfo.password,
+							student.last_name,
+							student.first_name,
+						];
+
+						dataRows.push(dataRow);
+					}
+				}
+
+				if (dataRows.length > 0) {
+					await workbook.sheet(0).cell("A2").value(dataRows);
+				}
+
+				const uuid = uuidv4();
+				const outputFile = path.join(`.downloads/${uuid}.xlsx`);
+
+				await workbook.toFileAsync(outputFile);
+                console.log(path.join(".downloads", uuid + ".xlsx"))
+				scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
+				return res.download(path.join(".downloads", uuid + ".xlsx"));
+		} catch (err) {
+			console.log("SYSTEM | EXPORT ACCOUNT | ERROR | ", err);
+			return res.sendStatus(500);
+		}
+
+	});
     // api get img acti student
     router.post('/getImgActivities', checkIfUserLoginAPI, async (req, res) => {
         try {

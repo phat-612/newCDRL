@@ -501,25 +501,38 @@ $(document).ready(() => {
 // xuất ra cái tài khoản 
 
 $('.export').on('click', async () => {
-  if(document.querySelector('.js_lop').value!='0'){
-    try {
-      const requestOptions = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ class: document.querySelector('.js_lop').value }) // Chuyển đổi thành JSON
-      };
-      const response = await fetch('/api/exportaccount', requestOptions);
-      if (response.status === 200) {
-        notify('n', 'Đang Tạo File')
-      } else {
-        notify('X', 'Có Lỗi Sãy Ra')
+    notify('n', 'Đang Chuẩn Bị File');
+    if (document.querySelector('.js_lop').value !== '0') {
+      try {
+        const requestOptions = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ class: document.querySelector('.js_lop').value }), // Chuyển đổi thành JSON
+        };
+  
+        const response = await fetch('/api/exportaccount', requestOptions);
+  
+        if (response.ok) {
+          const blobUrl = URL.createObjectURL(await response.blob());
+          const downloadLink = document.createElement('a');
+          downloadLink.href = blobUrl;
+          downloadLink.download = 'Danh_sach_tai_khoan.xlsx';
+          downloadLink.style.display = 'none';
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          URL.revokeObjectURL(blobUrl);
+          notify('n', 'Đã tải xuống file');
+        } else {
+          notify('X', 'Có lỗi xảy ra');
+        }
+      } catch (error) {
+        console.log('Error:', error);
+        notify('X', 'Có lỗi xảy ra');
       }
-    } catch (error) {
-      console.log('Error:', error);
+    } else {
+      notify('!', 'Vui lòng chọn lớp');
     }
-  }else {
-    notify('!', 'Vui Lòng họn Lớp ')
-  }
-});
+  });
+  
