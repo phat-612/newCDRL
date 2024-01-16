@@ -187,62 +187,68 @@ $('.save_btn').click(async function () {
 $('#delete__class').click(async function () {
     // disable curr button
     $(this).prop('disabled', true);
+    quest('Bạn có chắc chắn muốn xoá tất cả lớp được đánh dấu. Dữ liệu bị xoá sẽ KHÔNG THỂ ĐƯỢC KHÔI PHỤC!').then(
+        async (result) => {
+            if (result) {
 
-    notify('!', 'Đang xóa dữ liệu!');
+                notify('!', 'Đang xóa dữ liệu!');
 
-    let rm_cls = [];
-    let rm_ts = [];
+                let rm_cls = [];
+                let rm_ts = [];
 
-    $('table tbody .inp-cbx').each(function () {
-        if (this.checked) {
-            rm_cls.push(this.value);
+                $('table tbody .inp-cbx').each(function () {
+                    if (this.checked) {
+                        rm_cls.push(this.value);
 
-            rm_ts.push($(this).parent().parent().parent().find('.t_name').attr('id'));
-        }
-    });
+                        rm_ts.push($(this).parent().parent().parent().find('.t_name').attr('id'));
+                    }
+                });
 
-    // request
-    if (rm_ts.length > 0) {
-        const requestOptions = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                rm_cls: rm_cls,
-                rm_ts: rm_ts,
-            }),
-        };
+                // request
+                if (rm_ts.length > 0) {
+                    const requestOptions = {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            rm_cls: rm_cls,
+                            rm_ts: rm_ts,
+                        }),
+                    };
 
-        const response = await fetch('/api/deleteClasses', requestOptions);
-        if (response.ok) {
-            $('table tbody .inp-cbx').each(function () {
-                if (this.checked) {
-                    // remove currline
-                    $(this).parent().parent().parent().remove();
+                    const response = await fetch('/api/deleteClasses', requestOptions);
+                    if (response.ok) {
+                        $('table tbody .inp-cbx').each(function () {
+                            if (this.checked) {
+                                // remove currline
+                                $(this).parent().parent().parent().remove();
+                            }
+                        });
+
+                        // rewrite all numbers of lines after remove
+                        let index = 1;
+                        $('table tbody .nums').each(function () {
+                            $(this).text(index);
+                            index += 1;
+                        });
+
+                        // able curr button
+                        $(this).prop('disabled', false);
+
+                        notify('n', 'Đã xóa các lớp được đánh dấu');
+                    } else if (response.status == 500) {
+                        // Error occurred during upload
+                        notify('x', 'Có lỗi xảy ra!');
+                        // able curr button
+                        $(this).prop('disabled', false);
+                    }
+                } else {
+                    notify('!', 'Không có dữ liệu được đánh dấu');
                 }
-            });
-
-            // rewrite all numbers of lines after remove
-            let index = 1;
-            $('table tbody .nums').each(function () {
-                $(this).text(index);
-                index += 1;
-            });
-
-            // able curr button
-            $(this).prop('disabled', false);
-
-            notify('n', 'Đã xóa các lớp được đánh dấu');
-        } else if (response.status == 500) {
-            // Error occurred during upload
-            notify('x', 'Có lỗi xảy ra!');
-            // able curr button
-            $(this).prop('disabled', false);
-        }
-    } else {
-        notify('!', 'Không có dữ liệu được đánh dấu');
-    }
+            }
+        },
+    );
 });
 
 // Scroll to the end of page

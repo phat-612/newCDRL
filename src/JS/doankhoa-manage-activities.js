@@ -589,6 +589,7 @@ $('#subject_choice').click(async function () {
 // delete check checkbox
 $('#delete__activity').click(async function () {
     // disable curr button
+    
     $(this).prop('disabled', true);
 
     // notify("!", "Đang xóa dữ liệu!");

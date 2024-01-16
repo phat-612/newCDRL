@@ -35,58 +35,64 @@ $('#add__subject').click(function () {
 
 $('#delete__subject').click(async function () {
     // disable curr button
+
     $(this).prop('disabled', true);
+    quest('Bạn có chắc chắn muốn xoá tất cả bộ môn được đánh dấu. Dữ liệu bị xoá sẽ KHÔNG THỂ ĐƯỢC KHÔI PHỤC!').then(
+        async (result) => {
+            if (result) {
+                notify('!', 'Đang xóa dữ liệu!');
 
-    notify('!', 'Đang xóa dữ liệu!');
+                let rm_bs = [];
 
-    let rm_bs = [];
+                $('table tbody .inp-cbx').each(function () {
+                    if (this.checked) {
+                        rm_bs.push(this.value);
+                    }
+                });
 
-    $('table tbody .inp-cbx').each(function () {
-        if (this.checked) {
-            rm_bs.push(this.value);
-        }
-    });
+                if (rm_bs.length > 0) {
+                    // request
+                    const requestOptions = {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            rm_bs: rm_bs,
+                        }),
+                    };
 
-    if (rm_bs.length > 0) {
-        // request
-        const requestOptions = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                rm_bs: rm_bs,
-            }),
-        };
+                    const response = await fetch('/api/deleteBranchs', requestOptions);
+                    if (response.ok) {
+                        $('table tbody .inp-cbx').each(function () {
+                            if (this.checked) {
+                                // remove currline
+                                $(this).parent().parent().parent().remove();
+                            }
+                        });
+                        // rewrite all numbers of lines after remove
+                        let index = 1;
+                        $('table tbody .nums').each(function () {
+                            $(this).text(index);
+                            index += 1;
+                        });
 
-        const response = await fetch('/api/deleteBranchs', requestOptions);
-        if (response.ok) {
-            $('table tbody .inp-cbx').each(function () {
-                if (this.checked) {
-                    // remove currline
-                    $(this).parent().parent().parent().remove();
+                        // able curr button
+                        $(this).prop('disabled', false);
+
+                        notify('n', 'Đã xóa các bộ môn đc đánh dấu');
+                    } else if (response.status == 500) {
+                        // able curr button
+                        $(this).prop('disabled', false);
+                        // Error occurred during upload
+                        notify('x', 'Có lỗi xảy ra!');
+                    }
+                } else {
+                    notify('!', 'Không có bộ môn được đánh dấu');
                 }
-            });
-            // rewrite all numbers of lines after remove
-            let index = 1;
-            $('table tbody .nums').each(function () {
-                $(this).text(index);
-                index += 1;
-            });
-
-            // able curr button
-            $(this).prop('disabled', false);
-
-            notify('n', 'Đã xóa các bộ môn đc đánh dấu');
-        } else if (response.status == 500) {
-            // able curr button
-            $(this).prop('disabled', false);
-            // Error occurred during upload
-            notify('x', 'Có lỗi xảy ra!');
-        }
-    } else {
-        notify('!', 'Không có bộ môn được đánh dấu');
-    }
+            }
+        },
+    );
 });
 
 $('.modal.add').click(function () {

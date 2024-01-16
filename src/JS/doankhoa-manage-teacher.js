@@ -169,60 +169,65 @@ $('.save_btn').click(async function () {
 $('#delete__teacher').click(async function () {
     // disable curr button
     $(this).prop('disabled', true);
+    quest('Bạn có chắc chắn muốn xoá tất cả giáo viên được đánh dấu. Dữ liệu bị xoá sẽ KHÔNG THỂ ĐƯỢC KHÔI PHỤC!').then(
+        async (result) => {
+            if (result) {
+                notify('!', 'Đang xóa dữ liệu!');
 
-    notify('!', 'Đang xóa dữ liệu!');
+                let rm_ts = [];
 
-    let rm_ts = [];
+                $('table tbody .inp-cbx').each(function () {
+                    if (this.checked) {
+                        rm_ts.push(this.value);
+                    }
+                });
 
-    $('table tbody .inp-cbx').each(function () {
-        if (this.checked) {
-            rm_ts.push(this.value);
-        }
-    });
+                if (rm_ts.length > 0) {
+                    // request
+                    const requestOptions = {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            rm_ts: rm_ts,
+                        }),
+                    };
 
-    if (rm_ts.length > 0) {
-        // request
-        const requestOptions = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                rm_ts: rm_ts,
-            }),
-        };
+                    const response = await fetch('/api/deleteTeachers', requestOptions);
+                    if (response.ok) {
+                        $('table tbody .inp-cbx').each(function () {
+                            if (this.checked) {
+                                // remove currline
+                                $(this).parent().parent().parent().remove();
+                            }
+                        });
 
-        const response = await fetch('/api/deleteTeachers', requestOptions);
-        if (response.ok) {
-            $('table tbody .inp-cbx').each(function () {
-                if (this.checked) {
-                    // remove currline
-                    $(this).parent().parent().parent().remove();
+                        // rewrite all numbers of lines after remove
+                        let index = 1;
+                        $('table tbody .nums').each(function () {
+                            $(this).text(index);
+                            index += 1;
+                        });
+
+                        // able curr button
+                        $(this).prop('disabled', false);
+
+                        notify('n', 'Đã xóa các cố vấn được đánh dấu');
+                    } else if (response.status == 500) {
+                        // Error occurred during upload
+                        notify('x', 'Có lỗi xảy ra!');
+                        // able curr button
+                        $(this).prop('disabled', false);
+                    }
+                } else {
+                    // able curr button
+                    $(this).prop('disabled', false);
+                    notify('!', 'Không có cố vấn được đánh dấu');
                 }
-            });
-
-            // rewrite all numbers of lines after remove
-            let index = 1;
-            $('table tbody .nums').each(function () {
-                $(this).text(index);
-                index += 1;
-            });
-
-            // able curr button
-            $(this).prop('disabled', false);
-
-            notify('n', 'Đã xóa các cố vấn được đánh dấu');
-        } else if (response.status == 500) {
-            // Error occurred during upload
-            notify('x', 'Có lỗi xảy ra!');
-            // able curr button
-            $(this).prop('disabled', false);
-        }
-    } else {
-        // able curr button
-        $(this).prop('disabled', false);
-        notify('!', 'Không có cố vấn được đánh dấu');
-    }
+            }
+        },
+    );
 });
 
 // all checkbox set (if all-cbx tick all checkboxs will tick otherwise untick all)
