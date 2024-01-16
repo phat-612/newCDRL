@@ -1115,338 +1115,183 @@ function createAPIRouter(client, wss) {
         }
     });
     // Export students score report --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    router.get('/exportStudentsScore', checkIfUserLoginAPI, async (req, res) => {
-        try {
-            const user = req.session.user;
-            console.log(req.session.pow)
-            if (user.pow[1] || user.pow[2]) {
-                const data = req.query;
-                console.log(data)
-                //data = {year: "HK1_2022-2023", cls: '1', stdlist: []}
-                const school_year = data.year;
-                let cls = data.cls;
-                // create uuid for download file
-                const uuid = uuidv4();
-                const stdlist = JSON.parse(data.stdlist);
-                console.log(stdlist)
-                // check for post data.cls if class define this mean they choose class so that must
-                let student_list = [];
+    router.get("/exportStudentsScore", checkIfUserLoginAPI, async (req, res) => {
+		try {
+			const user = req.session.user;
+			const data = req.query;
+			let cls = data.cls;
+			let stdlist = [];
+			if (data.stdlist) {
+				stdlist = JSON.parse(data.stdlist);
+			}
+			const school_year = data.year;
 
-                student_list = sortStudentName(
-                    await client
-                        .db(name_global_databases)
-                        .collection('user_info')
-                        .find(
-                            {
-                                class: cls,
-                                'power.0': { $exists: true },
-                                _id: { $in: stdlist },
-                            },
-                            { projection: { first_name: 1, last_name: 1 } },
-                        )
-                        .toArray(),
-                );
-                // get all student total score from themself:
-                let scores = [];
+			if (user.pow[0] || user.pow[1] || user.pow[2]) {
+				if ((data.type === "singe") & user.pow[0]) {
+					cls = user.cls[0];
+					stdlist = [user._id];
+				}
+				//data = {year: "HK1_2022-2023", cls: '1', stdlist: []}
+				// create uuid for download file
+				const uuid = uuidv4();
+				// check for post data.cls if class define this mean they choose class so that must
+				let student_list = [];
 
-                if (student_list.length !== 0) {
-                    for (let i = 0; i < student_list.length; i++) {
-                        // [stt, mssv. ho, ten, lop,
-                        // 1.0, 1.1, 1.2, 1.3, 1.4,
-                        // 2.0, 2.1,
-                        // 3.0, 3.1, 3.2,
-                        // 4.0, 4.1, 4.2,
-                        // 5.0, 5.1, 5.2, 5.3,
-                        // "", total, conduct, ""]
-                        let curr_score = {
-                            year: school_year,
-                            mssv: student_list[i]._id,
-                            name: student_list[i].last_name + ' ' + student_list[i].first_name,
-                            class: cls,
-                            std: [],
-                            stf: [],
-                            dep: [],
-                        };
+				student_list = sortStudentName(
+					await client
+						.db(name_global_databases)
+						.collection("user_info")
+						.find(
+							{
+								class: cls,
+								"power.0": { $exists: true },
+								_id: { $in: stdlist },
+							},
+							{ projection: { first_name: 1, last_name: 1 } }
+						)
+						.toArray()
+				);
+				// get all student total score from themself:
+				let scores = [];
 
-                        const curr_students_score = await client
-                            .db(user.dep)
-                            .collection(cls + '_std_table')
-                            .findOne(
-                                {
-                                    mssv: student_list[i]._id,
-                                    school_year: school_year,
-                                },
-                                {
-                                    projection: {
-                                        first: 1,
-                                        second: 1,
-                                        third: 1,
-                                        fourth: 1,
-                                        fifth: 1,
-                                        total: 1,
-                                    },
-                                },
-                            );
+				if (student_list.length !== 0) {
+					for (let i = 0; i < student_list.length; i++) {
+						// [stt, mssv. ho, ten, lop,
+						// 1.0, 1.1, 1.2, 1.3, 1.4,
+						// 2.0, 2.1,
+						// 3.0, 3.1, 3.2,
+						// 4.0, 4.1, 4.2,
+						// 5.0, 5.1, 5.2, 5.3,
+						// "", total, conduct, ""]
+						let curr_score = {
+							year: school_year,
+							mssv: student_list[i]._id,
+							name: student_list[i].last_name + " " + student_list[i].first_name,
+							class: cls,
+							std: [],
+							stf: [],
+							dep: [],
+						};
 
-                        const curr_staff_score = await client
-                            .db(user.dep)
-                            .collection(cls + '_stf_table')
-                            .findOne(
-                                {
-                                    mssv: student_list[i]._id,
-                                    school_year: school_year,
-                                },
-                                {
-                                    projection: {
-                                        first: 1,
-                                        second: 1,
-                                        third: 1,
-                                        fourth: 1,
-                                        fifth: 1,
-                                        total: 1,
-                                    },
-                                },
-                            );
+						const curr_students_score = await client
+							.db(user.dep)
+							.collection(cls + "_std_table")
+							.findOne(
+								{
+									mssv: student_list[i]._id,
+									school_year: school_year,
+								},
+								{
+									projection: {
+										first: 1,
+										second: 1,
+										third: 1,
+										fourth: 1,
+										fifth: 1,
+										total: 1,
+									},
+								}
+							);
 
-                        const curr_departmentt_score = await client
-                            .db(user.dep)
-                            .collection(cls + '_dep_table')
-                            .findOne(
-                                {
-                                    mssv: student_list[i]._id,
-                                    school_year: school_year,
-                                },
-                                {
-                                    projection: {
-                                        first: 1,
-                                        second: 1,
-                                        third: 1,
-                                        fourth: 1,
-                                        fifth: 1,
-                                        total: 1,
-                                    },
-                                },
-                            );
+						const curr_staff_score = await client
+							.db(user.dep)
+							.collection(cls + "_stf_table")
+							.findOne(
+								{
+									mssv: student_list[i]._id,
+									school_year: school_year,
+								},
+								{
+									projection: {
+										first: 1,
+										second: 1,
+										third: 1,
+										fourth: 1,
+										fifth: 1,
+										total: 1,
+									},
+								}
+							);
 
-                        if (curr_students_score) {
-                            curr_score.std.push(...curr_students_score.first);
-                            curr_score.std.push(...curr_students_score.second);
-                            curr_score.std.push(...curr_students_score.third);
-                            curr_score.std.push(...curr_students_score.fourth);
-                            curr_score.std.push(...curr_students_score.fifth);
-                            curr_score.std.push(curr_students_score.total);
-                        } else {
-                            for (let j = 0; j < 18; j++) {
-                                curr_score.std.push('N/A');
-                            }
-                        }
-                        if (curr_staff_score) {
-                            curr_score.stf.push(...curr_staff_score.first);
-                            curr_score.stf.push(...curr_staff_score.second);
-                            curr_score.stf.push(...curr_staff_score.third);
-                            curr_score.stf.push(...curr_staff_score.fourth);
-                            curr_score.stf.push(...curr_staff_score.fifth);
-                            curr_score.stf.push(curr_staff_score.total);
-                        } else {
-                            for (let j = 0; j < 18; j++) {
-                                curr_score.stf.push('N/A');
-                            }
-                        }
+						const curr_departmentt_score = await client
+							.db(user.dep)
+							.collection(cls + "_dep_table")
+							.findOne(
+								{
+									mssv: student_list[i]._id,
+									school_year: school_year,
+								},
+								{
+									projection: {
+										first: 1,
+										second: 1,
+										third: 1,
+										fourth: 1,
+										fifth: 1,
+										total: 1,
+									},
+								}
+							);
 
-                        if (curr_departmentt_score) {
-                            curr_score.dep.push(...curr_departmentt_score.first);
-                            curr_score.dep.push(...curr_departmentt_score.second);
-                            curr_score.dep.push(...curr_departmentt_score.third);
-                            curr_score.dep.push(...curr_departmentt_score.fourth);
-                            curr_score.dep.push(...curr_departmentt_score.fifth);
-                            curr_score.dep.push(curr_departmentt_score.total);
-                        } else {
-                            for (let j = 0; j < 18; j++) {
-                                curr_score.dep.push('N/A');
-                            }
-                        }
+						if (curr_students_score) {
+							curr_score.std.push(...curr_students_score.first);
+							curr_score.std.push(...curr_students_score.second);
+							curr_score.std.push(...curr_students_score.third);
+							curr_score.std.push(...curr_students_score.fourth);
+							curr_score.std.push(...curr_students_score.fifth);
+							curr_score.std.push(curr_students_score.total);
+						} else {
+							for (let j = 0; j < 18; j++) {
+								curr_score.std.push("N/A");
+							}
+						}
+						if (curr_staff_score) {
+							curr_score.stf.push(...curr_staff_score.first);
+							curr_score.stf.push(...curr_staff_score.second);
+							curr_score.stf.push(...curr_staff_score.third);
+							curr_score.stf.push(...curr_staff_score.fourth);
+							curr_score.stf.push(...curr_staff_score.fifth);
+							curr_score.stf.push(curr_staff_score.total);
+						} else {
+							for (let j = 0; j < 18; j++) {
+								curr_score.stf.push("N/A");
+							}
+						}
 
-                        scores.push(curr_score);
-                    }
-                } else {
-                    return res.sendStatus(402);
-                }
+						if (curr_departmentt_score) {
+							curr_score.dep.push(...curr_departmentt_score.first);
+							curr_score.dep.push(...curr_departmentt_score.second);
+							curr_score.dep.push(...curr_departmentt_score.third);
+							curr_score.dep.push(...curr_departmentt_score.fourth);
+							curr_score.dep.push(...curr_departmentt_score.fifth);
+							curr_score.dep.push(curr_departmentt_score.total);
+						} else {
+							for (let j = 0; j < 18; j++) {
+								curr_score.dep.push("N/A");
+							}
+						}
 
-                const temp_namefile = await createPdf('.downloads', scores);
-                // tải file xlsx về máy người dùng
-                res.download(path.join('.downloads', temp_namefile));
+						scores.push(curr_score);
+					}
+				} else {
+					return res.sendStatus(402);
+				}
 
-                // delete file after 12 hours
+				const temp_namefile = await createPdf(".downloads", scores);
+				// tải file xlsx về máy người dùng
+				res.download(path.join(".downloads", temp_namefile));
 
-                scheduleFileDeletion(path.join('.downloads', temp_namefile));
-            }
-            else if (user.pow['0']) {
-                const data = req.query;
-                //data = {year: "HK1_2022-2023", cls: '1', stdlist: []}
-                const school_year = data.year;
-                let cls = user.cls[0];
-                // create uuid for download file
-                const stdlist = [`${user._id}`];
-                // check for post data.cls if class define this mean they choose class so that must
-                let student_list = [];
+				// delete file after 12 hours
 
-                student_list = sortStudentName(
-                    await client
-                        .db(name_global_databases)
-                        .collection('user_info')
-                        .find(
-                            {
-                                class: cls,
-                                'power.0': { $exists: true },
-                                _id: { $in: stdlist },
-                            },
-                            { projection: { first_name: 1, last_name: 1 } },
-                        )
-                        .toArray(),
-                );
-                // get all student total score from themself:
-                let scores = [];
-
-                if (student_list.length !== 0) {
-                    for (let i = 0; i < student_list.length; i++) {
-                        // [stt, mssv. ho, ten, lop,
-                        // 1.0, 1.1, 1.2, 1.3, 1.4,
-                        // 2.0, 2.1,
-                        // 3.0, 3.1, 3.2,
-                        // 4.0, 4.1, 4.2,
-                        // 5.0, 5.1, 5.2, 5.3,
-                        // "", total, conduct, ""]
-                        let curr_score = {
-                            year: school_year,
-                            mssv: student_list[i]._id,
-                            name: student_list[i].last_name + ' ' + student_list[i].first_name,
-                            class: cls,
-                            std: [],
-                            stf: [],
-                            dep: [],
-                        };
-
-                        const curr_students_score = await client
-                            .db(user.dep)
-                            .collection(cls + '_std_table')
-                            .findOne(
-                                {
-                                    mssv: student_list[i]._id,
-                                    school_year: school_year,
-                                },
-                                {
-                                    projection: {
-                                        first: 1,
-                                        second: 1,
-                                        third: 1,
-                                        fourth: 1,
-                                        fifth: 1,
-                                        total: 1,
-                                    },
-                                },
-                            );
-
-                        const curr_staff_score = await client
-                            .db(user.dep)
-                            .collection(cls + '_stf_table')
-                            .findOne(
-                                {
-                                    mssv: student_list[i]._id,
-                                    school_year: school_year,
-                                },
-                                {
-                                    projection: {
-                                        first: 1,
-                                        second: 1,
-                                        third: 1,
-                                        fourth: 1,
-                                        fifth: 1,
-                                        total: 1,
-                                    },
-                                },
-                            );
-
-                        const curr_departmentt_score = await client
-                            .db(user.dep)
-                            .collection(cls + '_dep_table')
-                            .findOne(
-                                {
-                                    mssv: student_list[i]._id,
-                                    school_year: school_year,
-                                },
-                                {
-                                    projection: {
-                                        first: 1,
-                                        second: 1,
-                                        third: 1,
-                                        fourth: 1,
-                                        fifth: 1,
-                                        total: 1,
-                                    },
-                                },
-                            );
-
-                        if (curr_students_score) {
-                            curr_score.std.push(...curr_students_score.first);
-                            curr_score.std.push(...curr_students_score.second);
-                            curr_score.std.push(...curr_students_score.third);
-                            curr_score.std.push(...curr_students_score.fourth);
-                            curr_score.std.push(...curr_students_score.fifth);
-                            curr_score.std.push(curr_students_score.total);
-                        } else {
-                            for (let j = 0; j < 18; j++) {
-                                curr_score.std.push('N/A');
-                            }
-                        }
-                        if (curr_staff_score) {
-                            curr_score.stf.push(...curr_staff_score.first);
-                            curr_score.stf.push(...curr_staff_score.second);
-                            curr_score.stf.push(...curr_staff_score.third);
-                            curr_score.stf.push(...curr_staff_score.fourth);
-                            curr_score.stf.push(...curr_staff_score.fifth);
-                            curr_score.stf.push(curr_staff_score.total);
-                        } else {
-                            for (let j = 0; j < 18; j++) {
-                                curr_score.stf.push('N/A');
-                            }
-                        }
-
-                        if (curr_departmentt_score) {
-                            curr_score.dep.push(...curr_departmentt_score.first);
-                            curr_score.dep.push(...curr_departmentt_score.second);
-                            curr_score.dep.push(...curr_departmentt_score.third);
-                            curr_score.dep.push(...curr_departmentt_score.fourth);
-                            curr_score.dep.push(...curr_departmentt_score.fifth);
-                            curr_score.dep.push(curr_departmentt_score.total);
-                        } else {
-                            for (let j = 0; j < 18; j++) {
-                                curr_score.dep.push('N/A');
-                            }
-                        }
-
-                        scores.push(curr_score);
-                    }
-                } else {
-                    return res.sendStatus(402);
-                }
-
-                const temp_namefile = await createPdf('.downloads', scores);
-                // tải file xlsx về máy người dùng
-                res.download(path.join('.downloads', temp_namefile));
-
-                // delete file after 12 hours
-
-                scheduleFileDeletion(path.join('.downloads', temp_namefile));
-                    
-            } 
-            else {
-                return res.sendStatus(403);
-            }
-        } catch (err) {
-            console.log('SYSTEM | EXPORT_STUDENTS_SCORE | ERROR | ', err);
-            return res.sendStatus(500);
-        }
-    });
+				scheduleFileDeletion(path.join(".downloads", temp_namefile));
+			} else {
+				return res.sendStatus(403);
+			}
+		} catch (err) {
+			console.log("SYSTEM | EXPORT_STUDENTS_SCORE | ERROR | ", err);
+			return res.sendStatus(500);
+		}
+	});
     // Load score list of student in specific class at specific time ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
     router.get('/loadScoresList', checkIfUserLoginAPI, async (req, res) => {
         try {

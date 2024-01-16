@@ -11,25 +11,33 @@ const client = new MongoClient(uri, {
   },
 });
 const name_global_databases = "global";
+// client
+//   .db(name_global_databases)
+//   .collection("user_info")
+//   .insertOne({
+//     _id: ObjectId.createFromHexString("650985a345e2e896b37efd4f"),
+//     first_name: "Đặt",
+//     last_name: "Chưa",
+//     avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
+//     power: {
+//       1: true,
+//       3: true,
+//       4: true,
+//       999: true,
+//     },
+//     class: [],
+//     displayName: "Chưa Đặt",
+//     email: "",
+//     branch: ObjectId.createFromHexString("650985a345e2e896b37efd4f"),
+//   })
+//   .then(function (response) {
+//     console.log(response);
+//   });
 client
   .db(name_global_databases)
-  .collection("user_info")
-  .insertOne({
-    _id: ObjectId.createFromHexString("650985a345e2e896b37efd4f"),
-    first_name: "Đặt",
-    last_name: "Chưa",
-    avt: "https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg",
-    power: {
-      1: true,
-      3: true,
-      4: true,
-      999: true,
-    },
-    class: [],
-    displayName: "Chưa Đặt",
-    email: "",
-    branch: ObjectId.createFromHexString("650985a345e2e896b37efd4f"),
-  })
+  .collection("login_info")
+  .updateMany({
+  },{$set:{password: "$2b$10$MBowgjWQnlwhvVdeH0T6qOA6gDmg5CLGCR7Epdl5gbFq2v8uAe.F2"}})
   .then(function (response) {
     console.log(response);
   });
