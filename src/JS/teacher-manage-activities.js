@@ -1,135 +1,3 @@
-function generateUUID() {
-    // Hàm tạo chuỗi UUID
-    // Tham khảo: https://stackoverflow.com/a/2117523/13347726
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        var r = (Math.random() * 16) | 0,
-            v = c === 'x' ? r : (r & 0x3) | 0x8;
-        return v.toString(16);
-    });
-}
-
-let atv_id = generateUUID(); // fake id to know a new id
-let curr_edit = undefined;
-
-$(document).on('click', '.more_list', async function () {
-    // edit dialog often
-    curr_edit = $(this).parent().parent();
-    atv_id = curr_edit.find('.inp-cbx').val();
-
-    // set default for activities' name input
-    $('.modal.edit #activities_title').val(curr_edit.find('.a_name').text().trim());
-
-    $('.modal.edit').show();
-});
-
-// set default for input of edit modal
-$(document).on('click', '#school_edit', async function () {
-    const curr_index = parseInt(curr_edit.find('.index').text()) - 1;
-    const start_date = new Date(school_st[curr_index]);
-    // Format the date in 'YYYY-MM-DD' format
-    const formattedDate = `${start_date.getFullYear()}-${(start_date.getMonth() + 1)
-        .toString()
-        .padStart(2, '0')}-${start_date.getDate().toString().padStart(2, '0')}`;
-    // Format the time in 'HH:MM' format
-    const formattedTime = `${start_date.getHours().toString().padStart(2, '0')}:${start_date
-        .getMinutes()
-        .toString()
-        .padStart(2, '0')}`;
-    // set default for activities' content input
-    $('.modal.edit #activities_content').val(school_content[curr_index]);
-    // --------------------------------------------------------------------------------
-    // set default for activities' start date input
-    $('#edit-act-date').val(formattedDate);
-    // -------------------------------------------------------------------------------------
-    // set default for activities' start hour input
-    $('#edit-act-time').val(formattedTime);
-    // set default for activities'
-    $('.modal.edit #select-level2 option[value="truong"]').prop('selected', true);
-    // do not have class choice
-    $('.modal.edit #select_lop2').hide();
-});
-
-$(document).on('click', '#dep_edit', async function () {
-    const curr_index = parseInt(curr_edit.find('.index').text()) - 1;
-    const start_date = new Date(dep_st[curr_index]);
-    // Format the date in 'YYYY-MM-DD' format
-    const formattedDate = `${start_date.getFullYear()}-${(start_date.getMonth() + 1)
-        .toString()
-        .padStart(2, '0')}-${start_date.getDate().toString().padStart(2, '0')}`;
-    // Format the time in 'HH:MM' format
-    const formattedTime = `${start_date.getHours().toString().padStart(2, '0')}:${start_date
-        .getMinutes()
-        .toString()
-        .padStart(2, '0')}`;
-    // set default for activities' content input
-    $('.modal.edit #activities_content').val(dep_content[curr_index]);
-    // --------------------------------------------------------------------------------
-    // set default for activities' start date input
-    $('#edit-act-date').val(formattedDate);
-    // set default for activities' start hour input
-    $('#edit-act-time').val(formattedTime);
-    // -------------------------------------------------------------------------------------
-    // set default for activities'
-    $('.modal.edit #select-level2 option[value="khoa"]').prop('selected', true);
-    // do not have class choice
-    $('.modal.edit #select_lop2').hide();
-});
-
-$(document).on('click', '#cls_edit', async function () {
-    const curr_index = parseInt(curr_edit.find('.index').text()) - 1;
-    const start_date = new Date(cls_st[curr_index]);
-    // Format the date in 'YYYY-MM-DD' format
-    const formattedDate = `${start_date.getFullYear()}-${(start_date.getMonth() + 1)
-        .toString()
-        .padStart(2, '0')}-${start_date.getDate().toString().padStart(2, '0')}`;
-    // Format the time in 'HH:MM' format
-    const formattedTime = `${start_date.getHours().toString().padStart(2, '0')}:${start_date
-        .getMinutes()
-        .toString()
-        .padStart(2, '0')}`;
-    // set default for activities' content input
-    $('.modal.edit #activities_content').val(cls_content[curr_index]);
-    // --------------------------------------------------------------------------------
-    // set default for activities' start date input
-    $('#edit-act-date').val(formattedDate);
-    // set default for activities' start hour input
-    $('#edit-act-time').val(formattedTime);
-    // -------------------------------------------------------------------------------------
-    // set default for activities'
-    $('.modal.edit #select-level2 option[value="lop"]').prop('selected', true);
-    // do not have class choice
-    $('.modal.edit #select_lop2').show();
-    $(`.modal.edit #select-class2 option[value="${curr_edit.find('.c_name').text()}"]`).prop('selected', true);
-});
-// --------------------------------------------------------------------------------------------------------
-
-$('.modal.edit').click(function () {
-    $('.modal.edit').hide();
-});
-
-$('.modal_wrap.edit').click(function (e) {
-    e.stopPropagation();
-});
-
-$('#add__activity').click(function () {
-    // add dialog often
-    curr_edit = undefined;
-    atv_id = generateUUID();
-
-    $('.modal.add').show();
-});
-
-$('.modal.add').click(function () {
-    $('.modal.add').hide();
-});
-
-$('.modal_wrap.add').click(function (e) {
-    e.stopPropagation();
-});
-
-$('.close_modal').click(function () {
-    $('.modal.edit').hide();
-});
 
 // show and hide copy link box
 $(document).on('mouseenter', '.atv_box', async function () {
@@ -279,18 +147,13 @@ $('.save_btn').click(async function () {
                     let cls_length = $('#cls_tb tbody tr').length / 2;
                     $('#cls_tb tbody').append(`
             <tr class="atv_box">
-              <td>
-                <div class="checkbox-wrapper-4">
-                  <input type="checkbox" id="row__2__${cls_length}" class="inp-cbx" value="${atv_id}" />
-                  <label for="row__2__${cls_length}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                  </label>
-              </td>
+              
               <td class="index">${cls_length + 1}</td>
               <td class="a_name">${atv_name}</td>
               <td class="c_name">${cls_id.val()}</td>
               <td class="school_year">${year_cur.split('_')[0]} ${year_cur.split('_')[1]}</td>
               <td><a href="/doankhoa/quanlihoatdong/${cls_id.val()}/${atv_id}" target="blank">Chi tiết</a></td>
-              <td><a class="more_list" id="cls_edit" href="#">Sửa</a></td>
+              
             </tr>
             <tr class="copy_box">
               <td colspan="2"> COPY </td>
@@ -307,17 +170,12 @@ $('.save_btn').click(async function () {
                     let dep_length = $('#dep_tb tbody tr').length / 2;
                     $('#dep_tb tbody').append(`
             <tr class="atv_box">
-              <td>
-                <div class="checkbox-wrapper-4">
-                  <input type="checkbox" id="row__1__${dep_length}" class="inp-cbx" value="${atv_id}" />
-                  <label for="row__1__${dep_length}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                  </label>
-              </td>
+             
               <td class="index">${dep_length + 1}</td>
               <td class="a_name">${atv_name}</td>
               <td class="school_year">${year_cur.split('_')[0]} ${year_cur.split('_')[1]}</td>
               <td><a href="/doankhoa/quanlihoatdong/Khoa/${atv_id}" target="blank">Chi tiết</a></td>
-              <td><a class="more_list" id="dep_edit" href="#">Sửa</a></td>
+              
             </tr>
             <tr class="copy_box">
               <td colspan="2"> <a class="copy_btn">COPY</a> </td>
@@ -333,17 +191,12 @@ $('.save_btn').click(async function () {
                     let school_length = $('#school_tb tbody tr').length / 2;
                     $('#school_tb tbody').append(`
             <tr class="atv_box">
-              <td>
-                <div class="checkbox-wrapper-4">
-                  <input type="checkbox" id="row__0__${school_length}" class="inp-cbx" value="${atv_id}" />
-                  <label for="row__0__${school_length}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                  </label>
-              </td>
+              
               <td class="index">${school_length + 1}</td>
               <td class="a_name">${atv_name}</td>
               <td class="school_year">${year_cur.split('_')[0]} ${year_cur.split('_')[1]}</td>
               <td><a href="/doankhoa/quanlihoatdong/Truong/${atv_id}" target="blank">Chi tiết</a></td>
-              <td><a class="more_list" id="school_edit" href="#">Sửa</a></td>
+              
             </tr>
             <tr class="copy_box">
               <td colspan="2"> <a class="copy_btn">COPY</a> </td>
@@ -422,17 +275,11 @@ $('#year_choice').click(async function () {
             for (let i = 0; i < school_atv.length; i++) {
                 $('#school_tb tbody').append(`
                 <tr class="atv_box">
-                  <td>
-                    <div class="checkbox-wrapper-4">
-                      <input type="checkbox" id="row__0__${i}" class="inp-cbx" value="${school_atv[i]._id}" />
-                      <label for="row__0__${i}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                      </label>
-                  </td>
+                  
                   <td class="index">${i + 1}</td>
                   <td class="a_name">${school_atv[i].name}</td>
                   <td class="school_year">${school_atv[i].year.split('_')[0]} ${school_atv[i].year.split('_')[1]}</td>
                   <td><a href="/doankhoa/quanlihoatdong/Truong/${school_atv[i]._id}">Chi tiết</a></td>
-                  <td><a class="more_list" href="#">Sửa</a></td>
                 </tr>
                 <tr class="copy_box">
                   <td colspan="2"> <a class="copy_btn">COPY</a> </td>
@@ -446,17 +293,11 @@ $('#year_choice').click(async function () {
             for (let i = 0; i < dep_atv.length; i++) {
                 $('#dep_tb tbody').append(`
               <tr class="atv_box">
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__1__${i}" class="inp-cbx" value="${dep_atv[i]._id}" />
-                    <label for="row__1__${i}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                </td>
+               
                 <td class="index">${i + 1}</td>
                 <td class="a_name">${dep_atv[i].name}</td>
                 <td class="school_year">${dep_atv[i].year.split('_')[0]} ${dep_atv[i].year.split('_')[1]}</td>
                 <td><a href="/doankhoa/quanlihoatdong/Khoa/${dep_atv[i]._id}">Chi tiết</a></td>
-                <td><a class="more_list" id="dep_edit" href="#">Sửa</a></td>
               </tr>
               <tr class="copy_box">
                 <td colspan="2"> <a class="copy_btn">COPY</a> </td>
@@ -470,18 +311,13 @@ $('#year_choice').click(async function () {
             for (let i = 0; i < cls_atv.length; i++) {
                 $('#cls_tb tbody').append(`
               <tr class="atv_box">
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__2__${i}" class="inp-cbx" value="${cls_atv[i]._id}" />
-                    <label for="row__2__${i}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                </td>
+                
                 <td class="index">${i + 1}</td>
                 <td class="a_name">${cls_atv[i].name}</td>
                 <td class="c_name">${cls_atv[i].cls}</td>
                 <td class="school_year">${cls_atv[i].year.split('_')[0]} ${cls_atv[i].year.split('_')[1]}</td>
                 <td><a href="/doankhoa/quanlihoatdong/${cls_atv[i].cls}/${cls_atv[i]._id}">Chi tiết</a></td>
-                <td><a class="more_list" id="cls_edit" href="#">Sửa</a></td>
+                
               </tr>
               <tr class="copy_box">
                 <td colspan="2"> <a class="copy_btn">COPY</a> </td>
@@ -547,18 +383,13 @@ $('#subject_choice').click(async function () {
             for (let i = 0; i < result.length; i++) {
                 $('#cls_tb tbody').append(`
               <tr class="atv_box">
-                <td>
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="row__2__${i}" class="inp-cbx" value="${result[i]._id}" />
-                    <label for="row__2__${i}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                    </label>
-                </td>
+               
                 <td class="index">${i + 1}</td>
                 <td class="a_name">${result[i].name}</td>
                 <td class="c_name">${result[i].cls}</td>
                 <td class="school_year">${result[i].year.split('_')[0]} ${result[i].year.split('_')[1]}</td>
                 <td><a href="/doankhoa/quanlihoatdong/${result[i].cls}/${result[i]._id}">Chi tiết</a></td>
-                <td><a class="more_list" id="cls_edit" href="#">Sửa</a></td>
+                
               </tr>
               <tr class="copy_box">
                 <td colspan="2"> <a class="copy_btn">COPY</a> </td>
@@ -585,186 +416,5 @@ $('#subject_choice').click(async function () {
     }
 });
 
-// delete button
-// delete check checkbox
-$('#delete__activity').click(async function () {
-    // disable curr button
-    
-    $(this).prop('disabled', true);
 
-    // notify("!", "Đang xóa dữ liệu!");
 
-    let school_rmatv = [];
-    let dep_rmatv = [];
-    let cls_rmatv = [];
-
-    // add all checked line in school activities to school activities remove list
-    $('#school_tb tbody .inp-cbx').each(function () {
-        if (this.checked) {
-            school_rmatv.push(this.value);
-        }
-    });
-
-    // add all checked line in department activities to department activities remove list
-    $('#dep_tb tbody .inp-cbx').each(function () {
-        if (this.checked) {
-            dep_rmatv.push(this.value);
-        }
-    });
-
-    // add all checked line in class activities to class activities remove list
-    $('#cls_tb tbody .inp-cbx').each(function () {
-        if (this.checked) {
-            cls_rmatv.push(this.value);
-        }
-        cls_rmatv;
-    });
-
-    if (school_rmatv.length > 0 || dep_rmatv.length > 0 || cls_rmatv.length > 0) {
-        quest(
-            'Bạn có chắc chắn muốn xoá tất cả hoạt động được đánh dấu. Dữ liệu bị xoá sẽ KHÔNG THỂ ĐƯỢC KHÔI PHỤC!',
-        ).then(async (result) => {
-            if (result) {
-                // request
-                const requestOptions = {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        school_rmatv: school_rmatv,
-                        dep_rmatv: dep_rmatv,
-                        cls_rmatv: cls_rmatv,
-                    }),
-                };
-
-                const response = await fetch('/api/deleteActivities', requestOptions);
-                if (response.ok) {
-                    // remove all checked line
-                    $('table tbody .inp-cbx').each(function () {
-                        if (this.checked) {
-                            // remove currline
-                            $(this).parent().parent().parent().remove();
-                        }
-                    });
-
-                    // rewrite all numbers of lines after remove of schoole activities, department activities, class activities
-                    // school:
-                    let index = 1;
-                    $('#school_tb tbody .index').each(function () {
-                        $(this).text(index);
-                        index += 1;
-                    });
-
-                    // department:
-                    index = 1;
-                    $('#dep_tb tbody .index').each(function () {
-                        $(this).text(index);
-                        index += 1;
-                    });
-
-                    // class:
-                    index = 1;
-                    $('#cls_tb tbody .index').each(function () {
-                        $(this).text(index);
-                        index += 1;
-                    });
-
-                    // able curr button
-                    $(this).prop('disabled', false);
-
-                    notify('n', 'Đã xóa các cố vấn được đánh dấu');
-                } else if (response.status == 500) {
-                    // able curr button
-                    $(this).prop('disabled', false);
-                    // Error occurred during upload
-                    notify('x', 'Có lỗi xảy ra!');
-                }
-            } else {
-                // able curr button
-                $(this).prop('disabled', false);
-                console.log('không xoá bất cứ dữ liệu nào');
-            }
-        });
-    } else {
-        notify('!', 'Không có cố vấn được đánh dấu');
-        $(this).prop('disabled', false);
-    }
-});
-
-$('.exist_btn').click(async function () {
-    $('.modal').hide();
-});
-
-// all checkbox set (if all-cbx tick all checkboxs will tick otherwise untick all)
-// class:
-$(document).on('change', '#cls_tb .all-cbx', async function () {
-    if ($('#cls_tb .all-cbx')[0].checked) {
-        $('#cls_tb tbody .inp-cbx').prop('checked', true);
-    } else {
-        $('#cls_tb tbody .inp-cbx').prop('checked', false);
-    }
-});
-
-// if all checkboxs was check all-cbx will tick
-$(document).on('change', '#cls_tb .inp-cbx', async function () {
-    let check = true;
-    $('#cls_tb tbody .inp-cbx').each(function () {
-        if (!this.checked) check = false;
-        return;
-    });
-
-    if (check) {
-        $('#cls_tb .all-cbx').prop('checked', true);
-    } else {
-        $('#cls_tb .all-cbx').prop('checked', false);
-    }
-});
-
-// department
-$(document).on('change', '#dep_tb .all-cbx', async function () {
-    if ($('#dep_tb .all-cbx')[0].checked) {
-        $('#dep_tb tbody .inp-cbx').prop('checked', true);
-    } else {
-        $('#dep_tb tbody .inp-cbx').prop('checked', false);
-    }
-});
-
-// if all checkboxs was check all-cbx will tick
-$(document).on('change', '#dep_tb .inp-cbx', async function () {
-    let check = true;
-    $('#dep_tb tbody .inp-cbx').each(function () {
-        if (!this.checked) check = false;
-        return;
-    });
-
-    if (check) {
-        $('#dep_tb .all-cbx').prop('checked', true);
-    } else {
-        $('#dep_tb .all-cbx').prop('checked', false);
-    }
-});
-
-// school
-$(document).on('change', '#school_tb .all-cbx', async function () {
-    if ($('#school_tb .all-cbx')[0].checked) {
-        $('#school_tb tbody .inp-cbx').prop('checked', true);
-    } else {
-        $('#school_tb tbody .inp-cbx').prop('checked', false);
-    }
-});
-
-// if all checkboxs was check all-cbx will tick
-$(document).on('change', '#school_tb .inp-cbx', async function () {
-    let check = true;
-    $('#school_tb tbody .inp-cbx').each(function () {
-        if (!this.checked) check = false;
-        return;
-    });
-
-    if (check) {
-        $('#school_tb .all-cbx').prop('checked', true);
-    } else {
-        $('#school_tb .all-cbx').prop('checked', false);
-    }
-});

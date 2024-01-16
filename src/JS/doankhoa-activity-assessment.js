@@ -94,44 +94,50 @@ $('#delete-student').on('click', async () => {
     let cbxs = $('.delete-cbx');
     let dataDelete = {};
     let tableDelete = [];
-    for (let i = 0; i < cbxs.length; i++) {
-        if (cbxs[i].checked) {
-            dataDelete['student_list.' + cbxs[i].value.toString()] = '';
-            tableDelete.push(cbxs[i]);
-        }
-    }
-
-    notify('n', 'Đang xóa sinh viên...');
-
-    if (tableDelete.length > 0) {
-        try {
-            let postData = JSON.stringify({
-                _id: _id,
-                level: level,
-                dataDelete: dataDelete,
-            });
-            const requestOptions = {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: postData,
-            };
-            const response = await fetch('/api/deleteActivityStudent', requestOptions);
-            if (response.ok) {
-                for (let i = 0; i < tableDelete.length; i++) {
-                    tableDelete[i].parentNode.parentNode.parentNode.remove();
+    quest('Bạn có chắc chắn muốn xoá tất cả học sinh được đánh dấu. Dữ liệu bị xoá sẽ KHÔNG THỂ ĐƯỢC KHÔI PHỤC!').then(
+        async (result) => {
+            if (result) {
+                for (let i = 0; i < cbxs.length; i++) {
+                    if (cbxs[i].checked) {
+                        dataDelete['student_list.' + cbxs[i].value.toString()] = '';
+                        tableDelete.push(cbxs[i]);
+                    }
                 }
-                notify('n', 'Xóa sinh viên thành công!');
-            } else {
-                notify('!', 'Xóa sinh viên thất bại!');
+
+                notify('n', 'Đang xóa sinh viên...');
+
+                if (tableDelete.length > 0) {
+                    try {
+                        let postData = JSON.stringify({
+                            _id: _id,
+                            level: level,
+                            dataDelete: dataDelete,
+                        });
+                        const requestOptions = {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: postData,
+                        };
+                        const response = await fetch('/api/deleteActivityStudent', requestOptions);
+                        if (response.ok) {
+                            for (let i = 0; i < tableDelete.length; i++) {
+                                tableDelete[i].parentNode.parentNode.parentNode.remove();
+                            }
+                            notify('n', 'Xóa sinh viên thành công!');
+                        } else {
+                            notify('!', 'Xóa sinh viên thất bại!');
+                        }
+                    } catch (error) {
+                        console.log(error);
+                    }
+                } else {
+                    notify('!', 'Vui lòng chọn sinh viên');
+                }
             }
-        } catch (error) {
-            console.log(error);
-        }
-    } else {
-        notify('!', 'Vui lòng chọn sinh viên');
-    }
+        },
+    );
 });
 
 // reset all student approval to default

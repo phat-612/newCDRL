@@ -15,6 +15,9 @@
         top: 1.4rem;
         right: 38%;
     }
+    .modal_wrap {
+        width: 95%;
+    }
 
     .modal_wrap_img {
         flex-wrap: wrap;
@@ -29,6 +32,10 @@
         margin-top: 20px;
         padding: 10px;
         background-color: #dccece;
+    }
+
+    .modal_wrap_img_item:hover p{
+        top: 100%;
     }
 
     .button-35:hover {
@@ -48,7 +55,7 @@
     }
 
     .m-auto {
-        margin: 3rem auto 9rem auto;
+        margin: 3rem auto 10.3rem auto;
     }
 
     .menu1 {

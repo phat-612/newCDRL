@@ -83,6 +83,15 @@ th {
 tr:hover {
     background-color: rgba(158, 158, 158, 0.507);
 }
+.checkbox-wrapper-4{
+    position: relative;
+}
+.checkbox-wrapper-4 input[type="checkbox"]{
+    position: absolute;
+    visibility: hidden;
+    top: 0;
+    left: 0;
+}
 
 /* modal */
 .modal {
@@ -142,6 +151,7 @@ label {
     text-align: center;
 }
 
+
 .activity-board h2 {
     border-bottom: 1px solid;
     margin-bottom: 1rem;
@@ -151,6 +161,7 @@ label {
     color: #ffffff;
     padding: 1rem;
 }
+
 
 .model-lb {
     margin-right: 2rem;
@@ -832,4 +843,10 @@ textarea::placeholder {
 }
 .show_img {
     display: flex !important;
+}
+@media screen and (max-width: 600px) {
+    .foot_modal .modal_wrap{
+        bottom: auto;
+        height: auto ;
+    }
 }

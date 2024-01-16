@@ -222,7 +222,7 @@ exports.getDriveFileLinkAndDescription = async (fileId) => {
     await initStorage();
     await getAccessToken();
     const fileMetadata = await drive.files.get({ fileId, fields: 'id,description', auth });
-    const directLink = `https://drive.google.com/uc?export=view&id=${fileMetadata.data.id}`;
+    const directLink = `https://drive.google.com/uc?export=view&id=${fileMetadata.data.id}&export=view&authuser=0`;
 
     return { fileDescription: fileMetadata.data.description, fileLink: directLink };
 };

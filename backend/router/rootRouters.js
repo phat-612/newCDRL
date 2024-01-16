@@ -10,6 +10,7 @@ function createRootRouter(client, parentDirectory) {
     router.get('/', checkIfUserLoginRoute, async (req, res) => {
         try {
             const user = req.session.user;
+            console.log(user)
             if (user.pow[0]) {
                 const schoolYear = await client
                     .db(name_global_databases)

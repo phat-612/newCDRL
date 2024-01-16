@@ -21,6 +21,12 @@
 .year_full {
     padding-bottom: 1rem;
 }
+.first_child{
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+}
 .hk {
     display: flex;
     align-items: center;
@@ -101,44 +107,3 @@ table tr td:nth-child(9) a {
     right: 20%;
 }
 
-@media screen and (max-width: 600px) {
-    .year_full {
-        display: block;
-        padding: 0 1rem;
-        width: 100%;
-    }
-    .hk {
-        width: 100%;
-        margin-bottom: 0;
-    }
-    .danh_sach_bang_diem {
-        overflow: auto;
-    }
-    .content .hk_nk {
-        padding: 0 0.5rem;
-        gap: 0;
-    }
-    .year_full {
-        flex-direction: column;
-    }
-
-    .button-35-a {
-        position: revert !important;
-        width: 95%;
-
-        margin: 1rem !important;
-    }
-    .--bomon {
-        width: 80%;
-    }
-    .--class {
-        width: 100%;
-    }
-    .hk span {
-        width: 25%;
-    }
-    .hk {
-        width: 100%;
-        justify-content: space-around;
-    }
-}

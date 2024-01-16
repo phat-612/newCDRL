@@ -119,7 +119,7 @@ async function checkIfUserLoginRoute(req, res, next) {
         if ((user.pow[1] && user.pow[4]) || user.pow[8]) {
             res.locals.isnotST = true;
         }
-        if (user.pow[0] && !user.pow[1]) {
+        if (user.pow[0]) {
             res.locals.iskhoa = false;
             res.locals.isbancansu = false;
             res.locals.isgiaovien = false;
@@ -162,7 +162,7 @@ async function mark(table, user, mssv, data, marker, cls) {
     //   third: [],
     //   fourth: [],
     //   fifth: [],
-    //   img_ids: [],
+    //   img_ids: {},
     //   total: 100,
     // }
 

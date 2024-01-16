@@ -27,4 +27,11 @@
     .content__info a .button-35 {
         width: 75%;
     }
+    .group_btn{
+        display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    }
 }

@@ -3,7 +3,9 @@
     margin: 0;
     box-sizing: content-box;
 }
-
+.container{
+    margin-bottom: 3rem;
+}
 .content {
     margin-top: 2rem;
     max-width: 91rem;
