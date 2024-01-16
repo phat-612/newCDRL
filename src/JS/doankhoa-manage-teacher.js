@@ -169,7 +169,7 @@ $('.save_btn').click(async function () {
 $('#delete__teacher').click(async function () {
     // disable curr button
     $(this).prop('disabled', true);
-    quest('Bạn có chắc chắn muốn xoá tất cả giáo viên được đánh dấu. Dữ liệu bị xoá sẽ KHÔNG THỂ ĐƯỢC KHÔI PHỤC!').then(
+    quest('Bạn có chắc chắn muốn xoá tất cả cố vấn được đánh dấu. Dữ liệu bị xoá sẽ KHÔNG THỂ ĐƯỢC KHÔI PHỤC!').then(
         async (result) => {
             if (result) {
                 notify('!', 'Đang xóa dữ liệu!');
