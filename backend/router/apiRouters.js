@@ -647,6 +647,7 @@ function createAPIRouter(client, wss) {
                                 //[['MSSV', 'Họ', 'Tên' ]]
                                 sheet.cell('D1').value('Email');
                                 sheet.cell('E1').value('Password');
+                                const dataRows = [];
                                 for (let i = 1; i < values.length; i++) {
                                     let pw = await randomPassword();
                                     let email = await generateEmail(
@@ -670,6 +671,25 @@ function createAPIRouter(client, wss) {
                                         password: hashPassword(pw),
                                         first: 'new_user',
                                     };
+
+
+
+
+                                    const dataRow = [
+                                        dataInsertUser._id,
+                                        pw,
+                                        dataInsertUser.last_name,
+                                        dataInsertUser.first_name,
+                                    ];
+                                    console.log(dataRow);
+                                    dataRows.push(dataRow);
+
+
+
+
+
+
+
                                     client.db('global').collection('user_info').updateOne(
                                         {
                                             _id: dataInsertUser._id,
@@ -704,9 +724,23 @@ function createAPIRouter(client, wss) {
                                 sheet.column('D').width(maxWidthEmail);
                                 const uuid = uuidv4();
                                 await workbook.toFileAsync(path.join('.downloads', uuid + '.xlsx'));
-                                res.download(path.join('.downloads', uuid + '.xlsx'));
                                 // xoa file sau khi xu ly
                                 scheduleFileDeletion(path.join('.downloads', uuid + '.xlsx'));
+                                const workbookacc = await XlsxPopulate.fromFileAsync(
+                                    "./src/excelTemplate/FILE_TAO_ACC.xlsx"
+                                );
+
+
+                                if (dataRows.length > 0) {
+                                    await workbookacc.sheet(0).cell("A2").value(dataRows);
+                                }
+                                const outputFile = path.join(`.downloads/${uuid}.xlsx`);
+
+                                await workbookacc.toFileAsync(outputFile);
+                                scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
+                                return res.download(path.join(".downloads", uuid + ".xlsx"))
+
+
                             } catch (err) {
                                 console.log('SYSTEM | CREATE_ACCOUNT | ERROR | ', err);
                                 return res.sendStatus(500);
@@ -2915,76 +2949,76 @@ function createAPIRouter(client, wss) {
             return res.sendStatus(500);
         }
     });
-    router.post("/exportaccount",upload.single('file'), checkIfUserLoginAPI, async (req, res) => {
+    router.post("/exportaccount", upload.single('file'), checkIfUserLoginAPI, async (req, res) => {
 
-		try {
-			const user = req.session.user;
-			const Class = req.body.class;
-				const studentList = sortStudentName(
-					await client
-						.db(name_global_databases)
-						.collection("user_info")
-						.find(
-							{ class: Class, "power.0": { $exists: true } },
-							{
-								projection: {
-									_id: 1,
-									last_name: 1,
-									first_name: 1,
-								},
-							}
-						)
-						.toArray()
-				);
+        try {
+            const user = req.session.user;
+            const Class = req.body.class;
+            const studentList = sortStudentName(
+                await client
+                    .db(name_global_databases)
+                    .collection("user_info")
+                    .find(
+                        { class: Class, "power.0": { $exists: true } },
+                        {
+                            projection: {
+                                _id: 1,
+                                last_name: 1,
+                                first_name: 1,
+                            },
+                        }
+                    )
+                    .toArray()
+            );
 
-				const workbook = await XlsxPopulate.fromFileAsync(
-					"./src/excelTemplate/FILE_TAO_ACC.xlsx"
-				);
+            const workbook = await XlsxPopulate.fromFileAsync(
+                "./src/excelTemplate/FILE_TAO_ACC.xlsx"
+            );
 
-				const dataRows = [];
+            const dataRows = [];
 
-				for (const student of studentList) {
-					const loginInfo = await client
-						.db(name_global_databases)
-						.collection("login_info")
-						.findOne(
-							{ _id: student._id },
-							{
-								projection: {
-									_id: 1,
-									password: 1,
-								},
-							}
-						);
-					if (loginInfo) {
-						const dataRow = [
-							student._id,
-							loginInfo.password,
-							student.last_name,
-							student.first_name,
-						];
+            for (const student of studentList) {
+                const loginInfo = await client
+                    .db(name_global_databases)
+                    .collection("login_info")
+                    .findOne(
+                        { _id: student._id },
+                        {
+                            projection: {
+                                _id: 1,
+                                password: 1,
+                            },
+                        }
+                    );
+                if (loginInfo) {
+                    const dataRow = [
+                        student._id,
+                        loginInfo.password,
+                        student.last_name,
+                        student.first_name,
+                    ];
 
-						dataRows.push(dataRow);
-					}
-				}
+                    dataRows.push(dataRow);
+                }
+            }
 
-				if (dataRows.length > 0) {
-					await workbook.sheet(0).cell("A2").value(dataRows);
-				}
+            if (dataRows.length > 0) {
+                await workbook.sheet(0).cell("A2").value(dataRows);
+            }
 
-				const uuid = uuidv4();
-				const outputFile = path.join(`.downloads/${uuid}.xlsx`);
+            const uuid = uuidv4();
+            const outputFile = path.join(`.downloads/${uuid}.xlsx`);
 
-				await workbook.toFileAsync(outputFile);
-                console.log(path.join(".downloads", uuid + ".xlsx"))
-				scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
-				return res.download(path.join(".downloads", uuid + ".xlsx"));
-		} catch (err) {
-			console.log("SYSTEM | EXPORT ACCOUNT | ERROR | ", err);
-			return res.sendStatus(500);
-		}
+            await workbook.toFileAsync(outputFile);
+            console.log(path.join(".downloads", uuid + ".xlsx"))
+            scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
+            return res.download(path.join(".downloads", uuid + ".xlsx"));
+        } catch (err) {
+            console.log("SYSTEM | EXPORT ACCOUNT | ERROR | ", err);
+            return res.sendStatus(500);
+        }
 
-	});
+    });
     // api get img acti student
     router.post('/getImgActivities', checkIfUserLoginAPI, async (req, res) => {
         try {
