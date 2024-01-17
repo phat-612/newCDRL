@@ -340,7 +340,6 @@ function createStaffRouter(client) {
                     .db(name_global_databases)
                     .collection('classes')
                     .findOne({ _id: user.cls[0] }, { projection: { _id: 0, years: 1 } });
-
                 // get all student in staff member class:
                 const student_list = sortStudentName(
                     await client
