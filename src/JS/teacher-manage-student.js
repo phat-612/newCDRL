@@ -410,6 +410,7 @@ $(document).ready(() => {
             try {
                 let postData = JSON.stringify({
                     dataDelete: dataDelete,
+                    cls: cls,
                 });
                 const requestOptions = {
                     method: 'POST',

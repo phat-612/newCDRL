@@ -562,7 +562,9 @@ $('#subject_choice').click(async function () {
               </tr>
               <tr class="copy_box">
                 <td colspan="2"> <a class="copy_btn">COPY</a> </td>
-                <td colspan="6"><a class="copy_link" href="#">Link đăng kí và điểm danh hoạt động</a></td>
+                <td colspan="6"><a class="copy_link" href="/dangkyhoatdong?id=${result[i]._id}&class=${
+                    result[i].cls
+                }&level=lop">Link đăng kí và điểm danh hoạt động</a></td>
               </tr>
             `);
             }
@@ -589,7 +591,7 @@ $('#subject_choice').click(async function () {
 // delete check checkbox
 $('#delete__activity').click(async function () {
     // disable curr button
-    
+
     $(this).prop('disabled', true);
 
     // notify("!", "Đang xóa dữ liệu!");

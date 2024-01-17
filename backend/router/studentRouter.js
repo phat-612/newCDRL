@@ -57,7 +57,7 @@ function createStudentRouter(client) {
                 mssv = req.session.user._id;
             }
             const schoolYearParam = req.query.schoolYear;
-            const studentTotalScore = await client
+            let studentTotalScore = await client
                 .db(user.dep)
                 .collection(user.cls[0] + '_std_table')
                 .findOne(
@@ -78,7 +78,6 @@ function createStudentRouter(client) {
                         },
                     },
                 );
-
             let stfTotalScore = await client
                 .db(user.dep)
                 .collection(user.cls[0] + '_stf_table')
@@ -130,34 +129,32 @@ function createStudentRouter(client) {
                 third: ['Chưa chấm', 'Chưa chấm', 'Chưa chấm'],
                 total: 'Chưa chấm',
             };
-            if (!stfTotalScore) {
+            if (!studentTotalScore || !studentTotalScore.fifth) {
+                studentTotalScore = nulltable;
+            }
+            if (!stfTotalScore || !stfTotalScore.fifth) {
                 stfTotalScore = nulltable;
             }
-            if (!depTotalScore) {
+            if (!depTotalScore || !depTotalScore.fifth) {
                 depTotalScore = nulltable;
             }
             let link_img = [];
-            if (studentTotalScore) {
-                for (const [key, value] of Object.entries(studentTotalScore.img_ids)) {
-                    if (key == 'global') {
-                        for (const i of value) {
-                            link_img.push(await server.getDriveFileLinkAndDescription(i));
-                        }
-                    } else {
-                        let activitie_info;
-                        activitie_info = await client
-                            .db(user.dep)
-                            .collection(`${user.cls[0]}_activities`)
-                            .findOne(
-                                {
-                                    _id: key,
-                                },
-                                { projection: { name: 1 } },
-                            );
-                        if (!activitie_info) {
+            if (
+                (studentTotalScore && studentTotalScore.first) ||
+                (stfTotalScore && stfTotalScore.fifth) ||
+                (depTotalScore && depTotalScore.fifth)
+            ) {
+                if (studentTotalScore.img_ids) {
+                    for (const [key, value] of Object.entries(studentTotalScore.img_ids)) {
+                        if (key == 'global') {
+                            for (const i of value) {
+                                link_img.push(await server.getDriveFileLinkAndDescription(i));
+                            }
+                        } else {
+                            let activitie_info;
                             activitie_info = await client
                                 .db(user.dep)
-                                .collection('activities')
+                                .collection(`${user.cls[0]}_activities`)
                                 .findOne(
                                     {
                                         _id: key,
@@ -166,7 +163,7 @@ function createStudentRouter(client) {
                                 );
                             if (!activitie_info) {
                                 activitie_info = await client
-                                    .db(name_global_databases)
+                                    .db(user.dep)
                                     .collection('activities')
                                     .findOne(
                                         {
@@ -174,14 +171,25 @@ function createStudentRouter(client) {
                                         },
                                         { projection: { name: 1 } },
                                     );
+                                if (!activitie_info) {
+                                    activitie_info = await client
+                                        .db(name_global_databases)
+                                        .collection('activities')
+                                        .findOne(
+                                            {
+                                                _id: key,
+                                            },
+                                            { projection: { name: 1 } },
+                                        );
+                                }
                             }
-                        }
-                        if (activitie_info) {
-                            for (const i of value) {
-                                let imginfo = await server.getDriveFileLinkAndDescription(i);
-                                if (imginfo) {
-                                    imginfo.fileDescription = activitie_info.name + '-' + imginfo.fileDescription;
-                                    link_img.push(imginfo);
+                            if (activitie_info) {
+                                for (const i of value) {
+                                    let imginfo = await server.getDriveFileLinkAndDescription(i);
+                                    if (imginfo) {
+                                        imginfo.fileDescription = activitie_info.name + '-' + imginfo.fileDescription;
+                                        link_img.push(imginfo);
+                                    }
                                 }
                             }
                         }

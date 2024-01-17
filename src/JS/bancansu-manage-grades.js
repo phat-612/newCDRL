@@ -225,8 +225,14 @@ async function mark() {
         };
 
         const response = await fetch('/api/stf_mark', requestOptions);
-        if (response.ok) {
+        if ((response.status = 200)) {
             notify('n', 'Đã lưu phiếu đánh giá điểm rèn luyện thành công!');
+        } else if (response.status == 203) {
+            // Error occurred during upload
+            notify('!', 'Đã quá thời hạn chấm điểm!');
+        } else if (response.status == 205) {
+            // Error occurred during upload
+            notify('!', 'Khoa đã chấm điểm bạn không thể tiếp tục chấm điểm!');
         } else if (response.status == 500) {
             // Error occurred during upload
             notify('x', 'Có lỗi xảy ra!');

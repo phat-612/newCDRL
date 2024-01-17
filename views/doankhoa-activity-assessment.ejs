@@ -146,50 +146,75 @@
                               </div>
                             </td>
                             <td><%= i+1 %></td>
-                            <td class="mssv">
-                              <%=students_data[i]._id%>
-                            </td>
-                            <td class="a_name">
-                              <%= students_data[i].displayName %>
-                            </td>
-                            <td class="class_student">
-                              <%= students_data[i].class[0] %>
-                            </td>
-                            <td class="show_img_btn">
-                              <a href="">Xem</a>
-                            </td>
-                            <td colspan="2">
-                              <div class="checkbox-wrapper-4">
-                                <% if (curr_act.student_list[students_data[i]._id] > 0) { %>
-                                  <input type="checkbox" id="row__1__<%= i %>" class="inp-cbx approval-cbx" value="<%=students_data[i]._id%>" checked/>
-                                <% } else { %>
-                                  <input type="checkbox" id="row__1__<%= i %>" class="inp-cbx approval-cbx" value="<%=students_data[i]._id%>" />
-                                <% } %>
-                                <label for="row__1__<%= i %>" class="cbx"><span> <svg height="10px" width="12px"></svg> </span>
-                                </label>
-                              </div>
-                            </td>
+                              <%if(students_data[i]._id!=='none'){%>
+                                    <td class="mssv">
+                                      <%=students_data[i]._id%>
+                                    </td>
+                                    <td class="a_name">
+                                      <%= students_data[i].displayName %>
+                                    </td>
+                                    <td class="class_student">
+                                      <%= students_data[i].class[0] %>
+                                    </td>
+                                    <td class="show_img_btn">
+                                      <a href="">Xem</a>
+                                    </td>
+                                    <td colspan="2">
+                                      <div class="checkbox-wrapper-4">
+                                        <% if (curr_act.student_list[students_data[i]._id] > 0) { %>
+                                          <input type="checkbox" id="row__1__<%= i %>" class="inp-cbx approval-cbx" value="<%=students_data[i]._id%>" checked/>
+                                        <% } else { %>
+                                          <input type="checkbox" id="row__1__<%= i %>" class="inp-cbx approval-cbx" value="<%=students_data[i]._id%>" />
+                                        <% } %>
+                                        <label for="row__1__<%= i %>" class="cbx"><span> <svg height="10px" width="12px"></svg> </span>
+                                        </label>
+                                      </div>
+                                    </td>
 
-                            <td colspan="2">
-                              <div class="checkbox-wrapper-4">
-                                <% if (curr_act.student_list[students_data[i]._id] > 1) { %>
-                                  <input type="checkbox" id="row__2__<%= i %>" class="inp-cbx bonus-cbx" value="<%=students_data[i]._id%>" checked/>
-                                <% } else { %>
-                                  <input type="checkbox" id="row__2__<%= i %>" class="inp-cbx bonus-cbx" value="<%=students_data[i]._id%>" />
-                                <% } %>
-                                <label for="row__2__<%= i %>" class="cbx"><span> <svg height="10px" width="12px"></svg> </span>
-                                </label>
-                              </div>
-                            </td>
-                          </tr>
+                                    <td colspan="2">
+                                      <div class="checkbox-wrapper-4">
+                                        <% if (curr_act.student_list[students_data[i]._id] > 1) { %>
+                                          <input type="checkbox" id="row__2__<%= i %>" class="inp-cbx bonus-cbx" value="<%=students_data[i]._id%>" checked/>
+                                        <% } else { %>
+                                          <input type="checkbox" id="row__2__<%= i %>" class="inp-cbx bonus-cbx" value="<%=students_data[i]._id%>" />
+                                        <% } %>
+                                        <label for="row__2__<%= i %>" class="cbx"><span> <svg height="10px" width="12px"></svg> </span>
+                                        </label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                              <%}else{%>
+                                  <td class="mssv">
+                                    <%=students_data[i]._id%>
+                                  </td>
+                                  <td class="a_name">
+                                    không có sinh viên này 
+                                  </td>
+                                  <td class="class_student">
+                                    không có sinh viên này 
+                                  </td>
+                                  <td class="show_img_btn">
+                                  </td>
+                                  <td colspan="2">
+                                    <div class="checkbox-wrapper-4">
+                                      x
+                                    </div>
+                                  </td>
 
-                          <%}%>
+                                  <td colspan="2">
+                                    <div class="checkbox-wrapper-4">
+                                      x
+                                    </div>
+                                  </td>
+                                </tr>
+                              <%}%>
+                        <%}%>
                     </tbody>
                   </table>
                  </div>
                   <%} else {%>
                     <h1>Không có học sinh nào!</h1>
-                    <%}%>
+                  <%}%>
               </div>
               <!--ghi danh -->
             </div>

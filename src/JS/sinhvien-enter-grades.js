@@ -433,8 +433,14 @@ async function mark(img_ids) {
         };
 
         const response = await fetch('/api/std_mark', requestOptions);
-        if (response.ok) {
+        if ((response.status = 200)) {
             notify('n', 'Đã lưu phiếu đánh giá điểm rèn luyện thành công!');
+        } else if (response.status == 203) {
+            // Error occurred during upload
+            notify('!', 'Đã quá thời hạn chấm điểm!');
+        } else if (response.status == 205) {
+            // Error occurred during upload
+            notify('!', 'Cố vấn hoặc ban cán sự đã chấm điểm bạn không thể tiếp tục chấm điểm!');
         } else if (response.status == 500) {
             // Error occurred during upload
             notify('x', 'Có lỗi xảy ra!');
@@ -477,7 +483,7 @@ function remarksellect() {
 }
 
 function removeNow() {
-    console.log('hahah')
+    console.log('hahah');
     $('.menu1 .hope_star').removeClass('now');
 }
 $(document).on('click', '.button_medium', function () {

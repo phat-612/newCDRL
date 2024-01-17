@@ -17,7 +17,7 @@ API NẾU KHÔNG CÓ QUYỀN THÌ GỬI STATUS 403 res.sendStatus(403);
     8: quản lý cố vấn (khoa)
     9: quản lý lớp (khoa)
     10: đảng viên
-    11: quyền quản lý hoạt động VIP (khoa) - thêm quyền xoá và thêm hoạt động
+    11: quyền quản lý hoạt động VIP (khoa) - thêm quyền xoá,sửa và thêm hoạt động
     ...
     
     role sv [0]

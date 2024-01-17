@@ -149,12 +149,18 @@ async function checkIfUserLoginRoute(req, res, next) {
                 .db(name_global_databases)
                 .collection('user_info')
                 .findOne({ _id: user._id }, { projection: { _id: 0, avt: 1, displayName: 1 } });
-            res.locals.avt = user_info.avt;
-            res.locals.displayName = user_info.displayName;
+            if (user_info) {
+                res.locals.avt = user_info.avt;
+                res.locals.displayName = user_info.displayName;
+            } else {
+                res.locals.avt = '';
+                res.locals.displayName = '';
+            }
         }
         next();
     }
 }
+
 async function mark(table, user, mssv, data, marker, cls) {
     // data = {
     //   first: [],
@@ -232,50 +238,83 @@ async function mark(table, user, mssv, data, marker, cls) {
                 { upsert: true },
             );
 
-        updateStudentTotalScore(table, school_year.year, mssv, data.total, marker.last_name + ' ' + marker.first_name);
+        if (
+            updateStudentTotalScore(
+                table,
+                school_year.year,
+                mssv,
+                data.total,
+                marker.last_name + ' ' + marker.first_name,
+            )
+        )
+            return 0;
+        else return 2;
     }
+    return 1;
 }
 
 async function updateStudentTotalScore(table, school_year, mssv, total, marker) {
+    const step = await client
+        .db(name_global_databases)
+        .collection('user_info')
+        .findOne(
+            {
+                _id: mssv,
+            },
+            {
+                projection: {
+                    total_score: 1,
+                },
+            },
+        );
+
     // update total score list for student
     switch (table) {
         case '_std_table':
-            await client
-                .db(name_global_databases)
-                .collection('user_info')
-                .updateOne(
-                    {
-                        _id: mssv,
-                    },
-                    {
-                        $set: {
-                            [`total_score.${school_year}.std`]: total,
+            if (step[`total_score.${school_year}.step`] <= 1) {
+                await client
+                    .db(name_global_databases)
+                    .collection('user_info')
+                    .updateOne(
+                        {
+                            _id: mssv,
                         },
-                    },
-                    {
-                        upsert: true,
-                    },
-                );
-            break;
+                        {
+                            $set: {
+                                [`total_score.${school_year}.std`]: total,
+                                [`total_score.${school_year}.step`]: 1,
+                            },
+                        },
+                        {
+                            upsert: true,
+                        },
+                    );
+                return true;
+            }
+            return false;
         case '_stf_table':
-            await client
-                .db(name_global_databases)
-                .collection('user_info')
-                .updateOne(
-                    {
-                        _id: mssv,
-                    },
-                    {
-                        $set: {
-                            [`total_score.${school_year}.stf`]: total,
-                            [`total_score.${school_year}.marker`]: marker,
+            if (step[`total_score.${school_year}.step`] <= 2) {
+                await client
+                    .db(name_global_databases)
+                    .collection('user_info')
+                    .updateOne(
+                        {
+                            _id: mssv,
                         },
-                    },
-                    {
-                        upsert: true,
-                    },
-                );
-            break;
+                        {
+                            $set: {
+                                [`total_score.${school_year}.stf`]: total,
+                                [`total_score.${school_year}.marker`]: marker,
+                                [`total_score.${school_year}.step`]: 2,
+                            },
+                        },
+                        {
+                            upsert: true,
+                        },
+                    );
+                return true;
+            }
+            return false;
         case '_dep_table':
             await client
                 .db(name_global_databases)
@@ -287,13 +326,14 @@ async function updateStudentTotalScore(table, school_year, mssv, total, marker) 
                     {
                         $set: {
                             [`total_score.${school_year}.dep`]: total,
+                            [`total_score.${school_year}.step`]: 3,
                         },
                     },
                     {
                         upsert: true,
                     },
                 );
-            break;
+            return true;
     }
 }
 
@@ -420,6 +460,44 @@ async function deleteClassApi(data, user) {
                 class: [data.rm_cls[i]],
                 'power.0': { $exists: true },
             });
+
+        let info_search = `student_list.${user._id}`;
+        await client
+            .db(user.dep)
+            .collection(`${data.rm_cls[i]}_activities`)
+            .updateMany(
+                {
+                    [info_search]: { $exists: true },
+                },
+                {
+                    $pull: { student_list: user._id, ai: user._id },
+                },
+            );
+
+        await client
+            .db(user.dep)
+            .collection('activities')
+            .updateMany(
+                {
+                    [info_search]: { $exists: true },
+                },
+                {
+                    $pull: { student_list: user._id, ai: user._id },
+                },
+            );
+
+        await client
+            .db(name_global_databases)
+            .collection('activities')
+            .updateMany(
+                {
+                    [info_search]: { $exists: true },
+                },
+                {
+                    $pull: { student_list: user._id, ai: user._id },
+                },
+            );
+
         // xoa lop khoi giao vien
         await client
             .db(name_global_databases)

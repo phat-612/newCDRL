@@ -308,6 +308,7 @@ viewLinks.forEach(function (link) {
             for (const i of dataimg) {
                 const imgElement = document.createElement('img');
                 imgElement.src = i.fileLink;
+                imgElement.crossOrigin = 'anonymous';
                 divElement.appendChild(imgElement);
             }
         } else if (response.status == 404) {

@@ -345,8 +345,13 @@
               </td>
               <td>
               </td>
-              <td id="total_muc_1"> <%=  Scorestd.first[0] + Scorestd.first[1] + Scorestd.first[2] + Scorestd.first[3] + Scorestd.first[4] %> điểm
+              <%if (Scorestd.first[0] == 'Chưa chấm') {%>
+              <td id="total_muc_1"> <%=  Scorestd.first[0] %>
               </td>
+              <%}else {%>
+                <td id="total_muc_1"> <%=  Scorestd.first[0] + Scorestd.first[1] + Scorestd.first[2] + Scorestd.first[3] + Scorestd.first[4] %> điểm
+                </td>
+                  <%}%>
               <%if (Score.first[0] == 'Chưa chấm') {%>
               <td id="total_muc_1"> <%=  Score.first[0]%>
                 <%}else {%>
@@ -543,11 +548,16 @@
         </td>
         <td>
         </td>
-        <td>
-          <%=Scorestd.second[0]+Scorestd.second[1]%> điểm
 
+          <%if (Scorestd.first[0] == 'Chưa chấm') {%>
+            <td id="total_muc_2"> <%=  Scorestd.first[0] %>
+            </td>
+            <%}else {%>
+              <td id="total_muc_2"> <%=Scorestd.second[0]+Scorestd.second[1]%>
+              </td>
+              <%}%>
         <%if (Score.first[0] == 'Chưa chấm') {%>
-      <td id="total_muc_1"> <%=  Score.first[0]%>
+      <td id="total_muc_2"> <%=  Score.first[0]%>
         <%}else {%>
       <td id="total_muc_2"> <%=Score.second[0]+Score.second[1]%> điểm
         <%}%>
@@ -714,14 +724,18 @@
     </td>
     <td>
     </td>
-    <td>
-      <%=Scorestd.third[0]+Scorestd.third[1]+Scorestd.third[2]%> điểm
+    <%if (Scorestd.first[0] == 'Chưa chấm') {%>
+      <td id="total_muc_3"> <%=  Scorestd.first[0] %>
+      </td>
+      <%}else {%>
+        <td id="total_muc_3"><%=Scorestd.third[0]+Scorestd.third[1]+Scorestd.third[2]%> điểm
 
     </td>
+    <%}%>
     <%if (Score.first[0] == 'Chưa chấm') {%>
-    <td id="total_muc_1"> <%=  Score.first[0]%>
+    <td id="total_muc_3"> <%=  Score.first[0]%>
       <%}else {%>
-    <td id="total_muc_1"> <%=Score.third[0]+Score.third[1]+Score.third[2]%> điểm
+    <td id="total_muc_3"> <%=Score.third[0]+Score.third[1]+Score.third[2]%> điểm
       <%}%>
         </td>
   
@@ -819,9 +833,14 @@
     </td>
     <td>
     </td>
+    <%if (Scorestd.first[0] == 'Chưa chấm') {%>
+      <td id="total_muc_4"> <%=  Scorestd.first[0] %>
+      </td>
+      <%}else {%>
     <td id="total_muc_4">
       <%=Scorestd.fourth[0]+Scorestd.fourth[1]+Scorestd.fourth[2]%> điểm
     </td>
+    <%}%>
     <%if (Score.first[0] == 'Chưa chấm') {%>
     <td id="total_muc_4"> <%=  Score.first[0]%>
       <%}else {%>
@@ -1002,10 +1021,15 @@
     </td>
     <td>
     </td>
+    <%if (Scorestd.first[0] == 'Chưa chấm') {%>
+      <td id="total_muc_5"> <%=  Scorestd.first[0] %>
+      </td>
+      <%}else {%>
     <td id="total_muc_5">
       <%=Scorestd.fifth[0]+Scorestd.fifth[1]+Scorestd.fifth[2]+Scorestd.fifth[3]%> điểm
 
     </td>
+    <%}%>
     <%if (Score.first[0] == 'Chưa chấm') {%>
     <td id="total_muc_5"> <%=  Score.first[0]%>
       <%}else {%>
@@ -1028,8 +1052,13 @@
     <td>
 
     </td>
+    <%if (Scorestd.first[0] == 'Chưa chấm') {%>
+      <td id="total_all"> <%=  Scorestd.first[0] %>
+      </td>
+      <%}else {%>
     <td id="total_all"><%=Scorestd.total%> điểm
     </td>
+    <%}%>
     <%if (Score.first[0] == 'Chưa chấm') {%>
     <td id="total_all"><%=Score.total%>
       <%}else {%>

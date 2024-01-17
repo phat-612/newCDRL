@@ -116,57 +116,69 @@
                   </thead>
                   <tbody>
                     <% for (let i=0; i < hoatdong.length; i++) {%>
-                    <%if(hoatdong[i].activitie_info_lop){%>
+                    <%if(hoatdong[i].activitie_info_lop.length>0){%>
+                      <%hoatdong[i].activitie_info_lop.forEach((element) => {%>
                     <tr>
                       <td><%=i+1%></td>
                       <td><%=hoatdong[i].year.split("_")[0]%></td>
-                      <td><%=hoatdong[i].activitie_info_lop.name%></td>
-                      <td><%=hoatdong[i].activitie_info_lop.level%></td>
-                      <%if (hoatdong[i].activitie_info_lop.thamgia){%>
+                      <td><%=element.name%></td>
+                      <td><%=element.level%></td>
+                      <%if (element.thamgia){%>
                       <td>x</td>
                       <%} else {%>
                       <td></td>
-                      <%}%> <%if (hoatdong[i].activitie_info_lop.khenthuong){%>
+                      <%}%> <%if (element.khenthuong){%>
                       <td>x</td>
                       <%} else {%>
                       <td></td>
                       <%}%>
+                      <%});%>
+
                     </tr>
                     <%}%>
                     <%if(hoatdong[i].activitie_info_khoa){%>
+                      <%hoatdong[i].activitie_info_khoa.forEach((element) => {%>
+
                     <tr>
                       <td><%=i+1%></td>
                       <td><%=hoatdong[i].year.split("_")[0]%></td>
-                      <td><%=hoatdong[i].activitie_info_khoa.name%></td>
-                      <td><%=hoatdong[i].activitie_info_khoa.level%></td>
-                      <%if (hoatdong[i].activitie_info_khoa.thamgia){%>
+                      <td><%=element.name%></td>
+                      <td><%=element.level%></td>
+                      <%if (element.thamgia){%>
                       <td>x</td>
                       <%} else {%>
                       <td></td>
-                      <%}%> <%if (hoatdong[i].activitie_info_khoa.khenthuong){%>
+                      <%}%> <%if (element.khenthuong){%>
                       <td>x</td>
                       <%} else {%>
                       <td></td>
                       <%}%>
                     </tr>
+                    <%});%>
+
                     <%}%>
-                    <%if(hoatdong[i].activitie_info_truong){%>
+                    <%if(hoatdong[i].activitie_info_truong.length>0){%>
+                      <%hoatdong[i].activitie_info_lop.forEach((element) => {%>
+
                     <tr>
                       <td><%=i+1%></td>
                       <td><%=hoatdong[i].year.split("_")[0]%></td>
-                      <td><%=hoatdong[i].activitie_info_truong.name%></td>
-                      <td><%=hoatdong[i].activitie_info_truong.level%></td>
-                      <%if (hoatdong[i].activitie_info_truong.thamgia){%>
+                      <td><%=element.name%></td>
+                      <td><%=element.level%></td>
+                      <%if (element.thamgia){%>
                       <td>x</td>
                       <%} else {%>
                       <td></td>
-                      <%}%> <%if (hoatdong[i].activitie_info_truong.khenthuong){%>
+                      <%}%> <%if (element.khenthuong){%>
                       <td>x</td>
                       <%} else {%>
                       <td></td>
                       <%}%>
                     </tr>
+                    <%});%>
+
                     <%}%>
+                    
                     <%}%>
                   </tbody>
                 </table>

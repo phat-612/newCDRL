@@ -274,6 +274,7 @@ function createStaffRouter(client) {
                     .find(
                         {
                             year: school_year.year,
+                            cls: user.cls[0],
                         },
                         {
                             projection: {

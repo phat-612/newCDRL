@@ -10,7 +10,6 @@ function createRootRouter(client, parentDirectory) {
     router.get('/', checkIfUserLoginRoute, async (req, res) => {
         try {
             const user = req.session.user;
-            console.log(user)
             if (user.pow[0]) {
                 const schoolYear = await client
                     .db(name_global_databases)
@@ -71,13 +70,14 @@ function createRootRouter(client, parentDirectory) {
                                 };
                             }),
                         );
+                        console.log(studentTotalScores);
                         const studentActivities = await Promise.all(
                             schoolYearsToSearch.map(async (year) => {
                                 info_search = `student_list.${user._id}`;
                                 let activitie_info_lop = await client
                                     .db(user.dep)
                                     .collection(`${user.cls[0]}_activities`)
-                                    .findOne(
+                                    .find(
                                         {
                                             [info_search]: { $exists: true },
                                             year: year,
@@ -90,19 +90,23 @@ function createRootRouter(client, parentDirectory) {
                                                 level: 1,
                                             },
                                         },
-                                    );
-                                if (activitie_info_lop) {
-                                    if (activitie_info_lop.ai && activitie_info_lop.ai[user._id]) {
-                                        activitie_info_lop.thamgia = true;
-                                    }
-                                    if (activitie_info_lop.student_list[user._id] == 2) {
-                                        activitie_info_lop.khenthuong = true;
-                                    }
+                                    )
+
+                                    .toArray();
+                                if (activitie_info_lop.length > 0) {
+                                    activitie_info_lop.forEach((element) => {
+                                        if (element.ai && element.ai[user._id]) {
+                                            element.thamgia = true;
+                                        }
+                                        if (element.student_list[user._id] == 2) {
+                                            element.khenthuong = true;
+                                        }
+                                    });
                                 }
                                 let activitie_info_khoa = await client
                                     .db(user.dep)
                                     .collection('activities')
-                                    .findOne(
+                                    .find(
                                         {
                                             [info_search]: { $exists: true },
                                             year: year,
@@ -115,19 +119,24 @@ function createRootRouter(client, parentDirectory) {
                                                 level: 1,
                                             },
                                         },
-                                    );
-                                if (activitie_info_khoa) {
-                                    if (activitie_info_khoa.ai && activitie_info_khoa.ai[user._id]) {
-                                        activitie_info_khoa.thamgia = true;
-                                    }
-                                    if (activitie_info_khoa.student_list[user._id] == 2) {
-                                        activitie_info_khoa.khenthuong = true;
-                                    }
+                                    )
+                                    .toArray();
+
+                                if (activitie_info_khoa.length > 0) {
+                                    activitie_info_khoa.forEach((element) => {
+                                        if (element.ai && element.ai[user._id]) {
+                                            element.thamgia = true;
+                                        }
+                                        if (element.student_list[user._id] == 2) {
+                                            element.khenthuong = true;
+                                        }
+                                    });
                                 }
+
                                 let activitie_info_truong = await client
                                     .db(name_global_databases)
                                     .collection('activities')
-                                    .findOne(
+                                    .find(
                                         {
                                             [info_search]: { $exists: true },
                                             year: year,
@@ -140,14 +149,17 @@ function createRootRouter(client, parentDirectory) {
                                                 level: 1,
                                             },
                                         },
-                                    );
-                                if (activitie_info_truong) {
-                                    if (activitie_info_truong.ai && activitie_info_truong.ai[user._id]) {
-                                        activitie_info_truong.thamgia = true;
-                                    }
-                                    if (activitie_info_truong.student_list[user._id] == 2) {
-                                        activitie_info_truong.khenthuong = true;
-                                    }
+                                    )
+                                    .toArray();
+                                if (activitie_info_truong.length > 0) {
+                                    activitie_info_truong.forEach((element) => {
+                                        if (element.ai && element.ai[user._id]) {
+                                            element.thamgia = true;
+                                        }
+                                        if (element.student_list[user._id] == 2) {
+                                            element.khenthuong = true;
+                                        }
+                                    });
                                 }
 
                                 return {
@@ -348,6 +360,7 @@ function createRootRouter(client, parentDirectory) {
                             activitie_info = await client.db(user.dep).collection(`${user.cls[0]}_activities`).findOne({
                                 _id: query.id,
                             });
+                            console.log(user.cls[0]);
                         } else {
                             const collections = await client.db(user.dep).listCollections().toArray();
                             // Filter collections ending with '_activities'

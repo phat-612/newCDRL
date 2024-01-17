@@ -278,12 +278,20 @@ $(document).ready(() => {
                     if (response.ok) {
                         delete dataStudents[cls]; // clear data
                         delete skip[cls]; // reset to load again
-                        await loadStudents(true);
-
+                        await getStudentList();
+                        loadStudents(true);
                         notify('n', 'Thêm sinh viên thành công');
                         const blobUrl = URL.createObjectURL(await response.blob());
-
+                        const downloadLink = document.createElement('a');
+                        downloadLink.href = blobUrl;
+                        downloadLink.download = 'Danh_sach_tai_khoan.xlsx';
+                        downloadLink.style.display = 'none';
+                        document.body.appendChild(downloadLink);
+                        downloadLink.click();
                         URL.revokeObjectURL(blobUrl);
+
+                        notify('n', 'Thêm sinh viên thành công');
+
                         $('.js_md_add').text('Thêm');
                     } else {
                         notify('!', 'Thêm sinh viên thất bại');
@@ -375,8 +383,6 @@ $(document).ready(() => {
                             } else {
                                 notify('!', 'Thêm sinh viên thất bại ');
                             }
-
-
                         } catch (error) {
                             console.log(error);
                         }
@@ -430,6 +436,7 @@ $(document).ready(() => {
             try {
                 let postData = JSON.stringify({
                     dataDelete: dataDelete,
+                    cls: cls,
                 });
                 const requestOptions = {
                     method: 'POST',
@@ -507,4 +514,4 @@ $(document).ready(() => {
         }
     });
 });
-// xuất ra cái tài khoản 
+// xuất ra cái tài khoản

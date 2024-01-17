@@ -738,8 +738,11 @@ function createDepRouter(client) {
                                     },
                                 },
                             );
-                        // add current data to students data
-                        students_data.push(data);
+                        if (data) {
+                            students_data.push(data);
+                        } else {
+                            students_data.push({ _id: 'none', displayName: 'none', class: ['none'] });
+                        }
 
                         if (value == 1) {
                             // have one student not have bonus

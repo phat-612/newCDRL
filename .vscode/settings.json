@@ -1,8 +1,11 @@
 {
-  "terminal.integrated.tabs.enabled": false,
-  "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "[javascript]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features"
-  }
+    "terminal.integrated.tabs.enabled": false,
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "[javascript]": {
+        "editor.defaultFormatter": "ms-vsliveshare.vsliveshare"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "ms-vsliveshare.vsliveshare"
+    }
 }

@@ -441,9 +441,16 @@ function createAPIRouter(client, wss) {
                         },
                     );
 
-                await mark('_std_table', user, user._id, data, marker, user.cls[0]);
+                const marked = await mark('_std_table', user, user._id, data, marker, user.cls[0]);
 
-                return res.sendStatus(200);
+                switch (marked) {
+                    case 0:
+                        return res.sendStatus(200);
+                    case 1:
+                        return res.sendStatus(203);
+                    case 2:
+                        return res.sendStatus(205);
+                }
             } else {
                 return res.sendStatus(403);
             }
@@ -473,9 +480,16 @@ function createAPIRouter(client, wss) {
                         },
                     );
 
-                await mark('_stf_table', user, data.mssv, data, marker, data.class);
+                const marked = await mark('_stf_table', user, data.mssv, data, marker, data.class);
 
-                return res.sendStatus(200);
+                switch (marked) {
+                    case 0:
+                        return res.sendStatus(200);
+                    case 1:
+                        return res.sendStatus(203);
+                    case 2:
+                        return res.sendStatus(205);
+                }
             } catch (err) {
                 console.log('SYSTEM | STF_MARK | ERROR | ', err);
                 return res.sendStatus(500);
@@ -497,9 +511,16 @@ function createAPIRouter(client, wss) {
                         },
                     );
 
-                await mark('_stf_table', user, data.mssv, data, marker, user.cls[0]);
+                const marked = await mark('_stf_table', user, data.mssv, data, marker, user.cls[0]);
 
-                return res.sendStatus(200);
+                switch (marked) {
+                    case 0:
+                        return res.sendStatus(200);
+                    case 1:
+                        return res.sendStatus(203);
+                    case 2:
+                        return res.sendStatus(205);
+                }
             } catch (err) {
                 console.log('SYSTEM | STF_MARK | ERROR | ', err);
                 return res.sendStatus(500);
@@ -529,7 +550,14 @@ function createAPIRouter(client, wss) {
                         },
                     );
 
-                await mark('_dep_table', user, data.mssv, data, marker, data.class);
+                const marked = await mark('_dep_table', user, data.mssv, data, marker, data.class);
+
+                switch (marked) {
+                    case 0:
+                        return res.sendStatus(200);
+                    case 1:
+                        return res.sendStatus(203);
+                }
 
                 return res.sendStatus(200);
             } catch (err) {
@@ -672,9 +700,6 @@ function createAPIRouter(client, wss) {
                                         first: 'new_user',
                                     };
 
-
-
-
                                     const dataRow = [
                                         dataInsertUser._id,
                                         pw,
@@ -683,12 +708,6 @@ function createAPIRouter(client, wss) {
                                     ];
                                     console.log(dataRow);
                                     dataRows.push(dataRow);
-
-
-
-
-
-
 
                                     client.db('global').collection('user_info').updateOne(
                                         {
@@ -727,20 +746,17 @@ function createAPIRouter(client, wss) {
                                 // xoa file sau khi xu ly
                                 scheduleFileDeletion(path.join('.downloads', uuid + '.xlsx'));
                                 const workbookacc = await XlsxPopulate.fromFileAsync(
-                                    "./src/excelTemplate/FILE_TAO_ACC.xlsx"
+                                    './src/excelTemplate/FILE_TAO_ACC.xlsx',
                                 );
 
-
                                 if (dataRows.length > 0) {
-                                    await workbookacc.sheet(0).cell("A2").value(dataRows);
+                                    await workbookacc.sheet(0).cell('A2').value(dataRows);
                                 }
                                 const outputFile = path.join(`.downloads/${uuid}.xlsx`);
 
                                 await workbookacc.toFileAsync(outputFile);
-                                scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
-                                return res.download(path.join(".downloads", uuid + ".xlsx"))
-
-
+                                scheduleFileDeletion(path.join('.downloads', uuid + '.xlsx'));
+                                return res.download(path.join('.downloads', uuid + '.xlsx'));
                             } catch (err) {
                                 console.log('SYSTEM | CREATE_ACCOUNT | ERROR | ', err);
                                 return res.sendStatus(500);
@@ -975,8 +991,43 @@ function createAPIRouter(client, wss) {
             try {
                 const listDelete = req.body.dataDelete;
                 for (let i = 0; i < listDelete.length; i++) {
-                    client.db('global').collection('user_info').deleteOne({ _id: listDelete[i] });
-                    client.db('global').collection('login_info').deleteOne({ _id: listDelete[i] });
+                    await client.db('global').collection('user_info').deleteOne({ _id: listDelete[i] });
+                    let info_search = `student_list.${listDelete[i]}`;
+                    await client
+                        .db(user.dep)
+                        .collection(`${data.cls}_activities`)
+                        .updateMany(
+                            {
+                                [info_search]: { $exists: true },
+                            },
+                            {
+                                $pull: { student_list: user._id, ai: user._id },
+                            },
+                        );
+
+                    await client
+                        .db(user.dep)
+                        .collection('activities')
+                        .updateMany(
+                            {
+                                [info_search]: { $exists: true },
+                            },
+                            {
+                                $pull: { student_list: user._id, ai: user._id },
+                            },
+                        );
+
+                    await client
+                        .db(name_global_databases)
+                        .collection('activities')
+                        .updateMany(
+                            {
+                                [info_search]: { $exists: true },
+                            },
+                            {
+                                $pull: { student_list: user._id, ai: user._id },
+                            },
+                        );
                 }
                 return res.sendStatus(200);
             } catch (err) {
@@ -2380,24 +2431,46 @@ function createAPIRouter(client, wss) {
 
                 // Loop through activity collections and retrieve all documents
                 const cls_atvs = await activityCollections.map(async (collection) => {
-                    const dummy = await client
-                        .db(user.dep)
-                        .collection(collection.name)
-                        .find(
-                            {
-                                year: curr_year,
-                            },
-                            {
-                                projection: {
-                                    name: 1,
-                                    content: 1,
-                                    cls: 1,
-                                    year: 1,
+                    if (user.pow[1]) {
+                        const dummy = await client
+                            .db(user.dep)
+                            .collection(collection.name)
+                            .find(
+                                {
+                                    year: curr_year,
+                                    cls: user.cls[0],
                                 },
-                            },
-                        )
-                        .toArray();
-                    return dummy;
+                                {
+                                    projection: {
+                                        name: 1,
+                                        content: 1,
+                                        cls: 1,
+                                        year: 1,
+                                    },
+                                },
+                            )
+                            .toArray();
+                        return dummy;
+                    } else {
+                        const dummy = await client
+                            .db(user.dep)
+                            .collection(collection.name)
+                            .find(
+                                {
+                                    year: curr_year,
+                                },
+                                {
+                                    projection: {
+                                        name: 1,
+                                        content: 1,
+                                        cls: 1,
+                                        year: 1,
+                                    },
+                                },
+                            )
+                            .toArray();
+                        return dummy;
+                    }
                 });
                 Promise.all(cls_atvs)
                     .then((results) => {
@@ -2949,38 +3022,35 @@ function createAPIRouter(client, wss) {
             return res.sendStatus(500);
         }
     });
-    router.post("/exportaccount", upload.single('file'), checkIfUserLoginAPI, async (req, res) => {
-
+    router.post('/exportaccount', upload.single('file'), checkIfUserLoginAPI, async (req, res) => {
         try {
             const user = req.session.user;
             const Class = req.body.class;
             const studentList = sortStudentName(
                 await client
                     .db(name_global_databases)
-                    .collection("user_info")
+                    .collection('user_info')
                     .find(
-                        { class: Class, "power.0": { $exists: true } },
+                        { class: Class, 'power.0': { $exists: true } },
                         {
                             projection: {
                                 _id: 1,
                                 last_name: 1,
                                 first_name: 1,
                             },
-                        }
+                        },
                     )
-                    .toArray()
+                    .toArray(),
             );
 
-            const workbook = await XlsxPopulate.fromFileAsync(
-                "./src/excelTemplate/FILE_TAO_ACC.xlsx"
-            );
+            const workbook = await XlsxPopulate.fromFileAsync('./src/excelTemplate/FILE_TAO_ACC.xlsx');
 
             const dataRows = [];
 
             for (const student of studentList) {
                 const loginInfo = await client
                     .db(name_global_databases)
-                    .collection("login_info")
+                    .collection('login_info')
                     .findOne(
                         { _id: student._id },
                         {
@@ -2988,36 +3058,30 @@ function createAPIRouter(client, wss) {
                                 _id: 1,
                                 password: 1,
                             },
-                        }
+                        },
                     );
                 if (loginInfo) {
-                    const dataRow = [
-                        student._id,
-                        loginInfo.password,
-                        student.last_name,
-                        student.first_name,
-                    ];
+                    const dataRow = [student._id, loginInfo.password, student.last_name, student.first_name];
 
                     dataRows.push(dataRow);
                 }
             }
 
             if (dataRows.length > 0) {
-                await workbook.sheet(0).cell("A2").value(dataRows);
+                await workbook.sheet(0).cell('A2').value(dataRows);
             }
 
             const uuid = uuidv4();
             const outputFile = path.join(`.downloads/${uuid}.xlsx`);
 
             await workbook.toFileAsync(outputFile);
-            console.log(path.join(".downloads", uuid + ".xlsx"))
-            scheduleFileDeletion(path.join(".downloads", uuid + ".xlsx"));
-            return res.download(path.join(".downloads", uuid + ".xlsx"));
+            console.log(path.join('.downloads', uuid + '.xlsx'));
+            scheduleFileDeletion(path.join('.downloads', uuid + '.xlsx'));
+            return res.download(path.join('.downloads', uuid + '.xlsx'));
         } catch (err) {
-            console.log("SYSTEM | EXPORT ACCOUNT | ERROR | ", err);
+            console.log('SYSTEM | EXPORT ACCOUNT | ERROR | ', err);
             return res.sendStatus(500);
         }
-
     });
     // api get img acti student
     router.post('/getImgActivities', checkIfUserLoginAPI, async (req, res) => {
