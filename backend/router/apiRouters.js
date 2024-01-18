@@ -592,6 +592,16 @@ function createAPIRouter(client, wss) {
     // Create new account -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     router.post('/createAccount', upload.single('file'), checkIfUserLoginAPI, async (req, res) => {
         const user = req.session.user;
+        const dummyScore = {
+            first: [0, 0, 0, 0, 0],
+            second: [0, 0],
+            third: [0, 0, 0],
+            fourth: [0, 0, 0],
+            fifth: [0, 0, 0, 0],
+            img_ids: [],
+            total: 0,
+        };
+
         if (user.pow[4] || user.pow[7]) {
             const fileStudents = req.file;
             async function generateEmail(str) {
@@ -706,7 +716,6 @@ function createAPIRouter(client, wss) {
                                         dataInsertUser.last_name,
                                         dataInsertUser.first_name,
                                     ];
-                                    console.log(dataRow);
                                     dataRows.push(dataRow);
 
                                     client.db('global').collection('user_info').updateOne(
@@ -912,6 +921,14 @@ function createAPIRouter(client, wss) {
                     {
                         upsert: true,
                     },
+                );
+                await mark(
+                    '_std_table',
+                    user,
+                    dataInsertUser._id,
+                    dummyScore,
+                    { first_name: dataInsertUser.first_name, last_name: dataInsertUser.last_name },
+                    dataInsertUser.class[0],
                 );
                 // xu ly sau khi them sinh vien
                 const uuid = uuidv4();

@@ -433,7 +433,7 @@ async function mark(img_ids) {
         };
 
         const response = await fetch('/api/std_mark', requestOptions);
-        if ((response.status = 200)) {
+        if (response.status == 200) {
             notify('n', 'Đã lưu phiếu đánh giá điểm rèn luyện thành công!');
         } else if (response.status == 203) {
             // Error occurred during upload

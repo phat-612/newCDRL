@@ -213,18 +213,21 @@ $(document).on('click', '.load_list_btn', async function () {
                         newstd = 'zero_score';
                     }
 
-                    const std_score_html = curr_year_total.std
-                        ? `<td class="${newstd}">${curr_year_total.std}</td>`
-                        : `<td class="${newstd}">-</td>`;
-                    const stf_score_html = curr_year_total.stf
-                        ? `<td class="${newstf}">${curr_year_total.stf}</td>`
-                        : `<td class="${newstf}">-</td>`;
-                    const dep_score_html = curr_year_total.dep
-                        ? `<td class="${newdep}">${curr_year_total.dep}</td>`
-                        : `<td class="${newdep}">-</td>`;
+                    const std_score_html =
+                        curr_year_total.std || curr_year_total.std === 0
+                            ? `<td class="${newstd}">${curr_year_total.std}</td>`
+                            : `<td class="${newstd}">-</td>`;
+                    const stf_score_html =
+                        curr_year_total.stf || curr_year_total.stf === 0
+                            ? `<td class="${newstf}">${curr_year_total.stf}</td>`
+                            : `<td class="${newstf}">-</td>`;
+                    const dep_score_html =
+                        curr_year_total.dep || curr_year_total.dep === 0
+                            ? `<td class="${newdep}">${curr_year_total.dep}</td>`
+                            : `<td class="${newdep}">-</td>`;
                     const maker_html = curr_year_total.marker ? `<td>${curr_year_total.marker}</td>` : `<td>-</td>`;
 
-                    if (curr_year_total.std && curr_year_total.std !== 0) {
+                    if (curr_year_total.std || curr_year_total.std === 0) {
                         if (curr_year_total.dep) {
                             $('table tbody').append(`
                 <tr>

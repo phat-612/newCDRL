@@ -62,14 +62,13 @@ $(document).on('click', '.setd_btn', () => {
     update_cbx();
 });
 
-$(document).on('click', '.save-btn', SaveButtonClick);
-async function SaveButtonClick(event) {
+$(document).on('click', '.save-btn', async (event) => {
     event.preventDefault();
     try {
         const HK = $('#mySelect1').val();
         const school_year = $('#mySelect2').val();
         const start_day = $('.start_time').val() + ':00.000Z';
-        const end_day = $('.end_time').val() + ':00.000Z';
+        const end_day = $('.end_time').val() ? $('.end_time').val() + ':00.000Z' : $('.end_time').val();
 
         let data = JSON.stringify({
             sch_y: `HK${HK}_${school_year}`,
@@ -93,10 +92,9 @@ async function SaveButtonClick(event) {
             notify('x', 'Có lỗi xảy ra!');
         }
     } catch (error) {
-        console.log(error);
         notify('x', 'Có lỗi xảy ra!');
     }
-}
+})
 
 // clear end_time input
 $(document).on('click', '.time_set_note a', () => {

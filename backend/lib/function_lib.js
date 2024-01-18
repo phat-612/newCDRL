@@ -238,23 +238,22 @@ async function mark(table, user, mssv, data, marker, cls) {
                 { upsert: true },
             );
 
-        if (
-            updateStudentTotalScore(
-                table,
-                school_year.year,
-                mssv,
-                data.total,
-                marker.last_name + ' ' + marker.first_name,
-            )
-        )
-            return 0;
+        const updated = await updateStudentTotalScore(
+            table,
+            school_year.year,
+            mssv,
+            data.total,
+            marker.last_name + ' ' + marker.first_name,
+        );
+
+        if (updated) return 0;
         else return 2;
     }
     return 1;
 }
 
 async function updateStudentTotalScore(table, school_year, mssv, total, marker) {
-    const step = await client
+    let step = await client
         .db(name_global_databases)
         .collection('user_info')
         .findOne(
@@ -263,15 +262,19 @@ async function updateStudentTotalScore(table, school_year, mssv, total, marker) 
             },
             {
                 projection: {
+                    _id: 0,
                     total_score: 1,
                 },
             },
         );
 
+    if (!step.total_score[`${school_year}`]) step = 0;
+    else step = step.total_score[`${school_year}`].step;
+
     // update total score list for student
     switch (table) {
         case '_std_table':
-            if (step[`total_score.${school_year}.step`] <= 1) {
+            if (step <= 1) {
                 await client
                     .db(name_global_databases)
                     .collection('user_info')
@@ -293,7 +296,7 @@ async function updateStudentTotalScore(table, school_year, mssv, total, marker) 
             }
             return false;
         case '_stf_table':
-            if (step[`total_score.${school_year}.step`] <= 2) {
+            if (step <= 2) {
                 await client
                     .db(name_global_databases)
                     .collection('user_info')

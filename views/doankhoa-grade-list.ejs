@@ -180,23 +180,24 @@
                   </td>
                   <td>
                     <%= student_list[i].last_name + " " + student_list[i].first_name%>
-                    <% if( curr_year_total.std || curr_year_total.std == 0 ) {%>
+                    
+                    <% if( !curr_year_total.std || curr_year_total.std === 0 ) {%>
                     <span class="dau_sao">*</span>
                     <% } %>
                   </td>
-                  <% if(curr_year_total.dep) { %>
+                  <% if(curr_year_total.dep || curr_year_total.dep === 0) { %>
                   <td class="zero_score"><%= curr_year_total.std %></td>
                   <td class="first_score"><%= curr_year_total.stf %></td>
                   <td class="marker_name"><%= curr_year_total.marker %></td>
                   <td class="new_update khoa_score"><%= curr_year_total.dep %></td>
                   <td><a class="chamdiem">Chấm điểm</a></td>
                   <%} else {%>
-                  <% if(curr_year_total.stf) { %>
+                  <% if(curr_year_total.stf || curr_year_total.stf === 0) { %>
                   <td class="zero_score"><%= curr_year_total.std %></td>
                   <td class="new_update first_score"><%= curr_year_total.stf %></td>
                   <td class="marker_name"><%= curr_year_total.marker %></td>
                   <%} else {%>
-                  <%if(curr_year_total.std){%>
+                  <%if(curr_year_total.std || curr_year_total.std === 0){%>
                   <td class="new_update zero_score"><%= curr_year_total.std %></td>
                   <td class="first_score">-</td>
                   <%} else {%>
@@ -204,9 +205,9 @@
                   <td class="first_score">-</td>
                   <%}%>
                           <td class="marker_name">-</td>
-                        <%}%>
+                  <%}%>
                   <td class="khoa_score">-</td>
-                  <% if( curr_year_total.std &&  curr_year_total.std !== 0) { %>
+                  <% if( curr_year_total.std || curr_year_total.std === 0) { %>
                   <td><a class="chamdiem">Chấm điểm</a></td>
                   <%}else {%>
                   <td>-</td>
