@@ -740,17 +740,17 @@ function createAPIRouter(client, wss) {
                                             upsert: true,
                                         },
                                     );
-                                    await mark(
-                                        '_std_table',
-                                        user,
-                                        dataInsertUser._id,
-                                        dummyScore,
-                                        {
-                                            first_name: dataInsertUser.first_name,
-                                            last_name: dataInsertUser.last_name,
-                                        },
-                                        dataInsertUser.class[0],
-                                    );
+                                    // await mark(
+                                    //     '_std_table',
+                                    //     user,
+                                    //     dataInsertUser._id,
+                                    //     dummyScore,
+                                    //     {
+                                    //         first_name: dataInsertUser.first_name,
+                                    //         last_name: dataInsertUser.last_name,
+                                    //     },
+                                    //     dataInsertUser.class[0],
+                                    // );
                                     await sheet.cell(`D${i + 1}`).value(email);
                                     await sheet.cell(`E${i + 1}`).value(pw);
                                     const range = sheet.range(`D${i + 1}:E${i + 1}`);
@@ -852,17 +852,17 @@ function createAPIRouter(client, wss) {
                                                 upsert: true,
                                             },
                                         );
-                                        await mark(
-                                            '_std_table',
-                                            user,
-                                            dataInsertUser._id,
-                                            dummyScore,
-                                            {
-                                                first_name: dataInsertUser.first_name,
-                                                last_name: dataInsertUser.last_name,
-                                            },
-                                            dataInsertUser.class[0],
-                                        );
+                                        // await mark(
+                                        //     '_std_table',
+                                        //     user,
+                                        //     dataInsertUser._id,
+                                        //     dummyScore,
+                                        //     {
+                                        //         first_name: dataInsertUser.first_name,
+                                        //         last_name: dataInsertUser.last_name,
+                                        //     },
+                                        //     dataInsertUser.class[0],
+                                        // );
                                         await sheet.cell(`D${i + 1}`).value(email);
                                         await sheet.cell(`E${i + 1}`).value(pw);
                                         const range = sheet.range(`D${i + 1}:E${i + 1}`);
