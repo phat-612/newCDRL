@@ -740,17 +740,17 @@ function createAPIRouter(client, wss) {
                                             upsert: true,
                                         },
                                     );
-                                    // await mark(
-                                    //     '_std_table',
-                                    //     user,
-                                    //     dataInsertUser._id,
-                                    //     dummyScore,
-                                    //     {
-                                    //         first_name: dataInsertUser.first_name,
-                                    //         last_name: dataInsertUser.last_name,
-                                    //     },
-                                    //     dataInsertUser.class[0],
-                                    // );
+                                    await mark(
+                                        '_std_table',
+                                        user,
+                                        dataInsertUser._id,
+                                        dummyScore,
+                                        {
+                                            first_name: dataInsertUser.first_name,
+                                            last_name: dataInsertUser.last_name,
+                                        },
+                                        dataInsertUser.class[0],
+                                    );
                                     await sheet.cell(`D${i + 1}`).value(email);
                                     await sheet.cell(`E${i + 1}`).value(pw);
                                     const range = sheet.range(`D${i + 1}:E${i + 1}`);
@@ -852,17 +852,17 @@ function createAPIRouter(client, wss) {
                                                 upsert: true,
                                             },
                                         );
-                                        // await mark(
-                                        //     '_std_table',
-                                        //     user,
-                                        //     dataInsertUser._id,
-                                        //     dummyScore,
-                                        //     {
-                                        //         first_name: dataInsertUser.first_name,
-                                        //         last_name: dataInsertUser.last_name,
-                                        //     },
-                                        //     dataInsertUser.class[0],
-                                        // );
+                                        await mark(
+                                            '_std_table',
+                                            user,
+                                            dataInsertUser._id,
+                                            dummyScore,
+                                            {
+                                                first_name: dataInsertUser.first_name,
+                                                last_name: dataInsertUser.last_name,
+                                            },
+                                            dataInsertUser.class[0],
+                                        );
                                         await sheet.cell(`D${i + 1}`).value(email);
                                         await sheet.cell(`E${i + 1}`).value(pw);
                                         const range = sheet.range(`D${i + 1}:E${i + 1}`);
@@ -1029,13 +1029,14 @@ function createAPIRouter(client, wss) {
         const user = req.session.user;
         if (user.pow[4] || user.pow[7]) {
             try {
+                const cls = req.body.cls;
                 const listDelete = req.body.dataDelete;
                 for (let i = 0; i < listDelete.length; i++) {
                     await client.db('global').collection('user_info').deleteOne({ _id: listDelete[i] });
                     let info_search = `student_list.${listDelete[i]}`;
                     await client
                         .db(user.dep)
-                        .collection(`${data.cls}_activities`)
+                        .collection(`${cls}_activities`)
                         .updateMany(
                             {
                                 [info_search]: { $exists: true },
