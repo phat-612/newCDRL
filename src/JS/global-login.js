@@ -1,4 +1,7 @@
 $('.login_btn').on('click', async function (e) {
+    sendata();
+});
+const sendata = async function () {
     const mssv = $('.mssv_input').val();
     const password = $('.password_input').val();
     if (mssv == '') {
@@ -38,15 +41,14 @@ $('.login_btn').on('click', async function (e) {
             notify('x', 'Có lỗi xảy ra!');
         }
     }
-});
-
+};
 $('.password_input').on('keydown', async function (e) {
     if (e.keyCode == 13) {
         e.preventDefault();
         $('.login_btn').click();
     }
 });
-
+nextInput(sendata);
 const password_input = document.querySelector('.password_input');
 const eye = document.querySelector('.eye');
 password_input.oninput = () => {
@@ -69,3 +71,38 @@ eye.onclick = () => {
         check = 0;
     }
 };
+
+// const inputs = Array.prototype.slice.call(document.querySelectorAll('.container input:not([type="checkbox"]'));
+// inputs.forEach((input) => {
+//     input.addEventListener('keydown', (event) => {
+//         const num = Number(event.keyCode);
+//         let check = true;
+//         let next = true;
+//         if (check && next && num && num == 13) {
+//             // Only allow numbers
+//             event.preventDefault();
+//             check = focusNext();
+//             console.log(check);
+//             // next = true;
+//         } else if (check == false && num && num == 13) {
+//             console.log(next);
+//             // next = false;
+//             sendata();
+//         }
+//     });
+// });
+
+// function focusNext() {
+//     const currInput = document.activeElement;
+//     const currInputIndex = inputs.indexOf(currInput);
+//     // const nextinputIndex = (currInputIndex + 1) % inputs.length;
+//     const nextinputIndex = currInputIndex + 1;
+//     const input = inputs[nextinputIndex];
+//     if (input) {
+//         console.log(input);
+//         input.focus();
+//         return true;
+//     } else {
+//         return false;
+//     }
+// }

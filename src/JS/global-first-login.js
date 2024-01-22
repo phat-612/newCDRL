@@ -1,4 +1,8 @@
 $('.login_btn').on('click', async function (e) {
+    sendata();
+});
+
+async function sendata() {
     const new_password = $('.password_input').val();
     const re_new_password = $('.again_password_input').val();
     if (new_password == '') {
@@ -34,8 +38,7 @@ $('.login_btn').on('click', async function (e) {
             notify('x', 'Có lỗi xảy ra!');
         }
     }
-});
-
+}
 const password_input = document.querySelector('.password_input');
 const eye = document.querySelector('.eye');
 password_input.oninput = () => {
