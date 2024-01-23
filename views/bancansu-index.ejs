@@ -14,7 +14,6 @@
     <%- include(header) %>
       <%- include(thongbao) %>
         <div class="container">
-
           <!-- Quản lí điểm -->
           <div class="manager">
             <div class="content content_top">
@@ -36,7 +35,12 @@
           <div class="submit-mark">
             <div class="content content_top">
               <h2>ĐÁNH GIÁ ĐIỂM CÁ NHÂN</h2>
-              <a href="/hocsinh/nhapdiemdanhgia"><button class="button-35">Nộp bảng điểm</button></a>
+              <% if(check_chamdiem){%>
+
+                <a href="/hocsinh/nhapdiemdanhgia"><button class="button-35">Nộp bảng điểm</button></a>
+              <%}else{%>
+                <h1 style="color: red;text-align: center;">Đã hết thời hạn chấm điểm</h1>
+                <%}%>
             </div>
           </div>
 

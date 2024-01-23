@@ -32,20 +32,18 @@
                     <span class="hocky">Học kỳ</span>
                     <div class="selectbox selectbox--hocky">
                       <div class="select">
-                        <select>
-                          <% for (let i=1; i <=Object.values(years[cy[1]]).length; i++) {%>
-                          <% if (i==parseInt(cy[0].slice(2))) {%>
-                          <option value="<%= i %>" selected="selected">
-                            <%= i %>
+                        
+                        <select name="" id="">
+                        
+                          <option value="1">
+                            1
                           </option>
-                          <%global_year = `HK${i}_`%>
-
-                          <% } else { %>
-                          <option value="<%= i %>">
-                            <%= i %>
+                          <option value="2">
+                            2
                           </option>
-                          <% } %>
-                          <% } %>
+                          <option value="3">
+                            3
+                          </option>
                         </select>
                       </div>
                     </div>

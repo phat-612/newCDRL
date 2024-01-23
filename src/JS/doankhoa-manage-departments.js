@@ -110,7 +110,11 @@ $('.exist_btn').click(function () {
 });
 
 //save button
+const sendata = async () => {
+    $('.save_btn').click();
+};
 $('.save_btn').click(async function () {
+    console.log('hahah');
     if ($(this).parent().parent().parent().find('.subject--input').val()) {
         // check if user enter info or not
         // disable curr button
@@ -139,6 +143,7 @@ $('.save_btn').click(async function () {
         };
 
         const response = await fetch('/api/addOrEditBranchs', requestOptions);
+        console.log(response);
         if (response.ok) {
             if (curr_edit) {
                 // set current edit line name to new name
@@ -146,22 +151,22 @@ $('.save_btn').click(async function () {
             } else {
                 let length = $('table tbody tr').length;
                 $('table tbody').append(`
-          <tr>
-            <td>
-              <div class="checkbox-wrapper-4">
-                <input type="checkbox" id="row--${length}" class="inp-cbx" value="${new_name}" />
-                <label for="row--${length}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
-                </label>
-              </div>
-            </td>
-            <td class="nums">${length + 1}</td>
-            <td class="b_name">${new_name}</td>
-            <td class="dep_name">${dep_name}</td>
-            <td>
-              <a id="edit__subject" href="#">Sửa</a>
-            </td>
-          </tr>
-        `);
+      <tr>
+        <td>
+          <div class="checkbox-wrapper-4">
+            <input type="checkbox" id="row--${length}" class="inp-cbx" value="${new_name}" />
+            <label for="row--${length}" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
+            </label>
+          </div>
+        </td>
+        <td class="nums">${length + 1}</td>
+        <td class="b_name">${new_name}</td>
+        <td class="dep_name">${dep_name}</td>
+        <td>
+          <a id="edit__subject" href="#">Sửa</a>
+        </td>
+      </tr>
+    `);
             }
             // able curr button
             $(this).prop('disabled', false);
@@ -183,7 +188,11 @@ $('.save_btn').click(async function () {
         notify('!', 'Hãy nhập đầy đủ thông tin!');
     }
 });
+const input1 = Array.prototype.slice.call(document.querySelectorAll('.modal.add input:not([type="checkbox"]'));
+const input2 = Array.prototype.slice.call(document.querySelectorAll('.modal.edit input:not([type="checkbox"]'));
 
+nextInput(input1, sendata);
+nextInput(input2, sendata);
 // all checkbox set (if all-cbx tick all checkboxs will tick otherwise untick all)
 $(document).on('change', '.all-cbx', async function () {
     if ($('.all-cbx')[0].checked) {

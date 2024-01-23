@@ -123,21 +123,18 @@ theme_btn.addEventListener('change', () => {
     }
 });
 
-const nextInput = (sendata) => {
-    const inputs = Array.prototype.slice.call(document.querySelectorAll('.container input:not([type="checkbox"]'));
+const nextInput = (inputs, sendata) => {
     inputs.forEach((input) => {
+        let check = inputs.length > 1 ? true : false;
+        console.log(check, inputs.length);
         input.addEventListener('keydown', (event) => {
             const num = Number(event.keyCode);
-            let check = true;
-            let next = true;
-            if (check && next && num && num == 13) {
+            if (check == true && num && num == 13) {
                 // Only allow numbers
                 event.preventDefault();
                 check = focusNext();
-                console.log(check);
                 // next = true;
             } else if (check == false && num && num == 13) {
-                console.log(next);
                 // next = false;
                 sendata();
             }
@@ -151,7 +148,6 @@ const nextInput = (sendata) => {
         const nextinputIndex = currInputIndex + 1;
         const input = inputs[nextinputIndex];
         if (input) {
-            console.log(input);
             input.focus();
             return true;
         } else {

@@ -1,8 +1,10 @@
+const inputs = Array.prototype.slice.call(document.querySelectorAll('.content input:not([type="checkbox"]'));
+
 $('.login_btn').on('click', async function (e) {
     sendata();
 });
 
-async function sendata() {
+const sendata = async function () {
     const new_password = $('.password_input').val();
     const re_new_password = $('.again_password_input').val();
     if (new_password == '') {
@@ -38,7 +40,8 @@ async function sendata() {
             notify('x', 'Có lỗi xảy ra!');
         }
     }
-}
+};
+
 const password_input = document.querySelector('.password_input');
 const eye = document.querySelector('.eye');
 password_input.oninput = () => {
@@ -48,6 +51,7 @@ password_input.oninput = () => {
         password_input.parentElement.querySelector('.eye').style.display = 'block';
     }
 };
+nextInput(inputs, sendata);
 
 let check = 0;
 eye.onclick = () => {

@@ -1,45 +1,45 @@
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="/src/css/global-login.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/src/css/global-login.css" />
 </head>
 
 <body>
-    <%- include(header) %>
-      <%- include(thongbao) %>
-        <div class="container">
-
-          <div class="content">
+    <%- include(header) %> <%- include(thongbao) %>
+    <div class="container">
+        <div class="content">
             <div class="login-box">
-              <form class="login_form">
-                <div class="user-box">
-                  <input type="text" name="mssv" class="mssv_input" required="" />
-                  <label>Mã số sinh viên</label>
-                </div>
-                <div class="user-box">
-                  <input type="password" name="password" class="password_input" required="" />
-                  <div class="eye">
-                    <i class="fa-regular fa-eye-slash"></i>
-                  </div>
-                  <label>Mật khẩu</label>
-                </div>
-                <div class="control">
-                  <div class="checkbox-wrapper-4">
-                    <input type="checkbox" id="morning" class="inp-cbx" value="2" />
-                    <label for="morning" class="cbx"><span> <svg height="10px" width="12px"></svg></span><span>Tự động
-                        đăng nhập</span></label>
-                  </div>
-                  <a href="/quenmatkhau" class="quen_mk">Quên mật khẩu</a>
-                </div>
-                <center>
-                  <a class="login_btn">
-                    Đăng nhập
-                    <span></span>
-                  </a>
-                </center>
-              </form>
+                <form class="login_form">
+                    <div class="user-box">
+                        <input type="text" name="mssv" class="mssv_input" required="" />
+                        <label>Mã số sinh viên</label>
+                    </div>
+                    <div class="user-box">
+                        <input type="password" name="password" class="password_input" required="" />
+                        <div class="eye">
+                            <i class="fa-regular fa-eye-slash"></i>
+                        </div>
+                        <label>Mật khẩu</label>
+                    </div>
+                    <div class="control">
+                        <div class="checkbox-wrapper-4">
+                            <input type="checkbox" id="morning" class="inp-cbx" value="2" />
+                            <label for="morning" class="cbx"
+                                ><span> <svg height="10px" width="12px"></svg></span
+                                ><span>Tự động đăng nhập</span></label
+                            >
+                        </div>
+                        <a href="/quenmatkhau" class="quen_mk">Quên mật khẩu</a>
+                    </div>
+                    <center>
+                        <a class="login_btn">
+                            Đăng nhập
+                            <span></span>
+                        </a>
+                    </center>
+                </form>
             </div>
-          </div>
         </div>
+    </div>
 </body>
 <script src="/src/JS/global-login.js"></script>

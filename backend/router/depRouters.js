@@ -194,7 +194,7 @@ function createDepRouter(client) {
                     .db(name_global_databases)
                     .collection('classes')
                     .findOne({ _id: classlist[0]._id }, { projection: { _id: 0, years: 1 } });
-
+                console.log(years);
                 // get all student in staff member class:
                 let student_list = await client
                     .db(name_global_databases)
@@ -212,7 +212,7 @@ function createDepRouter(client) {
                     .toArray();
 
                 student_list = sortStudentName(student_list);
-
+                console.log('curr', school_year.year);
                 // get all student total score from themself:
                 let render = {
                     header: 'global-header',

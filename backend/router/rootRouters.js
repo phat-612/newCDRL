@@ -8,6 +8,40 @@ const path = require('path');
 function createRootRouter(client, parentDirectory) {
     // index route
     router.get('/', checkIfUserLoginRoute, async (req, res) => {
+        // kiểm tra châm điểm
+        const school_year = await client
+                .db(name_global_databases)
+                .collection('school_year')
+                .findOne(
+                    {},
+                    {
+                        projection: {
+                            _id: 0,
+                            year: 1,
+                            start_day: 1,
+                            end_day: 1,
+                        },
+                    },
+                );
+        const check_y =  () => {
+            
+            let today = new Date().getTime();
+            let start_day = new Date(school_year.start_day).getTime();
+            let end_day = new Date(school_year.end_day).getTime();
+            let forever_day = new Date('2003-10-18').getTime(); // special date
+
+            // check if end mark time or not
+            if (start_day <= today && (today < end_day || end_day == forever_day)) {
+                console.log('haha');
+                return true;
+            } else {
+                console.log('huhu');
+                return false;
+            }
+        };
+        let check_year = check_y();
+        console.log(check_year);
+        //
         try {
             const user = req.session.user;
             if (user.pow[0]) {
@@ -187,7 +221,9 @@ function createRootRouter(client, parentDirectory) {
                                 thongbao: 'global-notifications',
                                 bandiem: studentTotalScores,
                                 hoatdong: studentActivities,
+                                hethan: false,
                                 nienkhoa: Object.keys(schoolYear_all.years),
+                                check_chamdiem: check_year,
                             });
                         } else if (
                             user.pow[0] &&
@@ -207,7 +243,9 @@ function createRootRouter(client, parentDirectory) {
                                 pow: 0,
                                 bandiem: studentTotalScores,
                                 hoatdong: studentActivities,
+                                hethan: false,
                                 nienkhoa: Object.keys(schoolYear_all.years),
+                                check_chamdiem: check_year,
                             });
                         } else if (
                             user.pow[0] &&
@@ -227,8 +265,9 @@ function createRootRouter(client, parentDirectory) {
                                 pow: 1,
                                 bandiem: studentTotalScores,
                                 hoatdong: studentActivities,
-
+                                hethan: false,
                                 nienkhoa: Object.keys(schoolYear_all.years),
+                                check_chamdiem: check_year,
                             });
                         } else if (
                             user.pow[0] &&
@@ -248,12 +287,247 @@ function createRootRouter(client, parentDirectory) {
                                 pow: 2,
                                 bandiem: studentTotalScores,
                                 hoatdong: studentActivities,
-
+                                hethan: false,
                                 nienkhoa: Object.keys(schoolYear_all.years),
+                                check_chamdiem: check_year,
                             });
                         }
                     } else {
-                        return res.status(403).send('Sinh viên đã tốt nghiệp');
+                        // console.log("xx",schoolYear_all.years[schoolYear.year.slice(4)]);
+                        for (let i = 0; i < 3; i++) {
+                            schoolYearsToSearch.push(`HK${i + 1}_` + schoolYear.year.slice(4));
+                        }
+                        const studentTotalScores = await Promise.all(
+                            schoolYearsToSearch.map(async (year) => {
+                                // Tìm trong bảng '_dep_table' trước
+                                const depCollection = client.db(user.dep).collection(user.cls[0] + '_dep_table');
+                                const stfCollection = client.db(user.dep).collection(user.cls[0] + '_stf_table');
+                                const stdCollection = client.db(user.dep).collection(user.cls[0] + '_std_table');
+                                const depDocument = await depCollection.findOne(
+                                    { mssv: user._id, school_year: year },
+                                    { projection: { _id: 0, total: 1 } },
+                                );
+
+                                if (depDocument) {
+                                    return {
+                                        year: year,
+                                        total: depDocument.total,
+                                    };
+                                }
+                                const stfDocument = await stfCollection.findOne(
+                                    { mssv: user._id, school_year: year },
+                                    { projection: { _id: 0, total: 1 } },
+                                );
+                                if (stfDocument) {
+                                    return {
+                                        year: year,
+                                        total: stfDocument.total,
+                                    };
+                                }
+                                const stdDocument = await stdCollection.findOne(
+                                    { mssv: user._id, school_year: year },
+                                    { projection: { _id: 0, total: 1 } },
+                                );
+                                if (stdDocument) {
+                                    return {
+                                        year: year,
+                                        total: stdDocument.total,
+                                    };
+                                }
+                                return {
+                                    year: year,
+                                    total: 'Chưa có điểm',
+                                };
+                            }),
+                        );
+                        console.log(studentTotalScores);
+                        const studentActivities = await Promise.all(
+                            schoolYearsToSearch.map(async (year) => {
+                                info_search = `student_list.${user._id}`;
+                                let activitie_info_lop = await client
+                                    .db(user.dep)
+                                    .collection(`${user.cls[0]}_activities`)
+                                    .find(
+                                        {
+                                            [info_search]: { $exists: true },
+                                            year: year,
+                                        },
+                                        {
+                                            projection: {
+                                                name: 1,
+                                                student_list: 1,
+                                                ai: 1,
+                                                level: 1,
+                                            },
+                                        },
+                                    )
+
+                                    .toArray();
+                                if (activitie_info_lop.length > 0) {
+                                    activitie_info_lop.forEach((element) => {
+                                        if (element.ai && element.ai[user._id]) {
+                                            element.thamgia = true;
+                                        }
+                                        if (element.student_list[user._id] == 2) {
+                                            element.khenthuong = true;
+                                        }
+                                    });
+                                }
+                                let activitie_info_khoa = await client
+                                    .db(user.dep)
+                                    .collection('activities')
+                                    .find(
+                                        {
+                                            [info_search]: { $exists: true },
+                                            year: year,
+                                        },
+                                        {
+                                            projection: {
+                                                name: 1,
+                                                student_list: 1,
+                                                ai: 1,
+                                                level: 1,
+                                            },
+                                        },
+                                    )
+                                    .toArray();
+
+                                if (activitie_info_khoa.length > 0) {
+                                    activitie_info_khoa.forEach((element) => {
+                                        if (element.ai && element.ai[user._id]) {
+                                            element.thamgia = true;
+                                        }
+                                        if (element.student_list[user._id] == 2) {
+                                            element.khenthuong = true;
+                                        }
+                                    });
+                                }
+
+                                let activitie_info_truong = await client
+                                    .db(name_global_databases)
+                                    .collection('activities')
+                                    .find(
+                                        {
+                                            [info_search]: { $exists: true },
+                                            year: year,
+                                        },
+                                        {
+                                            projection: {
+                                                name: 1,
+                                                student_list: 1,
+                                                ai: 1,
+                                                level: 1,
+                                            },
+                                        },
+                                    )
+                                    .toArray();
+                                if (activitie_info_truong.length > 0) {
+                                    activitie_info_truong.forEach((element) => {
+                                        if (element.ai && element.ai[user._id]) {
+                                            element.thamgia = true;
+                                        }
+                                        if (element.student_list[user._id] == 2) {
+                                            element.khenthuong = true;
+                                        }
+                                    });
+                                }
+
+                                return {
+                                    year: year,
+                                    activitie_info_lop: activitie_info_lop,
+                                    activitie_info_khoa: activitie_info_khoa,
+                                    activitie_info_truong: activitie_info_truong,
+                                };
+                            }),
+                        );
+                        if (
+                            user.pow[0] &&
+                            !user.pow[1] &&
+                            !user.pow[2] &&
+                            !user.pow[3] &&
+                            !user.pow[4] &&
+                            !user.pow[5] &&
+                            !user.pow[6] &&
+                            !user.pow[7] &&
+                            !user.pow[8]
+                        ) {
+                            return res.render('sinhvien-index', {
+                                header: 'global-header',
+                                footer: 'global-footer',
+                                thongbao: 'global-notifications',
+                                bandiem: studentTotalScores,
+                                hoatdong: studentActivities,
+                                hethan: true,
+                                nienkhoa: Object.keys(schoolYear_all.years),
+                                check_chamdiem: check_year,
+                            });
+                        } else if (
+                            user.pow[0] &&
+                            user.pow[1] &&
+                            !user.pow[2] &&
+                            user.pow[3] &&
+                            !user.pow[4] &&
+                            !user.pow[5] &&
+                            !user.pow[6] &&
+                            !user.pow[7] &&
+                            !user.pow[8]
+                        ) {
+                            return res.render('bancansu-index', {
+                                header: 'global-header',
+                                footer: 'global-footer',
+                                thongbao: 'global-notifications',
+                                pow: 0,
+                                bandiem: studentTotalScores,
+                                hoatdong: studentActivities,
+                                hethan: true,
+                                nienkhoa: Object.keys(schoolYear_all.years),
+                                check_chamdiem: check_year,
+                            });
+                        } else if (
+                            user.pow[0] &&
+                            user.pow[1] &&
+                            !user.pow[2] &&
+                            !user.pow[3] &&
+                            !user.pow[4] &&
+                            !user.pow[5] &&
+                            !user.pow[6] &&
+                            !user.pow[7] &&
+                            !user.pow[8]
+                        ) {
+                            return res.render('bancansu-index', {
+                                header: 'global-header',
+                                footer: 'global-footer',
+                                thongbao: 'global-notifications',
+                                pow: 1,
+                                bandiem: studentTotalScores,
+                                hoatdong: studentActivities,
+                                hethan: true,
+                                nienkhoa: Object.keys(schoolYear_all.years),
+                                check_chamdiem: check_year,
+                            });
+                        } else if (
+                            user.pow[0] &&
+                            !user.pow[1] &&
+                            !user.pow[2] &&
+                            user.pow[3] &&
+                            !user.pow[4] &&
+                            !user.pow[5] &&
+                            !user.pow[6] &&
+                            !user.pow[7] &&
+                            !user.pow[8]
+                        ) {
+                            return res.render('bancansu-index', {
+                                header: 'global-header',
+                                footer: 'global-footer',
+                                thongbao: 'global-notifications',
+                                pow: 2,
+                                bandiem: studentTotalScores,
+                                hoatdong: studentActivities,
+                                hethan: true,
+                                nienkhoa: Object.keys(schoolYear_all.years),
+                                check_chamdiem: check_year,
+                            });
+                        }
                     }
                 } else {
                     return res.sendStatus(403).send('Sinh viên đã tốt nghiệp');
