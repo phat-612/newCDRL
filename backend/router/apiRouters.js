@@ -1880,6 +1880,7 @@ function createAPIRouter(client, wss) {
             // must be department to use this api
             if (user.pow[6]) {
                 const data = req.body; // data = {sch_y: "HK1_2022-2023", start_day: '18/10/2023', end_day: '19/11/999999999999999999']}
+                const cy = data.sch_y.split('_');
 
                 console.log(data);
                 // set end day to special date if it is ''
@@ -1900,6 +1901,19 @@ function createAPIRouter(client, wss) {
                             },
                         },
                     );
+                const keyupdate = `years.${cy[1]}`;
+                await client
+                    .db(name_global_databases)
+                    .collection('classes')
+                    .updateMany(
+                        {},
+                        {
+                            $set: {
+                                [keyupdate]: { 0: 1, 1: 2, 2: 3 },
+                            },
+                        },
+                    );
+
                 return res.sendStatus(200);
             } else {
                 return res.sendStatus(403); // back to home

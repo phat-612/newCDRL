@@ -32,15 +32,13 @@ function createRootRouter(client, parentDirectory) {
 
             // check if end mark time or not
             if (start_day <= today && (today < end_day || end_day == forever_day)) {
-                console.log('haha');
                 return true;
             } else {
-                console.log('huhu');
                 return false;
             }
         };
         let check_year = check_y();
-        console.log(check_year);
+        // console.log(check_year);
         //
         try {
             const user = req.session.user;
