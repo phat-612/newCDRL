@@ -1909,7 +1909,7 @@ function createAPIRouter(client, wss) {
                         {},
                         {
                             $set: {
-                                [keyupdate]: { 0: 1, 1: 2, 2: 3 },
+                                [keyupdate]: [1, 2, 3],
                             },
                         },
                     );
