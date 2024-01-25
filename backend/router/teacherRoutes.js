@@ -19,52 +19,71 @@ function createTeacherRouter(client) {
     router.get('/danhsachbangdiem', checkIfUserLoginRoute, async (req, res) => {
         try {
             const user = req.session.user;
-
-            const school_year = await client
+            // check neu kho co lop
+            const check = await client
                 .db(name_global_databases)
-                .collection('school_year')
-                .findOne({}, { projection: { _id: 0, year: 1 } });
-            // check user login:
-            if (user.pow[1]) {
-                const years = await client
+                .collection('user_info')
+                .find(
+                    { class: user.cls[0], 'power.0': { $exists: true } },
+                    {
+                        projection: {
+                            first_name: 1,
+                            last_name: 1,
+                            class: 1,
+                            total_score: 1,
+                        },
+                    },
+                )
+                .toArray();
+            //
+
+            if (check.length > 0) {
+                const school_year = await client
                     .db(name_global_databases)
-                    .collection('classes')
-                    .findOne({ _id: user.cls[0] }, { projection: { _id: 0, years: 1 } });
-
-                // get all student in staff member class:
-                const student_list = sortStudentName(
-                    await client
+                    .collection('school_year')
+                    .findOne({}, { projection: { _id: 0, year: 1 } });
+                // check user login:
+                if (user.pow[1]) {
+                    const Years = await client
                         .db(name_global_databases)
-                        .collection('user_info')
-                        .find(
-                            { class: user.cls[0], 'power.0': { $exists: true } },
-                            {
-                                projection: {
-                                    first_name: 1,
-                                    last_name: 1,
-                                    class: 1,
-                                    total_score: 1,
-                                },
-                            },
-                        )
-                        .toArray(),
-                );
-                // get all student total score from themself:
-                let render = {
-                    header: 'global-header',
-                    footer: 'global-footer',
-                    thongbao: 'global-notifications',
-                    student_list: student_list,
-                    cls: user.cls,
-                    years: years.years,
-                    curr_year: school_year.year,
-                };
+                        .collection('classes')
+                        .findOne({ _id: user.cls[0] }, { projection: { _id: 0, years: 1 } });
 
-                return res.render('teacher-grade-list', render);
-            } else {
-                // user not staff members
-                // redirect to home
-                return res.redirect('/');
+                    // get all student in staff member class:
+                    const student_list = sortStudentName(
+                        await client
+                            .db(name_global_databases)
+                            .collection('user_info')
+                            .find(
+                                { class: user.cls[0], 'power.0': { $exists: true } },
+                                {
+                                    projection: {
+                                        first_name: 1,
+                                        last_name: 1,
+                                        class: 1,
+                                        total_score: 1,
+                                    },
+                                },
+                            )
+                            .toArray(),
+                    );
+                    // get all student total score from themself:
+                    let render = {
+                        header: 'global-header',
+                        footer: 'global-footer',
+                        thongbao: 'global-notifications',
+                        student_list: student_list,
+                        cls: user.cls,
+                        years: Years.years,
+                        curr_year: school_year.year,
+                    };
+
+                    return res.render('teacher-grade-list', render);
+                } else {
+                    // user not staff members
+                    // redirect to home
+                    return res.redirect('/');
+                }
             }
         } catch (e) {
             console.log('SYSTEM | BAN_CAN_SU_DANH_SACH_BANG_DIEM | ERROR | ', e);

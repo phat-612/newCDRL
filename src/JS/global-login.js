@@ -1,14 +1,34 @@
 const inputs = Array.prototype.slice.call(document.querySelectorAll('.container input:not([type="checkbox"]'));
+const btn = document.querySelector('.login_form').querySelector('center');
 $('.login_btn').on('click', async function (e) {
+    e.preventDefault();
+
     sendata();
 });
 
 const sendata = async function () {
+    btn.innerHTML = `<center>
+                        <div class="login_btn">
+                            loading...
+                        </div>
+                    </center>`;
     const mssv = $('.mssv_input').val();
     const password = $('.password_input').val();
     if (mssv == '') {
+        btn.innerHTML = `<center>
+        <a class="login_btn">
+            Đăng nhập
+            <span></span>
+        </a>
+    </center>`;
         notify('!', 'Vui lòng nhập mssv!');
     } else if (password == '') {
+        btn.innerHTML = `<center>
+        <a class="login_btn">
+            Đăng nhập
+            <span></span>
+        </a>
+    </center>`;
         notify('!', 'Vui lòng nhập password!');
     } else {
         try {
@@ -30,12 +50,30 @@ const sendata = async function () {
                 if (datareturn.check) {
                     window.location.href = currentURLbase + '/login/firstlogin';
                 } else {
+                    btn.innerHTML = `<center>
+                                        <a class="login_btn">
+                                            Đăng nhập
+                                            <span></span>
+                                        </a>
+                                    </center>`;
                     window.location.href = '/';
                 }
             } else if (response.status == 403) {
+                btn.innerHTML = `<center>
+                                        <a class="login_btn">
+                                            Đăng nhập
+                                            <span></span>
+                                        </a>
+                                    </center>`;
                 // Error occurred during upload
                 notify('!', 'Sai thông tin đăng nhập');
             } else if (response.status == 404) {
+                btn.innerHTML = `<center>
+                                        <a class="login_btn">
+                                            Đăng nhập
+                                            <span></span>
+                                        </a>
+                                    </center>`;
                 window.location.href = '/';
             }
         } catch (error) {

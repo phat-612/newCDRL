@@ -1,25 +1,51 @@
 const inputs = Array.prototype.slice.call(document.querySelectorAll('.content input:not([type="checkbox"]'));
 const btn = document.querySelector('.login_form').querySelector('center');
 $('.login_btn').on('click', async function (e) {
-    btn.innerHTML = `<center>
-    <div class="login_btn">
-        loading...
-    </div>
-</center>`;
+    e.preventDefault();
+
     sendata();
 });
 
 const sendata = async function () {
+    btn.innerHTML = `<center>
+                        <div class="login_btn">
+                            loading...
+                        </div>
+                    </center>`;
     const new_password = $('.password_input').val();
     const re_new_password = $('.again_password_input').val();
     if (new_password == '') {
         notify('!', 'Vui lòng nhập mật khẩu mới!');
+        btn.innerHTML = `<center>
+            <a class="login_btn">
+              Kế tiếp
+              <span></span>
+            </a>
+          </center>`;
     } else if (re_new_password == '') {
         notify('!', 'Vui lòng nhập lại mật khẩu mới!');
+        btn.innerHTML = `<center>
+            <a class="login_btn">
+              Kế tiếp
+              <span></span>
+            </a>
+          </center>`;
     } else if (re_new_password !== new_password) {
         notify('x', 'Mật khẩu nhập lại không trùng, vui lòng kiểm tra lại');
+        btn.innerHTML = `<center>
+            <a class="login_btn">
+              Kế tiếp
+              <span></span>
+            </a>
+          </center>`;
     } else if (!/^.{6,}$/.test(new_password)) {
         notify('x', 'Mật khẩu không đủ bảo mật\nYêu cầu mật khẩu có ít nhất 6 ký tự!');
+        btn.innerHTML = `<center>
+            <a class="login_btn">
+              Kế tiếp
+              <span></span>
+            </a>
+          </center>`;
     } else {
         try {
             let postData = JSON.stringify({
@@ -41,11 +67,11 @@ const sendata = async function () {
                 // Error occurred during upload
                 notify('x', 'Mật khẩu mới không được trùng mật khẩu cũ!');
                 btn.innerHTML = `<center>
-                                    <a class="login_btn">
-                                        Đăng nhập
-                                        <span></span>
-                                    </a>
-                                </center>`;
+                <a class="login_btn">
+                  Kế tiếp
+                  <span></span>
+                </a>
+              </center>`;
             }
         } catch (error) {
             console.log(error);

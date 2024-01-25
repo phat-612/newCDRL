@@ -212,7 +212,7 @@ function createDepRouter(client) {
                     .toArray();
 
                 student_list = sortStudentName(student_list);
-                console.log('curr', school_year.year);
+                console.log('curr', classlist[0]._id);
                 // get all student total score from themself:
                 let render = {
                     header: 'global-header',
@@ -224,6 +224,7 @@ function createDepRouter(client) {
                     cls: classlist,
                     years: years.years,
                     curr_year: school_year.year,
+                    curr_clss: classlist[0]._id,
                     branch: branch_list,
                 };
 

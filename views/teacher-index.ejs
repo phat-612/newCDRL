@@ -1,35 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/src/css/bancansu-index.css" />
+        <link rel="stylesheet" href="/src/css/bancansu-index-responsive.css" />
+        <title>Trang Giáo Viên</title>
+    </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="/src/css/bancansu-index.css" />
-  <link rel="stylesheet" href="/src/css/bancansu-index-responsive.css" />
-  <title>Trang Giáo Viên</title>
-</head>
-
-<body>
-  <div class="main">
-    <%- include(header) %>
-    <div class="container">
-
-      <!-- Quản lí điểm -->
-      <div class="manager">
-        <div class="content content_top">
-          <h2>QUẢN LÍ LỚP HỌC</h2>
-          <div class="group_btn">
-            <a href="/giaovien/danhsachbangdiem"><button class="button-35">QL điểm rèn luyện</button></a>
-            <a href="/giaovien/quanlihoatdong"><button class="button-35">QL hoạt động</button></a>
-            <a href="/giaovien/quanlyquyen"><button class="button-35">QL lớp</button></a>
-          </div>
+    <body>
+        <div class="main">
+            <%- include(header) %>
+            <div class="container">
+                <!-- Quản lí điểm -->
+                <div class="manager">
+                    <div class="content content_top">
+                        <h2>QUẢN LÍ LỚP HỌC</h2>
+                        <div class="group_btn">
+                            <%if(student_list[0]==1){%>
+                            <h1 style="color: red">Bạn Chưa Có Lớp Phân Công</h1>
+                            <%}else{%>
+                            <a href="/giaovien/danhsachbangdiem"
+                                ><button class="button-35">QL điểm rèn luyện</button></a
+                            >
+                            <a href="/giaovien/quanlihoatdong"><button class="button-35">QL hoạt động</button></a>
+                            <a href="/giaovien/quanlyquyen"><button class="button-35">QL lớp</button></a>
+                            <%}%>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%- include(footer) %>
         </div>
-      </div>
-
-
-    </div>
-    <%- include(footer) %>
-  </div>
-</body>
-
+    </body>
 </html>

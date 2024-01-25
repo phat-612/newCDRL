@@ -10,21 +10,20 @@ function createRootRouter(client, parentDirectory) {
     router.get('/', checkIfUserLoginRoute, async (req, res) => {
         // kiểm tra châm điểm
         const school_year = await client
-                .db(name_global_databases)
-                .collection('school_year')
-                .findOne(
-                    {},
-                    {
-                        projection: {
-                            _id: 0,
-                            year: 1,
-                            start_day: 1,
-                            end_day: 1,
-                        },
+            .db(name_global_databases)
+            .collection('school_year')
+            .findOne(
+                {},
+                {
+                    projection: {
+                        _id: 0,
+                        year: 1,
+                        start_day: 1,
+                        end_day: 1,
                     },
-                );
-        const check_y =  () => {
-            
+                },
+            );
+        const check_y = () => {
             let today = new Date().getTime();
             let start_day = new Date(school_year.start_day).getTime();
             let end_day = new Date(school_year.end_day).getTime();
@@ -542,8 +541,12 @@ function createRootRouter(client, parentDirectory) {
                     !user.pow[7] &&
                     !user.pow[8]
                 ) {
+                    const student_list = user.cls[0];
+
+                    const nulll = [1];
                     return res.render('teacher-index', {
                         header: 'global-header',
+                        student_list: student_list != undefined ? student_list : nulll,
                         footer: 'global-footer',
                     });
                 } else if (
