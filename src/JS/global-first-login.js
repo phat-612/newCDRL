@@ -1,6 +1,11 @@
 const inputs = Array.prototype.slice.call(document.querySelectorAll('.content input:not([type="checkbox"]'));
-
+const btn = document.querySelector('.login_form').querySelector('center');
 $('.login_btn').on('click', async function (e) {
+    btn.innerHTML = `<center>
+    <div class="login_btn">
+        loading...
+    </div>
+</center>`;
     sendata();
 });
 
@@ -29,11 +34,18 @@ const sendata = async function () {
                 body: postData,
             };
             const response = await fetch('/api/first_login', requestOptions);
+
             if (response.ok) {
                 window.location.href = '/';
             } else if (response.status == 403) {
                 // Error occurred during upload
                 notify('x', 'Mật khẩu mới không được trùng mật khẩu cũ!');
+                btn.innerHTML = `<center>
+                                    <a class="login_btn">
+                                        Đăng nhập
+                                        <span></span>
+                                    </a>
+                                </center>`;
             }
         } catch (error) {
             console.log(error);
