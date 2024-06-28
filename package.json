@@ -19,5 +19,8 @@
     "pdfmake-unicode": "^0.0.1",
     "ws": "^8.13.0",
     "xlsx-populate": "^1.21.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
   }
 }
