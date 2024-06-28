@@ -1684,7 +1684,7 @@ function createAPIRouter(client, wss) {
         }
     });
 
-    // api danh sach sinh vien // có j sữa tên tiêng anh lại cho nó dồng bộ code nha Phát
+    // api danh sach sinh vien
     router.post('/getStudentList', checkIfUserLoginAPI, async (req, res) => {
         const user = req.session.user;
 

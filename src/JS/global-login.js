@@ -9,7 +9,8 @@ $('.login_btn').on('click', async function (e) {
 const sendata = async function () {
     btn.innerHTML = `<center>
                         <div class="login_btn">
-                            loading...
+                            Loading...
+                            <span></span>
                         </div>
                     </center>`;
     const mssv = $('.mssv_input').val();
