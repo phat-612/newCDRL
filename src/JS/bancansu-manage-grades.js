@@ -233,6 +233,9 @@ async function mark() {
         } else if (response.status == 205) {
             // Error occurred during upload
             notify('!', 'Khoa đã chấm điểm bạn không thể tiếp tục chấm điểm!');
+        } else if (response.status == 206) {
+            // Error occurred during upload
+            notify('!', 'Dữ liệu không hợp lệ!');
         } else if (response.status == 500) {
             // Error occurred during upload
             notify('x', 'Có lỗi xảy ra!');

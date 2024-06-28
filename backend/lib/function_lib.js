@@ -25,6 +25,49 @@ function comparePassword(inputPassword, hashedPassword) {
     return bcrypt.compareSync(inputPassword, hashedPassword);
 }
 
+// Hàm để kiểm tra hợp lệ của dữ liệu chấm điểm
+function checkScore(data) {
+    const maxScore = {
+        first: [7, 2, 4, 2, 5],
+        second: [15, 10],
+        third: [8, 6, 6],
+        fourth: [10, 5, 10],
+        fifth: [3, 3, 2, 2],
+        total: 100,
+    };
+
+    if (data.total > 100 || data.total < 0) return false;
+
+    const check =
+        data.first.forEach((element, index) => {
+            if (element > maxScore.first[index] || element < 0) {
+                return false;
+            }
+        }) &&
+        data.second.forEach((element, index) => {
+            if (element > maxScore.first[index] || element < 0) {
+                return false;
+            }
+        }) &&
+        data.third.forEach((element, index) => {
+            if (element > maxScore.first[index] || element < 0) {
+                return false;
+            }
+        }) &&
+        data.fourth.forEach((element, index) => {
+            if (element > maxScore.first[index] || element < 0) {
+                return false;
+            }
+        }) &&
+        data.fifth.forEach((element, index) => {
+            if (element > maxScore.first[index] || element < 0) {
+                return false;
+            }
+        });
+
+    return check;
+}
+
 async function sendEmail(password, email) {
     try {
         const transporter = nodemailer.createTransport({
@@ -171,6 +214,9 @@ async function mark(table, user, mssv, data, marker, cls) {
     //   img_ids: {},
     //   total: 100,
     // }
+
+    console.log(!checkScore(data));
+    if (!checkScore(data)) return 3;
 
     const school_year = await client
         .db(name_global_databases)

@@ -441,6 +441,9 @@ async function mark(img_ids) {
         } else if (response.status == 205) {
             // Error occurred during upload
             notify('!', 'Cố vấn hoặc ban cán sự đã chấm điểm bạn không thể tiếp tục chấm điểm!');
+        } else if (response.status == 206) {
+            // Error occurred during upload
+            notify('!', 'Dữ liệu không hợp lệ!');
         } else if (response.status == 500) {
             // Error occurred during upload
             notify('x', 'Có lỗi xảy ra!');

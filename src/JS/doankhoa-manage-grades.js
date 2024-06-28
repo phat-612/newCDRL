@@ -246,12 +246,16 @@ async function mark() {
         };
 
         const response = await fetch('/api/dep_mark', requestOptions);
-        if (response.status = 200) {
+        // console.log(response);
+        if (response.status === 200) {
             notify('n', 'Đã lưu phiếu đánh giá điểm rèn luyện thành công!');
-        } else if (response.status == 203) {
+        } else if (response.status === 203) {
             // Error occurred during upload
             notify('!', 'Đã quá thời hạn chấm điểm!');
-        } else if (response.status == 500) {
+        } else if (response.status === 206) {
+            // Error occurred during upload
+            notify('!', 'Dữ liệu không hợp lệ!');
+        } else if (response.status === 500) {
             // Error occurred during upload
             notify('x', 'Có lỗi xảy ra!');
         }

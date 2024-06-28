@@ -8,9 +8,9 @@ $('.login_btn').on('click', async function (e) {
 
 const sendata = async function () {
     btn.innerHTML = `<center>
-                        <div class="login_btn">
+                        <a class="login_btn">
                             loading...
-                        </div>
+                        </a>
                     </center>`;
     const new_password = $('.password_input').val();
     const re_new_password = $('.again_password_input').val();

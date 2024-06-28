@@ -427,6 +427,7 @@ function createAPIRouter(client, wss) {
             const user = req.session.user;
             if (user.pow[0]) {
                 const data = req.body;
+
                 const marker = await client
                     .db(name_global_databases)
                     .collection('user_info')
@@ -450,6 +451,8 @@ function createAPIRouter(client, wss) {
                         return res.sendStatus(203);
                     case 2:
                         return res.sendStatus(205);
+                    case 3:
+                        return res.sendStatus(206);
                 }
             } else {
                 return res.sendStatus(403);
@@ -489,6 +492,8 @@ function createAPIRouter(client, wss) {
                         return res.sendStatus(203);
                     case 2:
                         return res.sendStatus(205);
+                    case 3:
+                        return res.sendStatus(206);
                 }
             } catch (err) {
                 console.log('SYSTEM | STF_MARK | ERROR | ', err);
@@ -520,6 +525,8 @@ function createAPIRouter(client, wss) {
                         return res.sendStatus(203);
                     case 2:
                         return res.sendStatus(205);
+                    case 3:
+                        return res.sendStatus(206);
                 }
             } catch (err) {
                 console.log('SYSTEM | STF_MARK | ERROR | ', err);
@@ -557,6 +564,8 @@ function createAPIRouter(client, wss) {
                         return res.sendStatus(200);
                     case 1:
                         return res.sendStatus(203);
+                    case 3:
+                        return res.sendStatus(206);
                 }
 
                 return res.sendStatus(200);

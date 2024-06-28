@@ -8,10 +8,10 @@ $('.login_btn').on('click', async function (e) {
 
 const sendata = async function () {
     btn.innerHTML = `<center>
-                        <div class="login_btn">
+                        <a class="login_btn">
                             Loading...
                             <span></span>
-                        </div>
+                        </a>
                     </center>`;
     const mssv = $('.mssv_input').val();
     const password = $('.password_input').val();
