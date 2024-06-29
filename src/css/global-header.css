@@ -14,7 +14,7 @@ html {
     --td-a: rgb(117, 117, 255);
     --td-ahover: rgb(79 79 235);
     --header-boxshadow: #70707042;
-    --button-color: #d3d3d3;
+    --button-color: #f0f1fb;
     --checkbox-boxshadow: rgba(0, 16, 75, 0.05);
     --checkbox-border: #9b9ea7;
     --checkbox-border-hover: #c2c2c2;
@@ -54,7 +54,8 @@ body {
     margin: 0;
     padding: 0;
 }
-.container{
+
+.container {
     margin-bottom: 3rem;
 }
 
@@ -161,7 +162,7 @@ input {
     align-items: center;
     background-color: var(--button-color);
     border-radius: 1rem;
-    box-shadow: transparent 0 0 0 0.3rem, #797272 0 1px 3px 0px;
+    box-shadow: #969696 0 0 0 0.1rem, #969696 0 1px 2px 1px;
     box-sizing: border-box;
     color: var(--black-color);
     cursor: pointer;
@@ -175,7 +176,7 @@ input {
     padding: 1rem 1.2rem;
     text-align: center;
     text-decoration: none;
-    transition: box-shadow 0.2s, -webkit-box-shadow 0.2s;
+    transition: box-shadow 0.3s, -webkit-box-shadow 0.3s;
     white-space: nowrap;
     border: 0;
     user-select: none;
@@ -184,12 +185,12 @@ input {
 }
 
 .button-35:hover {
-    box-shadow: var(--black-color) 0 0 0 0.3rem, transparent 0 0 0 0;
+    box-shadow: var(--black-color) 0 0 0 0.1rem, transparent 0 0 0 0;
 }
 
 .button-35:active {
-    background-color: #a0a0a0;
-    color: #e2e2e2;
+    background-color: #6287ff;
+    color: #000;
 }
 
 .button-35 a {
@@ -262,13 +263,13 @@ input {
     visibility: hidden;
 }
 
-.checkbox-wrapper-4 .inp-cbx:checked + .cbx span:first-child {
+.checkbox-wrapper-4 .inp-cbx:checked+.cbx span:first-child {
     background: var(--checkbox-active);
     border-color: var(--checkbox-border-hover);
     animation: wave-4 0.4s ease;
 }
 
-.checkbox-wrapper-4 .inp-cbx:checked + .cbx span:first-child svg {
+.checkbox-wrapper-4 .inp-cbx:checked+.cbx span:first-child svg {
     stroke-dashoffset: 0;
 }
 
@@ -368,6 +369,7 @@ td .select select option {
     transition: 0.25s all ease;
     pointer-events: none;
 }
+
 .select::after {
     font-size: 1.2rem;
 
@@ -379,8 +381,9 @@ td .select select option {
     transition: 0.25s all ease;
     pointer-events: none;
 }
+
 .select:hover::after {
-    color: var(--checkbox-active);
+    color: rgb(30 0 255);
 }
 
 /* table chung */
@@ -517,11 +520,11 @@ textarea {
 }
 
 /* ------ On check event ------ */
-.theme_btn input:checked ~ .moon {
+.theme_btn input:checked~.moon {
     display: none;
 }
 
-.theme_btn input:checked ~ .sun {
+.theme_btn input:checked~.sun {
     display: block;
 }
 
@@ -551,31 +554,35 @@ textarea {
     .container {
         margin-bottom: 12rem;
     }
+
     .header {
         display: flex;
         top: 0;
         left: 0;
         right: 0;
     }
+
     .theme_btn {
         fill: var(--white-color);
     }
+
     .content--button,
     #button-main {
         margin: 0;
         gap: 20px;
         justify-content: center;
     }
+
     .content--button .button-35,
     #button-main .button-35 {
         padding: 2rem 4.2rem;
     }
 
-    .right-header > a {
+    .right-header>a {
         display: none;
     }
 
-    .avatar_wrap > p {
+    .avatar_wrap>p {
         display: none;
     }
 
@@ -586,6 +593,7 @@ textarea {
     .avatar:hover .setting {
         display: none;
     }
+
     .select::after {
         font-size: 1.2rem;
 
@@ -598,34 +606,43 @@ textarea {
         pointer-events: none;
     }
 }
+
 @media screen and (max-width: 600px) {
     .main-content {
         margin: 3rem auto 10.3rem auto;
     }
+
     .container__table {
         overflow: auto;
     }
+
     select {
         display: block;
 
         margin: 0 auto !important;
     }
+
     .subtitle {
         display: block;
         margin: 0;
     }
+
     #select-main .select {
         display: block;
     }
+
     .select_branch {
         margin: 0 0 0 0;
     }
+
     .select {
         width: 100%;
     }
+
     .select select {
         appearance: auto;
     }
+
     .subject--input {
         width: 75%;
         display: block;
@@ -636,6 +653,7 @@ textarea {
         display: flex;
         gap: 2rem;
     }
+
     .button-35 {
         margin: 1rem 0 0 0;
     }
@@ -643,12 +661,15 @@ textarea {
     #button-main div {
         width: 100%;
     }
+
     #button-main div .button-35 {
         width: 100%;
     }
+
     .modal_main {
         height: auto;
     }
+
     .content_main div {
         display: block;
     }
@@ -657,18 +678,22 @@ textarea {
         padding: 0 0.5rem;
         box-sizing: border-box;
     }
+
     .content.title {
         position: unset !important;
         padding: 0;
         width: 100%;
         text-align: center;
     }
+
     .content_main {
         margin-top: 0 !important;
     }
+
     .selectbox {
         margin: 1rem;
     }
+
     .table_container {
         overflow: auto;
     }
@@ -739,4 +764,5 @@ textarea {
     justify-content: center;
     box-sizing: border-box;
 }
+
 /* ----------------------------------- */

@@ -60,7 +60,7 @@ function setLight() {
     rootStyle.setProperty('--table-header', 'rgb(206, 206, 206)');
     rootStyle.setProperty('--tb-white', 'rgb(241, 241, 241)');
     rootStyle.setProperty('--tr-hover', 'rgb(247 234 255)');
-    rootStyle.setProperty('--button-color', '#d3d3d3');
+    rootStyle.setProperty('--button-color', '#f0f1fb');
     rootStyle.setProperty('--mauvang-ne', 'rgb(251, 251, 138)');
     rootStyle.setProperty('--primColor', '#dcdcdc');
     rootStyle.setProperty('--secoColor', '#555555');
