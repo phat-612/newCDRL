@@ -3,7 +3,7 @@
     margin: 0;
     box-sizing: content-box;
 }
-.container{
+.container {
     margin-bottom: 3rem;
 }
 .content {
@@ -196,7 +196,9 @@ label {
 }
 
 .copy_box {
-    display: none;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
 }
 
 .activity-board {

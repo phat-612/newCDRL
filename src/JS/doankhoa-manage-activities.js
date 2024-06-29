@@ -1,12 +1,10 @@
-function generateUUID() {
-    // Hàm tạo chuỗi UUID
-    // Tham khảo: https://stackoverflow.com/a/2117523/13347726
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        var r = (Math.random() * 16) | 0,
-            v = c === 'x' ? r : (r & 0x3) | 0x8;
-        return v.toString(16);
-    });
-}
+// tippy
+tippy('#dep_copy_link', {
+    content: 'Sao chép đường dẫn',
+});
+tippy('#dep_access_link', {
+    content: 'Truy cập đường dẫn',
+});
 
 let atv_id = generateUUID(); // fake id to know a new id
 let curr_edit = undefined;
@@ -132,25 +130,26 @@ $('.close_modal').click(function () {
 });
 
 // show and hide copy link box
-$(document).on('mouseenter', '.atv_box', async function () {
-    $(this).next().show();
-    $(this).next().css('transition', 'all 2s');
-});
+// $(document).on('mouseenter', '.atv_box', async function () {
+//     $(this).next().show();
+//     $(this).next().css('transition', 'all 2s');
+// });
 
-$(document).on('mouseenter', '.copy_box', async function () {
-    $(this).show();
-    $(this).css('transition', 'all 2s');
-});
+// $(document).on('mouseenter', '.copy_box', async function () {
+//     $(this).show();
+//     $(this).css('transition', 'all 2s');
+// });
 
-$(document).on('mouseleave', '.atv_box', async function () {
-    $(this).next().hide();
-});
+// $(document).on('mouseleave', '.atv_box', async function () {
+//     $(this).next().hide();
+// });
 
-$(document).on('mouseleave', '.copy_box', async function () {
-    $(this).hide();
-});
+// $(document).on('mouseleave', '.copy_box', async function () {
+//     $(this).hide();
+// });
 
-$(document).on('click', '.copy_btn', async function () {
+$(document).on('click', '.copy_btn', async function (event) {
+    event.preventDefault();
     notify('n', 'Đã copy link đãng kí và điểm danh hoạt động.');
     navigator.clipboard.writeText($(this).parent().parent().find('.copy_link').prop('href'));
 });
@@ -318,11 +317,25 @@ $('.save_btn').click(async function () {
               <td class="school_year">${year_cur.split('_')[0]} ${year_cur.split('_')[1]}</td>
               <td><a href="/doankhoa/quanlihoatdong/Khoa/${atv_id}" target="blank">Chi tiết</a></td>
               <td><a class="more_list" id="dep_edit" href="#">Sửa</a></td>
+                <td>
+                    <a class="copy_btn" id="dep_copy_link" href="#">
+                        <i class="fa-regular fa-copy"></i>
+                    </a>
+                </td>
+                <td>
+                    <a class="copy_link" id="dep_access_link" href="/dangkyhoatdong?id=${atv_id}&level=khoa" target="_blank">
+                        <i class="fa-solid fa-link"></i>
+                    </a>
+                </td>
             </tr>
-            <tr class="copy_box">
-              <td colspan="2"> <a class="copy_btn">COPY</a> </td>
-              <td colspan="6"><a class="copy_link" href="/dangkyhoatdong?id=${atv_id}&level=khoa">Link đăng kí và điểm danh hoạt động</a></td>
-            </tr>
+            <script>
+                tippy('#dep_copy_link', {
+                    content: 'Sao chép đường dẫn',
+                });
+                tippy('#dep_access_link', {
+                    content: 'Truy cập đường dẫn',
+                });
+            </script>
           `);
                     // add content and start time to dep list
                     dep_content.push(atv_content);
@@ -344,11 +357,25 @@ $('.save_btn').click(async function () {
               <td class="school_year">${year_cur.split('_')[0]} ${year_cur.split('_')[1]}</td>
               <td><a href="/doankhoa/quanlihoatdong/Truong/${atv_id}" target="blank">Chi tiết</a></td>
               <td><a class="more_list" id="school_edit" href="#">Sửa</a></td>
+                <td>
+                    <a class="copy_btn" id="dep_copy_link" href="#">
+                      <i class="fa-regular fa-copy"></i>
+                    </a>
+                </td>
+                <td>
+                    <a class="copy_link" id="dep_access_link" href="/dangkyhoatdong?id=${atv_id}&level=truong" target="_blank">
+                      <i class="fa-solid fa-link"></i>
+                    </a>
+                </td>
             </tr>
-            <tr class="copy_box">
-              <td colspan="2"> <a class="copy_btn">COPY</a> </td>
-              <td colspan="6"><a class="copy_link" href="/dangkyhoatdong?id=${atv_id}&level=truong">Link đăng kí và điểm danh hoạt động</a></td>
-            </tr>
+            <script>
+                tippy('#dep_copy_link', {
+                    content: 'Sao chép đường dẫn',
+                });
+                tippy('#dep_access_link', {
+                    content: 'Truy cập đường dẫn',
+                });
+            </script>
           `);
 
                     // add content and start time to cls list
@@ -433,13 +460,27 @@ $('#year_choice').click(async function () {
                   <td class="school_year">${school_atv[i].year.split('_')[0]} ${school_atv[i].year.split('_')[1]}</td>
                   <td><a href="/doankhoa/quanlihoatdong/Truong/${school_atv[i]._id}">Chi tiết</a></td>
                   <td><a class="more_list" href="#">Sửa</a></td>
+                  <td>
+                    <a class="copy_btn" id="dep_copy_link" href="#">
+                      <i class="fa-regular fa-copy"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <a class="copy_link" id="dep_access_link" href="/dangkyhoatdong?id=${
+                        school_atv[i]._id
+                    }&level=truong" target="_blank">
+                      <i class="fa-solid fa-link"></i>
+                    </a>
+                  </td>
                 </tr>
-                <tr class="copy_box">
-                  <td colspan="2"> <a class="copy_btn">COPY</a> </td>
-                  <td colspan="6"><a class="copy_link" href="/dangkyhoatdong?id=${
-                      school_atv[i]._id
-                  }&level=truong">Link đăng kí và điểm danh hoạt động</a></td>
-                </tr>
+                <script>
+                    tippy('#dep_copy_link', {
+                        content: 'Sao chép đường dẫn',
+                    });
+                    tippy('#dep_access_link', {
+                        content: 'Truy cập đường dẫn',
+                    });
+                </script>
               `);
             }
             //append activities to department's table ************************************************************
@@ -457,13 +498,27 @@ $('#year_choice').click(async function () {
                 <td class="school_year">${dep_atv[i].year.split('_')[0]} ${dep_atv[i].year.split('_')[1]}</td>
                 <td><a href="/doankhoa/quanlihoatdong/Khoa/${dep_atv[i]._id}">Chi tiết</a></td>
                 <td><a class="more_list" id="dep_edit" href="#">Sửa</a></td>
+                <td>
+                    <a class="copy_btn" id="dep_copy_link" href="#">
+                      <i class="fa-regular fa-copy"></i>
+                    </a>
+                </td>
+                <td>
+                    <a class="copy_link" id="dep_access_link" href="/dangkyhoatdong?id=${
+                        dep_atv[i]._id
+                    }&level=khoa" target="_blank">
+                      <i class="fa-solid fa-link"></i>
+                    </a>
+                </td>
               </tr>
-              <tr class="copy_box">
-                <td colspan="2"> <a class="copy_btn">COPY</a> </td>
-                <td colspan="6"><a class="copy_link" href="/dangkyhoatdong?id=${
-                    dep_atv[i]._id
-                }&level=khoa">Link đăng kí và điểm danh hoạt động</a></td>
-              </tr>
+              <script>
+                    tippy('#dep_copy_link', {
+                        content: 'Sao chép đường dẫn',
+                    });
+                    tippy('#dep_access_link', {
+                        content: 'Truy cập đường dẫn',
+                    });
+                </script>
             `);
             }
             //append activities to class' table ************************************************************
@@ -482,13 +537,27 @@ $('#year_choice').click(async function () {
                 <td class="school_year">${cls_atv[i].year.split('_')[0]} ${cls_atv[i].year.split('_')[1]}</td>
                 <td><a href="/doankhoa/quanlihoatdong/${cls_atv[i].cls}/${cls_atv[i]._id}">Chi tiết</a></td>
                 <td><a class="more_list" id="cls_edit" href="#">Sửa</a></td>
-              </tr>
-              <tr class="copy_box">
-                <td colspan="2"> <a class="copy_btn">COPY</a> </td>
-                <td colspan="6"><a class="copy_link" href="/dangkyhoatdong?id=${cls_atv[i]._id}&class=${
+                <td>
+                    <a class="copy_btn" id="dep_copy_link" href="#">
+                      <i class="fa-regular fa-copy"></i>
+                    </a>
+                </td>
+                <td>
+                    <a class="copy_link" id="dep_access_link" href="/dangkyhoatdong?id=${cls_atv[i]._id}&class=${
                     cls_atv[i].cls
-                }&level=lop">Link đăng kí và điểm danh hoạt động</a></td>
+                }&level=lop" target="_blank">
+                      <i class="fa-solid fa-link"></i>
+                    </a>
+                </td>
               </tr>
+              <script>
+                    tippy('#dep_copy_link', {
+                        content: 'Sao chép đường dẫn',
+                    });
+                    tippy('#dep_access_link', {
+                        content: 'Truy cập đường dẫn',
+                    });
+                </script>
             `);
             }
         });
@@ -559,13 +628,27 @@ $('#subject_choice').click(async function () {
                 <td class="school_year">${result[i].year.split('_')[0]} ${result[i].year.split('_')[1]}</td>
                 <td><a href="/doankhoa/quanlihoatdong/${result[i].cls}/${result[i]._id}">Chi tiết</a></td>
                 <td><a class="more_list" id="cls_edit" href="#">Sửa</a></td>
-              </tr>
-              <tr class="copy_box">
-                <td colspan="2"> <a class="copy_btn">COPY</a> </td>
-                <td colspan="6"><a class="copy_link" href="/dangkyhoatdong?id=${result[i]._id}&class=${
+                <td>
+                    <a class="copy_btn" id="dep_copy_link" href="#">
+                        <i class="fa-regular fa-copy"></i>
+                    </a>
+                </td>
+                <td>
+                    <a class="copy_link" id="dep_access_link" href="/dangkyhoatdong?id=${result[i]._id}&class=${
                     result[i].cls
-                }&level=lop">Link đăng kí và điểm danh hoạt động</a></td>
+                }&level=lop" target="_blank">
+                        <i class="fa-solid fa-link"></i>
+                    </a>
+                </td>
               </tr>
+                <script>
+                    tippy('#dep_copy_link', {
+                        content: 'Sao chép đường dẫn',
+                    });
+                    tippy('#dep_access_link', {
+                        content: 'Truy cập đường dẫn',
+                    });
+                </script>
             `);
             }
         });

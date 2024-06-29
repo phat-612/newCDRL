@@ -102,6 +102,8 @@
                   <th style="width: 10%;">Thời gian</th>
                   <th style="width: 10%;">Đánh giá</th>
                   <th style="width: 10%;">Cập nhật</th>
+                  <th style="width: 2%;"></th>
+                  <th style="width: 2%;"></th>
                 </tr>
               </thead>
               <tbody>
@@ -124,11 +126,21 @@
                   </td>
                   <td><a href="/doankhoa/quanlihoatdong/Truong/<%= school_atv[i]._id %>" target="blank">Chi tiết</a></td>
                   <td><a class="more_list" id="school_edit" href="#">Sửa</a></td>
+                  <td>
+                    <a class="copy_btn" id="dep_copy_link" href="#">
+                      <i class="fa-regular fa-copy"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <a class="copy_link" id="dep_access_link" href="/dangkyhoatdong?id=<%= school_atv[i]._id %>&level=truong" target="_blank">
+                      <i class="fa-solid fa-link"></i>
+                    </a>
+                  </td>
                 </tr>
-                <tr class="copy_box">
+                <!-- <tr class="copy_box">
                   <td colspan="2"> <a class="copy_btn">COPY</a> </td>
                   <td colspan="6"><a class="copy_link" href="/dangkyhoatdong?id=<%= school_atv[i]._id %>&level=truong" target="_blank">Link đăng kí và điểm danh hoạt động</a></td>
-                </tr>
+                </tr> -->
                 <% } %>
               </tbody>
             </table>
@@ -159,6 +171,8 @@
                   <th style="width: 10%;">Thời gian</th>
                   <th style="width: 10%;">Đánh giá</th>
                   <th style="width: 10%;">Cập nhật</th>
+                  <th style="width: 2%;"></th>
+                  <th style="width: 2%;"></th>
                 </tr>
               </thead>
               <tbody>
@@ -181,12 +195,22 @@
                   </td>
                   <td><a href="/doankhoa/quanlihoatdong/Khoa/<%= dep_atv[i]._id %>" target="blank">Chi tiết</a></td>
                   <td><a class="more_list" id="dep_edit" href="#">Sửa</a></td>
+                  <td>
+                    <a class="copy_btn" id="dep_copy_link" href="#">
+                      <i class="fa-regular fa-copy"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <a class="copy_link" id="dep_access_link" href="/dangkyhoatdong?id=<%= dep_atv[i]._id %>&level=khoa" target="_blank">
+                      <i class="fa-solid fa-link"></i>
+                    </a>
+                  </td>
                 </tr>
-                <tr class="copy_box">
+                <!-- <tr class="copy_box"> -->
                   <!-- fill link google forn here  -->
-                  <td colspan="2"> <a class="copy_btn">COPY</a> </td>
+                  <!-- <td colspan="2"> <a class="copy_btn">COPY</a> </td>
                   <td colspan="6"><a class="copy_link" href="/dangkyhoatdong?id=<%= dep_atv[i]._id %>&level=khoa" target="_blank">Link đăng kí và điểm danh hoạt động</a></td>
-                </tr>
+                </tr> -->
                 <% } %>
               </tbody>
             </table>
@@ -267,6 +291,8 @@
                   <th style="width: 10%;">Thời gian</th>
                   <th style="width: 10%;">Đánh giá</th>
                   <th style="width: 10%;">Cập nhật</th>
+                  <th style="width: 3%;"></th>
+                  <th style="width: 3%;"></th>
                 </tr>
               </thead>
               <tbody>
@@ -284,12 +310,22 @@
                   <td class="school_year"><%= cls_atv[i].year.split("_")[0] + " " + cls_atv[i].year.split("_")[1] %></td>
                   <td><a href="/doankhoa/quanlihoatdong/<%= cls_atv[i].cls %>/<%= cls_atv[i]._id %>" target="blank">Chi tiết</a></td>
                   <td><a class="more_list" id="cls_edit" href="#">Sửa</a></td>
+                  <td>
+                    <a class="copy_btn" id="dep_copy_link" href="#">
+                      <i class="fa-regular fa-copy"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <a class="copy_link" id="dep_access_link" href="/dangkyhoatdong?id=<%= cls_atv[i]._id %>&level=lop" target="_blank">
+                      <i class="fa-solid fa-link"></i>
+                    </a>
+                  </td>
                 </tr>
-                <tr class="copy_box">
+                <!-- <tr class="copy_box"> -->
                   <!-- fill link google forn -->
-                  <td colspan="2"> <a class="copy_btn">COPY</a> </td>
+                  <!-- <td colspan="2"> <a class="copy_btn">COPY</a> </td>
                   <td colspan="6"><a class="copy_link" href="/dangkyhoatdong?id=<%= cls_atv[i]._id %>&level=lop" target="_blank">Link đăng kí và điểm danh hoạt động</a></td>
-                </tr>
+                </tr> -->
                 <% } %>
               </tbody>
             </table>
@@ -433,6 +469,7 @@
     </div>
   </div>
 </div>
+
 <script>
   const branch_list = <%-JSON.stringify(branch) %>;
   const class_list = <%-JSON.stringify(cls) %>;
@@ -448,5 +485,6 @@
 </script>
 
 <script src="/src/JS/doankhoa-manage-activities.js"></script>
+
 
 </html>
