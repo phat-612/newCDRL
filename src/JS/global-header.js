@@ -57,9 +57,9 @@ function setLight() {
     rootStyle.setProperty('--header-text', '#667580');
     rootStyle.setProperty('--black-color', '#000');
     rootStyle.setProperty('--white-color', '#fff');
-    rootStyle.setProperty('--table-header', 'rgb(206, 206, 206)');
+    rootStyle.setProperty('--table-header', '#1b57c67d');
     rootStyle.setProperty('--tb-white', 'rgb(241, 241, 241)');
-    rootStyle.setProperty('--tr-hover', 'rgb(247 234 255)');
+    rootStyle.setProperty('--tr-hover', 'rgb(192 216 255)');
     rootStyle.setProperty('--button-color', '#f0f1fb');
     rootStyle.setProperty('--mauvang-ne', 'rgb(251, 251, 138)');
     rootStyle.setProperty('--primColor', '#dcdcdc');
@@ -80,9 +80,9 @@ function setDark() {
     rootStyle.setProperty('--header-text', '#9fa0a0');
     rootStyle.setProperty('--black-color', '#fff');
     rootStyle.setProperty('--white-color', '#181a1b');
-    rootStyle.setProperty('--table-header', '#34383a');
+    rootStyle.setProperty('--table-header', '#374864');
     rootStyle.setProperty('--tb-white', '#202324');
-    rootStyle.setProperty('--tr-hover', '#1e2022');
+    rootStyle.setProperty('--tr-hover', '#49535e');
     rootStyle.setProperty('--button-color', '#313537');
     rootStyle.setProperty('--mauvang-ne', '#777804');
     rootStyle.setProperty('--primColor', '#2c2f31');

@@ -83,10 +83,12 @@ th {
 tr:hover {
     background-color: rgba(158, 158, 158, 0.507);
 }
-.checkbox-wrapper-4{
+
+.checkbox-wrapper-4 {
     position: relative;
 }
-.checkbox-wrapper-4 input[type="checkbox"]{
+
+.checkbox-wrapper-4 input[type="checkbox"] {
     position: absolute;
     visibility: hidden;
     top: 0;
@@ -308,7 +310,7 @@ label {
 .complete_img {
     display: flex;
     justify-content: flex-end;
-    padding: 1rem 1rem 1rem 0;
+    padding: 2rem 1rem 2rem 0;
 }
 
 .drop_img:hover {
@@ -680,7 +682,7 @@ label {
 .complete_img {
     display: flex;
     justify-content: flex-end;
-    padding: 1rem 1rem 1rem 0;
+    padding: 2rem 1rem 2rem 0;
 }
 
 .drop_img:hover {
@@ -816,19 +818,23 @@ textarea::placeholder {
     padding: 1rem;
     border-radius: 1rem;
 }
+
 .main_img_list {
     margin-top: 3rem;
 }
+
 .main_img_item {
     text-align: center;
     font-size: 2rem;
     padding-bottom: 2rem;
 }
+
 .main_img_item img {
     border: 1px solid;
     margin-bottom: 1rem;
     width: 300px;
 }
+
 .model_show {
     position: fixed;
     width: 100%;
@@ -841,12 +847,14 @@ textarea::placeholder {
     align-items: center;
     display: none !important;
 }
+
 .show_img {
     display: flex !important;
 }
+
 @media screen and (max-width: 600px) {
-    .foot_modal .modal_wrap{
+    .foot_modal .modal_wrap {
         bottom: auto;
-        height: auto ;
+        height: auto;
     }
 }

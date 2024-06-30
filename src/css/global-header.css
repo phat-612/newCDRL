@@ -9,8 +9,8 @@ html {
     --black-color: black;
     --white-color: #fff;
     --checkbox-active: rgb(143, 213, 229);
-    --tr-hover: rgb(247 234 255);
-    --table-header: rgb(206, 206, 206);
+    --tr-hover: rgb(192 216 255);
+    --table-header: #1b57c67d;
     --td-a: rgb(117, 117, 255);
     --td-ahover: rgb(79 79 235);
     --header-boxshadow: #70707042;

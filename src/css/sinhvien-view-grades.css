@@ -2,6 +2,7 @@ html {
     font-size: 62.5%;
     position: relative;
 }
+
 body {
     margin: 0;
 }
@@ -11,6 +12,7 @@ table * {
     margin: 0;
     padding: 0;
 }
+
 table,
 th,
 td {
@@ -18,21 +20,26 @@ td {
     border-collapse: collapse;
     font-weight: 600;
 }
+
 tr {
     min-height: 5rem;
 }
+
 th {
     font-size: 2rem;
     padding: 1rem;
 }
+
 td {
     font-size: 1.6rem;
     text-align: center;
 }
+
 td:nth-child(1) {
     text-align: left;
     padding: 1.2rem 1rem 1.2rem 1.5rem;
 }
+
 td:nth-child(2) {
     font-weight: bold;
 }
@@ -46,6 +53,7 @@ tr:nth-child(42) {
     color: rgb(255, 75, 75);
     font-size: 1.8rem;
 }
+
 td .title {
     font-size: 2rem;
     font-weight: bold;
@@ -59,6 +67,7 @@ td .title {
     margin-top: 3rem;
     padding: 1rem;
 }
+
 .tittle-table {
     margin: 0;
     padding: 3rem 0;
@@ -69,6 +78,7 @@ td .title {
 .modal_wrap_img_item:hover p {
     top: 75%;
 }
+
 .modal_wrap_img_item:hover .up-img-btn {
     z-index: 3;
 }
@@ -114,6 +124,7 @@ td .title {
 .button-35.up-btn {
     padding: 1rem 4rem;
 }
+
 .post-btn {
     display: none;
 }
@@ -122,6 +133,7 @@ td .title {
     font-size: 2rem;
     color: #515050;
 }
+
 .row_type_1 {
     background-color: #f1f1f1;
     font-size: 1.5rem;
@@ -191,7 +203,7 @@ td .title {
 .complete_img {
     display: flex;
     justify-content: flex-end;
-    padding: 1rem 1rem 1rem 0;
+    padding: 2rem 1rem 2rem 0;
 }
 
 .drop_img:hover {
@@ -276,6 +288,7 @@ textarea::placeholder {
 .modal_img_btn button {
     padding: 1rem 4rem;
 }
+
 .done-btn:last-child {
     margin: 0;
 }
@@ -285,6 +298,7 @@ td .select select {
     background-color: inherit;
     padding: 0;
 }
+
 td .select::after {
     top: 6%;
     right: 20%;
@@ -293,6 +307,7 @@ td .select::after {
 .m-auto {
     margin: 3rem auto 6rem;
 }
+
 .mdl-js {
     background-color: var(--html-color);
 }
@@ -301,14 +316,17 @@ td .select::after {
     margin-top: 5rem;
     padding: 0 2rem;
 }
+
 .main_img_list {
     margin-top: 3rem;
 }
+
 .main_img_item {
     text-align: center;
     font-size: 2rem;
     padding-bottom: 2rem;
 }
+
 .main_img_item img {
     border: 1px solid;
     margin-bottom: 1rem;
@@ -320,6 +338,7 @@ td .select::after {
     padding: 10px;
     text-align: center;
 }
+
 .act_name_title {
     text-align: center;
     font-size: 2rem;
@@ -328,10 +347,12 @@ td .select::after {
     margin: 2rem 20rem;
     border-radius: 1rem;
 }
+
 .active_con {
     border: 1px solid var(--black-color);
     border-radius: 5px;
 }
+
 .active_item {
     margin-bottom: 2rem;
 }

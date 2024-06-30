@@ -94,6 +94,7 @@ tr:hover {
     background-color: var(--modal-color);
     display: none;
 }
+
 .subject--input {
     margin-top: 0.5rem;
     width: 100%;
@@ -168,6 +169,7 @@ label {
     padding: 9rem 0 15rem 0;
     color: #61ff61;
 }
+
 .activity_body_studentname {
     padding: 2rem 0;
 }
@@ -175,6 +177,7 @@ label {
 .modal_wrap_img_item:hover p {
     top: 75%;
 }
+
 .modal_wrap_img_item:hover .up-img-btn {
     z-index: 3;
 }
@@ -225,6 +228,7 @@ label {
     font-size: 2rem;
     color: #515050;
 }
+
 .row_type_1 {
     background-color: #f1f1f1;
     font-size: 1.5rem;
@@ -295,7 +299,7 @@ label {
 .complete_img {
     display: flex;
     justify-content: flex-end;
-    padding: 1rem 1rem 1rem 0;
+    padding: 2rem 1rem 2rem 0;
 }
 
 .drop_img:hover {
@@ -381,6 +385,7 @@ textarea::placeholder {
 .modal_img_btn button {
     padding: 1rem 4rem;
 }
+
 .done-btn:last-child {
     margin: 0;
 }
@@ -388,6 +393,7 @@ textarea::placeholder {
 .attendance {
     color: #e01010;
 }
+
 .no_attendance_yet {
     color: #5fff33;
 }
