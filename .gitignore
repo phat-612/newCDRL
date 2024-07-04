@@ -1,2 +1,4 @@
 # ignore file
-.vscode/settings.json
+.vscode
+
+.node_modules
