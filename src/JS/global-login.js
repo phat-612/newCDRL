@@ -1,9 +1,15 @@
 const inputs = Array.prototype.slice.call(document.querySelectorAll('.container input:not([type="checkbox"]'));
 const btn = document.querySelector('.login_form').querySelector('center .login_btn');
-$('.login_btn').on('click', async function (e) {
+$('.login_btn').on('click', async function (e) { 
     e.preventDefault();
-
     sendata();
+});
+
+$('.password_input').on('keydown', function (e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        sendata();
+    }
 });
 
 const sendata = async function () {
