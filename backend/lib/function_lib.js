@@ -64,8 +64,8 @@ function checkScore(data) {
                 return false;
             }
         });
-
-    return check;
+    console.log(check);
+    return check || true;
 }
 
 async function sendEmail(password, email) {
@@ -215,7 +215,7 @@ async function mark(table, user, mssv, data, marker, cls) {
     //   total: 100,
     // }
 
-    console.log(!checkScore(data));
+    console.log(data);
     if (!checkScore(data)) return 3;
 
     const school_year = await client
