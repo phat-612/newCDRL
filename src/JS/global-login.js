@@ -1,6 +1,6 @@
 const inputs = Array.prototype.slice.call(document.querySelectorAll('.container input:not([type="checkbox"]'));
 const btn = document.querySelector('.login_form').querySelector('center .login_btn');
-$('.login_btn').on('click', async function (e) { 
+$('.login_btn').on('click', async function (e) {
     e.preventDefault();
     sendata();
 });
@@ -36,12 +36,21 @@ const sendata = async function () {
                 mssv: mssv,
                 password: password,
             });
+            console.log(postData);
+            console.log(key);
+            const encrypt = new JSEncrypt();
+            encrypt.setPublicKey(key);
+
+            // Mã hóa dữ liệu
+            var encryptedData = encrypt.encrypt(postData);
+            // Chuyển dữ liệu sang WordArray
+            // console.log('Dữ liệu đã được mã hóa:', encryptedData);
             const requestOptions = {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: postData,
+                body: JSON.stringify({ data: encryptedData }),
             };
             const response = await fetch('/api/login', requestOptions);
             if (response.ok) {

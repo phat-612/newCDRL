@@ -2,6 +2,11 @@ $('#mySelect2').change(async function () {
     notify('!', 'Đang tải dữ liệu...');
     const selectedYear = $('#mySelect2').val();
     const response = await fetch(`/api/getuserscore?schoolYear=${selectedYear}`);
+    if (response.status == 200) {
+        setTimeout(() => {
+            toast.classList.remove('active');
+        }, 500);
+    }
     const data = await response.json();
     data.forEach((item) => {
         console.log(item.year);

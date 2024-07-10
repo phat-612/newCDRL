@@ -7,7 +7,8 @@ const fs = require('fs');
 const uploadDirectory = path.join('../../upload_temp');
 const multer = require('multer');
 const server = require('../lib/csdl_google_lib');
-
+const forge = require('node-forge');
+require('dotenv').config();
 const { ObjectId } = require('mongodb');
 const { getNameGlobal } = require('../lib/mogodb_lib');
 const name_global_databases = getNameGlobal();
@@ -44,7 +45,15 @@ const upload = multer({ storage: storage_file });
 function createAPIRouter(client, wss) {
     // Log in --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     router.post('/login', async (req, res) => {
-        const data = req.body;
+        const privateKeyPem = process.env.PRIVATE_KEY; // Khóa mật AES
+        const encryptedData = req.body.data; // Dữ liệu đã mã hóa nhận từ client
+        // Tạo đối tượng khóa RSA private từ chuỗi PEM
+        const privateKey = forge.pki.privateKeyFromPem(privateKeyPem);
+        const decryptedData = privateKey.decrypt(forge.util.decode64(encryptedData));
+
+        // console.log('Dữ liệu đã giải mã:', decryptedData);
+        const data = JSON.parse(decryptedData);
+        // console.log(data); // In ra dữ liệu giải mã
         // 403: sai thong tin dang nhap
         // data = {mssv: bbp, password: 1234567890, remember: true}
         try {
@@ -365,13 +374,69 @@ function createAPIRouter(client, wss) {
     // Đổi pass ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     router.post('/change_pass', checkIfUserLoginAPI, async (req, res) => {
         try {
-            const data = req.body;
+            const privateKeyPem = process.env.PRIVATE_KEY; // Khóa mật AES
+            const encryptedData = req.body.data; // Dữ liệu đã mã hóa nhận từ client
+            // Tạo đối tượng khóa RSA private từ chuỗi PEM
+            const privateKey = forge.pki.privateKeyFromPem(privateKeyPem);
+            const decryptedData = privateKey.decrypt(forge.util.decode64(encryptedData));
+
+            // console.log('Dữ liệu đã giải mã:', decryptedData);
+            const data = JSON.parse(decryptedData);
             const old_pass = await client
                 .db(name_global_databases)
                 .collection('login_info')
                 .findOne({ _id: req.session.user._id }, { projection: { _id: 0, password: 1 } });
-            if (comparePassword(data.old_password, old_pass.password)) {
-                if (!comparePassword(data.new_password, old_pass.password)) {
+            if (old_pass && data.new_password) {
+                if (comparePassword(data.old_password, old_pass.password)) {
+                    if (!comparePassword(data.new_password, old_pass.password)) {
+                        await client
+                            .db(name_global_databases)
+                            .collection('login_info')
+                            .updateOne(
+                                { _id: req.session.user._id },
+                                { $set: { password: hashPassword(data.new_password) } },
+                            );
+                        return res.sendStatus(200);
+                    } else {
+                        return res.sendStatus(403);
+                    }
+                } else {
+                    res.sendStatus(404);
+                }
+            } else {
+                console.log('SYSTEM | CHANGE_PASSWORD | ERROR | OLD_PASS NULL');
+                res.sendStatus(200);
+            }
+        } catch (err) {
+            console.log('SYSTEM | CHANGE_PASSWORD | ERROR | ', err);
+            return res.sendStatus(200);
+        }
+    });
+
+    // Đổi pass lần đầu đăng nhập -------------------------------------------------------------------------------------------------------------------------------
+    router.post('/first_login', checkIfUserLoginAPI, async (req, res) => {
+        try {
+            const privateKeyPem = process.env.PRIVATE_KEY; // Khóa mật AES
+            const encryptedData = req.body.data; // Dữ liệu đã mã hóa nhận từ client
+            // Tạo đối tượng khóa RSA private từ chuỗi PEM
+            const privateKey = forge.pki.privateKeyFromPem(privateKeyPem);
+            const decryptedData = privateKey.decrypt(forge.util.decode64(encryptedData));
+
+            // console.log('Dữ liệu đã giải mã:', decryptedData);
+            const data = JSON.parse(decryptedData);
+            const old_pass = await client
+                .db(name_global_databases)
+                .collection('login_info')
+                .findOne({ _id: req.session.user._id }, { projection: { _id: 0, password: 1 } });
+            if (data.new_password && old_pass.password) {
+                if (comparePassword(data.new_password, old_pass.password)) {
+                    return res.sendStatus(403);
+                } else {
+                    delete req.session.user.first;
+                    await client
+                        .db(name_global_databases)
+                        .collection('login_info')
+                        .updateOne({ _id: req.session.user._id }, { $unset: { first: '' } });
                     await client
                         .db(name_global_databases)
                         .collection('login_info')
@@ -380,40 +445,7 @@ function createAPIRouter(client, wss) {
                             { $set: { password: hashPassword(data.new_password) } },
                         );
                     return res.sendStatus(200);
-                } else {
-                    return res.sendStatus(403);
                 }
-            } else {
-                res.sendStatus(404);
-            }
-        } catch (err) {
-            console.log('SYSTEM | CHANGE_PASSWORD | ERROR | ', err);
-            return res.sendStatus(500);
-        }
-    });
-
-    // Đổi pass lần đầu đăng nhập -------------------------------------------------------------------------------------------------------------------------------
-    router.post('/first_login', checkIfUserLoginAPI, async (req, res) => {
-        try {
-            const data = req.body;
-            const old_pass = await client
-                .db(name_global_databases)
-                .collection('login_info')
-                .findOne({ _id: req.session.user._id }, { projection: { _id: 0, password: 1 } });
-
-            if (comparePassword(data.new_password, old_pass.password)) {
-                return res.sendStatus(403);
-            } else {
-                delete req.session.user.first;
-                await client
-                    .db(name_global_databases)
-                    .collection('login_info')
-                    .updateOne({ _id: req.session.user._id }, { $unset: { first: '' } });
-                await client
-                    .db(name_global_databases)
-                    .collection('login_info')
-                    .updateOne({ _id: req.session.user._id }, { $set: { password: hashPassword(data.new_password) } });
-                return res.sendStatus(200);
             }
         } catch (err) {
             console.log('SYSTEM | CHANGE_PASSWORD | ERROR | ', err);
@@ -443,7 +475,7 @@ function createAPIRouter(client, wss) {
                     );
 
                 const marked = await mark('_std_table', user, user._id, data, marker, user.cls[0]);
-
+                console.log(marked);
                 switch (marked) {
                     case 0:
                         return res.sendStatus(200);
@@ -901,7 +933,11 @@ function createAPIRouter(client, wss) {
                     return res.sendStatus(405);
                 }
             } else {
-                const dataStudent = req.body;
+                if (!dataStudent || !dataStudent.ho || !dataStudent.ten || !dataStudent.mssv) {
+                    console.log('DỮ LIỆU ĐẦU VÀO KHÔNG HỢP LỆ KHÔNG THỂ TẠO ACC');
+                    return res.sendStatus(403);
+                }
+
                 let pw = await randomPassword();
                 let email = await generateEmail(
                     `${dataStudent['ho']} ${dataStudent['ten']} ${dataStudent['mssv'].toString()}`,
@@ -914,6 +950,15 @@ function createAPIRouter(client, wss) {
                     3: dataStudent['lbhd'],
                     10: dataStudent['dangvien'],
                 };
+                if (!dataStudent || !dataStudent.mssv || !dataStudent.ten || !dataStudent.ho || !dataStudent.cls) {
+                    console.log('DỮ LIỆU ĐẦU VÀO KHÔNG HỢP LỆ KHÔNG CÓ DỮ LIỆU USER');
+                    return res.sendStatus(403);
+                }
+
+                if (!pw || !email) {
+                    console.log('DỮ LIỆU ĐẦU VÀO KHÔNG HỢP LỆ KHÔNG CÓ EMAIL ĐƯỢC TẠO');
+                    return res.sendStatus(403);
+                }
 
                 let dataInsertUser = {
                     _id: dataStudent['mssv'].toString(),
@@ -992,6 +1037,12 @@ function createAPIRouter(client, wss) {
         const user = req.session.user;
         if (user.pow[4] || user.pow[7]) {
             const dataStudent = req.body;
+
+            // Validate required fields
+            if (!dataStudent['mssv'] || !dataStudent['ten'] || !dataStudent['ho']) {
+                return res.status(400).send('Missing required student information.');
+            }
+
             let power = {
                 0: true,
                 1: dataStudent['chamdiem'],
@@ -1007,19 +1058,23 @@ function createAPIRouter(client, wss) {
                 displayName: `${dataStudent['ho']} ${dataStudent['ten']}`,
             };
 
-            client.db('global').collection('user_info').updateOne(
-                {
-                    _id: dataInsertUser._id,
-                },
-                {
-                    $set: dataInsertUser,
-                },
-                {
-                    upsert: true,
-                },
-            );
-
-            return res.sendStatus(200);
+            try {
+                await client.db('global').collection('user_info').updateOne(
+                    {
+                        _id: dataInsertUser._id,
+                    },
+                    {
+                        $set: dataInsertUser,
+                    },
+                    {
+                        upsert: true,
+                    },
+                );
+                return res.sendStatus(200);
+            } catch (error) {
+                console.error('Failed to update account:', error);
+                return res.status(500).send('Internal server error.');
+            }
         } else {
             return res.sendStatus(403);
         }
@@ -1892,9 +1947,8 @@ function createAPIRouter(client, wss) {
                 const cy = data.sch_y.split('_');
 
                 console.log(data);
-                // set end day to special date if it is ''
                 if (!data.end_day) {
-                    data.end_day = '2003-10-18'; // special date
+                    data.end_day = '1975-04-30';
                 }
 
                 await client
