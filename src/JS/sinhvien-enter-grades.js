@@ -361,6 +361,9 @@ function generateUUID() {
 }
 
 async function uploadImage() {
+    $('.save-btn').prop('disabled', true);
+    document.querySelector('.save-btn').innerHTML = `Loading...
+    <span></span>`;
     try {
         // get files and descripts
         let files = [];
@@ -434,6 +437,8 @@ async function mark(img_ids) {
 
         const response = await fetch('/api/std_mark', requestOptions);
         if (response.status == 200) {
+            $('.save-btn').prop('disabled', false);
+            document.querySelector('.save-btn').innerHTML = 'Lưu';
             notify('n', 'Đã lưu phiếu đánh giá điểm rèn luyện thành công!');
         } else if (response.status == 203) {
             // Error occurred during upload

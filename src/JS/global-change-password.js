@@ -20,12 +20,19 @@ $('.login_btn').on('click', async function (e) {
                 new_password: new_password,
                 re_new_password: re_new_password,
             });
+            const encrypt = new JSEncrypt();
+            encrypt.setPublicKey(key);
+
+            // Mã hóa dữ liệu
+            var encryptedData = encrypt.encrypt(postData);
+            // Chuyển dữ liệu sang WordArray
+            console.log('Dữ liệu đã được mã hóa:', encryptedData);
             const requestOptions = {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: postData,
+                body: JSON.stringify({ data: encryptedData }),
             };
             const response = await fetch('/api/change_pass', requestOptions);
             if (response.ok) {

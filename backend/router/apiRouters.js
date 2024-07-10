@@ -7,7 +7,8 @@ const fs = require('fs');
 const uploadDirectory = path.join('../../upload_temp');
 const multer = require('multer');
 const server = require('../lib/csdl_google_lib');
-
+const forge = require('node-forge');
+require('dotenv').config();
 const { ObjectId } = require('mongodb');
 const { getNameGlobal } = require('../lib/mogodb_lib');
 const name_global_databases = getNameGlobal();
@@ -44,7 +45,15 @@ const upload = multer({ storage: storage_file });
 function createAPIRouter(client, wss) {
     // Log in --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     router.post('/login', async (req, res) => {
-        const data = req.body;
+        const privateKeyPem = process.env.PRIVATE_KEY; // Khóa mật AES
+        const encryptedData = req.body.data; // Dữ liệu đã mã hóa nhận từ client
+        // Tạo đối tượng khóa RSA private từ chuỗi PEM
+        const privateKey = forge.pki.privateKeyFromPem(privateKeyPem);
+        const decryptedData = privateKey.decrypt(forge.util.decode64(encryptedData));
+
+        // console.log('Dữ liệu đã giải mã:', decryptedData);
+        const data = JSON.parse(decryptedData);
+        // console.log(data); // In ra dữ liệu giải mã
         // 403: sai thong tin dang nhap
         // data = {mssv: bbp, password: 1234567890, remember: true}
         try {
@@ -365,7 +374,14 @@ function createAPIRouter(client, wss) {
     // Đổi pass ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     router.post('/change_pass', checkIfUserLoginAPI, async (req, res) => {
         try {
-            const data = req.body;
+            const privateKeyPem = process.env.PRIVATE_KEY; // Khóa mật AES
+            const encryptedData = req.body.data; // Dữ liệu đã mã hóa nhận từ client
+            // Tạo đối tượng khóa RSA private từ chuỗi PEM
+            const privateKey = forge.pki.privateKeyFromPem(privateKeyPem);
+            const decryptedData = privateKey.decrypt(forge.util.decode64(encryptedData));
+
+            // console.log('Dữ liệu đã giải mã:', decryptedData);
+            const data = JSON.parse(decryptedData);
             const old_pass = await client
                 .db(name_global_databases)
                 .collection('login_info')
@@ -400,7 +416,14 @@ function createAPIRouter(client, wss) {
     // Đổi pass lần đầu đăng nhập -------------------------------------------------------------------------------------------------------------------------------
     router.post('/first_login', checkIfUserLoginAPI, async (req, res) => {
         try {
-            const data = req.body;
+            const privateKeyPem = process.env.PRIVATE_KEY; // Khóa mật AES
+            const encryptedData = req.body.data; // Dữ liệu đã mã hóa nhận từ client
+            // Tạo đối tượng khóa RSA private từ chuỗi PEM
+            const privateKey = forge.pki.privateKeyFromPem(privateKeyPem);
+            const decryptedData = privateKey.decrypt(forge.util.decode64(encryptedData));
+
+            // console.log('Dữ liệu đã giải mã:', decryptedData);
+            const data = JSON.parse(decryptedData);
             const old_pass = await client
                 .db(name_global_databases)
                 .collection('login_info')

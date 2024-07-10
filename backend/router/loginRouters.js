@@ -1,11 +1,14 @@
 const express = require('express');
 const router = express.Router();
+require('dotenv').config();
 const { getNameGlobal } = require('../lib/mogodb_lib');
 const name_global_databases = getNameGlobal();
+const publicKey = process.env.PUBLIC_KEY;
 function createLoginRouter(client) {
     // login route
     router.get('/', async (req, res) => {
         const user = req.session.user;
+        console.log('hahahah');
         if (user) {
             return res.redirect('/');
         }
@@ -14,6 +17,7 @@ function createLoginRouter(client) {
             thongbao: 'global-notifications',
             footer: 'global-footer',
             avt: null,
+            secretKey: publicKey,
         });
     });
     // firstlogin route
@@ -33,6 +37,7 @@ function createLoginRouter(client) {
             avt: null,
             logout: true,
             tile: tile,
+            secretKey: publicKey,
         });
     });
     return router;
