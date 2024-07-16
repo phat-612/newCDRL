@@ -396,6 +396,7 @@ async function get_full_id(directoryPath, listName, listdep) {
         return list_id;
     } catch (err) {
         console.log('SYSTEM | GET_ID | ERR | ', err);
+        return null;
     }
 }
 

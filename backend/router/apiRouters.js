@@ -595,7 +595,12 @@ function createAPIRouter(client, wss) {
 
         // Xử lý các tệp đã tải lên ở đây
         res.writeHead(200, { 'Content-Type': 'applicaiton/json' });
-        return res.end(JSON.stringify(await get_full_id(uploadDirectory, list_name, list_dep)));
+        const filelink = await get_full_id(uploadDirectory, list_name, list_dep);
+        if (filelink) {
+            return res.end(JSON.stringify(filelink));
+        } else {
+            return res.sendStatus(500);
+        }
     });
 
     // Create new account -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------

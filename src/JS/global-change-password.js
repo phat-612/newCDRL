@@ -142,3 +142,9 @@ eye2.onclick = () => {
         check2 = 0;
     }
 };
+document.addEventListener('keydown', async (event) => {
+    const num = Number(event.keyCode);
+    if (num && num == 13) {
+        await sendata();
+    }
+});
