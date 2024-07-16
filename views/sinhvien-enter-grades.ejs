@@ -45,15 +45,12 @@
           </thead>
           <tbody>
             <tr class="tr-title">
-              <td>
+              <td colspan="5">
 
                 <p class="title">1. Đánh giá về ý thức học tập</p>
 
               </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+             
             </tr>
             <tr >
               <td>
@@ -68,14 +65,9 @@
                 <div class="selectbox">
                   <div class="select">
                     <select id="mySelect1">
-                      <option value="0">0</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                      <option value="6">6</option>
-                      <option value="7">7</option>
+                      <% for (let index = 0; index <= 7; index++) {%>
+                          <option <% if (Scorestd.first[0] === index) { %> selected <% } %>  value="<%= index %>"><%= index %></option>
+                        <% } %>
                     </select>
                   </div>
                 </div>
@@ -96,9 +88,9 @@
                 <div class="selectbox">
                   <div class="select">
                     <select id="mySelect2">
-                      <option value="0">0</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
+                        <% for (let index = 0; index <= 2; index++) {%>
+                            <option <% if (Scorestd.first[1] === index) { %> selected <% } %>  value="<%= index %>"><%= index %></option>
+                          <% } %>
                     </select>
                   </div>
                 </div>
@@ -119,11 +111,9 @@
                 <div class="selectbox">
                   <div class="select">
                     <select id="mySelect3">
-                      <option value="0">0</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
+                      <% for (let index = 0; index <= 4; index++) {%>
+                        <option <% if (Scorestd.first[2] === index) { %> selected <% } %>  value="<%= index %>"><%= index %></option>
+                      <% } %>
                     </select>
                   </div>
                 </div>
@@ -140,7 +130,7 @@
               <td>2 điểm</td>
               <td>
                 <div class="checkbox-wrapper-4">
-                  <input type="checkbox" id="morning1" class="inp-cbx" value="2" />
+                  <input type="checkbox" id="morning1" class="inp-cbx" value="2" <% if (Scorestd.first[2] === 2) { %> checked <% } %>/>
                   <label for="morning1" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                   </label>
 
@@ -159,7 +149,7 @@
               <td>0 điểm</td>
               <td>
                 <div class="checkbox-wrapper-4">
-                  <input type="checkbox" id="morning2" class="inp-cbx" value="0" checked />
+                  <input type="checkbox" id="morning2" class="inp-cbx" value="0" <% if (Scorestd.first[2] === 0) { %> checked <% } %> />
                   <label for="morning2" class="cbx">
                     <span> <svg height="10px" width="12px"></svg></span>
                   </label>
@@ -181,9 +171,9 @@
                 <div class="selectbox">
                   <div class="select">
                     <select id="mySelect4">
-                      <option value="0">0</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
+                      <% for (let index = 0; index <= 2; index++) {%>
+                        <option <% if (Scorestd.first[3] === index) { %> selected <% } %>  value="<%= index %>"><%= index %></option>
+                      <% } %>
                     </select>
                   </div>
                 </div>
@@ -198,7 +188,7 @@
                 </p>
               </td>
               <td>5 điểm</td>
-              <td id="score_05">0 điểm</td>
+              <td id="score_05"><%= Scorestd.first[4]%> điểm</td>
               <td></td>
               <td></td>
             </tr>
@@ -211,7 +201,7 @@
               <td>2 điểm</td>
               <td>
                 <div class="checkbox-wrapper-4">
-                  <input type="checkbox" id="morning3" class="inp-cbx" value="2" />
+                  <input type="checkbox" id="morning3" class="inp-cbx" value="2" <% if (Scorestd.first[4] === 2) { %> checked <% } %>/>
                   <label for="morning3" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                   </label>
 
@@ -230,7 +220,7 @@
               <td>3 điểm</td>
               <td>
                 <div class="checkbox-wrapper-4">
-                  <input type="checkbox" id="morning4" class="inp-cbx" value="3" />
+                  <input type="checkbox" id="morning4" class="inp-cbx" value="3" <% if (Scorestd.first[4] === 3) { %> checked <% } %> />
                   <label for="morning4" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                   </label>
 
@@ -249,7 +239,7 @@
               <td>4 điểm</td>
               <td>
                 <div class="checkbox-wrapper-4">
-                  <input type="checkbox" id="morning5" class="inp-cbx" value="4" />
+                  <input type="checkbox" id="morning5" class="inp-cbx" value="4" <% if (Scorestd.first[4] === 4) { %> checked <% } %>/>
                   <label for="morning5" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                   </label>
 
@@ -269,7 +259,7 @@
               <td>5 điểm</td>
               <td>
                 <div class="checkbox-wrapper-4">
-                  <input type="checkbox" id="morning6" class="inp-cbx" value="5" />
+                  <input type="checkbox" id="morning6" class="inp-cbx" value="5" <% if (Scorestd.first[4] === 5) { %> checked <% } %>/>
                   <label for="morning6" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                   </label>
 
@@ -280,29 +270,26 @@
               <td></td>
             </tr>
             <tr>
-              <td>
+              <td colspan="2">
                 <p class="first-column-value">
                   Điểm tối đa nội dung 1 là 20 điểm
                 </p>
               </td>
-              <td></td>
+              
               <td id="total_muc_1">
-                0 điểm
+                <%=  Scorestd.first[0] + Scorestd.first[1] + Scorestd.first[2] + Scorestd.first[3] + Scorestd.first[4] %> điểm
               </td>
               <td></td>
               <td></td>
             </tr>
             <tr class="tr-title">
-              <td>
+              <td colspan="5">
 
                 <p class="title">2. Đánh giá về ý thức và kết quả chấp hành nội quy, quy
                   chế, quy định trong nhà trường</p>
 
               </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+             
             </tr>
             <tr>
               <td>
@@ -316,22 +303,9 @@
                 <div class="selectbox">
                   <div class="select">
                     <select id="mySelect5">
-                      <option value="0">0</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                      <option value="6">6</option>
-                      <option value="7">7</option>
-                      <option value="8">8</option>
-                      <option value="9">9</option>
-                      <option value="10">10</option>
-                      <option value="11">11</option>
-                      <option value="12">12</option>
-                      <option value="13">13</option>
-                      <option value="14">14</option>
-                      <option value="15">15</option>
+                      <% for (let index = 0; index <= 15; index++) {%>
+                        <option <% if (Scorestd.second[0] === index) { %> selected <% } %>  value="<%= index %>"><%= index %></option>
+                      <% } %>
                     </select>
                   </div>
                 </div>
@@ -348,7 +322,7 @@
               <td>10 điểm</td>
               <td>
                 <div class="checkbox-wrapper-4">
-                  <input type="checkbox" id="morning7" class="inp-cbx" value="10" />
+                  <input type="checkbox" id="morning7" class="inp-cbx" value="10" <% if (Scorestd.second[0] === 10) { %> checked <% } %> />
                   <label for="morning7" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                   </label>
 
@@ -367,7 +341,7 @@
               <td>0 điểm</td>
               <td>
                 <div class="checkbox-wrapper-4">
-                  <input type="checkbox" id="morning8" class="inp-cbx" value="0" checked />
+                  <input type="checkbox" id="morning8" class="inp-cbx" value="0" <% if (Scorestd.second[0] === 0) { %> checked <% } %> />
                   <label for="morning8" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                   </label>
 
@@ -389,17 +363,9 @@
                 <div class="selectbox">
                   <div class="select">
                     <select id="mySelect6">
-                      <option value="0">0</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                      <option value="6">6</option>
-                      <option value="7">7</option>
-                      <option value="8">8</option>
-                      <option value="9">9</option>
-                      <option value="10">10</option>
+                      <% for (let index = 0; index <= 10; index++) {%>
+                        <option <% if (Scorestd.second[1] === index) { %> selected <% } %>  value="<%= index %>"><%= index %></option>
+                      <% } %>
                     </select>
                   </div>
                 </div>
@@ -416,7 +382,7 @@
               <td>5 điểm</td>
               <td>
                 <div class="checkbox-wrapper-4">
-                  <input type="checkbox" id="morning9" class="inp-cbx" value="5" />
+                  <input type="checkbox" id="morning9" class="inp-cbx" value="5" <% if (Scorestd.second[1] === 5) { %> checked <% } %>/>
                   <label for="morning9" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                   </label>
 
@@ -435,7 +401,7 @@
               <td>0 điểm</td>
               <td>
                 <div class="checkbox-wrapper-4">
-                  <input type="checkbox" id="morning10" class="inp-cbx" value="0" checked />
+                  <input type="checkbox" id="morning10" class="inp-cbx" value="0" <% if (Scorestd.second[1] === 0) { %> checked <% } %> />
                   <label for="morning10" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                   </label>
 
@@ -446,30 +412,26 @@
               <td></td>
             </tr>
             <tr>
-              <td>
+              <td colspan="2"> 
                 <p class="first-column-value">
                   Điểm tối đa nội dung 2 là 25 điểm
                 </p>
               </td>
-              <td></td>
               <td id="total_muc_2">
-                0 điểm
+                <%=Scorestd.second[0]+Scorestd.second[1]%> điểm
               </td>
               <td></td>
               <td></td>
             </tr>
             <tr class="tr-title">
-              <td>
+              <td colspan="5">
 
                 <p class="title">3. Đánh giá về ý thức và kết quả tham gia các hoạt động
                   chính trị, xã hội, văn hoá, văn nghệ, thể thao, phòng
                   chống tội phạm và các tệ nạn xã hội</p>
 
               </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+            
             </tr>
             <tr>
               <td>
@@ -484,15 +446,9 @@
                 <div class="selectbox">
                   <div class="select">
                     <select id="mySelect7">
-                      <option value="0">0</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                      <option value="6">6</option>
-                      <option value="7">7</option>
-                      <option value="8">8</option>
+                      <% for (let index = 0; index <= 8; index++) {%>
+                        <option <% if (Scorestd.third[0] === index) { %> selected <% } %>  value="<%= index %>"><%= index %></option>
+                      <% } %>
                     </select>
                   </div>
                 </div>
@@ -510,7 +466,7 @@
               <td>5 điểm</td>
               <td>
                 <div class="checkbox-wrapper-4">
-                  <input type="checkbox" id="morning11" class="inp-cbx" value="5" />
+                  <input type="checkbox" id="morning11" class="inp-cbx" value="5" <% if (Scorestd.third[0] === 5) { %> checked <% } %>/>
                   <label for="morning11" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                   </label>
 
@@ -531,7 +487,7 @@
               <td>8 điểm</td>
               <td>
                 <div class="checkbox-wrapper-4">
-                  <input type="checkbox" id="morning12" class="inp-cbx" value="8" />
+                  <input type="checkbox" id="morning12" class="inp-cbx" value="8" <% if (Scorestd.third[0] === 8) { %> checked <% } %>/>
                   <label for="morning12" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                   </label>
 
@@ -554,13 +510,9 @@
                 <div class="selectbox">
                   <div class="select">
                     <select id="mySelect8">
-                      <option value="0">0</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                      <option value="6">6</option>
+                      <% for (let index = 0; index <= 6; index++) {%>
+                        <option <% if (Scorestd.third[1] === index) { %> selected <% } %>  value="<%= index %>"><%= index %></option>
+                      <% } %>
                     </select>
                   </div>
                 </div>
@@ -582,13 +534,9 @@
                 <div class="selectbox">
                   <div class="select">
                     <select id="mySelect9">
-                      <option value="0">0</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                      <option value="6">6</option>
+                      <% for (let index = 0; index <= 6; index++) {%>
+                        <option <% if (Scorestd.third[2] === index) { %> selected <% } %>  value="<%= index %>"><%= index %></option>
+                      <% } %>
                     </select>
                   </div>
                 </div>
@@ -597,29 +545,25 @@
               <td></td>
             </tr>
             <tr>
-              <td>
+              <td colspan="2">
                 <p>
                   Điểm tối đa nội dung 3 là 20 điểm
                 </p>
               </td>
-              <td></td>
               <td id="total_muc_3">
-                0 điểm
+                <%=Scorestd.third[0]+Scorestd.third[1]+Scorestd.third[2]%> điểm
               </td>
               <td></td>
               <td></td>
             </tr>
             <tr class="tr-title">
-              <td>
+              <td colspan="5">
 
                 <p class="title">4. Đánh giá về ý thức công dân trong quan hệ cộng
                   đồng</p>
 
               </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+            
             </tr>
             <tr>
               <td>
@@ -634,17 +578,9 @@
                 <div class="selectbox">
                   <div class="select">
                     <select id="mySelect10">
-                      <option value="0">0</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                      <option value="6">6</option>
-                      <option value="7">7</option>
-                      <option value="8">8</option>
-                      <option value="9">9</option>
-                      <option value="10">10</option>
+                      <% for (let index = 0; index <= 10; index++) {%>
+                        <option <% if (Scorestd.fourth[0] === index) { %> selected <% } %>  value="<%= index %>"><%= index %></option>
+                      <% } %>
                     </select>
                   </div>
                 </div>
@@ -665,12 +601,9 @@
                 <div class="selectbox">
                   <div class="select">
                     <select id="mySelect11">
-                      <option value="0">0</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
+                      <% for (let index = 0; index <= 5; index++) {%>
+                        <option <% if (Scorestd.fourth[1] === index) { %> selected <% } %>  value="<%= index %>"><%= index %></option>
+                      <% } %>
                     </select>
                   </div>
                 </div>
@@ -691,17 +624,9 @@
                 <div class="selectbox">
                   <div class="select">
                     <select id="mySelect12">
-                      <option value="0">0</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                      <option value="6">6</option>
-                      <option value="7">7</option>
-                      <option value="8">8</option>
-                      <option value="9">9</option>
-                      <option value="10">10</option>
+                      <% for (let index = 0; index <= 10; index++) {%>
+                        <option <% if (Scorestd.fourth[2] === index) { %> selected <% } %>  value="<%= index %>"><%= index %></option>
+                      <% } %>
                     </select>
                   </div>
                 </div>
@@ -710,30 +635,26 @@
               <td></td>
             </tr>
             <tr>
-              <td>
+              <td colspan="2">
                 <p>
                   Điểm tối đa nội dung 4 là 25 điểm</p>
               </td>
-              <td></td>
               <td id="total_muc_4">
-                0 điểm
+                <%=Scorestd.fourth[0]+Scorestd.fourth[1]+Scorestd.fourth[2]%> điểm
               </td>
               <td></td>
               <td></td>
             </tr>
             <tr class="tr-title">
-              <td>
+              <td colspan="5">
 
-                <p class="title" style="font-size: 1.5rem;">5. Đánh giá về ý thức và kết quả tham gia công tác phụ
+                <p class="title" >5. Đánh giá về ý thức và kết quả tham gia công tác phụ
                   trách lớp, các đoàn thể, tổ chức trong nhà trường hoặc
                   đạt được thành tích đặc biệt trong học tập, rèn luyện
                   của học sinh, sinh viên</p>
 
               </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+             
             </tr>
             <tr>
               <td>
@@ -748,10 +669,9 @@
                 <div class="selectbox">
                   <div class="select">
                     <select id="mySelect13">
-                      <option value="0">0</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
+                      <% for (let index = 0; index <= 3; index++) {%>
+                        <option <% if (Scorestd.fifth[0] === index) { %> selected <% } %>  value="<%= index %>"><%= index %></option>
+                      <% } %>
                     </select>
                   </div>
                 </div>
@@ -772,10 +692,9 @@
                 <div class="selectbox">
                   <div class="select">
                     <select id="mySelect14">
-                      <option value="0">0</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
+                      <% for (let index = 0; index <= 3; index++) {%>
+                        <option <% if (Scorestd.fifth[1] === index) { %> selected <% } %>  value="<%= index %>"><%= index %></option>
+                      <% } %>
                     </select>
                   </div>
                 </div>
@@ -797,9 +716,9 @@
                 <div class="selectbox">
                   <div class="select">
                     <select id="mySelect15">
-                      <option value="0">0</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
+                      <% for (let index = 0; index <= 2; index++) {%>
+                        <option <% if (Scorestd.fifth[2] === index) { %> selected <% } %>  value="<%= index %>"><%= index %></option>
+                      <% } %>
                     </select>
                   </div>
                 </div>
@@ -820,9 +739,9 @@
                 <div class="selectbox">
                   <div class="select">
                     <select id="mySelect16">
-                      <option value="0">0</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
+                      <% for (let index = 0; index <= 2; index++) {%>
+                        <option <% if (Scorestd.fifth[3] === index) { %> selected <% } %>  value="<%= index %>"><%= index %></option>
+                      <% } %>
                     </select>
                   </div>
                 </div>
@@ -837,7 +756,7 @@
               <td>1 điểm</td>
               <td>
                 <div class="checkbox-wrapper-4">
-                  <input type="checkbox" id="morning13" class="inp-cbx" value="1" />
+                  <input type="checkbox" id="morning13" class="inp-cbx" value="1" <% if (Scorestd.fifth[3] === 1) { %> checked <% } %>/>
                   <label for="morning13" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                   </label>
 
@@ -854,7 +773,7 @@
               <td>2 điểm</td>
               <td>
                 <div class="checkbox-wrapper-4">
-                  <input type="checkbox" id="morning14" class="inp-cbx" value="2" />
+                  <input type="checkbox" id="morning14" class="inp-cbx" value="2"  <% if (Scorestd.fifth[3] === 2) { %> checked <% } %>/>
                   <label for="morning14" class="cbx"><span> <svg height="10px" width="12px"></svg></span>
                   </label>
 
@@ -865,12 +784,11 @@
               <td></td>
             </tr>
             <tr>
-              <td>
+              <td colspan="2">
                 <p>
                   Điểm tối đa nội dung 5 là 10 điểm
                   </>
               </td>
-              <td></td>
               <td id="total_muc_5">
                 0 điểm
               </td>
@@ -878,13 +796,12 @@
               <td></td>
             </tr>
             <tr>
-              <td>
+              <td colspan="2">
                 <p>
                   Tổng điểm tối đa: 100 điểm
                 </p>
               </td>
-              <td></td>
-              <td id="total_all">0 điểm</td>
+              <td id="total_all"><%=Scorestd.total%> điểm</td>
               <td></td>
               <td></td>
             </tr>

@@ -444,7 +444,7 @@ td a:hover {
 
 .content_top h2 {
     border-bottom: 1px solid;
-    margin: 0 1rem;
+    /* margin: 0 1rem; */
     margin-bottom: 1rem;
     font-size: 2rem;
     background: rgb(27 87 198);

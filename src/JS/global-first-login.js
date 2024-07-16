@@ -42,19 +42,12 @@ const sendata = async function () {
                 new_password: new_password,
                 re_new_password: re_new_password,
             });
-            const encrypt = new JSEncrypt();
-            encrypt.setPublicKey(key);
-
-            // Mã hóa dữ liệu
-            var encryptedData = encrypt.encrypt(postData);
-            // Chuyển dữ liệu sang WordArray
-            console.log('Dữ liệu đã được mã hóa:', encryptedData);
             const requestOptions = {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ data: encryptedData }),
+                body: postData,
             };
             const response = await fetch('/api/first_login', requestOptions);
 

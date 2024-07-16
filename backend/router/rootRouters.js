@@ -101,7 +101,10 @@ function createRootRouter(client, parentDirectory) {
                                 };
                             }),
                         );
-                        console.log(studentTotalScores);
+                        // console.log(studentTotalScores);
+                        const currentMark = studentTotalScores.find(item => item.year === schoolYear.year);
+                        const isMarked = (currentMark && typeof currentMark.total === 'number' && currentMark.total > 0);
+                        // console.log(isMarked);
                         const studentActivities = await Promise.all(
                             schoolYearsToSearch.map(async (year) => {
                                 info_search = `student_list.${user._id}`;
@@ -219,6 +222,7 @@ function createRootRouter(client, parentDirectory) {
                                 bandiem: studentTotalScores,
                                 hoatdong: studentActivities,
                                 hethan: false,
+                                isMarked: isMarked,
                                 nienkhoa: Object.keys(schoolYear_all.years),
                                 check_chamdiem: check_year,
                             });
@@ -337,7 +341,9 @@ function createRootRouter(client, parentDirectory) {
                                 };
                             }),
                         );
-                        console.log(studentTotalScores);
+                        // console.log(studentTotalScores);
+                        const currentMark = studentTotalScores.find(item => item.year === schoolYear.year);
+                        const isMarked = (currentMark && typeof currentMark.total === 'number' && currentMark.total > 0);
                         const studentActivities = await Promise.all(
                             schoolYearsToSearch.map(async (year) => {
                                 info_search = `student_list.${user._id}`;
@@ -455,6 +461,7 @@ function createRootRouter(client, parentDirectory) {
                                 bandiem: studentTotalScores,
                                 hoatdong: studentActivities,
                                 hethan: true,
+                                isMarked: isMarked,
                                 nienkhoa: Object.keys(schoolYear_all.years),
                                 check_chamdiem: check_year,
                             });

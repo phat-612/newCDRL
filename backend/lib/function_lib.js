@@ -36,36 +36,29 @@ function checkScore(data) {
         total: 100,
     };
 
-    if (data.total > 100 || data.total < 0) return false;
-
-    const check =
-        data.first.forEach((element, index) => {
-            if (element > maxScore.first[index] || element < 0) {
-                return false;
-            }
-        }) &&
-        data.second.forEach((element, index) => {
-            if (element > maxScore.first[index] || element < 0) {
-                return false;
-            }
-        }) &&
-        data.third.forEach((element, index) => {
-            if (element > maxScore.first[index] || element < 0) {
-                return false;
-            }
-        }) &&
-        data.fourth.forEach((element, index) => {
-            if (element > maxScore.first[index] || element < 0) {
-                return false;
-            }
-        }) &&
-        data.fifth.forEach((element, index) => {
-            if (element > maxScore.first[index] || element < 0) {
-                return false;
-            }
-        });
-
-    return check;
+    if (typeof data.total === 'string' || data.total === undefined || data.total === null || data.total > 100 || data.total < 0) return false;
+    const check = data.first.forEach((element, index) => {
+        if (typeof element === 'string' || element === null || element === undefined || element > maxScore.first[index] || element < 0) {
+            return true;
+        }
+    }) || data.second.forEach((element, index) => {
+        if (typeof element === 'string' || element === null || element === undefined || element > maxScore.first[index] || element < 0) {
+            return true;
+        }
+    }) || data.third.forEach((element, index) => {
+        if (typeof element === 'string' || element === null || element === undefined || element > maxScore.first[index] || element < 0) {
+            return true;
+        }
+    }) || data.fourth.forEach((element, index) => {
+        if (typeof element === 'string' || element === null || element === undefined || element > maxScore.first[index] || element < 0) {
+            return true;
+        }
+    }) || data.fifth.forEach((element, index) => {
+        if (typeof element === 'string' || element === null || element === undefined || element > maxScore.first[index] || element < 0) {
+            return true;
+        }
+    });
+    return !check;
 }
 
 async function sendEmail(password, email) {
@@ -215,7 +208,7 @@ async function mark(table, user, mssv, data, marker, cls) {
     //   total: 100,
     // }
 
-    console.log(!checkScore(data));
+    console.log(checkScore(data));
     if (!checkScore(data)) return 3;
 
     const school_year = await client

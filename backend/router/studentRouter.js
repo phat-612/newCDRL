@@ -7,34 +7,75 @@ const name_global_databases = getNameGlobal();
 function createStudentRouter(client) {
     // nhap bang diem route
     router.get('/nhapdiemdanhgia', checkIfUserLoginRoute, async (req, res) => {
-        const school_year = await client
-            .db(name_global_databases)
-            .collection('school_year')
-            .findOne(
-                {},
-                {
-                    projection: {
-                        _id: 0,
-                        year: 1,
-                        start_day: 1,
-                        end_day: 1,
+        try {
+            const school_year = await client
+                .db(name_global_databases)
+                .collection('school_year')
+                .findOne(
+                    {},
+                    {
+                        projection: {
+                            _id: 0,
+                            year: 1,
+                            start_day: 1,
+                            end_day: 1,
+                        },
                     },
-                },
-            );
-        let today = new Date().getTime();
-        let start_day = new Date(school_year.start_day).getTime();
-        let end_day = new Date(school_year.end_day).getTime();
-        let forever_day = new Date('2003-10-18').getTime(); // special date
+                );
+            let today = new Date().getTime();
+            let start_day = new Date(school_year.start_day).getTime();
+            let end_day = new Date(school_year.end_day).getTime();
+            let forever_day = new Date('2003-10-18').getTime(); // special date
 
-        // check if end mark time or not
-        if (start_day <= today && (today < end_day || end_day == forever_day)) {
-            return res.render('sinhvien-enter-grades', {
-                header: 'global-header',
-                thongbao: 'global-notifications',
-                footer: 'global-footer',
-            });
-        } else {
-            return res.redirect('/');
+            // check if end mark time or not
+            if (start_day <= today && (today < end_day || end_day == forever_day)) {
+                const user = req.session.user;
+                let mssv = req.session.user._id;
+                let studentTotalScore = await client
+                    .db(user.dep)
+                    .collection(user.cls[0] + '_std_table')
+                    .findOne(
+                        {
+                            mssv: mssv,
+                            school_year: school_year.year,
+                        },
+                        {
+                            projection: {
+                                _id: 0,
+                                first: 1,
+                                second: 1,
+                                third: 1,
+                                fourth: 1,
+                                fifth: 1,
+                                total: 1,
+                                img_ids: 1,
+                            },
+                        },
+                    );
+                nulltable = {
+                    fifth: [0, 0, 0, 0],
+                    first: [0, 0, 0, 0, 0],
+                    fourth: [0, 0, 0],
+                    second: [0, 0],
+                    third: [0, 0, 0],
+                    total: 0,
+                };
+                if (!studentTotalScore || !studentTotalScore.fifth) {
+                    studentTotalScore = nulltable;
+                }
+
+                return res.render('sinhvien-enter-grades', {
+                    header: 'global-header',
+                    thongbao: 'global-notifications',
+                    footer: 'global-footer',
+                    Scorestd: studentTotalScore,
+                });
+            } else {
+                return res.redirect('/');
+            }
+        } catch (err) {
+            console.log('SYSTEM | NHAP_BANG_DIEM_ROUTE | ERROR | ', err);
+            return res.status(500).json({ error: 'Lỗi hệ thống' });
         }
     });
 
