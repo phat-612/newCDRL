@@ -106,12 +106,22 @@ async function handleLogOutAllButtonClick(event) {
         notify('x', 'Có lỗi xảy ra!');
     }
 }
-
+$('.display_name').on('keydown', function (e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        handleSaveButtonClick();
+    }
+});
 async function handleSaveButtonClick(event) {
     try {
         const displayName = $('.display_name').val();
         const avt = $('.up-img').attr('src');
 
+        $('.profile_btn_save').innerHTML = `Loading...
+        <span></span>`;
+        $('.display_name').off('keydown');
+        $('.display_name').prop('disabled', true);
+        $('.profile_btn_save').prop('disabled', true);
         let postData = JSON.stringify({
             displayName: displayName,
             avt: avt,
@@ -125,6 +135,16 @@ async function handleSaveButtonClick(event) {
         };
         const response = await fetch('/api/updateInfo', requestOptions);
         if (response.ok) {
+            $('.profile_btn_save').innerHTML = `Lưu
+            <span></span>`;
+            $('.display_name').on('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleSaveButtonClick();
+                }
+            });
+            $('.display_name').prop('disabled', false);
+            $('.profile_btn_save').prop('disabled', false);
             notify('n', 'Đổi thông tin thành công!');
             $('.avatar_wrap img').attr('src', avt);
             $('.avatar_wrap p').text(displayName);

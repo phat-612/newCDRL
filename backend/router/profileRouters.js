@@ -3,6 +3,9 @@ const router = express.Router();
 const { checkIfUserLoginRoute } = require('../lib/function_lib');
 const { getNameGlobal } = require('../lib/mogodb_lib');
 const name_global_databases = getNameGlobal();
+require('dotenv').config();
+const publicKey = process.env.PUBLIC_KEY;
+
 function createProfileRouter(client) {
     // thong tin ca nhan route
     router.get('/', checkIfUserLoginRoute, async (req, res) => {
@@ -32,6 +35,7 @@ function createProfileRouter(client) {
             menu: 'doankhoa-menu',
             quyen: user,
             footer: 'global-footer',
+            secretKey: publicKey,
         });
     });
     return router;
