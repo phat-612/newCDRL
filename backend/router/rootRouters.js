@@ -27,7 +27,7 @@ function createRootRouter(client, parentDirectory) {
             let today = new Date().getTime();
             let start_day = new Date(school_year.start_day).getTime();
             let end_day = new Date(school_year.end_day).getTime();
-            let forever_day = new Date('2003-10-18').getTime(); // special date
+            let forever_day = new Date('2003-10-18').getTime(); // Bình Minh và cơn lú gái
 
             // check if end mark time or not
             if (start_day <= today && (today < end_day || end_day == forever_day)) {
