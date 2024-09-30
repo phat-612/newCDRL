@@ -1,12 +1,12 @@
 **Tên dự án**: Hệ thống Đánh giá Điểm rèn luyện Sinh viên trường ĐH Kỹ Thuật Công Nghệ Cần Thơ (CTUET)
 
 **Tác giả**: 
-- Nguyễn Lê Tấn Đạt (aka Nguyễn Lê Tấn Đạt)
-- Nguyễn Văn Phát (aka Nguyễn Phát)
-- Nguyễn Hưng Thịnh (aka HT-Kill_All)
-- Nguyễn Ngọc Long (aka Long Đại Đế)
-- Nguyễn Trần Hoàng Long (aka nthl đang)
-- Nguyễn Bình Minh (aka Saitama mạnh nhất vũ trụ)
+- Nguyễn Lê Tấn Đạt 
+- Nguyễn Văn Phát 
+- Nguyễn Hưng Thịnh 
+- Nguyễn Ngọc Long 
+- Nguyễn Trần Hoàng Long 
+- Nguyễn Bình Minh 
 
 ## Mô tả dự án
 Hệ thống Đánh giá Điểm rèn luyện Sinh viên CTUET là một ứng dụng web dành riêng cho cộng đồng Sinh viên, Ban cán sự lớp và Đoàn khoa tại Trường Đại học Kỹ Thuật Công Nghệ Cần Thơ. Dự án này cung cấp nền tảng để quản lý và đánh giá điểm rèn luyện của sinh viên dựa trên các chức năng cụ thể của từng đối tượng.
