@@ -13,7 +13,7 @@ function createDepRouter(client) {
         const user = req.session.user;
 
         // get all branch of department:
-        const branchs = await client
+        const branchs = (await client
             .db(name_global_databases)
             .collection('branchs')
             .find(
@@ -27,7 +27,7 @@ function createDepRouter(client) {
                     },
                 },
             )
-            .toArray();
+            .toArray()).reverse();
 
         // get department name:
         const dep_name = await client
