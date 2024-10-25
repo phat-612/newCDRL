@@ -1953,7 +1953,7 @@ function createAPIRouter(client, wss) {
 
                 console.log(data);
                 if (!data.end_day) {
-                    data.end_day = '1975-04-30';
+                    data.end_day = '2003-10-18';
                 }
 
                 await client
