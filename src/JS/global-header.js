@@ -122,7 +122,6 @@ theme_btn.addEventListener('change', () => {
         setLight();
     }
 });
-
 const nextInput = (inputs, sendata) => {
     inputs.forEach((input) => {
         let check = inputs.length > 1 ? true : false;

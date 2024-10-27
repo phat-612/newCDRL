@@ -402,6 +402,9 @@ async function uploadImage() {
         // Error occurred during the request
         console.error('Error uploading files.', error);
     }
+    $('.save-btn').prop('disabled', false);
+            document.querySelector('.save-btn').innerHTML = `Lưu
+            <span></span>`;
 }
 
 async function mark(img_ids) {

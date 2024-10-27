@@ -27,7 +27,7 @@ function createRootRouter(client, parentDirectory) {
             let today = new Date().getTime();
             let start_day = new Date(school_year.start_day).getTime();
             let end_day = new Date(school_year.end_day).getTime();
-            let forever_day = new Date('2003-10-18').getTime(); // special date
+            let forever_day = new Date('2003-10-18').getTime(); // Bình Minh và cơn lú gái
 
             // check if end mark time or not
             if (start_day <= today && (today < end_day || end_day == forever_day)) {
@@ -101,7 +101,10 @@ function createRootRouter(client, parentDirectory) {
                                 };
                             }),
                         );
-                        console.log(studentTotalScores);
+                        // console.log(studentTotalScores);
+                        const currentMark = studentTotalScores.find(item => item.year === schoolYear.year);
+                        const isMarked = (currentMark && typeof currentMark.total === 'number' && currentMark.total > 0);
+                        // console.log(isMarked);
                         const studentActivities = await Promise.all(
                             schoolYearsToSearch.map(async (year) => {
                                 info_search = `student_list.${user._id}`;
@@ -219,6 +222,7 @@ function createRootRouter(client, parentDirectory) {
                                 bandiem: studentTotalScores,
                                 hoatdong: studentActivities,
                                 hethan: false,
+                                isMarked: isMarked,
                                 nienkhoa: Object.keys(schoolYear_all.years),
                                 check_chamdiem: check_year,
                             });
@@ -337,7 +341,9 @@ function createRootRouter(client, parentDirectory) {
                                 };
                             }),
                         );
-                        console.log(studentTotalScores);
+                        // console.log(studentTotalScores);
+                        const currentMark = studentTotalScores.find(item => item.year === schoolYear.year);
+                        const isMarked = (currentMark && typeof currentMark.total === 'number' && currentMark.total > 0);
                         const studentActivities = await Promise.all(
                             schoolYearsToSearch.map(async (year) => {
                                 info_search = `student_list.${user._id}`;
@@ -455,6 +461,7 @@ function createRootRouter(client, parentDirectory) {
                                 bandiem: studentTotalScores,
                                 hoatdong: studentActivities,
                                 hethan: true,
+                                isMarked: isMarked,
                                 nienkhoa: Object.keys(schoolYear_all.years),
                                 check_chamdiem: check_year,
                             });

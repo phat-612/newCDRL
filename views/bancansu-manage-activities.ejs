@@ -62,6 +62,8 @@
                                         <th style="width: 30%">Hoạt động</th>
                                         <th style="width: 10%">Thời gian</th>
                                         <th style="width: 10%">Đánh giá</th>
+                                        <th style="width: 2%"></th>
+                                        <th style="width: 2%"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -80,8 +82,23 @@
                                                 >Chi tiết</a
                                             >
                                         </td>
+                                        <td>
+                                            <a class="copy_btn" id="dep_copy_link" href="#">
+                                                <i class="fa-regular fa-copy"></i>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a
+                                                class="copy_link"
+                                                id="dep_access_link"
+                                                href="/dangkyhoatdong?id=<%= school_atv[i]._id %>&level=truong"
+                                                target="_blank"
+                                            >
+                                                <i class="fa-solid fa-link"></i>
+                                            </a>
+                                        </td>
                                     </tr>
-                                    <tr class="copy_box">
+                                    <!-- <tr class="copy_box">
                                         <td><a class="copy_btn">COPY</a></td>
                                         <td colspan="6">
                                             <a
@@ -91,7 +108,7 @@
                                                 >Link đăng kí và điểm danh hoạt động</a
                                             >
                                         </td>
-                                    </tr>
+                                    </tr> -->
                                     <% } %>
                                 </tbody>
                             </table>
@@ -115,6 +132,8 @@
                                         <th style="width: 30%">Hoạt động</th>
                                         <th style="width: 10%">Thời gian</th>
                                         <th style="width: 10%">Đánh giá</th>
+                                        <th style="width: 2%"></th>
+                                        <th style="width: 2%"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -130,10 +149,25 @@
                                                 >Chi tiết</a
                                             >
                                         </td>
+                                        <td>
+                                            <a class="copy_btn" id="dep_copy_link" href="#">
+                                                <i class="fa-regular fa-copy"></i>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a
+                                                class="copy_link"
+                                                id="dep_access_link"
+                                                href="/dangkyhoatdong?id=<%= dep_atv[i]._id %>&level=khoa"
+                                                target="_blank"
+                                            >
+                                                <i class="fa-solid fa-link"></i>
+                                            </a>
+                                        </td>
                                     </tr>
-                                    <tr class="copy_box">
-                                        <!-- fill link google forn here -->
-                                        <td><a class="copy_btn">COPY</a></td>
+                                    <!-- <tr class="copy_box"> -->
+                                    <!-- fill link google forn here -->
+                                    <!-- <td><a class="copy_btn">COPY</a></td>
                                         <td colspan="6">
                                             <a
                                                 class="copy_link"
@@ -142,7 +176,7 @@
                                                 >Link đăng kí và điểm danh hoạt động</a
                                             >
                                         </td>
-                                    </tr>
+                                    </tr> -->
                                     <% } %>
                                 </tbody>
                             </table>
@@ -167,6 +201,8 @@
                                         <th style="width: 10%">Lớp</th>
                                         <th style="width: 10%">Thời gian</th>
                                         <th style="width: 10%">Đánh giá</th>
+                                        <th style="width: 3%"></th>
+                                        <th style="width: 3%"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -185,10 +221,25 @@
                                                 >Chi tiết</a
                                             >
                                         </td>
+                                        <td>
+                                            <a class="copy_btn" id="dep_copy_link" href="#">
+                                                <i class="fa-regular fa-copy"></i>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a
+                                                class="copy_link"
+                                                id="dep_access_link"
+                                                href="/dangkyhoatdong?id=<%= cls_atv[i]._id %>&level=lop"
+                                                target="_blank"
+                                            >
+                                                <i class="fa-solid fa-link"></i>
+                                            </a>
+                                        </td>
                                     </tr>
-                                    <tr class="copy_box">
+                                    <!-- <tr class="copy_box">
                                         <!-- fill link google forn here -->
-                                        <td><a class="copy_btn">COPY</a></td>
+                                    <!-- <td><a class="copy_btn">COPY</a></td>
                                         <td colspan="6">
                                             <a
                                                 class="copy_link"
@@ -197,7 +248,7 @@
                                                 >Link đăng kí và điểm danh hoạt động</a
                                             >
                                         </td>
-                                    </tr>
+                                    </tr> -->
                                     <% } %>
                                 </tbody>
                             </table>

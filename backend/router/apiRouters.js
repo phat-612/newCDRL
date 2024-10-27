@@ -475,7 +475,7 @@ function createAPIRouter(client, wss) {
                     );
 
                 const marked = await mark('_std_table', user, user._id, data, marker, user.cls[0]);
-                console.log(marked);
+                // console.log(marked);
                 switch (marked) {
                     case 0:
                         return res.sendStatus(200);
@@ -627,7 +627,12 @@ function createAPIRouter(client, wss) {
 
         // Xử lý các tệp đã tải lên ở đây
         res.writeHead(200, { 'Content-Type': 'applicaiton/json' });
-        return res.end(JSON.stringify(await get_full_id(uploadDirectory, list_name, list_dep)));
+        const filelink = await get_full_id(uploadDirectory, list_name, list_dep);
+        if (filelink) {
+            return res.end(JSON.stringify(filelink));
+        } else {
+            return res.sendStatus(500);
+        }
     });
 
     // Create new account -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1948,7 +1953,7 @@ function createAPIRouter(client, wss) {
 
                 console.log(data);
                 if (!data.end_day) {
-                    data.end_day = '1975-04-30';
+                    data.end_day = '2003-10-18';
                 }
 
                 await client

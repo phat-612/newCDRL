@@ -9,7 +9,6 @@ $('#mySelect2').change(async function () {
     }
     const data = await response.json();
     data.forEach((item) => {
-        console.log(item.year);
         const totalResultElement = $(`.total-result[data-year="${item.year}_total"]`);
         document.querySelector(
             `td a#${item.year}`,
@@ -26,6 +25,8 @@ $('#mySelect2').change(async function () {
             nextTd.nextElementSibling.querySelector('a').style.display = 'none';
         } else {
             nextTd.querySelector('a').style.display = 'block';
+            nextTd.nextElementSibling.querySelector('a').style.display = 'block';
+
         }
     });
     notify('n', 'Thành công!');

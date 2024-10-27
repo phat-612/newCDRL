@@ -24,7 +24,9 @@ html {
 }
 
 th {
-    font-size: 2rem;
+    user-select: none;
+    font-size: 1.7rem;
+
 }
 
 td {
@@ -46,7 +48,8 @@ td {
 }
 
 th {
-    font-size: 2rem;
+    user-select: none;
+    font-size: 1.7rem;
 }
 
 td {
@@ -157,4 +160,16 @@ td a {
 
 .content__subject.subject--input::placeholder {
     color: #767676;
+}
+.sort_num{
+    cursor: pointer;
+    & i{
+        color: #00000073;
+    }
+}
+.sort_name{
+    cursor: pointer;
+    & i{
+        color: #00000073;
+    }
 }
