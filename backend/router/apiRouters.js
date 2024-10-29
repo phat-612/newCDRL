@@ -8,7 +8,6 @@ const uploadDirectory = path.join('../../upload_temp');
 const multer = require('multer');
 const server = require('../lib/csdl_google_lib');
 const forge = require('node-forge');
-require('dotenv').config();
 const { ObjectId } = require('mongodb');
 const { getNameGlobal } = require('../lib/mogodb_lib');
 const name_global_databases = getNameGlobal();

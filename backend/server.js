@@ -16,7 +16,6 @@ const createDepRouter = require('./router/depRouters');
 const createStaffRouter = require('./router/staffRouters');
 const createTeacherRouter = require('./router/teacherRoutes');
 const createStudentRouter = require('./router/studentRouter');
-require('dotenv').config();
 
 const MongoStore = require('connect-mongo');
 const WebSocket = require('ws');
@@ -31,7 +30,7 @@ databaseLib
         const credentials = { key: privateKey, cert: certificate };
         // ----------------------------------------------------------------
         const port = process.env.PORT;
-        // port la 443 khong phai 433 dau
+
         const secretKey = '5gB#2L1!8*1!0)$7vF@9';
         const authenticationKey = Buffer.from(secretKey.padEnd(32, '0'), 'utf8').toString('hex');
         // ----------------------------------------------------------------
@@ -49,7 +48,7 @@ databaseLib
         app.use(cookieParser());
         app.use(
             session({
-                name: 'howtosavealife?', // Đặt tên mới cho Session ID
+                name: 'howtosavealife?',
                 secret: authenticationKey,
                 resave: false,
                 saveUninitialized: false,
@@ -123,7 +122,7 @@ databaseLib
                         });
 
                         // Xử lý khi client đóng kết nối
-                        ws.on('close', () => {});
+                        ws.on('close', () => { });
                     } else {
                         ws.send('Ko a');
                         ws.close();
@@ -140,7 +139,7 @@ databaseLib
         // -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         httpsServer.listen(port, () => {
             // Sử dụng các biến môi trường trong ứng dụng Node.js
-            console.log(`SYSTEM | LOG | Đang chạy server siu cấp vip pro đa vũ trụ ở https://localhost:${port}`);
+            console.log(`SYSTEM | LOG | Đang chạy server siu cấp vip pro đa vũ trụ ở ${process.env.WEB_URL}:${port}`);
         });
         // -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     })
