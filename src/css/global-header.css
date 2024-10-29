@@ -327,7 +327,7 @@ td .select select option {
     color: var(--black-color);
     font-size: 1.6rem;
     padding: 1rem 1.6rem 1rem 0.7rem;
-    text-align: center;
+    /* text-align: center; */
     appearance: none;
     outline: 1rem red;
     border: 0;
@@ -364,7 +364,7 @@ td .select select option {
     content: '\25BC';
     position: absolute;
     top: 33%;
-    right: 3%;
+    right: 2%;
     background-color: inherit;
     transition: 0.25s all ease;
     pointer-events: none;
@@ -376,7 +376,7 @@ td .select select option {
     content: '\25BC';
     position: absolute;
     top: 33%;
-    right: 3%;
+    right: 2%;
     background-color: inherit;
     transition: 0.25s all ease;
     pointer-events: none;
