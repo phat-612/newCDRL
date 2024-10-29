@@ -206,14 +206,21 @@ $(document).ready(() => {
         inpLbhd.prop('checked', studentInfo.lap_hoat_dong);
         $('.js_md_add').text('Cập nhật');
     }
+    $('#export-student').on('click', async () => {
+        window.open(`/api/exportStudentsList?cls=${cls}`, '_blank');
+    });
 
     $('.js_lop').on('change', async (event) => {
         cls = event.target.value;
         $('#row0')[0].checked = false;
+        $('#export-student').prop('disabled', true);
+
         if (skip[cls] == -1) {
+
             $('.js_tbody').empty();
             renderTable(dataStudents[cls], 0); // class is full dont need to load it any more
         } else {
+            $('#export-student').prop('disabled', false);
             if (
                 dataStudents[cls] &&
                 (Object.keys(dataStudents[cls]).length !== 0 || dataStudents[cls].constructor !== Object)
