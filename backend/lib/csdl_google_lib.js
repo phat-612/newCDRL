@@ -3,8 +3,7 @@ const fs = require('fs');
 const { google } = require('googleapis');
 const NodePersist = require('node-persist');
 const path = require('path');
-// Load the credentials from the JSON file
-const credentials = require('../cert/bimat.json');
+
 // Create a new Google Drive instance
 const drive = google.drive('v3');
 
@@ -20,11 +19,9 @@ const initStorage = async () => {
 
 // Authorize the client
 const auth = new google.auth.OAuth2(
-    credentials.web.client_id,
-    credentials.web.client_secret,
-    credentials.web.redirect_uris && credentials.web.redirect_uris.length > 0
-        ? credentials.web.redirect_uris[0]
-        : 'http://localhost:8181',
+    process.env.CLIENT_ID,
+    process.env.CLIENT_SECRET,
+    `${process.env.WEB_URL}:${process.env.PORT}`,
 );
 async function getNewAccessTokenUsingRefreshToken(refreshToken) {
     try {
