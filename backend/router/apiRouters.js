@@ -422,8 +422,8 @@ function createAPIRouter(client, wss) {
     router.post('/first_login', checkIfUserLoginAPI, async (req, res) => {
         try {
             const privateKeyPem = process.env.PRIVATE_KEY; // Khóa mật AES
-            let encryptedData = req.body; // Dữ liệu đã mã hóa nhận từ client
-            console.log("hahahahahah",encryptedData);
+            let encryptedData = req.body.data; // Dữ liệu đã mã hóa nhận từ client
+            console.log('hahahahahah', encryptedData);
 
             // Kiểm tra và chuyển đổi encryptedData thành chuỗi nếu cần
             if (typeof encryptedData !== 'string') {

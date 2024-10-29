@@ -20,6 +20,8 @@ $('.login_btn').on('click', async function (e) {
                 new_password: new_password,
                 re_new_password: re_new_password,
             });
+            console.log(postData);
+            console.log(key);
             const encrypt = new JSEncrypt();
             encrypt.setPublicKey(key);
 
@@ -39,8 +41,8 @@ $('.login_btn').on('click', async function (e) {
                 notify('n', 'Đổi mật khẩu thành công!');
 
                 setTimeout(() => {
-                    window.location.href = currentURLbase + '/profile';
-                }, 2000);
+                    window.location.href = currentURLbase + '/';
+                }, 500);
             } else if (response.status == 403) {
                 // Error occurred during upload
                 notify('x', 'Mật khẩu mới không được trùng mật khẩu cũ!');
@@ -75,20 +77,29 @@ const sendata = async function () {
                 new_password: new_password,
                 re_new_password: re_new_password,
             });
+            console.log(postData);
+            console.log(key);
+            const encrypt = new JSEncrypt();
+            encrypt.setPublicKey(key);
+
+            // Mã hóa dữ liệu
+            var encryptedData = encrypt.encrypt(postData);
+            // Chuyển dữ liệu sang WordArray
+            console.log('Dữ liệu đã được mã hóa:', encryptedData);
             const requestOptions = {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: postData,
+                body: JSON.stringify({ data: encryptedData }),
             };
             const response = await fetch('/api/change_pass', requestOptions);
             if (response.ok) {
                 notify('n', 'Đổi mật khẩu thành công!');
 
                 setTimeout(() => {
-                    window.location.href = currentURLbase + '/profile';
-                }, 2000);
+                    window.location.href = currentURLbase + '/';
+                }, 500);
             } else if (response.status == 403) {
                 // Error occurred during upload
                 notify('x', 'Mật khẩu mới không được trùng mật khẩu cũ!');
