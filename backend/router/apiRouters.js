@@ -376,6 +376,11 @@ function createAPIRouter(client, wss) {
         try {
             const privateKeyPem = process.env.PRIVATE_KEY; // Khóa mật AES
             const encryptedData = req.body.data; // Dữ liệu đã mã hóa nhận từ client
+
+            // Kiểm tra và chuyển đổi encryptedData thành chuỗi nếu cần
+            if (typeof encryptedData !== 'string') {
+                encryptedData = JSON.stringify(encryptedData);
+            }
             // Tạo đối tượng khóa RSA private từ chuỗi PEM
             const privateKey = forge.pki.privateKeyFromPem(privateKeyPem);
             const decryptedData = privateKey.decrypt(forge.util.decode64(encryptedData));
@@ -417,11 +422,22 @@ function createAPIRouter(client, wss) {
     router.post('/first_login', checkIfUserLoginAPI, async (req, res) => {
         try {
             const privateKeyPem = process.env.PRIVATE_KEY; // Khóa mật AES
-            const encryptedData = req.body.data; // Dữ liệu đã mã hóa nhận từ client
+            let encryptedData = req.body; // Dữ liệu đã mã hóa nhận từ client
+            console.log("hahahahahah",encryptedData);
+
+            // Kiểm tra và chuyển đổi encryptedData thành chuỗi nếu cần
+            if (typeof encryptedData !== 'string') {
+                encryptedData = JSON.stringify(encryptedData);
+            }
             // Tạo đối tượng khóa RSA private từ chuỗi PEM
             const privateKey = forge.pki.privateKeyFromPem(privateKeyPem);
-            const decryptedData = privateKey.decrypt(forge.util.decode64(encryptedData));
-
+            let decryptedData;
+            try {
+                decryptedData = privateKey.decrypt(forge.util.decode64(encryptedData));
+            } catch (decryptError) {
+                console.error('SYSTEM | FIRST_LOGIN | DECRYPTION ERROR |', decryptError);
+                return res.sendStatus(400); // Bad Request
+            }
             // console.log('Dữ liệu đã giải mã:', decryptedData);
             const data = JSON.parse(decryptedData);
             const old_pass = await client
