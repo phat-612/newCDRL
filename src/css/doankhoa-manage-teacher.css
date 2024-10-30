@@ -16,10 +16,47 @@ html {
     margin-left: auto;
     margin-right: auto;
     border-radius: 0.8rem;
+    padding: 20px 30px;
+}
+
+.group_btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .content {
-    padding: 1rem;
+    padding: 0 1rem;
+}
+
+.search_wrap label {
+    color: var(--header-text);
+    font-size: 14px;
+}
+
+.search_wrap input {
+    margin-left: .5em;
+    color: var(--header-text);
+    display: inline-block;
+    width: auto;
+    height: 22px;
+    width: 82%;
+    padding: .25rem .5rem;
+    font-size: 14px;
+    line-height: 1.5;
+    border-radius: .2rem;
+    outline-offset: -2px;
+    -webkit-appearance: none;
+    border: 1px solid #7c7c7c;
+    border-radius: 5px;
+}
+
+.search_wrap input:focus {
+    color: #6e707e;
+    background-color: #fff;
+    border-color: #bac8f3;
+    outline: 0;
+    box-shadow: 0 0 0 .2rem rgba(78, 115, 223, .25);
 }
 
 .content p {
@@ -37,7 +74,15 @@ th {
 
 td {
     font-size: 1.6rem;
-    text-align: center;
+    text-align: start !important;
+}
+
+.nums {
+    text-align: center !important;
+}
+
+td:last-of-type {
+    text-align: center !important;
 }
 
 th,
@@ -180,4 +225,70 @@ label {
 
 .add_teacher_model {
     padding: 3rem;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+.pagination {
+    margin: 20px 0;
+    background: #fff;
+    text-align: center;
+
+}
+
+.pagination ul {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    /* padding: 8px; */
+    border-radius: 5px;
+    justify-content: center;
+    /* box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1); */
+}
+
+.pagination ul li {
+    color: #1b57c6;
+    list-style: none;
+    line-height: 45px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.3s ease;
+}
+
+.pagination ul li.numb {
+    list-style: none;
+    height: 45px;
+    width: 45px;
+    margin: 0 3px;
+    line-height: 45px;
+    border-radius: 50%;
+}
+
+.pagination ul li.numb.first {
+    margin: 0px 3px 0 -5px;
+}
+
+.pagination ul li.numb.last {
+    margin: 0px -5px 0 3px;
+}
+
+.pagination ul li.dots {
+    font-size: 22px;
+    cursor: default;
+}
+
+.pagination ul li.btn {
+    padding: 0 20px;
+    border-radius: 50px;
+}
+
+.pagination li.active,
+.pagination ul li.numb:hover,
+.pagination ul li:first-child:hover,
+.pagination ul li:last-child:hover {
+    color: #fff !important;
+    background: #1b57c6;
 }

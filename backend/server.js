@@ -16,6 +16,7 @@ const createDepRouter = require('./router/depRouters');
 const createStaffRouter = require('./router/staffRouters');
 const createTeacherRouter = require('./router/teacherRoutes');
 const createStudentRouter = require('./router/studentRouter');
+require('dotenv').config();
 
 const MongoStore = require('connect-mongo');
 const WebSocket = require('ws');
@@ -122,7 +123,7 @@ databaseLib
                         });
 
                         // Xử lý khi client đóng kết nối
-                        ws.on('close', () => { });
+                        ws.on('close', () => {});
                     } else {
                         ws.send('Ko a');
                         ws.close();
