@@ -954,6 +954,8 @@ function createAPIRouter(client, wss) {
                     return res.sendStatus(405);
                 }
             } else {
+                const dataStudent = req.body;
+
                 if (!dataStudent || !dataStudent.ho || !dataStudent.ten || !dataStudent.mssv) {
                     console.log('DỮ LIỆU ĐẦU VÀO KHÔNG HỢP LỆ KHÔNG THỂ TẠO ACC');
                     return res.sendStatus(403);
