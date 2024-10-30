@@ -13,21 +13,23 @@ function createDepRouter(client) {
         const user = req.session.user;
 
         // get all branch of department:
-        const branchs = (await client
-            .db(name_global_databases)
-            .collection('branchs')
-            .find(
-                {
-                    dep: user.dep,
-                }, // find all data
-                {
-                    projection: {
-                        _id: 0,
-                        name: 1,
+        const branchs = (
+            await client
+                .db(name_global_databases)
+                .collection('branchs')
+                .find(
+                    {
+                        dep: user.dep,
+                    }, // find all data
+                    {
+                        projection: {
+                            _id: 0,
+                            name: 1,
+                        },
                     },
-                },
-            )
-            .toArray()).reverse();
+                )
+                .toArray()
+        ).reverse();
 
         // get department name:
         const dep_name = await client
@@ -260,30 +262,34 @@ function createDepRouter(client) {
                 )
                 .toArray();
             // get user name and class in dep
-            const teachers = await client
-                .db(name_global_databases)
-                .collection('user_info')
-                .find(
-                    {
-                        'power.1': { $exists: true },
-                        'power.4': { $exists: true },
-                        'power.999': { $exists: false },
+            const teachers = (
+                await client
+                    .db(name_global_databases)
+                    .collection('user_info')
+                    .find(
+                        {
+                            'power.1': { $exists: true },
+                            'power.4': { $exists: true },
+                            'power.999': { $exists: false },
 
-                        $or: [
-                            { branch: { $in: all_branchs.map((branch) => branch._id) } },
-                            { branch: ObjectId.createFromHexString('650985a345e2e896b37efd4f') },
-                        ],
-                    }, // user is teacher
-                    {
-                        projection: {
-                            first_name: 1,
-                            last_name: 1,
-                            class: 1,
-                            branch: 1,
+                            $or: [
+                                { branch: { $in: all_branchs.map((branch) => branch._id) } },
+                                { branch: ObjectId.createFromHexString('650985a345e2e896b37efd4f') },
+                            ],
+                        }, // user is teacher
+                        {
+                            projection: {
+                                first_name: 1,
+                                last_name: 1,
+                                class: 1,
+                                branch: 1,
+                            },
                         },
-                    },
-                )
-                .toArray();
+                    )
+                    .toArray()
+            ).reverse();
+            console.log(teachers.length);
+
             let branch_list = [];
             for (let i = 0; i < teachers.length; i++) {
                 const branch = await client
@@ -306,6 +312,7 @@ function createDepRouter(client) {
                 thongbao: 'global-notifications',
                 menu: 'doankhoa-menu',
                 teachers: teachers,
+                dataLength: teachers.length,
                 branchs: branch_list,
                 all_branchs: all_branchs,
             });

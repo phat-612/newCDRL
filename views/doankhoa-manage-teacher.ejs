@@ -5,6 +5,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="/src/css/doankhoa-manage-teacher.css" />
         <link rel="stylesheet" href="/src/css/doankhoa-manage-teacher-resposive.css" />
+        <link
+            href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css"
+            rel="stylesheet"
+            type="text/css"
+        />
         <title>Quản Lí Cố Vấn</title>
     </head>
 
@@ -24,13 +29,20 @@
                                     <button class="button-35" id="add__class">Thêm Cố Vấn</button>
                                     <button class="button-35" id="delete__teacher">Xoá Cố Vấn</button>
                                 </div>
+                                <div class="search_wrap">
+                                    <div id="dataTable_filter" class="dataTables_filter">
+                                        <label><i class="fal fa-search"></i>
+                                            <input type="text" class="form-control form-control-sm" placeholder="" aria-controls="dataTable">
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Table -->
                     <div class="content container__table">
-                        <table>
+                        <table id="TeacherTable">
                             <thead>
                                 <tr>
                                     <th>
@@ -46,8 +58,10 @@
                                             </label>
                                         </div>
                                     </th>
-                                    <th>STT</th>
-                                    <th style="width: 25%">Tên Cố Vấn Học Tập</th>
+                                    <th style="width: 10%" class="sort_num">STT <i class="fal fa-sort-numeric-down"></i></th>
+                                    <th style="width: 25%" class="sort_name">
+                                        Họ và tên <i class="fal fa-sort-alpha-down"></i></i>
+                                    </th>
                                     <th style="width: 25%">Bộ Môn</th>
                                     <th style="width: 25%">Lớp Phân Công</th>
                                     <th>Cập Nhập</th>
@@ -74,9 +88,9 @@
                                     <td class="t_name"><%= teachers[i].last_name + " " + teachers[i].first_name %></td>
                                     <td class="b_name"><%= branchs[i] %></td>
                                     <td>
-                                        <% for (let j = 0; j < teachers[i].class.length; j++) {%> <% if (j ==
-                                        teachers[i].class.length - 1) { %> <%= teachers[i].class[j]%> <% } else { %> <%=
-                                        teachers[i].class[j] + ", "%> <% } %> <% } %>
+                                        <% for (let j = 0; j < teachers[i].class.length; j++) {%> 
+                                            <li><%= teachers[i].class[j] %></li> 
+                                          <% } %> 
                                     </td>
                                     <td>
                                         <a id="edit__class">Sửa</a>
@@ -85,6 +99,9 @@
                                 <% } %>
                             </tbody>
                         </table>
+                        <div class="pagination">
+                            <ul> <!--pages or li are comes from javascript --> </ul>
+                          </div>
                     </div>
                 </div>
 
@@ -200,6 +217,10 @@
         </div>
         <%- include(footer) %>
     </body>
-
+    <script>
+        const dataLength = `<%= dataLength %>`;
+        let teachers = <%- JSON.stringify(teachers) %>;
+        const branchs = <%- JSON.stringify(branchs) %>;
+    </script>
     <script src="/src/JS/doankhoa-manage-teacher.js"></script>
 </html>

@@ -2047,6 +2047,8 @@ function createAPIRouter(client, wss) {
                     );
 
                 if (curr_teacher) {
+                    console.log('curr_teacher true');
+
                     // remove old teachers
                     await client.db(name_global_databases).collection('user_info').deleteOne({
                         _id: data.old_id,
@@ -2073,6 +2075,8 @@ function createAPIRouter(client, wss) {
                         });
                 } else {
                     // add new one
+                    console.log('curr_teacher sai');
+
                     await client
                         .db(name_global_databases)
                         .collection('user_info')
@@ -2094,6 +2098,8 @@ function createAPIRouter(client, wss) {
                 }
 
                 if (teacher_pass) {
+                    console.log('teacher_pass true');
+
                     await client.db(name_global_databases).collection('login_info').deleteOne({
                         _id: data.old_id,
                     });
@@ -2107,6 +2113,8 @@ function createAPIRouter(client, wss) {
                         });
                 } else {
                     // add new one
+                    console.log('teacher_pass sai');
+
                     await client
                         .db(name_global_databases)
                         .collection('login_info')
