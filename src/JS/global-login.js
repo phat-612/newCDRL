@@ -14,14 +14,14 @@ $('.password_input').on('keydown', function (e) {
 
 const sendata = async function () {
     btn.innerHTML = `Loading...
-    <span></span>
+
 `;
     const mssv = $('.mssv_input').val();
     const password = $('.password_input').val();
     if (mssv == '') {
         btn.innerHTML = `
             Đăng nhập
-            <span></span>
+        
         `;
         notify('!', 'Vui lòng nhập mssv!');
     } else if (password == '') {
@@ -37,9 +37,9 @@ const sendata = async function () {
                 password: password,
             });
             console.log(postData);
-            console.log(key);
+            console.log(key_public);
             const encrypt = new JSEncrypt();
-            encrypt.setPublicKey(key);
+            encrypt.setPublicKey(key_public);
 
             // Mã hóa dữ liệu
             var encryptedData = encrypt.encrypt(postData);
@@ -59,23 +59,25 @@ const sendata = async function () {
                     window.location.href = currentURLbase + '/login/firstlogin';
                 } else {
                     btn.innerHTML = `Đăng nhập
-<span></span>
+
 `;
                     window.location.href = '/';
                 }
             } else if (response.status == 403) {
                 btn.innerHTML = `Đăng nhập
-<span></span>
+
                                        `;
                 // Error occurred during upload
                 notify('!', 'Sai thông tin đăng nhập');
             } else if (response.status == 404) {
                 btn.innerHTML = `Đăng nhập
-<span></span>
+
                                        `;
                 window.location.href = '/';
             }
         } catch (error) {
+            btn.innerHTML = `Đăng nhập`
+
             console.log(error);
             notify('x', 'Có lỗi xảy ra!');
         }

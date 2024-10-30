@@ -23,7 +23,7 @@ $('.login_btn').on('click', async function (e) {
             console.log(postData);
             console.log(key);
             const encrypt = new JSEncrypt();
-            encrypt.setPublicKey(key);
+            encrypt.setPublicKey(key_public);
 
             // Mã hóa dữ liệu
             var encryptedData = encrypt.encrypt(postData);

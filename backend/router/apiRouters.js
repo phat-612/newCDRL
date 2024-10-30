@@ -44,18 +44,19 @@ const upload = multer({ storage: storage_file });
 function createAPIRouter(client, wss) {
     // Log in --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     router.post('/login', async (req, res) => {
-        const privateKeyPem = process.env.PRIVATE_KEY; // Khóa mật AES
-        const encryptedData = req.body.data; // Dữ liệu đã mã hóa nhận từ client
-        // Tạo đối tượng khóa RSA private từ chuỗi PEM
-        const privateKey = forge.pki.privateKeyFromPem(privateKeyPem);
-        const decryptedData = privateKey.decrypt(forge.util.decode64(encryptedData));
 
-        // console.log('Dữ liệu đã giải mã:', decryptedData);
-        const data = JSON.parse(decryptedData);
-        // console.log(data); // In ra dữ liệu giải mã
-        // 403: sai thong tin dang nhap
-        // data = {mssv: bbp, password: 1234567890, remember: true}
         try {
+            const privateKeyPem = process.env.PRIVATE_KEY; // Khóa mật AES
+
+            const encryptedData = req.body.data; // Dữ liệu đã mã hóa nhận từ client
+            // Tạo đối tượng khóa RSA private từ chuỗi PEM
+            const privateKey = forge.pki.privateKeyFromPem(privateKeyPem);
+            const decryptedData = privateKey.decrypt(forge.util.decode64(encryptedData));
+
+            // console.log('Dữ liệu đã giải mã:', decryptedData);
+            const data = JSON.parse(decryptedData);
+            // 403: sai thong tin dang nhap
+            // data = {mssv: bbp, password: 1234567890, remember: true}
             const user = req.session.user;
             if (!user) {
                 //(log in database)
@@ -421,8 +422,8 @@ function createAPIRouter(client, wss) {
     router.post('/first_login', checkIfUserLoginAPI, async (req, res) => {
         try {
             const privateKeyPem = process.env.PRIVATE_KEY; // Khóa mật AES
-            let encryptedData = req.body.data; // Dữ liệu đã mã hóa nhận từ client
-            console.log('hahahahahah', encryptedData);
+            let encryptedData = req.body; // Dữ liệu đã mã hóa nhận từ client
+            console.log("hahahahahah", encryptedData);
 
             // Kiểm tra và chuyển đổi encryptedData thành chuỗi nếu cần
             if (typeof encryptedData !== 'string') {
@@ -1302,6 +1303,87 @@ function createAPIRouter(client, wss) {
 
                 // delete file after 12 hours
                 scheduleFileDeletion(path.join('.downloads', uuid + '.xlsx'));
+            } else {
+                return res.sendStatus(403);
+            }
+        } catch (err) {
+            console.log('SYSTEM | EXPORT_CLASS_SCORE | ERROR | ', err);
+            return res.sendStatus(500);
+        }
+    });
+    // Export class score report --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    router.get('/exportStudentsList', checkIfUserLoginAPI, async (req, res) => {
+        try {
+            console.log('SYSTEM | EXPORT_CLASS_SCORE | START');
+
+            const user = req.session.user;
+            if (user.pow[1] || user.pow[2]) {
+                const data = req.query;
+                let cls = data.cls;
+                // create uuid for download file
+                const uuid = uuidv4();
+
+                let student_list = [];
+
+                if (user.pow[1]) {
+                    student_list = sortStudentName(
+                        await client
+                            .db(name_global_databases)
+                            .collection('user_info')
+                            .find(
+                                { class: user.cls[0], 'power.0': { $exists: true } },
+                                { projection: { first_name: 1, last_name: 1 } },
+                            )
+                            .toArray(),
+                    );
+                } else {
+                    student_list = sortStudentName(
+                        await client
+                            .db(name_global_databases)
+                            .collection('user_info')
+                            .find(
+                                { class: cls, 'power.0': { $exists: true } },
+                                { projection: { first_name: 1, last_name: 1 } },
+                            )
+                            .toArray(),
+                    );
+                }
+                let curr_list = [];
+                if (student_list.length !== 0) {
+                    for (let i = 0; i < student_list.length; i++) {
+                        // [stt, mssv. ho, ten, lop]
+                        curr_list.push([
+                            i + 1,
+                            student_list[i]._id,
+                            student_list[i].last_name,
+                            student_list[i].first_name,
+                            cls,
+                        ]);
+
+                    }
+                }
+
+                // Load an existing workbook
+                const workbook = await XlsxPopulate.fromFileAsync(
+                    './src/excelTemplate/Danh_Sach_ca_lop_xuat_tu_he_thong.xlsx',
+                );
+
+                if (curr_list.length != 0) {
+                    await workbook.sheet(0).cell('A7').value(curr_list);
+                }
+                // Write to file.
+
+                await workbook.toFileAsync(path.join('.downloads', uuid + '.xlsx'));
+
+                // tải file xlsx về máy người dùng
+                // res.download(path.join('.downloads', uuid + ".xlsx"));
+
+
+                // delete file after 12 hours
+                res.download(path.join('.downloads', uuid + '.xlsx'));
+                scheduleFileDeletion(path.join('.downloads', uuid + '.xlsx'));
+
+
             } else {
                 return res.sendStatus(403);
             }
