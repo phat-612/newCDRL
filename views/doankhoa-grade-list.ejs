@@ -154,12 +154,12 @@
                       </label>
                   </th>
                   <th style="width: 3%" class="sort_num">STT <i class="fal fa-sort-numeric-down"></i></th>
-                  <th style="width: 11%" class="sort_num">MSSV <i class="fal fa-sort-numeric-down"></i></th>
+                  <th style="width: 11%">MSSV</th>
                   <th style="width: 25%" class="sort_name">Họ Tên <i class="fal fa-sort-alpha-down"></i></th>
                   <th style="width: 15%">Điểm Tự Chấm</th>
                   <th style="width: 14%">Tổng điểm Lần 1</th>
                   <th>Chấm Lần 1</th>
-                  <th style="width: 17%" class="sort_num">Tổng Điểm Chính Thức <i class="fal fa-sort-numeric-down"></i></th>
+                  <th style="width: 17%" class="sort_score">Tổng Điểm Chính Thức <i class="fal fa-sort-numeric-down"></i></th>
                   <th style="width: 24%"></th>
                 </tr>
               </thead>
@@ -175,13 +175,13 @@
                       </label>
                     </div>
                   </td>
-                  <td>
+                  <td class="nums">
                     <%= i + 1 %>
                   </td>
                   <td>
                     <%= student_list[i]._id %>
                   </td>
-                  <td>
+                  <td class="t_name">
                     <%= student_list[i].last_name + " " + student_list[i].first_name%>
                     
                     <% if( !curr_year_total.std || curr_year_total.std === 0 ) {%>
@@ -226,13 +226,13 @@
                       </label>
                     </div>
                   </td>
-                  <td>
+                  <td class="nums">
                     <%= i + 1 %>
                   </td>
                   <td>
                     <%= student_list[i]._id %>
                   </td>
-                  <td>
+                  <td class="t_name">
                     <%= student_list[i].last_name + " " + student_list[i].first_name%>
                     <span class="dau_sao">*</span>
                   </td>
