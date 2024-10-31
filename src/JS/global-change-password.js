@@ -21,7 +21,6 @@ $('.login_btn').on('click', async function (e) {
                 re_new_password: re_new_password,
             });
             console.log(postData);
-            console.log(key);
             const encrypt = new JSEncrypt();
             encrypt.setPublicKey(key_public);
 
