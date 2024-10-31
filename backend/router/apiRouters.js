@@ -375,7 +375,7 @@ function createAPIRouter(client, wss) {
     router.post('/change_pass', checkIfUserLoginAPI, async (req, res) => {
         try {
             console.log('x');
-            
+
             const privateKeyPem = process.env.PRIVATE_KEY; // Khóa mật AES
             const encryptedData = req.body.data; // Dữ liệu đã mã hóa nhận từ client
 
@@ -646,228 +646,110 @@ function createAPIRouter(client, wss) {
 
     // Create new account -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     router.post('/createAccount', upload.single('file'), checkIfUserLoginAPI, async (req, res) => {
-        const user = req.session.user;
-        const dummyScore = {
-            first: [0, 0, 0, 0, 0],
-            second: [0, 0],
-            third: [0, 0, 0],
-            fourth: [0, 0, 0],
-            fifth: [0, 0, 0, 0],
-            img_ids: [],
-            total: 0,
-        };
+        try {
 
-        if (user.pow[4] || user.pow[7]) {
-            const fileStudents = req.file;
-            async function generateEmail(str) {
-                let s1 =
-                    'ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠạẢảẤấẦầẨẩẪẫẬậẮắẰằẲẳẴẵẶặẸẹẺẻẼẽẾếỀềỂểỄễỆệỈỉỊịỌọỎỏỐốỒồỔổỖỗỘộỚớỜờỞởỠỡỢợỤụỦủỨứỪừỬửỮữỰựỲỳỴỵỶỷỸỹ';
-                let s0 =
-                    'AAAAEEEIIOOOOUUYaaaaeeeiioooouuyAaDdIiUuOoUuAaAaAaAaAaAaAaAaAaAaAaAaEeEeEeEeEeEeEeEeEeIiIiOoOoOoOoOoOoOoOoOoOoOoUuUuUuUuUuUuUuYyYyYyYy';
-                let newStr = '';
-                let listSpace = [];
-                for (let i = 0; i < str.length; i++) {
-                    if (s1.indexOf(str[i]) != -1) {
-                        newStr += s0[s1.indexOf(str[i])];
-                    } else {
-                        newStr += str[i];
+
+            const user = req.session.user;
+            const dummyScore = {
+                first: [0, 0, 0, 0, 0],
+                second: [0, 0],
+                third: [0, 0, 0],
+                fourth: [0, 0, 0],
+                fifth: [0, 0, 0, 0],
+                img_ids: [],
+                total: 0,
+            };
+
+            if (user.pow[4] || user.pow[7]) {
+                const fileStudents = req.file;
+                async function generateEmail(str) {
+                    let s1 =
+                        'ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠạẢảẤấẦầẨẩẪẫẬậẮắẰằẲẳẴẵẶặẸẹẺẻẼẽẾếỀềỂểỄễỆệỈỉỊịỌọỎỏỐốỒồỔổỖỗỘộỚớỜờỞởỠỡỢợỤụỦủỨứỪừỬửỮữỰựỲỳỴỵỶỷỸỹ';
+                    let s0 =
+                        'AAAAEEEIIOOOOUUYaaaaeeeiioooouuyAaDdIiUuOoUuAaAaAaAaAaAaAaAaAaAaAaAaEeEeEeEeEeEeEeEeEeIiIiOoOoOoOoOoOoOoOoOoOoOoUuUuUuUuUuUuUuYyYyYyYy';
+                    let newStr = '';
+                    let listSpace = [];
+                    for (let i = 0; i < str.length; i++) {
+                        if (s1.indexOf(str[i]) != -1) {
+                            newStr += s0[s1.indexOf(str[i])];
+                        } else {
+                            newStr += str[i];
+                        }
+                        if (str[i] == ' ') {
+                            listSpace.push(i);
+                        }
                     }
-                    if (str[i] == ' ') {
-                        listSpace.push(i);
+                    let output = newStr[0];
+                    for (let i = 0; i < listSpace.length - 2; i++) {
+                        output += newStr.charAt(listSpace[i] + 1);
                     }
-                }
-                let output = newStr[0];
-                for (let i = 0; i < listSpace.length - 2; i++) {
-                    output += newStr.charAt(listSpace[i] + 1);
-                }
-                output += newStr.slice(listSpace[listSpace.length - 2] + 1).replace(/\s/g, '');
-                return output.toLowerCase() + '@student.ctuet.edu.vn';
-            }
-
-            if (fileStudents) {
-                const workbook = await XlsxPopulate.fromFileAsync(fileStudents.path);
-                const sheet = workbook.sheet(0);
-                // const sheetCount = workbook.sheetCount();
-                const values = sheet.usedRange().value();
-                const usedRange = sheet.usedRange();
-
-                const expectedValues = ['MSSV', 'HỌ', 'TÊN'];
-                // const columnCount = expectedValues.length;
-                let isCorrect = true;
-                const endCell = usedRange.endCell();
-                const rowCount = endCell.rowNumber();
-                const columnCount = 3;
-
-                for (let column = 1; column <= columnCount; column++) {
-                    const cell = sheet.cell(1, column); // Ô đầu tiên trên hàng 1 và cột column
-                    const value = cell.value();
-
-                    if (value !== expectedValues[column - 1]) {
-                        isCorrect = false;
-                        break;
-                    }
+                    output += newStr.slice(listSpace[listSpace.length - 2] + 1).replace(/\s/g, '');
+                    return output.toLowerCase() + '@student.ctuet.edu.vn';
                 }
 
-                if (isCorrect) {
-                    let havevalue = true;
+                if (fileStudents) {
+                    const workbook = await XlsxPopulate.fromFileAsync(fileStudents.path);
+                    const sheet = workbook.sheet(0);
+                    // const sheetCount = workbook.sheetCount();
+                    const values = sheet.usedRange().value();
+                    const usedRange = sheet.usedRange();
 
-                    for (let row = 2; row <= 5; row++) {
-                        let hasValue = false;
-                        for (let column = 1; column <= columnCount; column++) {
-                            const cell = sheet.cell(row, column);
-                            const value = cell.value();
+                    const expectedValues = ['MSSV', 'HỌ', 'TÊN'];
+                    // const columnCount = expectedValues.length;
+                    let isCorrect = true;
+                    const endCell = usedRange.endCell();
+                    const rowCount = endCell.rowNumber();
+                    const columnCount = 3;
 
-                            if (value) {
-                                hasValue = true;
+                    for (let column = 1; column <= columnCount; column++) {
+                        const cell = sheet.cell(1, column); // Ô đầu tiên trên hàng 1 và cột column
+                        const value = cell.value();
+
+                        if (value !== expectedValues[column - 1]) {
+                            isCorrect = false;
+                            break;
+                        }
+                    }
+
+                    if (isCorrect) {
+                        let havevalue = true;
+
+                        for (let row = 2; row <= 5; row++) {
+                            let hasValue = false;
+                            for (let column = 1; column <= columnCount; column++) {
+                                const cell = sheet.cell(row, column);
+                                const value = cell.value();
+
+                                if (value) {
+                                    hasValue = true;
+                                    break;
+                                }
+                            }
+
+                            if (hasValue) {
+                                break;
+                            } else {
+                                havevalue = false;
                                 break;
                             }
                         }
+                        if (havevalue) {
+                            if (req.body.status == 'true') {
+                                try {
+                                    // read excel file:
+                                    // create all account
 
-                        if (hasValue) {
-                            break;
-                        } else {
-                            havevalue = false;
-                            break;
-                        }
-                    }
-                    if (havevalue) {
-                        if (req.body.status == 'true') {
-                            try {
-                                // read excel file:
-                                // create all account
-
-                                let maxWidthEmail = 0;
-                                //[['MSSV', 'Họ', 'Tên' ]]
-                                sheet.cell('D1').value('Email');
-                                sheet.cell('E1').value('Password');
-                                const dataRows = [];
-                                for (let i = 1; i < values.length; i++) {
-                                    let pw = await randomPassword();
-                                    let email = await generateEmail(
-                                        `${values[i][1].toString()} ${values[i][2].toString()} ${values[
-                                            i
-                                        ][0].toString()}`,
-                                    );
-                                    let dataInsertUser = {
-                                        _id: values[i][0].toString(),
-                                        first_name: values[i][2].toString(),
-                                        last_name: values[i][1].toString(),
-                                        avt: 'https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg',
-                                        power: { 0: true },
-                                        class: [req.body.cls],
-                                        displayName: `${values[i][1].toString()} ${values[i][2].toString()}`,
-                                        email: email,
-                                        total_score: {},
-                                    };
-                                    let dataInsertLogin = {
-                                        _id: values[i][0].toString(),
-                                        password: hashPassword(pw),
-                                        first: 'new_user',
-                                    };
-
-                                    const dataRow = [
-                                        dataInsertUser._id,
-                                        pw,
-                                        dataInsertUser.last_name,
-                                        dataInsertUser.first_name,
-                                    ];
-                                    dataRows.push(dataRow);
-
-                                    client.db('global').collection('user_info').updateOne(
-                                        {
-                                            _id: dataInsertUser._id,
-                                        },
-                                        {
-                                            $set: dataInsertUser,
-                                        },
-                                        {
-                                            upsert: true,
-                                        },
-                                    );
-                                    client.db('global').collection('login_info').updateOne(
-                                        {
-                                            _id: dataInsertLogin._id,
-                                        },
-                                        {
-                                            $set: dataInsertLogin,
-                                        },
-                                        {
-                                            upsert: true,
-                                        },
-                                    );
-                                    await mark(
-                                        '_std_table',
-                                        user,
-                                        dataInsertUser._id,
-                                        dummyScore,
-                                        {
-                                            first_name: dataInsertUser.first_name,
-                                            last_name: dataInsertUser.last_name,
-                                        },
-                                        dataInsertUser.class[0],
-                                    );
-                                    await sheet.cell(`D${i + 1}`).value(email);
-                                    await sheet.cell(`E${i + 1}`).value(pw);
-                                    const range = sheet.range(`D${i + 1}:E${i + 1}`);
-                                    range.style({ border: true });
-                                    if (email.length > maxWidthEmail) {
-                                        maxWidthEmail = email.length;
-                                    }
-                                }
-                                // Write to file.
-                                sheet.column('D').width(maxWidthEmail);
-                                const uuid = uuidv4();
-                                await workbook.toFileAsync(path.join('.downloads', uuid + '.xlsx'));
-                                // xoa file sau khi xu ly
-                                scheduleFileDeletion(path.join('.downloads', uuid + '.xlsx'));
-                                const workbookacc = await XlsxPopulate.fromFileAsync(
-                                    './src/excelTemplate/FILE_TAO_ACC.xlsx',
-                                );
-
-                                if (dataRows.length > 0) {
-                                    await workbookacc.sheet(0).cell('A2').value(dataRows);
-                                }
-                                const outputFile = path.join(`.downloads/${uuid}.xlsx`);
-
-                                await workbookacc.toFileAsync(outputFile);
-                                scheduleFileDeletion(path.join('.downloads', uuid + '.xlsx'));
-                                return res.download(path.join('.downloads', uuid + '.xlsx'));
-                            } catch (err) {
-                                console.log('SYSTEM | CREATE_ACCOUNT | ERROR | ', err);
-                                return res.sendStatus(500);
-                            }
-                        } else {
-                            try {
-                                // read excel file:
-                                // create all account
-                                const workbook = await XlsxPopulate.fromFileAsync(fileStudents.path);
-                                const sheet = workbook.sheet(0);
-
-                                const values = sheet.usedRange().value();
-                                let maxWidthEmail = 0;
-                                //[['MSSV', 'Họ', 'Tên' ]]
-                                sheet.cell('D1').value('Email');
-                                sheet.cell('E1').value('Password');
-                                for (let i = 1; i < values.length; i++) {
-                                    let studentIdToCheck = values[i][0].toString(); // Mã số sinh viên cần kiểm tra
-
-                                    const marker = await client
-                                        .db(name_global_databases)
-                                        .collection('user_info')
-                                        .findOne(
-                                            { _id: studentIdToCheck },
-                                            {
-                                                projection: {
-                                                    _id: 0,
-                                                    last_name: 1,
-                                                    first_name: 1,
-                                                },
-                                            },
-                                        );
-                                    if (!marker) {
+                                    let maxWidthEmail = 0;
+                                    //[['MSSV', 'Họ', 'Tên' ]]
+                                    sheet.cell('D1').value('Email');
+                                    sheet.cell('E1').value('Password');
+                                    const dataRows = [];
+                                    for (let i = 1; i < values.length; i++) {
                                         let pw = await randomPassword();
                                         let email = await generateEmail(
-                                            `${values[i][1]} ${values[i][2]} ${values[i][0].toString()}`,
+                                            `${values[i][1].toString()} ${values[i][2].toString()} ${values[
+                                                i
+                                            ][0].toString()}`,
                                         );
                                         let dataInsertUser = {
                                             _id: values[i][0].toString(),
@@ -885,6 +767,15 @@ function createAPIRouter(client, wss) {
                                             password: hashPassword(pw),
                                             first: 'new_user',
                                         };
+
+                                        const dataRow = [
+                                            dataInsertUser._id,
+                                            pw,
+                                            dataInsertUser.last_name,
+                                            dataInsertUser.first_name,
+                                        ];
+                                        dataRows.push(dataRow);
+
                                         client.db('global').collection('user_info').updateOne(
                                             {
                                                 _id: dataInsertUser._id,
@@ -925,126 +816,243 @@ function createAPIRouter(client, wss) {
                                         if (email.length > maxWidthEmail) {
                                             maxWidthEmail = email.length;
                                         }
-
-                                        // Write to file.
-                                        sheet.column('D').width(maxWidthEmail);
-                                        const uuid = uuidv4();
-                                        await workbook.toFileAsync(path.join('.downloads', uuid + '.xlsx'));
-                                        res.download(path.join('.downloads', uuid + '.xlsx'));
-                                        // xoa file sau khi xu ly
-                                        scheduleFileDeletion(path.join('.downloads', uuid + '.xlsx'));
                                     }
+                                    // Write to file.
+                                    sheet.column('D').width(maxWidthEmail);
+                                    const uuid = uuidv4();
+                                    await workbook.toFileAsync(path.join('.downloads', uuid + '.xlsx'));
+                                    // xoa file sau khi xu ly
+                                    scheduleFileDeletion(path.join('.downloads', uuid + '.xlsx'));
+                                    const workbookacc = await XlsxPopulate.fromFileAsync(
+                                        './src/excelTemplate/FILE_TAO_ACC.xlsx',
+                                    );
+
+                                    if (dataRows.length > 0) {
+                                        await workbookacc.sheet(0).cell('A2').value(dataRows);
+                                    }
+                                    const outputFile = path.join(`.downloads/${uuid}.xlsx`);
+
+                                    await workbookacc.toFileAsync(outputFile);
+                                    scheduleFileDeletion(path.join('.downloads', uuid + '.xlsx'));
+                                    return res.download(path.join('.downloads', uuid + '.xlsx'));
+                                } catch (err) {
+                                    console.log('SYSTEM | CREATE_ACCOUNT | ERROR | ', err);
+                                    return res.sendStatus(500);
                                 }
-                            } catch (err) {
-                                console.log('SYSTEM | CREATE_ACCOUNT | ERROR | ', err);
-                                return res.sendStatus(500);
+                            } else {
+                                try {
+                                    // read excel file:
+                                    // create all account
+                                    const workbook = await XlsxPopulate.fromFileAsync(fileStudents.path);
+                                    const sheet = workbook.sheet(0);
+
+                                    const values = sheet.usedRange().value();
+                                    let maxWidthEmail = 0;
+                                    //[['MSSV', 'Họ', 'Tên' ]]
+                                    sheet.cell('D1').value('Email');
+                                    sheet.cell('E1').value('Password');
+                                    for (let i = 1; i < values.length; i++) {
+                                        let studentIdToCheck = values[i][0].toString(); // Mã số sinh viên cần kiểm tra
+
+                                        const marker = await client
+                                            .db(name_global_databases)
+                                            .collection('user_info')
+                                            .findOne(
+                                                { _id: studentIdToCheck },
+                                                {
+                                                    projection: {
+                                                        _id: 0,
+                                                        last_name: 1,
+                                                        first_name: 1,
+                                                    },
+                                                },
+                                            );
+                                        if (!marker) {
+                                            let pw = await randomPassword();
+                                            let email = await generateEmail(
+                                                `${values[i][1]} ${values[i][2]} ${values[i][0].toString()}`,
+                                            );
+                                            let dataInsertUser = {
+                                                _id: values[i][0].toString(),
+                                                first_name: values[i][2].toString(),
+                                                last_name: values[i][1].toString(),
+                                                avt: 'https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg',
+                                                power: { 0: true },
+                                                class: [req.body.cls],
+                                                displayName: `${values[i][1].toString()} ${values[i][2].toString()}`,
+                                                email: email,
+                                                total_score: {},
+                                            };
+                                            let dataInsertLogin = {
+                                                _id: values[i][0].toString(),
+                                                password: hashPassword(pw),
+                                                first: 'new_user',
+                                            };
+                                            client.db('global').collection('user_info').updateOne(
+                                                {
+                                                    _id: dataInsertUser._id,
+                                                },
+                                                {
+                                                    $set: dataInsertUser,
+                                                },
+                                                {
+                                                    upsert: true,
+                                                },
+                                            );
+                                            client.db('global').collection('login_info').updateOne(
+                                                {
+                                                    _id: dataInsertLogin._id,
+                                                },
+                                                {
+                                                    $set: dataInsertLogin,
+                                                },
+                                                {
+                                                    upsert: true,
+                                                },
+                                            );
+                                            await mark(
+                                                '_std_table',
+                                                user,
+                                                dataInsertUser._id,
+                                                dummyScore,
+                                                {
+                                                    first_name: dataInsertUser.first_name,
+                                                    last_name: dataInsertUser.last_name,
+                                                },
+                                                dataInsertUser.class[0],
+                                            );
+                                            await sheet.cell(`D${i + 1}`).value(email);
+                                            await sheet.cell(`E${i + 1}`).value(pw);
+                                            const range = sheet.range(`D${i + 1}:E${i + 1}`);
+                                            range.style({ border: true });
+                                            if (email.length > maxWidthEmail) {
+                                                maxWidthEmail = email.length;
+                                            }
+
+                                            // Write to file.
+                                            sheet.column('D').width(maxWidthEmail);
+                                            const uuid = uuidv4();
+                                            await workbook.toFileAsync(path.join('.downloads', uuid + '.xlsx'));
+                                            res.download(path.join('.downloads', uuid + '.xlsx'));
+                                            // xoa file sau khi xu ly
+                                            scheduleFileDeletion(path.join('.downloads', uuid + '.xlsx'));
+                                        }
+                                    }
+                                } catch (err) {
+                                    console.log('SYSTEM | CREATE_ACCOUNT | ERROR | ', err);
+                                    return res.sendStatus(500);
+                                }
                             }
+                        } else {
+                            return res.sendStatus(404);
                         }
                     } else {
-                        return res.sendStatus(404);
+                        return res.sendStatus(405);
                     }
                 } else {
-                    return res.sendStatus(405);
+                    const dataStudent = req.body;
+
+                    if (!dataStudent || !dataStudent.ho || !dataStudent.ten || !dataStudent.mssv) {
+                        console.log('DỮ LIỆU ĐẦU VÀO KHÔNG HỢP LỆ KHÔNG THỂ TẠO ACC');
+                        return res.sendStatus(403);
+                    }
+
+                    let pw = await randomPassword();
+                    let email = await generateEmail(
+                        `${dataStudent['ho']} ${dataStudent['ten']} ${dataStudent['mssv'].toString()}`,
+                    );
+                    let power;
+
+                    power = {
+                        0: true,
+                        1: dataStudent['chamdiem'],
+                        3: dataStudent['lbhd'],
+                        10: dataStudent['dangvien'],
+                    };
+                    if (!dataStudent || !dataStudent.mssv || !dataStudent.ten || !dataStudent.ho || !dataStudent.cls) {
+                        console.log('DỮ LIỆU ĐẦU VÀO KHÔNG HỢP LỆ KHÔNG CÓ DỮ LIỆU USER');
+                        return res.sendStatus(403);
+                    }
+
+                    if (!pw || !email) {
+                        console.log('DỮ LIỆU ĐẦU VÀO KHÔNG HỢP LỆ KHÔNG CÓ EMAIL ĐƯỢC TẠO');
+                        return res.sendStatus(403);
+                    }
+
+                    let dataInsertUser = {
+                        _id: dataStudent['mssv'].toString(),
+                        first_name: dataStudent['ten'],
+                        last_name: dataStudent['ho'],
+                        avt: 'https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg',
+                        power: power,
+                        class: [dataStudent['cls']],
+                        displayName: `${dataStudent['ho']} ${dataStudent['ten']}`,
+                        email: email,
+                        total_score: {},
+                    };
+                    let dataInsertLogin = {
+                        _id: dataStudent['mssv'].toString(),
+                        password: hashPassword(pw),
+                        first: 'new_user',
+                    };
+                    client.db('global').collection('user_info').updateOne(
+                        {
+                            _id: dataInsertUser._id,
+                        },
+                        {
+                            $set: dataInsertUser,
+                        },
+                        {
+                            upsert: true,
+                        },
+                    );
+                    client.db('global').collection('login_info').updateOne(
+                        {
+                            _id: dataInsertLogin._id,
+                        },
+                        {
+                            $set: dataInsertLogin,
+                        },
+                        {
+                            upsert: true,
+                        },
+                    );
+                    await mark(
+                        '_std_table',
+                        user,
+                        dataInsertUser._id,
+                        dummyScore,
+                        { first_name: dataInsertUser.first_name, last_name: dataInsertUser.last_name },
+                        dataInsertUser.class[0],
+                    );
+                    // xu ly sau khi them sinh vien
+                    const uuid = uuidv4();
+                    const workbook = await XlsxPopulate.fromFileAsync('./src/excelTemplate/Tao_danh_sach_lop_moi.xlsx');
+                    const sheet = workbook.sheet(0);
+                    await sheet.cell(`A2`).value(dataStudent['mssv'].toString());
+                    await sheet.cell(`B2`).value(dataStudent['ho']);
+                    await sheet.cell(`C2`).value(dataStudent['ten']);
+                    await sheet.cell(`D1`).value('Email');
+                    await sheet.cell(`E1`).value('Password');
+                    await sheet.cell(`D2`).value(email);
+                    await sheet.cell(`E2`).value(pw);
+                    let range = sheet.range(`D2:E2`);
+                    range.style({ border: true });
+                    sheet.column('D').width(email.length);
+                    await workbook.toFileAsync(path.join('.downloads', uuid + '.xlsx'));
+                    res.download(path.join('.downloads', uuid + '.xlsx'));
+                    // xoa file sau khi xu ly
+                    scheduleFileDeletion(path.join('.downloads', uuid + '.xlsx'));
+
+                    // return res.sendStatus(200);
                 }
             } else {
-                const dataStudent = req.body;
-
-                if (!dataStudent || !dataStudent.ho || !dataStudent.ten || !dataStudent.mssv) {
-                    console.log('DỮ LIỆU ĐẦU VÀO KHÔNG HỢP LỆ KHÔNG THỂ TẠO ACC');
-                    return res.sendStatus(403);
-                }
-
-                let pw = await randomPassword();
-                let email = await generateEmail(
-                    `${dataStudent['ho']} ${dataStudent['ten']} ${dataStudent['mssv'].toString()}`,
-                );
-                let power;
-
-                power = {
-                    0: true,
-                    1: dataStudent['chamdiem'],
-                    3: dataStudent['lbhd'],
-                    10: dataStudent['dangvien'],
-                };
-                if (!dataStudent || !dataStudent.mssv || !dataStudent.ten || !dataStudent.ho || !dataStudent.cls) {
-                    console.log('DỮ LIỆU ĐẦU VÀO KHÔNG HỢP LỆ KHÔNG CÓ DỮ LIỆU USER');
-                    return res.sendStatus(403);
-                }
-
-                if (!pw || !email) {
-                    console.log('DỮ LIỆU ĐẦU VÀO KHÔNG HỢP LỆ KHÔNG CÓ EMAIL ĐƯỢC TẠO');
-                    return res.sendStatus(403);
-                }
-
-                let dataInsertUser = {
-                    _id: dataStudent['mssv'].toString(),
-                    first_name: dataStudent['ten'],
-                    last_name: dataStudent['ho'],
-                    avt: 'https://i.pinimg.com/236x/89/08/3b/89083bba40545a72fa15321af5fab760--chibi-girl-zero.jpg',
-                    power: power,
-                    class: [dataStudent['cls']],
-                    displayName: `${dataStudent['ho']} ${dataStudent['ten']}`,
-                    email: email,
-                    total_score: {},
-                };
-                let dataInsertLogin = {
-                    _id: dataStudent['mssv'].toString(),
-                    password: hashPassword(pw),
-                    first: 'new_user',
-                };
-                client.db('global').collection('user_info').updateOne(
-                    {
-                        _id: dataInsertUser._id,
-                    },
-                    {
-                        $set: dataInsertUser,
-                    },
-                    {
-                        upsert: true,
-                    },
-                );
-                client.db('global').collection('login_info').updateOne(
-                    {
-                        _id: dataInsertLogin._id,
-                    },
-                    {
-                        $set: dataInsertLogin,
-                    },
-                    {
-                        upsert: true,
-                    },
-                );
-                await mark(
-                    '_std_table',
-                    user,
-                    dataInsertUser._id,
-                    dummyScore,
-                    { first_name: dataInsertUser.first_name, last_name: dataInsertUser.last_name },
-                    dataInsertUser.class[0],
-                );
-                // xu ly sau khi them sinh vien
-                const uuid = uuidv4();
-                const workbook = await XlsxPopulate.fromFileAsync('./src/excelTemplate/Tao_danh_sach_lop_moi.xlsx');
-                const sheet = workbook.sheet(0);
-                await sheet.cell(`A2`).value(dataStudent['mssv'].toString());
-                await sheet.cell(`B2`).value(dataStudent['ho']);
-                await sheet.cell(`C2`).value(dataStudent['ten']);
-                await sheet.cell(`D1`).value('Email');
-                await sheet.cell(`E1`).value('Password');
-                await sheet.cell(`D2`).value(email);
-                await sheet.cell(`E2`).value(pw);
-                let range = sheet.range(`D2:E2`);
-                range.style({ border: true });
-                sheet.column('D').width(email.length);
-                await workbook.toFileAsync(path.join('.downloads', uuid + '.xlsx'));
-                res.download(path.join('.downloads', uuid + '.xlsx'));
-                // xoa file sau khi xu ly
-                scheduleFileDeletion(path.join('.downloads', uuid + '.xlsx'));
-
-                // return res.sendStatus(200);
+                return res.sendStatus(403);
             }
-        } else {
-            return res.sendStatus(403);
+        } catch (error) {
+            console.log('SYSTEM | CREATE_ACCOUNT | ERROR | ', error);
+            return res.sendStatus(500);
+
         }
     });
 
