@@ -16,7 +16,6 @@ const createDepRouter = require('./router/depRouters');
 const createStaffRouter = require('./router/staffRouters');
 const createTeacherRouter = require('./router/teacherRoutes');
 const createStudentRouter = require('./router/studentRouter');
-require('dotenv').config();
 
 const MongoStore = require('connect-mongo');
 const WebSocket = require('ws');
@@ -73,8 +72,8 @@ databaseLib
         app.use(express.static(parentDirectory));
         app.set('view engine', 'ejs');
         app.set('views', path.join(parentDirectory, 'views'));
-        const httpsServer = https.createServer(credentials, app);
-        const wss = new WebSocket.Server({ server: httpsServer });
+        // const httpsServer = https.createServer(credentials, app);
+        const wss = new WebSocket.Server({ server: app });
         // -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         const rootRouter = createRootRouter(client, parentDirectory);
         const loginRouters = createLoginRouter(client);
@@ -138,7 +137,7 @@ databaseLib
             }
         });
         // -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        httpsServer.listen(port, () => {
+        app.listen(port, () => {
             // Sử dụng các biến môi trường trong ứng dụng Node.js
             console.log(`SYSTEM | LOG | Đang chạy server siu cấp vip pro đa vũ trụ ở ${process.env.WEB_URL}:${port}`);
         });
