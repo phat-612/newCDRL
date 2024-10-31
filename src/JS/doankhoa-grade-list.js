@@ -506,11 +506,91 @@ $(document).on('click', '.sort_score', async function () {
     if (sortOrder === 'asc') {
         $(this).html('Tổng Điểm Chính Thức <i class="fal fa-sort-numeric-up"></i>');
     } else {
-        $(this).html('Tổng Điểm Chính Thức  <i class="fal fa-sort-numeric-down"></i>');
+        $(this).html('Tổng Điểm Chính Thức <i class="fal fa-sort-numeric-down"></i>');
     }
     sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
     console.log(sortOrder);
 });
+
+
+$(document).on('click', '.sort_zero', async function () {
+    let rows = $('table tbody tr').get();
+    rows.sort((a, b) => {
+        let keyA = $(a).find('.zero_score').text().toUpperCase();
+        let keyB = $(b).find('.zero_score').text().toUpperCase();
+        console.log(keyA, keyB);
+
+        if (sortOrder === 'asc') {
+            if (keyA < keyB) return -1;
+            if (keyA > keyB) return 1;
+        } else {
+            if (keyA > keyB) return -1;
+            if (keyA < keyB) return 1;
+        }
+        return 0;
+    });
+    $.each(rows, function (_, row) {
+        $('table tbody').append(row);
+    });
+
+    // Update row numbers
+    $('table tbody')
+        .children('tr')
+        .each(function (index) {
+            $(this)
+                .find('.nums')
+                .text(index + 1);
+        });
+    console.log(sortOrder);
+
+    if (sortOrder === 'asc') {
+        $(this).html('Điểm Tự Chấm <i class="fal fa-sort-numeric-up"></i>');
+    } else {
+        $(this).html('Điểm Tự Chấm <i class="fal fa-sort-numeric-down"></i>');
+    }
+    sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+    console.log(sortOrder);
+});
+
+$(document).on('click', '.sort_s1', async function () {
+    let rows = $('table tbody tr').get();
+    rows.sort((a, b) => {
+        let keyA = $(a).find('.first_score').text().toUpperCase();
+        let keyB = $(b).find('.first_score').text().toUpperCase();
+        console.log(keyA, keyB);
+
+        if (sortOrder === 'asc') {
+            if (keyA < keyB) return -1;
+            if (keyA > keyB) return 1;
+        } else {
+            if (keyA > keyB) return -1;
+            if (keyA < keyB) return 1;
+        }
+        return 0;
+    });
+    $.each(rows, function (_, row) {
+        $('table tbody').append(row);
+    });
+
+    // Update row numbers
+    $('table tbody')
+        .children('tr')
+        .each(function (index) {
+            $(this)
+                .find('.nums')
+                .text(index + 1);
+        });
+    console.log(sortOrder);
+
+    if (sortOrder === 'asc') {
+        $(this).html('Tổng điểm Lần 1 <i class="fal fa-sort-numeric-up"></i>');
+    } else {
+        $(this).html('Tổng điểm Lần 1 <i class="fal fa-sort-numeric-down"></i>');
+    }
+    sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+    console.log(sortOrder);
+});
+
 $(document).on('click', '.sort_num', async function () {
     console.log('olllll');
 
