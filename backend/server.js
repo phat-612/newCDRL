@@ -72,7 +72,7 @@ databaseLib
         app.use(express.static(parentDirectory));
         app.set('view engine', 'ejs');
         app.set('views', path.join(parentDirectory, 'views'));
-        // const httpsServer = https.createServer(credentials, app);
+        const httpsServer = https.createServer(credentials, app);
         const wss = new WebSocket.Server({ server: app });
         // -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         const rootRouter = createRootRouter(client, parentDirectory);
@@ -137,7 +137,7 @@ databaseLib
             }
         });
         // -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        app.listen(port, () => {
+        httpsServer.listen(port, () => {
             // Sử dụng các biến môi trường trong ứng dụng Node.js
             console.log(`SYSTEM | LOG | Đang chạy server siu cấp vip pro đa vũ trụ ở ${process.env.WEB_URL}:${port}`);
         });
