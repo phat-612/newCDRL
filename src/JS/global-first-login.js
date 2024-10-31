@@ -43,9 +43,9 @@ const sendata = async function () {
                 re_new_password: re_new_password,
             });
             console.log(postData);
-            console.log(key);
+            console.log(key_public);
             const encrypt = new JSEncrypt();
-            encrypt.setPublicKey(key);
+            encrypt.setPublicKey(key_public);
 
             // Mã hóa dữ liệu
             var encryptedData = encrypt.encrypt(postData);

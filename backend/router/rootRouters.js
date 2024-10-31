@@ -47,12 +47,16 @@ function createRootRouter(client, parentDirectory) {
                     .collection('school_year')
                     .findOne({}, { projection: { _id: 0, year: 1 } });
                 if (user.cls[0]) {
+                    console.log(user.cls[0]);
+                    
                     const schoolYear_all = await client
                         .db(name_global_databases)
                         .collection('classes')
                         .findOne({ _id: user.cls[0] }, { projection: { _id: 0, years: 1 } });
                     let schoolYearsToSearch = [];
-                    if (schoolYear_all.years[schoolYear.year.slice(4)]) {
+                    console.log(schoolYear_all);
+                    
+                    if (schoolYear_all&&schoolYear_all.years[schoolYear.year.slice(4)]) {
                         for (let i = 0; i < Object.keys(schoolYear_all.years[schoolYear.year.slice(4)]).length; i++) {
                             schoolYearsToSearch.push(`HK${i + 1}_` + schoolYear.year.slice(4));
                         }
