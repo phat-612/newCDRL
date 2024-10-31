@@ -402,3 +402,66 @@ $('.set_score_btn').click(function () {
         notify('!', 'chưa mở chấm điểm vui lòng chọn năm khác.');
     }
 });
+
+let sortOrder = 'desc';
+$(document).on('click', '.sort_name', async function () {
+    let rows = $('table tbody tr').get();
+    rows.sort((a, b) => {
+        let keyA = $(a).find('.t_name').text().toUpperCase();
+        let keyB = $(b).find('.t_name').text().toUpperCase();
+        if (sortOrder === 'asc') {
+            if (keyA < keyB) return -1;
+            if (keyA > keyB) return 1;
+        } else {
+            if (keyA > keyB) return -1;
+            if (keyA < keyB) return 1;
+        }
+        return 0;
+    });
+    $.each(rows, function (_, row) {
+        $('table tbody').append(row);
+    });
+
+    // Update row numbers
+    $('table tbody')
+        .children('tr')
+        .each(function (index) {
+            $(this)
+                .find('.nums')
+                .text(index + 1);
+        });
+    console.log(sortOrder);
+
+    if (sortOrder === 'asc') {
+        $(this).html('Họ và tên <i class="fal fa-sort-alpha-up"></i>');
+    } else {
+        $(this).html('Họ và tên  <i class="fal fa-sort-alpha-down"></i>');
+    }
+    sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+    console.log(sortOrder);
+});
+
+$(document).on('click', '.sort_num', async function () {
+    console.log('olllll');
+
+    let rows = $('table tbody tr').get();
+    rows.sort((a, b) => {
+        let keyA = parseInt($(a).find('.nums').text());
+        let keyB = parseInt($(b).find('.nums').text());
+        if (sortOrder === 'asc') {
+            return keyA - keyB;
+        } else {
+            return keyB - keyA;
+        }
+    });
+    $.each(rows, function (index, row) {
+        $('table tbody').append(row);
+    });
+
+    if (sortOrder === 'asc') {
+        $(this).html('STT <i class="fal fa-sort-numeric-down"></i>');
+    } else {
+        $(this).html('STT <i class="fal fa-sort-numeric-up"></i>');
+    }
+    sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+});
